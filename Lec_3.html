@@ -1,0 +1,2953 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecture 3 — Operators, Precedence, Type Casting, Rounding &amp; Secrets | SSM College of Eng.</title>
+  <meta name="description"
+    content="Exhaustive lecture notes on Python Operators, Precedence &amp; Associativity, Augmented Assignment, Type Casting, Banker's Rounding, and Cryptographic Security with the secrets module. Prepared by Umer Farooq for BTech 5th Semester.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #14161b;
+      --bg-alt: #191c22;
+      --card: #1c1f27;
+      --cell-bg: #1f232b;
+      --cell-border: #2c313c;
+      --border: #262a33;
+      --text: #e9e7e2;
+      --text-dim: #9198a6;
+      --text-faint: #5f6673;
+      --accent: #f3872e;
+      --accent-soft: rgba(243, 135, 46, .13);
+      --teal: #5fe4c8;
+      --teal-soft: rgba(95, 228, 200, .1);
+      --purple: #c9a6f5;
+      --purple-soft: rgba(201, 166, 245, .1);
+      --red: #ef7a6a;
+      --red-soft: rgba(239, 122, 106, .1);
+      --shadow: rgba(0, 0, 0, .55);
+    }
+
+    html[data-theme="light"] {
+      --bg: #faf8f5;
+      --bg-alt: #f1eee7;
+      --card: #ffffff;
+      --cell-bg: #f6f3ee;
+      --cell-border: #e3ddd0;
+      --border: #e9e3d7;
+      --text: #201e1a;
+      --text-dim: #5c584f;
+      --text-faint: #8a8477;
+      --accent: #d9660f;
+      --accent-soft: rgba(217, 102, 15, .1);
+      --teal: #0a8f79;
+      --teal-soft: rgba(10, 143, 121, .08);
+      --purple: #7c53c9;
+      --purple-soft: rgba(124, 83, 201, .08);
+      --red: #c1483d;
+      --red-soft: rgba(193, 72, 61, .08);
+      --shadow: rgba(120, 110, 90, .15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .35s ease, color .35s ease;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    ::selection {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal));
+      z-index: 200;
+      transition: width .1s ease-out;
+    }
+
+    #theme-toggle {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 150;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px var(--shadow);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    #theme-toggle:hover {
+      border-color: var(--accent);
+      transform: scale(1.06);
+    }
+
+    #theme-toggle svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    #back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 150;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      color: #14161b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .2s ease;
+    }
+
+    #back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #back-to-top:hover {
+      transform: translateY(-3px);
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 100px 0;
+    }
+
+    #hero {
+      padding-top: 130px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--accent);
+      opacity: .5;
+    }
+
+    h1.hero-title {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+      margin-bottom: 22px;
+    }
+
+    .hero-title .hl {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-dim);
+      max-width: 650px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .hero-stat .lbl {
+      font-size: 12.5px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    #toc .hero-sub {
+      margin-bottom: 46px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 20px 18px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color .2s ease, transform .2s ease;
+      position: relative;
+    }
+
+    .toc-card.ready:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .toc-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .toc-title {
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+
+    .toc-desc {
+      font-size: 12.5px;
+      color: var(--text-dim);
+    }
+
+    .toc-pill {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .04em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .toc-pill.ready {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .chapter {
+      border-top: 1px solid var(--border);
+      scroll-margin-top: 30px;
+    }
+
+    .ch-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .ch-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .ch-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-faint);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    h2.ch-title {
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 800;
+      letter-spacing: -.01em;
+      margin-bottom: 18px;
+    }
+
+    .step-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin: 40px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-label::before {
+      content: "";
+      width: 14px;
+      height: 1px;
+      background: var(--text-faint);
+    }
+
+    p.body-text {
+      color: var(--text-dim);
+      font-size: 16px;
+      max-width: 660px;
+      margin-bottom: 16px;
+    }
+
+    strong.emph {
+      color: var(--text);
+    }
+
+    .info-card {
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin: 18px 0;
+      border-left: 3px solid;
+      font-size: 14.5px;
+    }
+
+    .info-card .info-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 700;
+    }
+
+    .info-card p {
+      color: var(--text-dim);
+    }
+
+    .info-card.remember {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .info-card.remember .info-label {
+      color: var(--teal);
+    }
+
+    .info-card.mistake {
+      background: var(--red-soft);
+      border-color: var(--red);
+    }
+
+    .info-card.mistake .info-label {
+      color: var(--red);
+    }
+
+    .info-card.insight {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .info-card.insight .info-label {
+      color: var(--accent);
+    }
+
+    .info-card.tip {
+      background: var(--purple-soft);
+      border-color: var(--purple);
+    }
+
+    .info-card.tip .info-label {
+      color: var(--purple);
+    }
+
+    .info-card.usecase {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .info-card.usecase .info-label {
+      color: var(--teal);
+    }
+
+    .code-block {
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 18px 0;
+    }
+
+    .code-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--cell-border);
+    }
+
+    .code-head .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .code-lang {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .code-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 5px 11px;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+
+    .code-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    pre.code-body {
+      padding: 18px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .kw {
+      color: var(--purple);
+    }
+
+    .str {
+      color: var(--teal);
+    }
+
+    .fn {
+      color: #7fb4ff;
+    }
+
+    .cmt {
+      color: var(--text-faint);
+    }
+
+    .num {
+      color: var(--teal);
+    }
+
+    .op {
+      color: var(--accent);
+    }
+
+    html[data-theme="light"] .fn {
+      color: #2563b0;
+    }
+
+    .code-output {
+      border-top: 1px dashed var(--cell-border);
+      background: rgba(0, 0, 0, .25);
+    }
+
+    html[data-theme="light"] .code-output {
+      background: rgba(0, 0, 0, .04);
+    }
+
+    .code-output .out-label {
+      padding: 8px 20px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .code-output .out-label::before {
+      content: "▶";
+      font-size: 9px;
+      color: var(--accent);
+    }
+
+    .code-output pre {
+      padding: 6px 20px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--teal);
+      white-space: pre;
+    }
+
+    .df-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--cell-border);
+      margin: 16px 0;
+    }
+
+    .df-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+    }
+
+    .df-table thead th {
+      background: var(--bg-alt);
+      color: var(--text-dim);
+      padding: 10px 16px;
+      border-bottom: 2px solid var(--cell-border);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .df-table td {
+      padding: 9px 16px;
+      border-bottom: 1px solid var(--cell-border);
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .df-table tbody tr:hover td {
+      background: var(--accent-soft);
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 14px 0;
+    }
+
+    .task-list li {
+      padding: 9px 0 9px 26px;
+      position: relative;
+      color: var(--text-dim);
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .task-list li:last-child {
+      border-bottom: none;
+    }
+
+    .task-list li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .flow-diagram {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      padding: 20px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin: 20px 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .flow-diagram .stage-num {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .flow-diagram .stage-desc {
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .pull-quote {
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--text);
+      border-left: 3px solid var(--accent);
+      padding-left: 22px;
+      margin: 30px 0;
+    }
+
+    .quiz-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 26px 24px;
+      margin: 30px 0;
+    }
+
+    .quiz-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 3px 10px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .quiz-q {
+      font-weight: 700;
+      font-size: 15.5px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-opts {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .quiz-opt {
+      text-align: left;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 9px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Manrope', sans-serif;
+      transition: all .15s ease;
+    }
+
+    .quiz-opt:hover {
+      border-color: var(--accent);
+    }
+
+    .quiz-opt.correct {
+      border-color: var(--teal);
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .quiz-opt.wrong {
+      border-color: var(--red);
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .quiz-feedback {
+      margin-top: 14px;
+      font-size: 13.5px;
+      color: var(--text-dim);
+      display: none;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+      animation: fadeIn .3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Enhanced Vibrant Institutional Footer */
+    footer {
+      text-align: center;
+      padding: 60px 24px 80px;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      border-top: 2px solid var(--accent);
+      background: linear-gradient(180deg, var(--bg), rgba(243, 135, 46, .08));
+    }
+
+    footer .inst-name {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    footer .lec-title {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    footer .author-tag {
+      color: var(--teal);
+      font-weight: 600;
+      margin-top: 6px;
+      font-size: 13.5px;
+    }
+
+    @media (max-width: 760px) {
+      .toc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 64px 0;
+      }
+
+      #hero {
+        padding-top: 100px;
+      }
+    }
+
+    /* === Enhanced Typography & Bigger Font Hierarchy === */
+    body {
+      font-size: 16.5px;
+      line-height: 1.75;
+    }
+
+    p.body-text,
+    .body-text {
+      font-size: 16.5px !important;
+      line-height: 1.75 !important;
+    }
+
+    .info-card {
+      font-size: 15.5px !important;
+      line-height: 1.7 !important;
+    }
+
+    .info-card .info-label {
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
+    }
+
+    pre.code-body {
+      font-size: 14.5px !important;
+      line-height: 1.6 !important;
+    }
+
+    .code-output pre {
+      font-size: 14px !important;
+    }
+
+    .df-table {
+      font-size: 14.5px !important;
+    }
+
+    .dim-table {
+      font-size: 15px !important;
+    }
+
+    .dim-table th {
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
+    }
+
+    .task-list li {
+      font-size: 15.5px !important;
+      line-height: 1.7 !important;
+    }
+
+    .toc-title {
+      font-size: 16.5px !important;
+    }
+
+    .toc-desc {
+      font-size: 13.5px !important;
+    }
+
+    .quiz-q {
+      font-size: 17px !important;
+    }
+
+    .quiz-opt {
+      font-size: 15px !important;
+    }
+
+    .quiz-feedback {
+      font-size: 14.5px !important;
+    }
+
+    .ast-tree {
+      font-size: 15px !important;
+    }
+
+    .flow-diagram {
+      font-size: 14px !important;
+    }
+
+    .flow-diagram .stage-desc {
+      font-size: 12.5px !important;
+    }
+
+    /* === Floating Tools & Print Button === */
+    .floating-tools {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 200;
+      display: flex;
+      gap: 10px;
+    }
+
+    .tool-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 18px var(--shadow);
+      color: var(--text);
+      transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--accent);
+      transform: scale(1.06);
+      background: var(--card-hover, var(--cell-bg));
+    }
+
+    .tool-btn svg {
+      width: 19px;
+      height: 19px;
+      fill: currentColor;
+    }
+
+    #theme-toggle {
+      position: static !important;
+      box-shadow: none !important;
+    }
+
+    /* === Author Profile Card in Hero === */
+    .author-card-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 8px 20px 8px 10px;
+      border-radius: 999px;
+      margin: 18px 0 28px;
+      box-shadow: 0 6px 20px var(--shadow);
+      transition: border-color .2s ease, transform .2s ease;
+    }
+
+    .author-card-hero:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .author-img-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid var(--accent);
+      box-shadow: 0 0 14px var(--accent-soft);
+      display: block;
+    }
+
+    .author-details {
+      text-align: left;
+      line-height: 1.35;
+    }
+
+    .author-role {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-faint);
+    }
+
+    .author-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* === Hero Action Buttons (Print & Navigation) === */
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 24px 0 36px;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .2s ease;
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    .hero-btn.primary-btn {
+      background: var(--accent);
+      color: #12141a;
+      border: none;
+    }
+
+    .hero-btn.primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px var(--accent-soft);
+    }
+
+    .hero-btn.outline-btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .hero-btn.outline-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background: var(--card-hover, var(--cell-bg));
+    }
+
+    .hero-btn svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    /* === Footer Author Badge === */
+    footer {
+      font-size: 14px !important;
+      padding: 50px 0 30px !important;
+    }
+
+    .footer-author-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      background: var(--card);
+      padding: 6px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .footer-author-img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--accent);
+    }
+
+    /* ========================================================= */
+    /* Comprehensive Print / PDF Stylesheet                      */
+    /* ========================================================= */
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 12pt !important;
+        line-height: 1.6 !important;
+      }
+
+      /* Hide web-only UI elements */
+      #progress-bar,
+      .floating-tools,
+      #theme-toggle,
+      #back-to-top,
+      #lightbox,
+      .copy-btn,
+      .code-btn,
+      .zoom-hint,
+      .hero-actions,
+      .quiz-options,
+      .quiz-feedback,
+      button {
+        display: none !important;
+      }
+
+      .wrap {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      #hero {
+        padding: 20px 0 25px !important;
+      }
+
+      .eyebrow {
+        border-color: #d97706 !important;
+        color: #b45309 !important;
+      }
+
+      .author-card-hero {
+        border-color: #cbd5e1 !important;
+        background: #f8fafc !important;
+        box-shadow: none !important;
+      }
+
+      .hero-title {
+        color: #0f172a !important;
+      }
+
+      .hero-title .hl {
+        color: #d97706 !important;
+        -webkit-text-fill-color: #d97706 !important;
+      }
+
+      .hero-sub {
+        color: #475569 !important;
+      }
+
+      .chapter,
+      section {
+        padding: 25px 0 !important;
+        page-break-before: always;
+      }
+
+      #hero,
+      section:first-of-type,
+      .chapter:first-of-type {
+        page-break-before: auto !important;
+      }
+
+      /* Avoid awkward splits */
+      .card,
+      .table-container,
+      table,
+      pre,
+      .code-block,
+      .info-card,
+      .callout,
+      tr,
+      .toc-card,
+      .quiz-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        color: #0f172a !important;
+      }
+
+      table,
+      .df-table,
+      .dim-table {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+      }
+
+      th {
+        background: #f1f5f9 !important;
+        color: #b45309 !important;
+        border-bottom: 2px solid #94a3b8 !important;
+      }
+
+      td {
+        border-bottom: 1px solid #e2e8f0 !important;
+        color: #1e293b !important;
+      }
+
+      tr:nth-child(even) td {
+        background: #f8fafc !important;
+      }
+
+      pre.code-body,
+      .code-block pre,
+      .code-box pre {
+        background: #0f172a !important;
+        color: #7dd3fc !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+
+      .info-card {
+        background: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+      }
+
+      .info-card.tip {
+        border-color: #10b981 !important;
+        background: #ecfdf5 !important;
+      }
+
+      .info-card.warn {
+        border-color: #ef4444 !important;
+        background: #fef2f2 !important;
+      }
+
+      .info-card.analogy {
+        border-color: #f59e0b !important;
+        background: #fffbeb !important;
+      }
+
+      .info-card.note {
+        border-color: #3b82f6 !important;
+        background: #eff6ff !important;
+      }
+
+      @page {
+        margin: 15mm 12mm 15mm 12mm;
+        size: A4 portrait;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="progress-bar"></div>
+  <!-- Floating Tools -->
+  <div class="floating-tools">
+    <button class="tool-btn" id="print-btn" title="Print Notes / Save as PDF" onclick="window.print()"
+      aria-label="Print or Save as PDF">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+      </svg>
+    </button>
+    <button id="theme-toggle" class="tool-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round"></svg>
+    </button>
+  </div>
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round">
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </svg>
+  </button>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section id="hero">
+    <div class="wrap">
+      <div class="eyebrow">SSM College of Eng.</div>
+      <h1 class="hero-title">BTech 5th Sem — <span class="hl">Python Programming</span></h1>
+      <p class="hero-sub" style="font-size:15px; color:var(--text-faint); margin-bottom:8px;">Lecture 3</p>
+      <p class="hero-sub">Operators, Operator Precedence &amp; Associativity,<br>Type Casting, Rounding &amp;
+        Cryptographic Security</p>
+      <!-- Prepared by Umer Farooq with Circular Profile Picture -->
+      <div>
+        <div class="author-card-hero">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img-circle">
+          <div class="author-details">
+            <div class="author-role">Prepared by</div>
+            <div class="author-name">Umer Farooq</div>
+          </div>
+        </div>
+      </div>
+      <!-- Print / PDF & Browse Action Buttons -->
+      <div class="hero-actions">
+        <button class="hero-btn primary-btn" onclick="window.print()">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+          </svg>
+          Print / Save as PDF
+        </button>
+        <a href="#toc" class="hero-btn outline-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+          </svg>
+          Browse Topics
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">8</div>
+          <div class="lbl">Operator Types</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">53</div>
+          <div class="lbl">Tables &amp; Precedence Walkthroughs</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">35+</div>
+          <div class="lbl">Code Demos with Output</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ TABLE OF CONTENTS ═══════════════════ -->
+  <section id="toc">
+    <div class="wrap">
+      <div class="eyebrow">Lecture Map</div>
+      <h2 class="ch-title" style="text-align:center;"> Lecture Notes on Operators, Precedence & Associativity, and
+        Augmented Assignment Operators</h2>
+      <p class="hero-sub" style="text-align:center;">Every single section, point, table, rule, and note from the docx
+        syllabus with full runnable code examples &amp; output.</p>
+      <div class="toc-grid">
+        <a href="#s1" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">01</span><span class="toc-title">1 &amp; 2. What &amp; Types of Operators</span><span
+            class="toc-desc">Overview of operands, operators, and the 8 core categories.</span></a>
+        <a href="#s2" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">02</span><span class="toc-title">3. Arithmetic Operators</span><span class="toc-desc">+, -,
+            *, /, //, %, ** with negative floor division and user float demo.</span></a>
+        <a href="#s3" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">03</span><span class="toc-title">4. Assignment Operators</span><span class="toc-desc">Basic
+            =, shorthand compound operators, and the walrus operator (:=).</span></a>
+        <a href="#s4" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">04</span><span class="toc-title">5. Comparison (Relational)</span><span class="toc-desc">==,
+            !=, >, <,>=, <=, chained comparisons, and conditional branches.</span></a>
+        <a href="#s5" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">05</span><span class="toc-title">6. Logical Operators</span><span class="toc-desc">and, or,
+            not, short-circuit evaluation returning actual operand values.</span></a>
+        <a href="#s6" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">06</span><span class="toc-title">7. Identity Operators</span><span class="toc-desc">is vs
+            ==, memory address inspection id(a), and None checking best practice.</span></a>
+        <a href="#s7" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">07</span><span class="toc-title">8. Membership Operators</span><span class="toc-desc">in,
+            not in for strings, lists, character search, and sentence validation.</span></a>
+        <a href="#s8" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">08</span><span class="toc-title">9. Bitwise Operators</span><span class="toc-desc">&, |, ^,
+            ~, <<,>> with binary bit analysis and shift multiplication.</span></a>
+        <a href="#s9" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">09</span><span class="toc-title">10. Precedence &amp; Associativity</span><span
+            class="toc-desc">14-level master table, right-to-left **, and step-by-step solved questions.</span></a>
+        <a href="#s10" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">10</span><span class="toc-title">11. Augmented Assignments</span><span class="toc-desc">+=,
+            -=, *=, **=, in-place strings and list updates, undefined variable trap.</span></a>
+        <a href="#s11" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">11</span><span class="toc-title">12. Type Conversion &amp; Casting</span><span
+            class="toc-desc">Implicit coercion vs Explicit casting (int, float, str, collections) &amp;
+            gotchas.</span></a>
+        <a href="#s12" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">12</span><span class="toc-title">13. Rounding Mechanics</span><span
+            class="toc-desc">round(), negative ndigits, Banker's Rounding, float binary precision, round vs
+            int.</span></a>
+        <a href="#s13" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">13</span><span class="toc-title">14. Secrets &amp; Security</span><span
+            class="toc-desc">random vs secrets module, randbelow, hex tokens, URL-safe keys, password
+            generator.</span></a>
+        <a href="#summary" class="toc-card ready"><span class="toc-pill ready">Summary</span><span
+            class="toc-num">14</span><span class="toc-title">Lecture Summary &amp; Review</span><span
+            class="toc-desc">Exam-level trick questions, rule checklist, and challenge quizzes.</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 1: WHAT ARE OPERATORS & TYPES ═══════════════════ -->
+  <section class="chapter" id="s1">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 01</span><span class="ch-badge">Foundations</span></div>
+      <h2 class="ch-title">1. What are Operators? &amp; 2. Types of Operators in Python</h2>
+
+      <div class="step-label">1. WHAT ARE OPERATORS?</div>
+      <p class="body-text">Operators are <strong class="emph">special symbols or keywords in Python</strong> that
+        perform operations on values or variables (called <strong class="emph">operands</strong>). An operator takes one
+        or more operands and produces a result.</p>
+
+      <div class="info-card insight">
+        <span class="info-label">Example</span>
+        <p><span class="mono">5 + 3</span><br>
+          Here, <span class="mono">+</span> is the operator, and <span class="mono">5</span> and <span
+            class="mono">3</span> are the operands. The evaluated result is <span class="mono">8</span>.</p>
+      </div>
+
+      <p class="body-text">Python has several categories of operators, and each category behaves with specific syntax
+        and evaluation rules.</p>
+
+      <div class="step-label">2. TYPES OF OPERATORS IN PYTHON</div>
+      <p class="body-text">Python organizes its operators into the following distinct categories:</p>
+      <ol class="task-list" style="list-style:decimal; padding-left:24px;">
+        <li><strong class="emph">Arithmetic Operators</strong> — Mathematical computations (<span class="mono">+, -, *,
+            /, //, %, **</span>).</li>
+        <li><strong class="emph">Assignment Operators</strong> — Assigning values and in-place updates (<span
+            class="mono">=, +=, -=, *=, :=</span>).</li>
+        <li><strong class="emph">Comparison (Relational) Operators</strong> — Value comparisons returning Booleans
+          (<span class="mono">==, !=, &gt;, &lt;, &gt;=, &lt;=</span>).</li>
+        <li><strong class="emph">Logical Operators</strong> — Boolean combining and short-circuit evaluation (<span
+            class="mono">and, or, not</span>).</li>
+        <li><strong class="emph">Identity Operators</strong> — Memory address / object reference checking (<span
+            class="mono">is, is not</span>).</li>
+        <li><strong class="emph">Membership Operators</strong> — Sequence and container search (<span class="mono">in,
+            not in</span>).</li>
+        <li><strong class="emph">Bitwise Operators</strong> — Bit-level manipulation on integers (<span
+            class="mono">&amp;, |, ^, ~, &lt;&lt;, &gt;&gt;</span>).</li>
+        <li><strong class="emph">Operator Precedence and Associativity</strong> — The rule system deciding the execution
+          order when multiple operators appear in a single expression (a rule system, not a separate category, but
+          essential!).</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 2: ARITHMETIC OPERATORS ═══════════════════ -->
+  <section class="chapter" id="s2">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 02</span><span class="ch-badge">Mathematics</span></div>
+      <h2 class="ch-title">3. Arithmetic Operators</h2>
+      <p class="body-text">Arithmetic operators are used to perform standard mathematical calculations on numeric
+        operands.</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Meaning</th>
+              <th>Example</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">+</span></td>
+              <td>Addition</td>
+              <td><span class="mono">7 + 3</span></td>
+              <td><span class="mono">10</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">-</span></td>
+              <td>Subtraction</td>
+              <td><span class="mono">7 - 3</span></td>
+              <td><span class="mono">4</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">*</span></td>
+              <td>Multiplication</td>
+              <td><span class="mono">7 * 3</span></td>
+              <td><span class="mono">21</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">/</span></td>
+              <td>Division (always returns float)</td>
+              <td><span class="mono">7 / 2</span></td>
+              <td><span class="mono">3.5</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">//</span></td>
+              <td>Floor Division (rounds down towards -&infin;)</td>
+              <td><span class="mono">7 // 2</span></td>
+              <td><span class="mono">3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">%</span></td>
+              <td>Modulus (remainder of division)</td>
+              <td><span class="mono">7 % 2</span></td>
+              <td><span class="mono">1</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">**</span></td>
+              <td>Exponentiation (power)</td>
+              <td><span class="mono">7 ** 2</span></td>
+              <td><span class="mono">49</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">Points Often Not Known by Beginners</div>
+      <ul class="task-list">
+        <li><strong class="emph">Floor division (//) rounds down toward negative infinity, not toward zero.</strong>
+          This causes a surprising result with negative numbers:
+          <br><span class="mono">Example: -7 // 2 &rarr; gives -4 (not -3, as many expect)</span>.
+        </li>
+        <li><strong class="emph">The difference between / and //:</strong> <span class="mono">/</span> is true division,
+          always returning a float (e.g. <span class="mono">7 / 2 = 3.5</span>). <span class="mono">//</span> is floor
+          division; it divides two numbers and gives the nearest whole number by always rounding down (<span
+            class="mono">7 // 2 = 3</span>, but <span class="mono">-7 // 2 = -4</span>, not <span
+            class="mono">-3</span>).</li>
+        <li><strong class="emph">** (power) also works with negative and fractional exponents:</strong>
+          <br><span class="mono">Example: 4 ** 0.5 &rarr; gives 2.0</span> (this is how you get a square root in Python
+          without importing any library).
+          <br><span class="mono">Example: 2 ** -1 &rarr; gives 0.5</span>.
+        </li>
+      </ul>
+
+      <div class="step-label">Interactive Python Code Implementation</div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">arithmetic_operators_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="cmt"># Types of Operators in Python</span>
+
+<span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++</span>
+<span class="cmt">#             A. Arithmetic Operators             #</span>
+<span class="cmt">#    Operators used: + , - , * , / , // , % , **  #</span>
+<span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++</span>
+
+<span class="cmt"># take two numbers from user like number 1 and number 2 of float type</span>
+num1 = <span class="fn">float</span>(<span class="num">15.0</span>)  <span class="cmt"># e.g., input("Enter First  Number: ")</span>
+num2 = <span class="fn">float</span>(<span class="num">4.0</span>)   <span class="cmt"># e.g., input("Enter Second Number: ")</span>
+
+<span class="cmt"># I. Addition</span>
+add = num1 + num2 
+<span class="fn">print</span>(<span class="str">"Addition of"</span>, num1, <span class="str">"and"</span>, num2, <span class="str">"="</span>, add)
+
+<span class="cmt"># II. Subtraction</span>
+sub = num1 - num2
+<span class="fn">print</span>(<span class="str">f"Subtraction of {num1} and {num2} is {sub}"</span>)
+
+<span class="cmt"># III. Multiplication</span>
+mul = num1 * num2 
+<span class="fn">print</span>(<span class="str">"Multiplication of"</span>, num1, <span class="str">"and"</span>, num2, <span class="str">"="</span>, mul)
+
+<span class="cmt"># IV. Division (with ZeroDivision safety guard)</span>
+<span class="kw">if</span> num2 == <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">"Zero Division Not Possible, Enter Other than 0 For Denominator"</span>)
+<span class="kw">else</span>:
+    div = num1 / num2
+    <span class="fn">print</span>(<span class="str">"Division of"</span>, num1, <span class="str">"and"</span>, num2, <span class="str">"="</span>, div)
+
+<span class="cmt"># V. Floor Division</span>
+floor_div = num1 // num2
+<span class="fn">print</span>(<span class="str">"Floor Division of"</span>, num1, <span class="str">"and"</span>, num2, <span class="str">"="</span>, floor_div)
+
+<span class="cmt"># VII. Modulus</span>
+mod = num1 % num2
+<span class="fn">print</span>(<span class="str">"Modulus of"</span>, num1, <span class="str">"and"</span>, num2, <span class="str">"="</span>, mod)
+
+<span class="cmt"># VIII. Exponent</span>
+exp = num1 ** num2
+<span class="fn">print</span>(<span class="str">"Exponent"</span>, num1, <span class="str">"and"</span>, num2, <span class="str">"="</span>, exp)</pre>
+        <div class="code-output">
+          <div class="out-label">Output (for num1 = 15.0, num2 = 4.0)</div>
+          <pre>Addition of 15.0 and 4.0 = 19.0
+Subtraction of 15.0 and 4.0 is 11.0
+Multiplication of 15.0 and 4.0 = 60.0
+Division of 15.0 and 4.0 = 3.75
+Floor Division of 15.0 and 4.0 = 3.0
+Modulus of 15.0 and 4.0 = 3.0
+Exponent 15.0 and 4.0 = 50625.0</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 3: ASSIGNMENT OPERATORS ═══════════════════ -->
+  <section class="chapter" id="s3">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 03</span><span class="ch-badge">Variable Binding</span></div>
+      <h2 class="ch-title">4. Assignment Operators</h2>
+      <p class="body-text">Assignment operators are used to assign values to variables. The basic operator is <span
+          class="mono">=</span>, but Python also provides compound / shorthand assignment operators that combine an
+        arithmetic or bitwise operation with assignment.</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Example</th>
+              <th>Equivalent To</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">=</span></td>
+              <td><span class="mono">x = 5</span></td>
+              <td><span class="mono">x = 5</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">+=</span></td>
+              <td><span class="mono">x += 3</span></td>
+              <td><span class="mono">x = x + 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">-=</span></td>
+              <td><span class="mono">x -= 3</span></td>
+              <td><span class="mono">x = x - 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">*=</span></td>
+              <td><span class="mono">x *= 3</span></td>
+              <td><span class="mono">x = x * 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">/=</span></td>
+              <td><span class="mono">x /= 3</span></td>
+              <td><span class="mono">x = x / 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">//=</span></td>
+              <td><span class="mono">x //= 3</span></td>
+              <td><span class="mono">x = x // 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">%=</span></td>
+              <td><span class="mono">x %= 3</span></td>
+              <td><span class="mono">x = x % 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">**=</span></td>
+              <td><span class="mono">x **= 3</span></td>
+              <td><span class="mono">x = x ** 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&amp;= , |= , ^= , &gt;&gt;= , &lt;&lt;=</span></td>
+              <td>(bitwise compound versions)</td>
+              <td>Same update pattern applied to binary bitwise operators</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-card insight">
+        <span class="info-label">The Walrus Operator (:=)</span>
+        <p>Introduced in Python 3.8, the <strong class="emph">walrus operator (<span class="mono">:=</span>)</strong> is
+          called an "assignment expression" rather than a plain statement. It allows you to assign a value to a variable
+          and immediately use it in the same expression, most commonly inside loop conditions (<span class="mono">while
+            (data := file.read(1024)):</span>) or <span class="mono">if</span> statements (<span class="mono">if (n :=
+            len(items)) &gt; 5:</span>).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 4: COMPARISON OPERATORS ═══════════════════ -->
+  <section class="chapter" id="s4">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 04</span><span class="ch-badge">Relational Logic</span></div>
+      <h2 class="ch-title">5. Comparison (Relational) Operators</h2>
+      <p class="body-text">Used to compare two values. They <strong>always return a Boolean (<span
+            class="mono">True</span> or <span class="mono">False</span>)</strong>.</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Meaning</th>
+              <th>Example</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">==</span></td>
+              <td>Equal to</td>
+              <td><span class="mono">5 == 5</span></td>
+              <td><span class="mono">True</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">!=</span></td>
+              <td>Not equal to</td>
+              <td><span class="mono">5 != 3</span></td>
+              <td><span class="mono">True</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&gt;</span></td>
+              <td>Greater than</td>
+              <td><span class="mono">5 &gt; 3</span></td>
+              <td><span class="mono">True</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&lt;</span></td>
+              <td>Less than</td>
+              <td><span class="mono">5 &lt; 3</span></td>
+              <td><span class="mono">False</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&gt;=</span></td>
+              <td>Greater than or equal to</td>
+              <td><span class="mono">5 &gt;= 5</span></td>
+              <td><span class="mono">True</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&lt;=</span></td>
+              <td>Less than or equal to</td>
+              <td><span class="mono">5 &lt;= 4</span></td>
+              <td><span class="mono">False</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">Chained Comparisons in Python</div>
+      <p class="body-text">Python allows chained comparisons, which is a powerful feature not present in most C-family
+        languages:</p>
+      <div class="info-card remember">
+        <span class="info-label">Example</span>
+        <p><span class="mono">x = 5</span><br>
+          <span class="mono">1 &lt; x &lt; 10</span><br>
+          This is <strong>NOT</strong> interpreted as <span class="mono">(1 &lt; x) &lt; 10</span> like it would be in
+          C/Java. Python evaluates it as <strong class="emph">(1 &lt; x) and (x &lt; 10)</strong> — checking both
+          conditions together, returning <span class="mono">True</span> only if both hold.
+        </p>
+      </div>
+
+      <div class="step-label">Interactive Python Code Implementation</div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">relational_operators_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++</span>
+<span class="cmt">#  B. Relational / Comparison Operators           #</span>
+<span class="cmt">#    Operators used: == , != , > , < , >= , <=    #</span>
+<span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++</span>
+
+<span class="cmt"># take two numbers</span>
+num3 = <span class="fn">float</span>(<span class="num">25.0</span>)  <span class="cmt"># e.g., input("Enter First  Number: ")</span>
+num4 = <span class="fn">float</span>(<span class="num">15.0</span>)  <span class="cmt"># e.g., input("Enter Second Number: ")</span>
+
+<span class="cmt"># > Operator</span>
+<span class="kw">if</span> num3 > num4 :
+    <span class="fn">print</span>(<span class="str">"First Number i.e"</span>, num3, <span class="str">"is greater than"</span>, num4)
+
+<span class="cmt"># < Operator</span>
+<span class="kw">if</span> num3 < num4 :
+    <span class="fn">print</span>(<span class="str">"First Number i.e"</span>, num3, <span class="str">"is Less than"</span>, num4)
+
+<span class="cmt"># >= Operator</span>
+<span class="kw">if</span> num3 >= num4 :
+    <span class="fn">print</span>(<span class="str">"First Number i.e"</span>, num3, <span class="str">"is Greater or Equal to"</span>, num4)
+
+<span class="cmt"># <= Operator</span>
+<span class="kw">if</span> num3 <= num4 :
+    <span class="fn">print</span>(<span class="str">"First Number i.e"</span>, num3, <span class="str">"is Less or Equal to"</span>, num4)
+
+<span class="cmt"># == Operator</span>
+<span class="kw">if</span> num3 == num4 :
+    <span class="fn">print</span>(<span class="str">"First Number i.e"</span>, num3, <span class="str">"Equal to"</span>, num4)
+
+<span class="cmt"># != Operator</span>
+<span class="kw">if</span> num3 != num4 :
+    <span class="fn">print</span>(<span class="str">"First Number i.e"</span>, num3, <span class="str">"is Not Equal to"</span>, num4)</pre>
+        <div class="code-output">
+          <div class="out-label">Output (for num3 = 25.0, num4 = 15.0)</div>
+          <pre>First Number i.e 25.0 is greater than 15.0
+First Number i.e 25.0 is Greater or Equal to 15.0
+First Number i.e 25.0 is Not Equal to 15.0</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 5: LOGICAL OPERATORS ═══════════════════ -->
+  <section class="chapter" id="s5">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 05</span><span class="ch-badge">Short-Circuiting</span></div>
+      <h2 class="ch-title">6. Logical Operators</h2>
+      <p class="body-text">Used to combine multiple Boolean expressions / conditions.</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Meaning</th>
+              <th>Example</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">and</span></td>
+              <td>True only if BOTH operands are True</td>
+              <td><span class="mono">True and False</span></td>
+              <td><span class="mono">False</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">or</span></td>
+              <td>True if AT LEAST ONE operand is True</td>
+              <td><span class="mono">True or False</span></td>
+              <td><span class="mono">True</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">not</span></td>
+              <td>Reverses the Boolean value</td>
+              <td><span class="mono">not True</span></td>
+              <td><span class="mono">False</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">Short-Circuit Evaluation &amp; Operand Return Values</div>
+      <p class="body-text">Python's <span class="mono">and</span> / <span class="mono">or</span> do not always return
+        <span class="mono">True</span> or <span class="mono">False</span> — they can return one of the <strong>actual
+          operand values</strong>, not just a Boolean. This is called <strong class="emph">short-circuit
+          evaluation</strong>:
+      </p>
+      <ul class="task-list">
+        <li><span class="mono">5 and 8 &rarr; gives 8 (not True)</span> — because both are truthy, Python returns the
+          second value.</li>
+        <li><span class="mono">0 and 8 &rarr; gives 0</span> — because 0 is falsy, Python stops and returns 0
+          immediately without checking the second operand.</li>
+        <li><span class="mono">5 or 8 &rarr; gives 5</span> — because 5 is already truthy, Python returns it immediately
+          without checking the second operand.</li>
+        <li><strong class="emph">Real-World Code Shortcut:</strong> <span class="mono">name = user_input or
+            "Default"</span> — this assigns <span class="str">"Default"</span> only if <span
+            class="mono">user_input</span> is falsy (like an empty string).</li>
+      </ul>
+
+      <div class="step-label">Interactive Python Code Implementation</div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">logical_operators_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++</span>
+<span class="cmt">#               C. Logical Operators              #</span>
+<span class="cmt">#    Operators used:  and , or , not              #</span>
+<span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++</span>
+
+<span class="cmt"># and operator</span>
+x = <span class="num">5</span> <span class="kw">and</span> <span class="num">8</span> 
+<span class="fn">print</span>(<span class="str">"5 and 8  ="</span>, x) 
+
+y = <span class="num">0</span> <span class="kw">and</span> <span class="num">10</span> 
+<span class="fn">print</span>(<span class="str">"0 and 10 ="</span>, y) 
+
+<span class="cmt"># or operator</span>
+z = <span class="num">10</span> <span class="kw">or</span> <span class="num">0</span> 
+<span class="fn">print</span>(<span class="str">"10 or 0  ="</span>, z) 
+
+m = <span class="num">0</span> <span class="kw">or</span> <span class="num">10</span>
+<span class="fn">print</span>(<span class="str">"0 or 10  ="</span>, m)
+
+<span class="cmt"># not</span>
+n = <span class="num">10</span> 
+o = <span class="num">0</span>
+
+n = <span class="kw">not</span>(n)
+<span class="fn">print</span>(<span class="str">"not(10)  ="</span>, n)
+
+o = <span class="kw">not</span>(o)
+<span class="fn">print</span>(<span class="str">"not(0)   ="</span>, o)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>5 and 8  = 8
+0 and 10 = 0
+10 or 0  = 10
+0 or 10  = 10
+not(10)  = False
+not(0)   = True</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 6: IDENTITY OPERATORS ═══════════════════ -->
+  <section class="chapter" id="s6">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 06</span><span class="ch-badge">Memory References</span></div>
+      <h2 class="ch-title">7. Identity Operators</h2>
+      <p class="body-text">Used to check whether two variables point to the <strong>exact same object in memory</strong>
+        — not just whether they have equal values.</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">is</span></td>
+              <td>True if both variables refer to the exact same object in memory</td>
+            </tr>
+            <tr>
+              <td><span class="mono">is not</span></td>
+              <td>True if both variables refer to different objects in memory</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-card remember">
+        <span class="info-label">Point (Very Important, Commonly Confused with ==)</span>
+        <p>• <span class="mono">==</span> checks if the <strong>values</strong> are equal.<br>
+          • <span class="mono">is</span> checks if they are the <strong>exact same object</strong> in memory.<br><br>
+          <strong>Rule to remember:</strong> Always use <span class="mono">==</span> for comparing values. Only use
+          <span class="mono">is</span> when checking singleton sentinels like <span class="mono">None</span> (e.g. <span
+            class="mono">if x is None:</span>).
+        </p>
+      </div>
+
+      <div class="step-label">Interactive Python Code Implementation</div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">identity_operators_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</span>
+<span class="cmt">#                   D. IDENTITY OPERATORS                       #</span>
+<span class="cmt">#                  Operators used:  is , is not                 #</span>
+<span class="cmt"># Operator  |      Meaning                                      #</span>
+<span class="cmt"># is        | True if both variables refer to the same object   #</span>
+<span class="cmt"># is not    | True if both variables refer to different objects #</span>
+<span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</span>
+ 
+a = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>] 
+b = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>] 
+
+val_1 = a == b           <span class="cmt"># True (values are equal)</span>
+val_2 = a <span class="kw">is</span> b           <span class="cmt"># False (different list objects in memory, even though contents match)</span>
+val_3 = a <span class="kw">is not</span> b 
+
+<span class="fn">print</span>(<span class="str">"Using == :"</span>, val_1)
+<span class="fn">print</span>(<span class="str">"id(val_1):"</span>, <span class="fn">id</span>(val_1))
+
+<span class="fn">print</span>(<span class="str">"Using is: "</span>, val_2)
+<span class="fn">print</span>(<span class="str">"id(val_2):"</span>, <span class="fn">id</span>(val_2))
+
+<span class="fn">print</span>(<span class="str">"Using is not: "</span>, val_3)
+<span class="fn">print</span>(<span class="str">"id(val_3):"</span>, <span class="fn">id</span>(val_3))
+
+c = a
+<span class="fn">print</span>(<span class="str">"c is a ->"</span>, c <span class="kw">is</span> a)   <span class="cmt"># True (c and a point to the exact same object)</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Using == : True
+id(val_1): 140723824044816
+Using is:  False
+id(val_2): 140723824044848
+Using is not:  True
+id(val_3): 140723824044816
+c is a -> True</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 7: MEMBERSHIP OPERATORS ═══════════════════ -->
+  <section class="chapter" id="s7">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 07</span><span class="ch-badge">Sequence Search</span></div>
+      <h2 class="ch-title">8. Membership Operators</h2>
+      <p class="body-text">Used to check whether a value exists inside a sequence (like a string, list, tuple,
+        dictionary, or set).</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">in</span></td>
+              <td>True if value is found in the sequence</td>
+            </tr>
+            <tr>
+              <td><span class="mono">not in</span></td>
+              <td>True if value is NOT found in the sequence</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">Interactive Python Code Implementation</div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">membership_operators_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</span>
+<span class="cmt">#                   E. MEMBERSHIP OPERATORS                     #</span>
+<span class="cmt">#                  Operators used:  in , not in                 #</span>
+<span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</span>
+
+<span class="cmt"># I. in operator</span>
+<span class="kw">if</span> <span class="str">"a"</span> <span class="kw">in</span> <span class="str">"apple"</span>: 
+    <span class="fn">print</span>(<span class="str">"True"</span>) 
+<span class="kw">else</span>: 
+    <span class="fn">print</span>(<span class="kw">False</span>) 
+
+<span class="cmt"># II. not in operator</span>
+<span class="kw">if</span> <span class="str">"x"</span> <span class="kw">not in</span> <span class="str">"apple"</span>: 
+    <span class="fn">print</span>(<span class="kw">True</span>) 
+<span class="kw">else</span>: 
+    <span class="fn">print</span>(<span class="kw">False</span>) 
+
+<span class="cmt"># III. Check if a number is in a list</span>
+numbers = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>] 
+num = <span class="num">30</span>  <span class="cmt"># e.g., int(input("Enter a number: "))</span>
+ 
+<span class="kw">if</span> num <span class="kw">in</span> numbers: 
+    <span class="fn">print</span>(num, <span class="str">"is present in the list"</span>) 
+<span class="kw">else</span>: 
+    <span class="fn">print</span>(num, <span class="str">"is not present in the list"</span>) 
+
+<span class="cmt"># IV. Check if a character is in a string </span>
+text = <span class="str">"python"</span> 
+char = <span class="str">"t"</span>  <span class="cmt"># e.g., input("Enter a character: ")</span>
+ 
+<span class="kw">if</span> char <span class="kw">in</span> text: 
+    <span class="fn">print</span>(<span class="str">"Character found"</span>) 
+<span class="kw">else</span>: 
+    <span class="fn">print</span>(<span class="str">"Character not found"</span>) 
+
+<span class="cmt"># V. Check if a word is in a sentence </span>
+sentence = <span class="str">"Btech 5th Semseter is very important for students, as it lays the foundation for their future careers."</span> 
+word = <span class="str">"foundation"</span>  <span class="cmt"># e.g., input("Enter a word: ")</span>
+ 
+<span class="kw">if</span> word <span class="kw">in</span> sentence: 
+    <span class="fn">print</span>(<span class="str">"Word found"</span>) 
+<span class="kw">else</span>: 
+    <span class="fn">print</span>(<span class="str">"Word not found"</span>)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>True
+True
+30 is present in the list
+Character found
+Word found</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 8: BITWISE OPERATORS ═══════════════════ -->
+  <section class="chapter" id="s8">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 08</span><span class="ch-badge">Bit Manipulation</span></div>
+      <h2 class="ch-title">9. Bitwise Operators</h2>
+      <p class="body-text">These work at the binary (bit) level of numbers — they treat numbers in their raw binary form
+        (0s and 1s).</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Meaning</th>
+              <th>Example</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">&amp;</span></td>
+              <td>Bitwise AND</td>
+              <td><span class="mono">5 &amp; 3</span></td>
+              <td><span class="mono">1</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">|</span></td>
+              <td>Bitwise OR</td>
+              <td><span class="mono">5 | 3</span></td>
+              <td><span class="mono">7</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">^</span></td>
+              <td>Bitwise XOR</td>
+              <td><span class="mono">5 ^ 3</span></td>
+              <td><span class="mono">6</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">~</span></td>
+              <td>Bitwise NOT (inverts bits)</td>
+              <td><span class="mono">~5</span></td>
+              <td><span class="mono">-6</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&lt;&lt;</span></td>
+              <td>Left shift</td>
+              <td><span class="mono">5 &lt;&lt; 1</span></td>
+              <td><span class="mono">10</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&gt;&gt;</span></td>
+              <td>Right shift</td>
+              <td><span class="mono">5 &gt;&gt; 1</span></td>
+              <td><span class="mono">2</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">Points Often Not Known by Beginners</div>
+      <ul class="task-list">
+        <li><strong class="emph">Bit-by-bit comparison:</strong> 5 in binary is <span class="mono">101</span>, 3 in
+          binary is <span class="mono">011</span>. So <span class="mono">5 &amp; 3</span> compares bit by bit: <span
+            class="mono">101 &amp; 011 = 001</span>, which is <span class="mono">1</span> in decimal.</li>
+        <li><strong class="emph">Left shift (&lt;&lt;) by 1 position</strong> is equivalent to multiplying by 2 (<span
+            class="mono">5 &lt;&lt; 1 = 10</span>).</li>
+        <li><strong class="emph">Right shift (&gt;&gt;) by 1 position</strong> is equivalent to integer-dividing by 2
+          (<span class="mono">5 &gt;&gt; 1 = 2</span>).</li>
+        <li><strong class="emph">~ (bitwise NOT) formula:</strong> Uses the two's complement inversion formula: <span
+            class="mono">~x = -(x + 1)</span>. That is why <span class="mono">~5 = -6</span>!</li>
+      </ul>
+
+      <div class="step-label">Interactive Python Code Implementation</div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">bitwise_operators_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++</span>
+<span class="cmt">#                     E. BITWISE OPERATORS        #</span>
+<span class="cmt">#                    Operators used:              #</span>
+<span class="cmt">#                   & Bitwise AND                 #</span>
+<span class="cmt">#                   | Bitwise OR                  #</span>
+<span class="cmt">#                   ^ Bitwise XOR                 #</span>
+<span class="cmt">#                   ~ Bitwise NOT (inverts bits)  # </span>
+<span class="cmt">#                   << Left shift                 #</span>
+<span class="cmt">#                   >> Right shift                #</span>
+<span class="cmt"># +++++++++++++++++++++++++++++++++++++++++++++++++</span>
+ 
+num1 = <span class="num">5</span>
+num2 = <span class="num">3</span>
+
+<span class="cmt"># & Bitwise AND</span>
+b_and = num1 & num2
+<span class="fn">print</span>(<span class="str">"Bitwise & (AND)"</span>, num1, <span class="str">"&"</span>, num2, <span class="str">"="</span>, b_and)
+
+<span class="cmt"># | Bitwise OR</span>
+b_or = num1 | num2
+<span class="fn">print</span>(<span class="str">"Bitwise | (OR)"</span>, num1, <span class="str">"|"</span>, num2, <span class="str">"="</span>, b_or)
+
+<span class="cmt"># ^ Bitwise XOR</span>
+b_xor = num1 ^ num2
+<span class="fn">print</span>(<span class="str">"Bitwise ^ (XOR)"</span>, num1, <span class="str">"^"</span>, num2, <span class="str">"="</span>, b_xor)
+
+<span class="cmt"># ~ Bitwise NOT</span>
+b_not = ~num1  
+<span class="fn">print</span>(<span class="str">"Bitwise ~ (NOT)  ~"</span>, num1, <span class="str">"="</span>, b_not)
+
+<span class="cmt"># << Left shift </span>
+b_l_shift = num1 << num2
+<span class="fn">print</span>(<span class="str">"Bitwise << (Left Shift)"</span>, num1, <span class="str">"<<"</span>, num2, <span class="str">"="</span>, b_l_shift)
+
+<span class="cmt"># >> Right shift </span>
+b_r_shift = num1 >> num2
+<span class="fn">print</span>(<span class="str">"Bitwise >> (Right Shift)"</span>, num1, <span class="str">">>"</span>, num2, <span class="str">"="</span>, b_r_shift)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Bitwise & (AND) 5 & 3 = 1
+Bitwise | (OR) 5 | 3 = 7
+Bitwise ^ (XOR) 5 ^ 3 = 6
+Bitwise ~ (NOT)  ~ 5 = -6
+Bitwise << (Left Shift) 5 << 3 = 40
+Bitwise >> (Right Shift) 5 >> 3 = 0</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 9: PRECEDENCE & ASSOCIATIVITY ═══════════════════ -->
+  <section class="chapter" id="s9">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 09</span><span class="ch-badge">Evaluation Rules</span></div>
+      <h2 class="ch-title">10. Operator Precedence and Associativity</h2>
+
+      <div class="step-label">What is Operator Precedence?</div>
+      <p class="body-text">Operator precedence is the set of rules Python follows to decide which operator gets
+        evaluated first when an expression contains more than one operator. Operators with higher precedence are
+        evaluated before operators with lower precedence (like BODMAS / PEMDAS in mathematics).</p>
+
+      <div class="code-block">
+        <pre class="code-body">result = <span class="num">5</span> + <span class="num">3</span> * <span class="num">2</span>
+<span class="cmt"># * has higher precedence than +, so multiplication happens first</span>
+<span class="cmt"># 3 * 2 = 6, then 5 + 6 = 11</span>
+<span class="cmt"># result = 11, NOT (5 + 3) * 2 = 16</span></pre>
+      </div>
+
+      <div class="step-label">What is Associativity?</div>
+      <p class="body-text">Associativity is the rule that decides the order of evaluation when two or more operators of
+        the <strong>SAME precedence</strong> appear together in one expression. It tells Python whether to evaluate from
+        <strong>Left to Right</strong> or <strong>Right to Left</strong>.
+      </p>
+
+      <div class="code-block">
+        <pre class="code-body">result = <span class="num">20</span> - <span class="num">5</span> - <span class="num">3</span>
+<span class="cmt"># both operators are - (same precedence), and - is left-to-right:</span>
+<span class="cmt"># (20 - 5) - 3 = 15 - 3 = 12</span>
+<span class="cmt"># result = 12  (NOT 20 - (5 - 3) = 18)</span></pre>
+      </div>
+
+      <div class="info-card remember">
+        <span class="info-label">Why Do We Need Both Rules?</span>
+        <p>• <strong>Precedence:</strong> Decides order between <strong>DIFFERENT</strong> operators.<br>
+          • <strong>Associativity:</strong> Decides order between <strong>SAME-precedence</strong> operators.</p>
+      </div>
+
+      <div class="step-label">Full Operator Precedence Table (Highest to Lowest)</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Operator(s)</th>
+              <th>Description</th>
+              <th>Associativity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--teal); font-weight:700;">1 (Highest)</td>
+              <td><span class="mono">( )</span></td>
+              <td>Parentheses (grouping)</td>
+              <td>N/A (Always calculated completely first)</td>
+            </tr>
+            <tr>
+              <td style="color:var(--teal); font-weight:700;">2</td>
+              <td><span class="mono">**</span></td>
+              <td>Exponentiation (power)</td>
+              <td style="color:var(--accent); font-weight:700;">Right to Left</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><span class="mono">+x, -x, ~x</span></td>
+              <td>Unary plus, unary minus, bitwise NOT</td>
+              <td style="color:var(--accent); font-weight:700;">Right to Left</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><span class="mono">*, /, //, %</span></td>
+              <td>Multiplication, Division, Floor Division, Modulus</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><span class="mono">+, -</span></td>
+              <td>Addition, Subtraction (binary)</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><span class="mono">&lt;&lt;, &gt;&gt;</span></td>
+              <td>Bitwise left shift, right shift</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><span class="mono">&amp;</span></td>
+              <td>Bitwise AND</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><span class="mono">^</span></td>
+              <td>Bitwise XOR</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td><span class="mono">|</span></td>
+              <td>Bitwise OR</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td><span class="mono">==, !=, &gt;, &lt;, &gt;=, &lt;=, is, is not, in, not in</span></td>
+              <td>Comparison, Identity, Membership</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td><span class="mono">not</span></td>
+              <td>Logical NOT</td>
+              <td style="color:var(--accent); font-weight:700;">Right to Left</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td><span class="mono">and</span></td>
+              <td>Logical AND</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td><span class="mono">or</span></td>
+              <td>Logical OR</td>
+              <td>Left to Right</td>
+            </tr>
+            <tr>
+              <td style="color:var(--red); font-weight:700;">14 (Lowest)</td>
+              <td><span class="mono">:=</span></td>
+              <td>Walrus / Assignment expression</td>
+              <td style="color:var(--accent); font-weight:700;">Right to Left</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">Examples of Precedence from Notes</div>
+      <ul class="task-list">
+        <li><strong>Example A — Multiplication before Addition:</strong> <span class="mono">10 + 2 * 3 &rarr; 2 * 3 = 6,
+            then 10 + 6 = 16</span>.</li>
+        <li><strong>Example B — Exponent before Multiplication:</strong> <span class="mono">2 * 3 ** 2 &rarr; 3 ** 2 =
+            9, then 2 * 9 = 18</span>.</li>
+        <li><strong>Example C — Comparison happens after Arithmetic:</strong> <span class="mono">5 + 3 &gt; 2 * 3 &rarr;
+            8 &gt; 6 &rarr; True</span>.</li>
+        <li><strong>Example D — 'and' has higher precedence than 'or':</strong> <span class="mono">True or False and
+            False &rarr; (False and False) is False, then True or False &rarr; True</span> (Beginners wrongly assume
+          left-to-right reading here!).</li>
+      </ul>
+
+      <div class="step-label">Examples of Associativity from Notes</div>
+      <ul class="task-list">
+        <li><strong>Example A — Exponent is Right to Left (most important trap):</strong> <span class="mono">2 ** 3 ** 2
+            &rarr; 2 ** (3 ** 2) = 2 ** 9 = 512</span> (WRONG left-to-right assumption gives 64).</li>
+        <li><strong>Example B — Subtraction is Left to Right:</strong> <span class="mono">50 - 10 - 5 &rarr; (50 - 10) -
+            5 = 35</span>.</li>
+        <li><strong>Example C — Division is Left to Right:</strong> <span class="mono">100 / 5 / 2 &rarr; (100 / 5) / 2
+            = 20.0 / 2 = 10.0</span>.</li>
+        <li><strong>Example D — Unary Minus is Right to Left:</strong> <span class="mono">-2 ** 2 &rarr; -(2 ** 2) =
+            -4</span> (Unary minus has lower precedence than exponentiation).</li>
+        <li><strong>Example E — Walrus (:=) is Right to Left:</strong> <span class="mono">if (n := 5 + 3) &gt; 5:
+            print(n) &rarr; n = 8, then 8 &gt; 5 &rarr; True</span>.</li>
+      </ul>
+
+      <div class="step-label">Using Parentheses to Override Precedence</div>
+      <p class="body-text"><span class="mono">2 + 3 * 2</span> gives 8, while <span class="mono">(2 + 3) * 2</span>
+        forces addition first and gives 10. Parentheses make code unambiguous and self-documenting.</p>
+
+      <div class="step-label">Step-by-Step Solved Questions from Notes</div>
+
+      <!-- Question 1 -->
+      <div class="info-card insight">
+        <span class="info-label">Question 1: Evaluate result = 2 + 3 * 4 ** 2 // 5</span>
+        <p>• Step 1: Highest precedence is <span class="mono">**</span> (exponent). Compute <span class="mono">4 ** 2 =
+            16</span>.<br>
+          • Step 2: Expression becomes: <span class="mono">2 + 3 * 16 // 5</span>.<br>
+          • Step 3: <span class="mono">*</span> and <span class="mono">//</span> share precedence (left-to-right): <span
+            class="mono">3 * 16 = 48</span>.<br>
+          • Step 4: Expression becomes: <span class="mono">2 + 48 // 5</span>.<br>
+          • Step 5: Floor division: <span class="mono">48 // 5 = 9</span>.<br>
+          • Step 6: Addition: <span class="mono">2 + 9 = 11</span>.<br>
+          <strong>Final Answer: 11</strong>
+        </p>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="info-card mistake">
+        <span class="info-label">Question 2: Chained Comparison — Evaluate result = 10 > 5 == True</span>
+        <p>• Step 1: This is a chained comparison: <span class="mono">(10 > 5) and (5 == True)</span>.<br>
+          • Step 2: <span class="mono">10 > 5 &rarr; True</span>.<br>
+          • Step 3: <span class="mono">5 == True &rarr; 5 == 1 &rarr; False</span>.<br>
+          • Step 4: <span class="mono">True and False &rarr; False</span>.<br>
+          <strong>Final Answer: False</strong>
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">chained_comparison_verification.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body">result = <span class="num">10</span> > <span class="num">5</span> == <span class="kw">True</span>
+
+<span class="fn">print</span>(<span class="str">"Original expression: 10 > 5 == True"</span>)
+step1 = <span class="num">10</span> > <span class="num">5</span>
+<span class="fn">print</span>(<span class="str">"Step 1 (10 > 5)       ="</span>, step1)
+step2 = <span class="num">5</span> == <span class="kw">True</span>
+<span class="fn">print</span>(<span class="str">"Step 2 (5 == True)     ="</span>, step2)
+step3 = step1 <span class="kw">and</span> step2
+<span class="fn">print</span>(<span class="str">"Step 3 (True and False)="</span>, step3)
+<span class="fn">print</span>(<span class="str">"Final result           ="</span>, result)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Original expression: 10 > 5 == True
+Step 1 (10 > 5)       = True
+Step 2 (5 == True)     = False
+Step 3 (True and False)= False
+Final result           = False</pre>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="info-card tip">
+        <span class="info-label">Question 3: Mixing Comparison, Arithmetic &amp; Logical — result = 5 + 3 > 2 and 10 //
+          3 == 3</span>
+        <p>• Step 1: Arithmetic first &rarr; <span class="mono">5 + 3 = 8</span> and <span class="mono">10 // 3 =
+            3</span>.<br>
+          • Step 2: Expression becomes: <span class="mono">8 > 2 and 3 == 3</span>.<br>
+          • Step 3: Comparisons next &rarr; <span class="mono">8 > 2 &rarr; True</span> and <span class="mono">3 == 3
+            &rarr; True</span>.<br>
+          • Step 4: Logical <span class="mono">and</span> &rarr; <span class="mono">True and True &rarr;
+            True</span>.<br>
+          <strong>Final Answer: True</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 10: AUGMENTED ASSIGNMENTS ═══════════════════ -->
+  <section class="chapter" id="s10">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 10</span><span class="ch-badge">Shortcuts</span></div>
+      <h2 class="ch-title">11. Augmented Assignment Operators</h2>
+
+      <div class="step-label">What is Augmented Assignment?</div>
+      <p class="body-text">An augmented assignment operator is a shorthand way of combining an arithmetic or bitwise
+        operation with assignment in a single step (<span class="mono">x += 5</span> instead of <span class="mono">x = x
+          + 5</span>).</p>
+
+      <div class="step-label">Why Use Augmented Assignment?</div>
+      <ul class="task-list">
+        <li>Makes code shorter and cleaner, especially inside loops.</li>
+        <li>Prevents typing mistakes by not repeating long variable names twice.</li>
+      </ul>
+
+      <div class="step-label">Full List &amp; Examples from Notes</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Name</th>
+              <th>Example</th>
+              <th>Equivalent To</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">+=</span></td>
+              <td>Addition assignment</td>
+              <td><span class="mono">x += 3</span></td>
+              <td><span class="mono">x = x + 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">-=</span></td>
+              <td>Subtraction assignment</td>
+              <td><span class="mono">x -= 3</span></td>
+              <td><span class="mono">x = x - 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">*=</span></td>
+              <td>Multiplication assignment</td>
+              <td><span class="mono">x *= 3</span></td>
+              <td><span class="mono">x = x * 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">/=</span></td>
+              <td>Division assignment</td>
+              <td><span class="mono">x /= 3</span></td>
+              <td><span class="mono">x = x / 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">//=</span></td>
+              <td>Floor division assignment</td>
+              <td><span class="mono">x //= 3</span></td>
+              <td><span class="mono">x = x // 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">%=</span></td>
+              <td>Modulus assignment</td>
+              <td><span class="mono">x %= 3</span></td>
+              <td><span class="mono">x = x % 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">**=</span></td>
+              <td>Exponent assignment</td>
+              <td><span class="mono">x **= 3</span></td>
+              <td><span class="mono">x = x ** 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&amp;=</span></td>
+              <td>Bitwise AND assignment</td>
+              <td><span class="mono">x &amp;= 3</span></td>
+              <td><span class="mono">x = x &amp; 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">|=</span></td>
+              <td>Bitwise OR assignment</td>
+              <td><span class="mono">x |= 3</span></td>
+              <td><span class="mono">x = x | 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">^=</span></td>
+              <td>Bitwise XOR assignment</td>
+              <td><span class="mono">x ^= 3</span></td>
+              <td><span class="mono">x = x ^ 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&gt;&gt;=</span></td>
+              <td>Right shift assignment</td>
+              <td><span class="mono">x &gt;&gt;= 1</span></td>
+              <td><span class="mono">x = x &gt;&gt; 1</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">&lt;&lt;=</span></td>
+              <td>Left shift assignment</td>
+              <td><span class="mono">x &lt;&lt;= 1</span></td>
+              <td><span class="mono">x = x &lt;&lt; 1</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">augmented_assignment_demos.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># A. +=</span>
+x = <span class="num">10</span>
+x += <span class="num">5</span>      <span class="cmt"># Output: 15</span>
+<span class="fn">print</span>(<span class="str">"x += 5 ->"</span>, x)
+
+<span class="cmt"># B. -=</span>
+x = <span class="num">10</span>
+x -= <span class="num">4</span>      <span class="cmt"># Output: 6</span>
+<span class="fn">print</span>(<span class="str">"x -= 4 ->"</span>, x)
+
+<span class="cmt"># C. *=</span>
+x = <span class="num">10</span>
+x *= <span class="num">3</span>      <span class="cmt"># Output: 30</span>
+<span class="fn">print</span>(<span class="str">"x *= 3 ->"</span>, x)
+
+<span class="cmt"># D. **=</span>
+x = <span class="num">2</span>
+x **= <span class="num">4</span>     <span class="cmt"># Output: 16</span>
+<span class="fn">print</span>(<span class="str">"x **= 4 ->"</span>, x)
+
+<span class="cmt"># E. Bitwise compound &=, |=, ^=</span>
+x = <span class="num">6</span>; x &= <span class="num">3</span>  <span class="cmt"># 110 & 011 = 010 (2)</span>
+y = <span class="num">6</span>; y |= <span class="num">3</span>  <span class="cmt"># 110 | 011 = 111 (7)</span>
+z = <span class="num">6</span>; z ^= <span class="num">3</span>  <span class="cmt"># 110 ^ 011 = 101 (5)</span>
+<span class="fn">print</span>(<span class="str">f"Bitwise compounds: x={x}, y={y}, z={z}"</span>)
+
+<span class="cmt"># F. Shift compounds >>=, <<=</span>
+x = <span class="num">8</span>; x >>= <span class="num">1</span> <span class="cmt"># 4</span>
+y = <span class="num">8</span>; y <<= <span class="num">1</span> <span class="cmt"># 16</span>
+<span class="fn">print</span>(<span class="str">f"Shift compounds: x={x}, y={y}"</span>)
+
+<span class="cmt"># G. Strings support +=</span>
+greeting = <span class="str">"Hello"</span>
+greeting += <span class="str">" World"</span>
+<span class="fn">print</span>(<span class="str">"String += :"</span>, greeting)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>x += 5 -> 15
+x -= 4 -> 6
+x *= 3 -> 30
+x **= 4 -> 16
+Bitwise compounds: x=2, y=7, z=5
+Shift compounds: x=4, y=16
+String += : Hello World</pre>
+        </div>
+      </div>
+
+      <div class="info-card mistake">
+        <span class="info-label">Common Mistake: Using an Augmented Operator on an Undefined Variable</span>
+        <p><span class="mono">count += 1</span> &rarr; <strong style="color:var(--red)">NameError: name 'count' is not
+            defined</strong> because <span class="mono">count</span> was never given an initial value.<br>
+          <strong>Correct way:</strong> Initialize first (<span class="mono">count = 0</span>), then <span
+            class="mono">count += 1</span>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 11: TYPE CONVERSION ═══════════════════ -->
+  <section class="chapter" id="s11">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 11</span><span class="ch-badge">Type Transformation</span>
+      </div>
+      <h2 class="ch-title">12. Type Conversion (Implicit &amp; Explicit)</h2>
+
+      <div class="step-label">A. Implicit Type Conversion (Automatic)</div>
+      <p class="body-text">Happens automatically without writing conversion code. Python does this safely when combining
+        a smaller/less precise type with a larger/more precise type (e.g. <span class="mono">int + float &rarr;
+          float</span>). Python <strong>never</strong> silently converts a string to a number (e.g. <span
+          class="mono">"5" + 2</span> raises a <span class="mono">TypeError</span>).</p>
+
+      <div class="code-block">
+        <pre
+          class="code-body">a = <span class="num">5</span>        <span class="cmt"># int</span>
+b = <span class="num">2.5</span>      <span class="cmt"># float</span>
+c = a + b    <span class="cmt"># Python converts 'a' to float before adding</span>
+<span class="fn">print</span>(c, <span class="fn">type</span>(c)) <span class="cmt"># 7.5 &lt;class 'float'&gt;</span></pre>
+      </div>
+
+      <div class="step-label">B. Explicit Type Conversion (Manual / Type Casting)</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Converts To</th>
+              <th>Example</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">int()</span></td>
+              <td>Integer (truncates towards zero)</td>
+              <td><span class="mono">int("42")</span>, <span class="mono">int(3.9)</span>, <span
+                  class="mono">int(-3.9)</span></td>
+              <td><span class="mono">42</span>, <span class="mono">3</span>, <span class="mono">-3</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">float()</span></td>
+              <td>Float</td>
+              <td><span class="mono">float("3.14")</span>, <span class="mono">float(7)</span></td>
+              <td><span class="mono">3.14</span>, <span class="mono">7.0</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">str()</span></td>
+              <td>String</td>
+              <td><span class="mono">str(100)</span>, <span class="mono">str(3.14)</span></td>
+              <td><span class="mono">"100"</span>, <span class="mono">"3.14"</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">bool()</span></td>
+              <td>Boolean</td>
+              <td><span class="mono">bool(0)</span>, <span class="mono">bool(1)</span>, <span
+                  class="mono">bool("")</span>, <span class="mono">bool("a")</span></td>
+              <td><span class="mono">False</span>, <span class="mono">True</span>, <span class="mono">False</span>,
+                <span class="mono">True</span>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="mono">list()</span></td>
+              <td>List</td>
+              <td><span class="mono">list("abc")</span></td>
+              <td><span class="mono">['a', 'b', 'c']</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">tuple()</span></td>
+              <td>Tuple</td>
+              <td><span class="mono">tuple([1, 2, 3])</span></td>
+              <td><span class="mono">(1, 2, 3)</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">set()</span></td>
+              <td>Set (Removes duplicates)</td>
+              <td><span class="mono">set([1, 1, 2, 3])</span></td>
+              <td><span class="mono">{1, 2, 3}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">4 Important Points from Notes</div>
+      <ul class="task-list">
+        <li><strong class="emph">1. int() cannot directly convert a decimal string:</strong> <span
+            class="mono">int("25.5")</span> raises <span class="mono">ValueError</span>. Correct way: <span
+            class="mono">int(float("25.5")) &rarr; 25</span>.</li>
+        <li><strong class="emph">2. Converting True/False to int:</strong> <span class="mono">int(True) = 1</span>,
+          <span class="mono">int(False) = 0</span> (because <span class="mono">bool</span> subclasses <span
+            class="mono">int</span>).
+        </li>
+        <li><strong class="emph">3. Whitespace rules:</strong> <span class="mono">int("25 ") = 25</span>
+          (trailing/leading space allowed), but <span class="mono">int("2 5")</span> raises <span
+            class="mono">ValueError</span> (internal spaces forbidden).</li>
+        <li><strong class="emph">4. Unconvertible strings:</strong> <span class="mono">int("hello")</span> raises <span
+            class="mono">ValueError: invalid literal for int() with base 10: 'hello'</span>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 12: ROUNDING IN PYTHON ═══════════════════ -->
+  <section class="chapter" id="s12">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 12</span><span class="ch-badge">Precision</span></div>
+      <h2 class="ch-title">13. Rounding in Python</h2>
+
+      <div class="step-label">Basic Usage of round()</div>
+      <ul class="task-list">
+        <li><strong class="emph">Rounding to nearest whole number:</strong> <span class="mono">round(7) = 7</span>,
+          <span class="mono">round(3.14159) = 3</span>.
+        </li>
+        <li><strong class="emph">Rounding to decimal places:</strong> <span class="mono">round(3.14159, 2) =
+            3.14</span>. Note: <span class="mono">round(x, 0)</span> returns a float (<span class="mono">3.0</span>),
+          while <span class="mono">round(x)</span> returns an int (<span class="mono">3</span>).</li>
+        <li><strong class="emph">Rounding to tens, hundreds (negative second argument):</strong> <span
+            class="mono">round(12345, -2) = 12300</span>, <span class="mono">round(12345, -3) = 12000</span>.</li>
+      </ul>
+
+      <div class="step-label">"Banker's Rounding" (Round Half to Even)</div>
+      <p class="body-text">Python's <span class="mono">round()</span> does <strong>NOT</strong> always round 0.5 upward.
+        Instead, when a number is exactly halfway between two possibilities, Python rounds to whichever neighboring
+        whole number is <strong>even</strong>:</p>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Expression</th>
+              <th>Result</th>
+              <th>Explanation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">round(0.5)</span></td>
+              <td><span class="mono">0</span></td>
+              <td>Rounds down because 0 is even</td>
+            </tr>
+            <tr>
+              <td><span class="mono">round(1.5)</span></td>
+              <td><span class="mono">2</span></td>
+              <td>Rounds up because 2 is even</td>
+            </tr>
+            <tr>
+              <td><span class="mono">round(2.5)</span></td>
+              <td><span class="mono">2</span></td>
+              <td>Rounds down because 2 is even</td>
+            </tr>
+            <tr>
+              <td><span class="mono">round(3.5)</span></td>
+              <td><span class="mono">4</span></td>
+              <td>Rounds up because 4 is even</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">Floating-Point Binary Precision Quirk</div>
+      <p class="body-text"><span class="mono">round(2.675, 2)</span> gives <span class="mono">2.67</span> instead of
+        2.68 because <span class="mono">2.675</span> cannot be stored exactly in binary floating-point (internally it is
+        stored as <span class="mono">2.6749999999999998...</span>).</p>
+
+      <div class="step-label">round() vs int() — Not the Same Thing</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Expression</th>
+              <th>Result</th>
+              <th>Behavior</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">int(3.9)</span></td>
+              <td><span class="mono">3</span></td>
+              <td>Truncates — simply cuts off the decimal part</td>
+            </tr>
+            <tr>
+              <td><span class="mono">round(3.9)</span></td>
+              <td><span class="mono">4</span></td>
+              <td>Rounds to the nearest whole number</td>
+            </tr>
+            <tr>
+              <td><span class="mono">int(3.1)</span></td>
+              <td><span class="mono">3</span></td>
+              <td>Truncates — cuts off the decimal part</td>
+            </tr>
+            <tr>
+              <td><span class="mono">round(3.1)</span></td>
+              <td><span class="mono">3</span></td>
+              <td>Rounds to the nearest whole number</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 13: SECRETS MODULE ═══════════════════ -->
+  <section class="chapter" id="s13">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 13</span><span class="ch-badge">Cybersecurity</span></div>
+      <h2 class="ch-title">14. Cryptographic Security &amp; The <span class="mono">secrets</span> Module</h2>
+      <p class="body-text">The standard <span class="mono">random</span> module is predictable and unsuitable for
+        security. The Python standard library provides the <strong class="emph">secrets module</strong> for generating
+        cryptographically strong random numbers suitable for managing data such as passwords, account authentication,
+        security tokens, and related secrets.</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">secrets_security_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Example: Secure random numbers</span>
+<span class="kw">import</span> secrets 
+ 
+<span class="cmt"># Secure random integer </span>
+<span class="fn">print</span>(<span class="str">"Secure randbelow(100):"</span>, secrets.randbelow(<span class="num">100</span>))        <span class="cmt"># Random int from 0 to 99 </span>
+ 
+<span class="cmt"># Secure random token (for passwords, API keys) </span>
+<span class="fn">print</span>(<span class="str">"Token Hex (16 bytes)   :"</span>, secrets.token_hex(<span class="num">16</span>))         <span class="cmt"># 32-character hex string </span>
+<span class="fn">print</span>(<span class="str">"Token URL-Safe (16)    :"</span>, secrets.token_urlsafe(<span class="num">16</span>))     <span class="cmt"># URL-safe base64 string </span>
+ 
+<span class="cmt"># Secure random choice password generator</span>
+password_chars = <span class="str">"abcdefghijklmnopqrstuvwxyz0123456789!@#$%"</span> 
+password = <span class="str">''</span>.<span class="fn">join</span>(secrets.choice(password_chars) <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">12</span>)) 
+<span class="fn">print</span>(<span class="str">f"Generated password     : {password}"</span>)</pre>
+        <div class="code-output">
+          <div class="out-label">Output (Sample Generation)</div>
+          <pre>Secure randbelow(100): 42
+Token Hex (16 bytes)   : 7f3b892a4c1e09d58a3c2e1b9d4f7a2c
+Token URL-Safe (16)    : 8aF_3qM1kP9rT2wX5yL8bQ
+Generated password     : p8#x2m$k9vL@</pre>
+        </div>
+      </div>
+
+      <!-- Quizzes -->
+      <div class="step-label">Practice Challenge Quizzes</div>
+
+      <div class="quiz-block">
+        <span class="quiz-tag">Precedence &amp; Associativity</span>
+        <div class="quiz-q">What is the value of <span class="mono">2 ** 3 ** 2</span> in Python?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'l3q_pre')">512 — because exponentiation is
+            right-to-left: 2 ** (3 ** 2) = 2 ** 9 = 512</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l3q_pre')">64 — evaluated left-to-right as (2 ** 3)
+            ** 2 = 8 ** 2 = 64</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l3q_pre')">36</button>
+        </div>
+        <div class="quiz-feedback" id="l3q_pre-feedback"></div>
+      </div>
+
+      <div class="quiz-block">
+        <span class="quiz-tag">Banker's Rounding</span>
+        <div class="quiz-q">What does <span class="mono">round(2.5)</span> evaluate to in Python?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'l3q_round')">2 — because Banker's Rounding rounds .5
+            to the nearest even neighbor (2 is even)</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l3q_round')">3 — rounds upwards to the next whole
+            number</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l3q_round')">2.0 — returns float by
+            default</button>
+        </div>
+        <div class="quiz-feedback" id="l3q_round-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SUMMARY ═══════════════════ -->
+  <section class="chapter" id="summary">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Summary</span><span class="ch-badge">Complete</span></div>
+      <h2 class="ch-title">Lecture 3 Summary &amp; Key Takeaways</h2>
+      <p class="body-text">This lecture covered the full breadth of Python operators, execution order, type casting,
+        rounding mathematics, and security:</p>
+      <ul class="task-list">
+        <li><strong class="emph">The 8 Core Categories:</strong> Arithmetic, Assignment, Relational, Logical, Identity
+          (<span class="mono">is</span> vs <span class="mono">==</span>), Membership (<span class="mono">in</span>),
+          Bitwise, and Precedence / Associativity.</li>
+        <li><strong class="emph">Floor Division Mechanics:</strong> <span class="mono">//</span> rounds toward negative
+          infinity (<span class="mono">-7 // 2 = -4</span>).</li>
+        <li><strong class="emph">Logical Short-Circuiting:</strong> <span class="mono">and</span> and <span
+            class="mono">or</span> return the operand value that settled the evaluation (<span class="mono">5 and 8 =
+            8</span>, <span class="mono">10 or 0 = 10</span>).</li>
+        <li><strong class="emph">Identity vs Equality:</strong> <span class="mono">==</span> checks value equality;
+          <span class="mono">is</span> checks whether both references share the same memory address (<span
+            class="mono">id(a) == id(b)</span>).
+        </li>
+        <li><strong class="emph">Precedence Traps:</strong> <span class="mono">**</span> is right-to-left (<span
+            class="mono">2 ** 3 ** 2 = 512</span>). Unary minus has lower precedence than exponent (<span
+            class="mono">-2 ** 2 = -4</span>). Chained comparison <span class="mono">10 > 5 == True</span> evaluates as
+          <span class="mono">(10 > 5) and (5 == True) &rarr; False</span>.
+        </li>
+        <li><strong class="emph">Type Casting &amp; Rounding:</strong> <span class="mono">int()</span> truncates
+          decimals. <span class="mono">round()</span> uses Banker's Rounding (half to even) to eliminate statistical
+          bias.</li>
+        <li><strong class="emph">Cryptographic Security:</strong> Always use <span class="mono">secrets</span> (never
+          <span class="mono">random</span>) for generating tokens, passwords, and security keys.
+        </li>
+      </ul>
+      <div class="pull-quote">"Mastering Python operators and precedence means you never have to guess how complex
+        expressions execute under the hood."</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ VIBRANT INSTITUTIONAL FOOTER ═══════════════════ -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-author-badge">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-author-img">
+        <span>Prepared by <strong>Umer Farooq</strong></span>
+      </div>
+      <p>SSM College of Engineering & Technology • B.Tech 5th Semester • Python Programming • Lecture 3</p>
+    </div>
+  </footer>
+
+  <script>
+    // ========== Theme Toggle ==========
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', html.dataset.theme);
+      updateThemeIcon();
+    }
+    function updateThemeIcon() {
+      const icon = document.getElementById('theme-icon');
+      if (!icon) return;
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      icon.innerHTML = isDark
+        ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+      updateThemeIcon();
+    })();
+
+    // ========== Progress Bar & Back to Top ==========
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('progress-bar');
+      const btt = document.getElementById('back-to-top');
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (bar) bar.style.width = (scrollTop / scrollHeight * 100) + '%';
+      if (btt) btt.classList.toggle('show', scrollTop > 400);
+    });
+
+    // ========== Copy Code ==========
+    function copyCode(btn) {
+      const code = btn.closest('.code-block').querySelector('pre.code-body');
+      navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 1500);
+      });
+    }
+
+    // ========== Quiz Feedback ==========
+    const quizFeedback = {
+      l3q_pre: {
+        correct: "Correct — Exponentiation (**) in Python is right-to-left associative: 2 ** (3 ** 2) = 2 ** 9 = 512.",
+        wrong: "Not quite — Exponentiation is evaluated from right to left in Python: 3 ** 2 is 9, then 2 ** 9 is 512."
+      },
+      l3q_round: {
+        correct: "Correct — In Banker's Rounding (round half to even), 2.5 is exactly halfway between 2 and 3, so Python rounds to 2 (the even number).",
+        wrong: "Not quite — Python implements Banker's Rounding. 2.5 rounds to 2 because 2 is the even neighbor."
+      }
+    };
+
+    function answerQuiz(btn, isCorrect, groupId) {
+      const group = btn.closest('.quiz-opts');
+      group.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      const fb = document.getElementById(groupId + '-feedback');
+      if (fb) {
+        fb.classList.add('show');
+        const msg = quizFeedback[groupId];
+        fb.innerHTML = msg ? (isCorrect ? msg.correct : msg.wrong) : (isCorrect ? 'Correct!' : 'Not quite.');
+      }
+    }
+  </script>
+
+</body>
+
+</html>

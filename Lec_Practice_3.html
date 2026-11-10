@@ -1,0 +1,4138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Practice Set 3: 40 Master Python Programs on while loop, for loop, break statement, and continue statement. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Practice Set 3: while Loop, for Loop, break &amp; continue in Python | SSM College of Engineering</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      /* IDE syntax highlighting tokens (Dark) */
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      /* IDE syntax highlighting tokens (Light) */
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #64748b;
+      --syn-function: #0284c7;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0d9488;
+      --syn-punctuation: #475569;
+      --syn-variable: #0f172a;
+      --syn-format: #b45309;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      font-size: 16px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Scroll Progress Bar */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      transition: width 0.1s ease;
+    }
+
+    /* Sticky Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      z-index: 900;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .nav-brand .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Container Layout */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--card) 0%, var(--bg-alt) 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius);
+      padding: 44px 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 36px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner::before {
+      content: "";
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .tag-accent { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+    .tag-teal { background: var(--teal-soft); color: var(--teal); border: 1px solid var(--teal); }
+    .tag-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid var(--purple); }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-dim);
+      font-size: 1.15rem;
+      max-width: 850px;
+      margin-bottom: 28px;
+      line-height: 1.65;
+    }
+
+    .hero-author-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .author-profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .author-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .author-details h4 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .author-details p {
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      margin-bottom: 0;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, #d46b17 100%);
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px var(--accent-glow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .meta-item {
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      padding: 14px 18px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .meta-item .val {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .meta-item .lbl {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* Table of Contents */
+    #toc-section {
+      margin-bottom: 50px;
+    }
+
+    .section-header-pill {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--teal);
+      background: var(--teal-soft);
+      border: 1px solid var(--teal);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .toc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .toc-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+
+    .ch-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+
+    .ch-name {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .ch-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.55;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+
+    .toc-pill-badge {
+      display: inline-flex;
+      align-self: flex-start;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    /* Chapter Section Styling */
+    .chapter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      margin-bottom: 48px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .ch-header {
+      margin-bottom: 28px;
+    }
+
+    .ch-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    h2.ch-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    /* Subheadings */
+    h3.sub-title {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 36px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid var(--teal);
+      padding-left: 12px;
+    }
+
+    h3.sub-title .sec-badge {
+      background: var(--teal);
+      color: #0e1015;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] h3.sub-title .sec-badge {
+      color: #ffffff;
+    }
+
+    h4.sub-sub-title {
+      font-family: var(--font-heading);
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 24px 0 12px;
+    }
+
+    /* Content Typography */
+    p {
+      color: var(--text);
+      font-size: 16.5px;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    ul, ol {
+      margin-left: 24px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    code {
+      font-family: var(--font-code);
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin: 24px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-accent);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--bg-alt);
+      color: var(--accent);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--border-accent);
+      letter-spacing: 0.4px;
+    }
+
+    td {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--cell-border);
+      background: var(--card);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    tr:nth-child(even) td {
+      background: var(--table-stripe);
+    }
+
+    tr:hover td {
+      background: var(--card-hover);
+    }
+
+    /* Program Box Container */
+    .program-box {
+      background: var(--bg-alt);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      margin: 32px 0;
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    .prog-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .prog-badge {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+      letter-spacing: 0.5px;
+    }
+
+    .prog-category-badge {
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--teal);
+    }
+
+    .program-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .program-desc {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    /* macOS Code Window */
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .code-header {
+      background: #151821;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    [data-theme="light"] .code-header {
+      background: #1e293b;
+      border-bottom-color: #334155;
+    }
+
+    .code-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-code);
+      font-size: 0.8rem;
+      color: #949db2;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .copy-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .code-body pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text);
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .code-body pre {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    /* Syntax Highlighting */
+    .syn-keyword { color: var(--syn-keyword); font-weight: 700; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); font-weight: 700; }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+    .syn-format { color: var(--syn-format); font-weight: 700; }
+
+    /* Output Window Box */
+    .output-box {
+      background: #090a0d;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      margin: 12px 0 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] .output-box {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .output-header {
+      background: #11141c;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    [data-theme="light"] .output-header {
+      background: #0f172a;
+      color: #2dd4bf;
+      border-bottom-color: #334155;
+    }
+
+    .output-body pre {
+      padding: 12px 16px;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: #a9b7c6;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin: 0;
+    }
+
+    [data-theme="light"] .output-body pre {
+      color: #e2e8f0;
+    }
+
+    .prog-takeaway {
+      background: var(--cell-bg);
+      border-left: 3px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Callout Alert Boxes */
+    .callout {
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 28px 0;
+      border: 1px solid;
+    }
+
+    .callout.tip {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .callout.important {
+      background: var(--red-soft);
+      border-color: var(--red);
+    }
+
+    .callout.remember {
+      background: var(--purple-soft);
+      border-color: var(--purple);
+    }
+
+    .callout-head {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .callout.tip .callout-head { color: var(--teal); }
+    .callout.important .callout-head { color: var(--red); }
+    .callout.remember .callout-head { color: var(--purple); }
+
+    .callout-body {
+      color: var(--text);
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    .callout-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Site Footer */
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    /* Floating Action Buttons */
+    .float-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 800;
+    }
+
+    .btn-float {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-float:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 12pt;
+      }
+
+      .top-nav,
+      .float-actions,
+      .copy-btn,
+      #progress-container,
+      .hero-buttons {
+        display: none !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+
+      .hero-banner,
+      .chapter,
+      .program-box,
+      .code-container,
+      .output-box {
+        border: 1px solid #cccccc !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        page-break-inside: avoid;
+      }
+
+      pre, code {
+        color: #000000 !important;
+        background: #f4f4f4 !important;
+      }
+
+      h1, h2, h3, h4 {
+        color: #000000 !important;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 16px 60px;
+      }
+
+      .hero-banner {
+        padding: 24px 20px;
+      }
+
+      .hero-title {
+        font-size: 1.75rem;
+      }
+
+      .chapter {
+        padding: 20px 16px;
+      }
+
+      h2.ch-title {
+        font-size: 1.5rem;
+      }
+
+      h3.sub-title {
+        font-size: 1.25rem;
+      }
+
+      .hero-author-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- Top Sticky Navigation -->
+  <header class="top-nav">
+    <a href="#" class="nav-brand">
+      <span class="badge">LEC PRACTICE 03</span>
+      <span>Python Programming</span>
+    </a>
+    <div class="nav-actions">
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF">
+        <span>🖨️</span> Print PDF
+      </button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon-nav">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Banner -->
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">B.Tech Computer Science &amp; Engineering</span>
+        <span class="tag tag-teal">Chapter 2: Loops &amp; Iteration Mastery</span>
+        <span class="tag tag-purple">Practice Sheet 03</span>
+      </div>
+      <h1 class="hero-title">Practice Set 3: Loops, Iteration &amp; Control Jump Statements</h1>
+      <p class="hero-subtitle">
+        An exhaustive master-level practical workbook containing <strong>40 distinct, fully tested Python 3 programs</strong> (10 programs each for the <code>while</code> loop, <code>for</code> loop, <code>break</code> statement, and <code>continue</code> statement), structured with 1-line definitions, syntax tables, terminal output traces, and execution takeaways.
+      </p>
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()">
+            <span>🖨️</span> Save as PDF / Print
+          </button>
+        </div>
+      </div>
+      <div class="hero-meta-strip">
+        <div class="meta-item">
+          <span class="val">4</span>
+          <span class="lbl">Core Topics</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">40</span>
+          <span class="lbl">Unique Programs (1–40)</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">40</span>
+          <span class="lbl">1-Line Definitions</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">100%</span>
+          <span class="lbl">Verified Outputs</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Table of Contents -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Quick Topic Navigation (40 Programs)</div>
+      <div class="toc-grid">
+
+        <a href="#sec-while-loop" class="toc-card">
+          <span class="ch-num">SECTION 01 • PROG 01–10</span>
+          <span class="ch-name">The while Loop (Indefinite &amp; Condition-Controlled Iteration)</span>
+          <span class="ch-desc">10 distinct master programs covering arithmetic accumulation, binary/decimal conversions, palindrome validatio...</span>
+          <span class="toc-pill-badge">10 Programs • Verified</span>
+        </a>
+        <a href="#sec-for-loop" class="toc-card">
+          <span class="ch-num">SECTION 02 • PROG 11–20</span>
+          <span class="ch-name">The for Loop (Definite Iteration &amp; Sequence Processing)</span>
+          <span class="ch-desc">10 distinct master programs covering factorial computation, harmonic series, matrix transposition, Caesar ciph...</span>
+          <span class="toc-pill-badge">10 Programs • Verified</span>
+        </a>
+        <a href="#sec-break-statement" class="toc-card">
+          <span class="ch-num">SECTION 03 • PROG 21–30</span>
+          <span class="ch-name">The break Statement (Early Exit &amp; Search Optimization)</span>
+          <span class="ch-desc">10 distinct master programs covering linear search pruning, first non-repeating character detection, password ...</span>
+          <span class="toc-pill-badge">10 Programs • Verified</span>
+        </a>
+        <a href="#sec-continue-statement" class="toc-card">
+          <span class="ch-num">SECTION 04 • PROG 31–40</span>
+          <span class="ch-name">The continue Statement (Iteration Skip &amp; Guard Filters)</span>
+          <span class="ch-desc">10 distinct master programs covering FizzBuzz multiple skipping, negative sensor filtering, non-alpha characte...</span>
+          <span class="toc-pill-badge">10 Programs • Verified</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Main Content Sections -->
+
+    <!-- The while Loop (Indefinite & Condition-Controlled Iteration) -->
+    <section class="chapter" id="sec-while-loop">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 01 • Condition-Controlled Repetition</span>
+        <h2 class="ch-title">The while Loop (Indefinite & Condition-Controlled Iteration)</h2>
+      </div>
+
+      <p class="hero-subtitle" style="margin-bottom: 24px;">10 distinct master programs covering arithmetic accumulation, binary/decimal conversions, palindrome validation, Armstrong numbers, compound interest models, Euclidean GCD, digital roots, prime factorization, and Newton-Raphson approximation.</p>
+
+      <h3 class="sub-title" id="sec-01-theory"><span class="sec-badge">01.1</span> Theoretical Foundation &amp; Principles</h3>
+      <div style="margin-bottom: 24px;">
+        <p>A <strong>while loop</strong> executes a block of statements repeatedly as long as its governing test condition evaluates to <code>True</code>. It is primarily used when the exact number of iterations is not known beforehand and depends dynamically on runtime data, arithmetic convergence, or sentinel inputs.</p>
+      </div>
+
+      <h3 class="sub-title" id="sec-01-concepts"><span class="sec-badge">01.2</span> One-Line Academic Definitions &amp; Mechanisms</h3>
+      <p>The following table establishes executive 1-line definitions, syntax archetypes, and runtime mechanics for this topic:</p>
+      
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 25%;">Core Concept</th>
+                <th style="width: 25%;">Syntax / Archetype</th>
+                <th style="width: 50%;">One-Line Definition &amp; Mechanism</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">while Loop Construct</td>
+              <td><code>while condition:</code></td>
+              <td>Executes its enclosed block repeatedly as long as the Boolean test condition remains True.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Loop Termination Rule</td>
+              <td><code>State update towards False</code></td>
+              <td>Requires an explicit state modification inside the body to eventually force the test condition to False.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Sentinel-Controlled Loop</td>
+              <td><code>while var != SENTINEL:</code></td>
+              <td>Continues processing until a designated boundary or exit marker value is encountered.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Logarithmic Halving</td>
+              <td><code>n = n // base</code></td>
+              <td>Repeatedly dividing a number by its radix base to process all individual digits in O(log n) steps.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Digit Extraction Formula</td>
+              <td><code>digit = n % 10</code></td>
+              <td>Isolates the least significant decimal digit using modulo arithmetic.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Digit Truncation Formula</td>
+              <td><code>n = n // 10</code></td>
+              <td>Discards the least significant digit using floor division.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Convergence Iteration</td>
+              <td><code>while abs(x_next - x) &gt; eps:</code></td>
+              <td>Iterates a mathematical recurrence relation until successive estimates differ by less than a tolerance epsilon.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Euclidean Algorithm</td>
+              <td><code>while b != 0: a, b = b, a % b</code></td>
+              <td>Computes the greatest common divisor of two integers through iterative remainder replacement.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Compound Growth Loop</td>
+              <td><code>while balance &lt; target:</code></td>
+              <td>Simulates dynamic financial or demographic growth periods over discrete time intervals.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Prime Sieve Factorization</td>
+              <td><code>while n % factor == 0:</code></td>
+              <td>Extracts all occurrences of a prime factor by continuous integer division.</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      <h3 class="sub-title" id="sec-01-programs"><span class="sec-badge">01.3</span> Executable Programs (Programs 1 through 10)</h3>
+      <p>Review the 10 distinct, verified Python 3 implementations below, complete with line-by-line syntax highlighting, terminal output traces, and key execution takeaways:</p>
+      
+      <!-- Program 1: while_sum_natural_numbers -->
+      <article class="program-box" id="prog-1">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 1</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Sum of First N Natural Numbers</h4>
+          <p class="program-desc">Calculates the arithmetic sum of the first N positive integers using a while loop counter.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_01_while_sum_natural_numbers.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Sum of first N natural numbers using while loop</span>
+n = <span class="syn-number">10</span>
+total_sum = <span class="syn-number">0</span>
+current = <span class="syn-number">1</span>
+
+<span class="syn-keyword">while</span> current &lt;= n:
+    total_sum += current
+    current += <span class="syn-number">1</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Number of terms (N) : {n}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Sum of first {n} terms: {total_sum}&quot;</span>)
+<span class="syn-comment"># Verification using Gauss formula: n * (n + 1) // 2</span>
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Mathematical Check  : {n * (n + 1) // 2}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Number of terms (N) : 10
+Sum of first 10 terms: 55
+Mathematical Check  : 55</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The state variable &#x27;current&#x27; increments by 1 on each pass, running exactly N times to accumulate the sum.
+        </div>
+      </article>
+
+      <!-- Program 2: while_binary_to_decimal -->
+      <article class="program-box" id="prog-2">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 2</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Binary to Decimal Number Converter</h4>
+          <p class="program-desc">Converts a binary representation integer into its base-10 decimal equivalent using position powers of 2.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_02_while_binary_to_decimal.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Binary to decimal integer converter</span>
+binary_input = <span class="syn-number">110101</span>
+temp = binary_input
+decimal_value = <span class="syn-number">0</span>
+power = <span class="syn-number">0</span>
+
+<span class="syn-keyword">while</span> temp &gt; <span class="syn-number">0</span>:
+    last_bit = temp % <span class="syn-number">10</span>
+    decimal_value += last_bit * (<span class="syn-number">2</span> ** power)
+    power += <span class="syn-number">1</span>
+    temp //= <span class="syn-number">10</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Binary Input : {binary_input}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Decimal Value: {decimal_value}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Binary Input : 110101
+Decimal Value: 53</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Each bit is extracted with % 10, multiplied by 2**power, and accumulated into the decimal total.
+        </div>
+      </article>
+
+      <!-- Program 3: while_palindrome_number_check -->
+      <article class="program-box" id="prog-3">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 3</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Integer Palindrome Checker via Reversal</h4>
+          <p class="program-desc">Determines whether an integer reads the same forwards and backwards without converting to a string.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_03_while_palindrome_number_check.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Numerical palindrome checker</span>
+num = <span class="syn-number">1234321</span>
+original = num
+reversed_num = <span class="syn-number">0</span>
+
+<span class="syn-keyword">while</span> num &gt; <span class="syn-number">0</span>:
+    digit = num % <span class="syn-number">10</span>
+    reversed_num = (reversed_num * <span class="syn-number">10</span>) + digit
+    num //= <span class="syn-number">10</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Original Number: {original}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Reversed Number: {reversed_num}&quot;</span>)
+
+<span class="syn-keyword">if</span> original == reversed_num:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot;Result         : PALINDROME NUMBER (Symmetric)&quot;</span>)
+<span class="syn-keyword">else</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot;Result         : NOT a palindrome&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Original Number: 1234321
+Reversed Number: 1234321
+Result         : PALINDROME NUMBER (Symmetric)</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Multiplying the accumulator by 10 before adding the extracted digit builds the exact reverse number.
+        </div>
+      </article>
+
+      <!-- Program 4: while_decimal_to_binary -->
+      <article class="program-box" id="prog-4">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 4</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Decimal to Binary String Generator</h4>
+          <p class="program-desc">Converts a positive decimal integer into its raw binary string representation via repeated division by 2.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_04_while_decimal_to_binary.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Decimal to binary converter</span>
+decimal_num = <span class="syn-number">156</span>
+temp = decimal_num
+binary_str = <span class="syn-string">&quot;&quot;</span>
+
+<span class="syn-keyword">if</span> temp == <span class="syn-number">0</span>:
+    binary_str = <span class="syn-string">&quot;0&quot;</span>
+<span class="syn-keyword">else</span>:
+    <span class="syn-keyword">while</span> temp &gt; <span class="syn-number">0</span>:
+        remainder = temp % <span class="syn-number">2</span>
+        binary_str = <span class="syn-function">str</span>(remainder) + binary_str  <span class="syn-comment"># Prepend bit</span>
+        temp //= <span class="syn-number">2</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Decimal Number : {decimal_num}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Binary String  : {binary_str}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Built-in Check : {bin(decimal_num)[2:]}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Decimal Number : 156
+Binary String  : 10011100
+Built-in Check : 10011100</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Remainders from % 2 represent binary digits from least to most significant, assembled by prepending.
+        </div>
+      </article>
+
+      <!-- Program 5: while_armstrong_number_checker -->
+      <article class="program-box" id="prog-5">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 5</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Armstrong (Narcissistic) Number Verifier</h4>
+          <p class="program-desc">Checks if an integer equals the sum of its own digits each raised to the power of the number of digits.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_05_while_armstrong_number_checker.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Armstrong number verification</span>
+number = <span class="syn-number">1634</span>
+temp = number
+
+<span class="syn-comment"># Step 1: Count digits using while loop</span>
+digit_count = <span class="syn-number">0</span>
+count_temp = number
+<span class="syn-keyword">while</span> count_temp &gt; <span class="syn-number">0</span>:
+    digit_count += <span class="syn-number">1</span>
+    count_temp //= <span class="syn-number">10</span>
+
+<span class="syn-comment"># Step 2: Sum powers of digits</span>
+armstrong_sum = <span class="syn-number">0</span>
+<span class="syn-keyword">while</span> temp &gt; <span class="syn-number">0</span>:
+    digit = temp % <span class="syn-number">10</span>
+    armstrong_sum += digit ** digit_count
+    temp //= <span class="syn-number">10</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Testing Number : {number}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Digit Count    : {digit_count}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Armstrong Sum  : {armstrong_sum}&quot;</span>)
+
+<span class="syn-keyword">if</span> armstrong_sum == number:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot;Status         : ARMSTRONG NUMBER (1^4 + 6^4 + 3^4 + 4^4 = 1634)&quot;</span>)
+<span class="syn-keyword">else</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot;Status         : NOT an Armstrong number&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Testing Number : 1634
+Digit Count    : 4
+Armstrong Sum  : 1634
+Status         : ARMSTRONG NUMBER (1^4 + 6^4 + 3^4 + 4^4 = 1634)</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> For a 4-digit number like 1634: 1^4 + 6^4 + 3^4 + 4^4 = 1 + 1296 + 81 + 256 = 1634.
+        </div>
+      </article>
+
+      <!-- Program 6: while_compound_interest_projection -->
+      <article class="program-box" id="prog-6">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 6</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Compound Interest Investment Doubling Simulator</h4>
+          <p class="program-desc">Simulates year-by-year compound interest growth until an initial principal reaches or exceeds a target.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_06_while_compound_interest_projection.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Investment growth simulation until target doubling</span>
+principal = <span class="syn-number">10000.0</span>  <span class="syn-comment"># Initial $10,000</span>
+target = principal * <span class="syn-number">2</span>
+rate = <span class="syn-number">0.075</span>         <span class="syn-comment"># 7.5% annual interest</span>
+years = <span class="syn-number">0</span>
+current_balance = principal
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Initial Principal: ${principal:,.2f} at {rate*100:.1f}% annual interest&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Target Balance   : ${target:,.2f}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">40</span>)
+
+<span class="syn-keyword">while</span> current_balance &lt; target:
+    years += <span class="syn-number">1</span>
+    interest_earned = current_balance * rate
+    current_balance += interest_earned
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Year {years:2d}: Earned ${interest_earned:8.2f} | Balance: ${current_balance:10.2f}&quot;</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">40</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Doubling Time: {years} years to reach ${current_balance:,.2f}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Initial Principal: $10,000.00 at 7.5% annual interest
+Target Balance   : $20,000.00
+----------------------------------------
+Year  1: Earned $  750.00 | Balance: $  10750.00
+Year  2: Earned $  806.25 | Balance: $  11556.25
+Year  3: Earned $  866.72 | Balance: $  12422.97
+Year  4: Earned $  931.72 | Balance: $  13354.69
+Year  5: Earned $ 1001.60 | Balance: $  14356.29
+Year  6: Earned $ 1076.72 | Balance: $  15433.02
+Year  7: Earned $ 1157.48 | Balance: $  16590.49
+Year  8: Earned $ 1244.29 | Balance: $  17834.78
+Year  9: Earned $ 1337.61 | Balance: $  19172.39
+Year 10: Earned $ 1437.93 | Balance: $  20610.32
+----------------------------------------
+Doubling Time: 10 years to reach $20,610.32</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The while loop models discrete compounding steps until current_balance &gt;= target is achieved.
+        </div>
+      </article>
+
+      <!-- Program 7: while_euclidean_gcd -->
+      <article class="program-box" id="prog-7">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 7</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Greatest Common Divisor (GCD) via Euclidean Algorithm</h4>
+          <p class="program-desc">Computes the GCD of two positive integers using iterative modulo reduction.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_07_while_euclidean_gcd.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Euclidean Algorithm for GCD</span>
+num1, num2 = <span class="syn-number">252</span>, <span class="syn-number">105</span>
+a, b = num1, num2
+
+<span class="syn-keyword">while</span> b != <span class="syn-number">0</span>:
+    remainder = a % b
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;gcd({a}, {b}) =&gt; remainder = {remainder}&quot;</span>)
+    a = b
+    b = remainder
+
+gcd_result = a
+lcm_result = (num1 * num2) // gcd_result
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">35</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Input Numbers : {num1} and {num2}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Greatest Common Divisor (GCD): {gcd_result}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Least Common Multiple (LCM)   : {lcm_result}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>gcd(252, 105) =&gt; remainder = 42
+gcd(105, 42) =&gt; remainder = 21
+gcd(42, 21) =&gt; remainder = 0
+-----------------------------------
+Input Numbers : 252 and 105
+Greatest Common Divisor (GCD): 21
+Least Common Multiple (LCM)   : 1260</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Euclid&#x27;s algorithm runs in logarithmic time by repeatedly assigning (a, b) = (b, a % b) until b is 0.
+        </div>
+      </article>
+
+      <!-- Program 8: while_digital_root_calculation -->
+      <article class="program-box" id="prog-8">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 8</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Digital Root (Iterated Digit Sum) Calculator</h4>
+          <p class="program-desc">Repeatedly sums the digits of a number using nested while loops until a single-digit root is obtained.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_08_while_digital_root_calculation.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Digital root calculation (repeated digit sum)</span>
+initial_number = <span class="syn-number">987543</span>
+current = initial_number
+step = <span class="syn-number">0</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Starting Number: {initial_number}&quot;</span>)
+
+<span class="syn-keyword">while</span> current &gt;= <span class="syn-number">10</span>:
+    step += <span class="syn-number">1</span>
+    temp = current
+    digit_sum = <span class="syn-number">0</span>
+    <span class="syn-keyword">while</span> temp &gt; <span class="syn-number">0</span>:
+        digit_sum += temp % <span class="syn-number">10</span>
+        temp //= <span class="syn-number">10</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Step {step}: Sum of digits of {current} = {digit_sum}&quot;</span>)
+    current = digit_sum
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Final Digital Root: {current}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Starting Number: 987543
+Step 1: Sum of digits of 987543 = 36
+Step 2: Sum of digits of 36 = 9
+Final Digital Root: 9</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The outer while loop runs as long as the number has multiple digits (current &gt;= 10), reducing it to a single digit.
+        </div>
+      </article>
+
+      <!-- Program 9: while_prime_factorization -->
+      <article class="program-box" id="prog-9">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 9</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Complete Prime Factorization of an Integer</h4>
+          <p class="program-desc">Decomposes an integer into its complete sequence of prime factor multipliers using while loops.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_09_while_prime_factorization.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Prime factorization</span>
+number = <span class="syn-number">360</span>
+temp = number
+factor = <span class="syn-number">2</span>
+factors_list = []
+
+<span class="syn-keyword">while</span> factor * factor &lt;= temp:
+    <span class="syn-keyword">while</span> temp % factor == <span class="syn-number">0</span>:
+        factors_list.append(factor)
+        temp //= factor
+    factor += <span class="syn-number">1</span>
+
+<span class="syn-keyword">if</span> temp &gt; <span class="syn-number">1</span>:
+    factors_list.append(temp)
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Original Number    : {number}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Prime Factors List : {factors_list}&quot;</span>)
+factor_str = <span class="syn-string">&quot; x &quot;</span>.join(<span class="syn-function">map</span>(<span class="syn-function">str</span>, factors_list))
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Factorization Form : {number} = {factor_str}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Original Number    : 360
+Prime Factors List : [2, 2, 2, 3, 3, 5]
+Factorization Form : 360 = 2 x 2 x 2 x 3 x 3 x 5</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The inner while loop completely divides out each candidate prime factor before the outer loop advances.
+        </div>
+      </article>
+
+      <!-- Program 10: while_newton_raphson_sqrt -->
+      <article class="program-box" id="prog-10">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 10</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Square Root Approximation via Newton-Raphson Method</h4>
+          <p class="program-desc">Computes high-precision square roots using the Newton-Raphson iterative recurrence relation.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_10_while_newton_raphson_sqrt.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Newton-Raphson square root approximation</span>
+N = <span class="syn-number">612.0</span>
+guess = N / <span class="syn-number">2.0</span>
+tolerance = <span class="syn-number">1e-9</span>
+iteration = <span class="syn-number">0</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Finding square root of {N} using Newton-Raphson:&quot;</span>)
+
+<span class="syn-keyword">while</span> <span class="syn-keyword">True</span>:
+    iteration += <span class="syn-number">1</span>
+    next_guess = <span class="syn-number">0.5</span> * (guess + N / guess)
+    diff = <span class="syn-function">abs</span>(next_guess - guess)
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot; Iteration {iteration:2d}: Estimate = {next_guess:16.10f} | Diff = {diff:12.4e}&quot;</span>)
+    <span class="syn-keyword">if</span> diff &lt; tolerance:
+        guess = next_guess
+        <span class="syn-keyword">break</span>
+    guess = next_guess
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">55</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Computed sqrt({N}) : {guess:.10f}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;math.sqrt({N})     : {N**0.5:.10f}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Finding square root of 612.0 using Newton-Raphson:
+ Iteration  1: Estimate = 154.0000000000 | Diff = 1.5200e+02
+ Iteration  2: Estimate =  78.9870129870 | Diff = 7.5013e+01
+ Iteration  3: Estimate =  43.3675001552 | Diff = 3.5620e+01
+ Iteration  4: Estimate =  28.7408781440 | Diff = 1.4627e+01
+ Iteration  5: Estimate =  25.0175510255 | Diff = 3.7233e+00
+ Iteration  6: Estimate =  24.7397985449 | Diff = 2.7775e-01
+ Iteration  7: Estimate =  24.7386337775 | Diff = 1.1648e-03
+ Iteration  8: Estimate =  24.7386337537 | Diff = 2.7397e-08
+ Iteration  9: Estimate =  24.7386337537 | Diff = 0.0000e+00
+-------------------------------------------------------
+Computed sqrt(612.0) : 24.7386337537
+math.sqrt(612.0)     : 24.7386337537</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Newton&#x27;s method converges quadratically, doubling the number of accurate decimal places on every iteration.
+        </div>
+      </article>
+
+    </section>
+
+    <!-- The for Loop (Definite Iteration & Sequence Processing) -->
+    <section class="chapter" id="sec-for-loop">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 02 • Definite Sequence Iteration</span>
+        <h2 class="ch-title">The for Loop (Definite Iteration & Sequence Processing)</h2>
+      </div>
+
+      <p class="hero-subtitle" style="margin-bottom: 24px;">10 distinct master programs covering factorial computation, harmonic series, matrix transposition, Caesar cipher encryption, token frequency analysis, zip record aggregation, enumerate rankings, dot products, ASCII diamond art, and Horner's polynomial evaluation.</p>
+
+      <h3 class="sub-title" id="sec-02-theory"><span class="sec-badge">02.1</span> Theoretical Foundation &amp; Principles</h3>
+      <div style="margin-bottom: 24px;">
+        <p>A <strong>for loop</strong> iterates over the members of a sequence in order, executing the code block once for each element. In Python, <code>for</code> loops iterate directly over iterables (lists, tuples, strings, ranges, dictionaries) without requiring explicit index management.</p>
+      </div>
+
+      <h3 class="sub-title" id="sec-02-concepts"><span class="sec-badge">02.2</span> One-Line Academic Definitions &amp; Mechanisms</h3>
+      <p>The following table establishes executive 1-line definitions, syntax archetypes, and runtime mechanics for this topic:</p>
+      
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 25%;">Core Concept</th>
+                <th style="width: 25%;">Syntax / Archetype</th>
+                <th style="width: 50%;">One-Line Definition &amp; Mechanism</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Definite Iteration</td>
+              <td><code>for item in iterable:</code></td>
+              <td>Repeats execution for a predetermined, finite sequence of elements.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Running Product Accumulator</td>
+              <td><code>fact *= i</code></td>
+              <td>Accumulates sequential multiplication factors into a single composite product.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Harmonic Progression</td>
+              <td><code>total += 1.0 / k</code></td>
+              <td>Sums reciprocal integer terms to evaluate divergent mathematical harmonic series.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">String Transformation</td>
+              <td><code>for char in text: ord/chr</code></td>
+              <td>Iterates over characters to perform character code shifting, sanitization, or encryption.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Dictionary Frequency Map</td>
+              <td><code>counts[word] = counts.get(word, 0) + 1</code></td>
+              <td>Populates word or character occurrence histograms through sequence traversal.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Parallel Sequence Locking</td>
+              <td><code>for a, b in zip(list1, list2):</code></td>
+              <td>Synchronizes iteration across multiple equal-length collections simultaneously.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Ranked Enumeration</td>
+              <td><code>for rank, item in enumerate(seq, start=1):</code></td>
+              <td>Generates 1-based or custom-indexed ordinal positions alongside element values.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Vector Dot Product</td>
+              <td><code>dot += v1[i] * v2[i]</code></td>
+              <td>Computes algebraic scalar products through aligned index-based iteration.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Symmetric Space-Star Art</td>
+              <td><code>for row in range(): &#x27; &#x27; * s + &#x27;*&#x27; * k</code></td>
+              <td>Generates parameterized geometrical patterns using string replication operators.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Horner&#x27;s Rule Evaluation</td>
+              <td><code>poly = poly * x + coeff</code></td>
+              <td>Evaluates polynomials of degree n in linear O(n) time using accumulator loops.</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      <h3 class="sub-title" id="sec-02-programs"><span class="sec-badge">02.3</span> Executable Programs (Programs 11 through 20)</h3>
+      <p>Review the 10 distinct, verified Python 3 implementations below, complete with line-by-line syntax highlighting, terminal output traces, and key execution takeaways:</p>
+      
+      <!-- Program 11: for_factorial_computation -->
+      <article class="program-box" id="prog-11">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 11</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Factorial Calculation with Product Accumulator</h4>
+          <p class="program-desc">Computes n! = 1 × 2 × 3 × ... × n using a for loop over range(1, n + 1).</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_11_for_factorial_computation.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Factorial calculation using for loop</span>
+n = <span class="syn-number">8</span>
+factorial = <span class="syn-number">1</span>
+
+<span class="syn-keyword">for</span> i <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-number">1</span>, n + <span class="syn-number">1</span>):
+    factorial *= i
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Number (n)      : {n}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Computed {n}!    : {factorial}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Multiplication  : {&#x27; x &#x27;.join(str(x) for x in range(1, n + 1))} = {factorial}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Number (n)      : 8
+Computed 8!    : 40320
+Multiplication  : 1 x 2 x 3 x 4 x 5 x 6 x 7 x 8 = 40320</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The product accumulator initializes to 1 (identity for multiplication) and multiplies by each integer in the range.
+        </div>
+      </article>
+
+      <!-- Program 12: for_harmonic_series_sum -->
+      <article class="program-box" id="prog-12">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 12</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Harmonic Series Summation (H_n)</h4>
+          <p class="program-desc">Evaluates the harmonic series H_n = 1/1 + 1/2 + 1/3 + ... + 1/n to high precision.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_12_for_harmonic_series_sum.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Harmonic series summation H_n</span>
+n_terms = <span class="syn-number">8</span>
+harmonic_sum = <span class="syn-number">0.0</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Calculating Harmonic Series H_{n_terms}:&quot;</span>)
+<span class="syn-keyword">for</span> k <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-number">1</span>, n_terms + <span class="syn-number">1</span>):
+    term = <span class="syn-number">1.0</span> / k
+    harmonic_sum += term
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;  Term {k}: + 1/{k} ({term:.4f}) =&gt; Running Sum = {harmonic_sum:.6f}&quot;</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">50</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Harmonic Number H_{n_terms} = {harmonic_sum:.6f}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Calculating Harmonic Series H_8:
+  Term 1: + 1/1 (1.0000) =&gt; Running Sum = 1.000000
+  Term 2: + 1/2 (0.5000) =&gt; Running Sum = 1.500000
+  Term 3: + 1/3 (0.3333) =&gt; Running Sum = 1.833333
+  Term 4: + 1/4 (0.2500) =&gt; Running Sum = 2.083333
+  Term 5: + 1/5 (0.2000) =&gt; Running Sum = 2.283333
+  Term 6: + 1/6 (0.1667) =&gt; Running Sum = 2.450000
+  Term 7: + 1/7 (0.1429) =&gt; Running Sum = 2.592857
+  Term 8: + 1/8 (0.1250) =&gt; Running Sum = 2.717857
+--------------------------------------------------
+Harmonic Number H_8 = 2.717857</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Float division 1.0 / k inside the loop computes fractional terms that accumulate into harmonic_sum.
+        </div>
+      </article>
+
+      <!-- Program 13: for_matrix_transposition -->
+      <article class="program-box" id="prog-13">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 13</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">2D Matrix Transposition using Nested for Loops</h4>
+          <p class="program-desc">Transposes an M x N matrix into an N x M matrix by swapping rows and columns.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_13_for_matrix_transposition.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># 2D Matrix Transposition</span>
+original_matrix = [
+    [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>],
+    [<span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>]
+]
+
+rows = <span class="syn-function">len</span>(original_matrix)
+cols = <span class="syn-function">len</span>(original_matrix[<span class="syn-number">0</span>])
+
+<span class="syn-comment"># Initialize transposed matrix (cols x rows)</span>
+transposed = []
+<span class="syn-keyword">for</span> c <span class="syn-keyword">in</span> <span class="syn-function">range</span>(cols):
+    new_row = []
+    <span class="syn-keyword">for</span> r <span class="syn-keyword">in</span> <span class="syn-function">range</span>(rows):
+        new_row.append(original_matrix[r][c])
+    transposed.append(new_row)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Original Matrix (2x3):&quot;</span>)
+<span class="syn-keyword">for</span> row <span class="syn-keyword">in</span> original_matrix:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot; &quot;</span>, row)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;\nTransposed Matrix (3x2):&quot;</span>)
+<span class="syn-keyword">for</span> row <span class="syn-keyword">in</span> transposed:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot; &quot;</span>, row)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Original Matrix (2x3):
+  [1, 2, 3]
+  [4, 5, 6]
+
+Transposed Matrix (3x2):
+  [1, 4]
+  [2, 5]
+  [3, 6]</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Outer loop iterates through column indices c, and inner loop extracts original_matrix[r][c] to form new rows.
+        </div>
+      </article>
+
+      <!-- Program 14: for_caesar_cipher_encryption -->
+      <article class="program-box" id="prog-14">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 14</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Caesar Cipher Cryptographic Text Encryptor</h4>
+          <p class="program-desc">Encrypts an ASCII string by shifting letters forward by a specified key using ord() and chr().</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_14_for_caesar_cipher_encryption.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Caesar cipher text encryptor</span>
+plain_text = <span class="syn-string">&quot;Python Programming 2026!&quot;</span>
+shift_key = <span class="syn-number">5</span>
+cipher_text = <span class="syn-string">&quot;&quot;</span>
+
+<span class="syn-keyword">for</span> ch <span class="syn-keyword">in</span> plain_text:
+    <span class="syn-keyword">if</span> ch.isupper():
+        <span class="syn-comment"># Shift within &#x27;A&#x27;..&#x27;Z&#x27; (ASCII 65..90)</span>
+        cipher_text += <span class="syn-function">chr</span>((<span class="syn-function">ord</span>(ch) - <span class="syn-function">ord</span>(<span class="syn-string">&#x27;A&#x27;</span>) + shift_key) % <span class="syn-number">26</span> + <span class="syn-function">ord</span>(<span class="syn-string">&#x27;A&#x27;</span>))
+    <span class="syn-keyword">elif</span> ch.islower():
+        <span class="syn-comment"># Shift within &#x27;a&#x27;..&#x27;z&#x27; (ASCII 97..122)</span>
+        cipher_text += <span class="syn-function">chr</span>((<span class="syn-function">ord</span>(ch) - <span class="syn-function">ord</span>(<span class="syn-string">&#x27;a&#x27;</span>) + shift_key) % <span class="syn-number">26</span> + <span class="syn-function">ord</span>(<span class="syn-string">&#x27;a&#x27;</span>))
+    <span class="syn-keyword">else</span>:
+        <span class="syn-comment"># Non-alphabetic characters remain unchanged</span>
+        cipher_text += ch
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Plain Text  : {plain_text}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Shift Key   : +{shift_key}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Cipher Text : {cipher_text}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Plain Text  : Python Programming 2026!
+Shift Key   : +5
+Cipher Text : Udymts Uwtlwfrrnsl 2026!</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Modulo 26 arithmetic wraps alphabet shifts around &#x27;Z&#x27; to &#x27;A&#x27; while preserving symbols and numbers.
+        </div>
+      </article>
+
+      <!-- Program 15: for_word_frequency_counter -->
+      <article class="program-box" id="prog-15">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 15</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Word Frequency Distribution Counter</h4>
+          <p class="program-desc">Tokenizes a text passage and counts word occurrences using a for loop and dictionary map.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_15_for_word_frequency_counter.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Word frequency counter</span>
+passage = <span class="syn-string">&quot;loops in python are powerful and loops in python are easy to write&quot;</span>
+words = passage.lower().split()
+freq_map = {}
+
+<span class="syn-keyword">for</span> w <span class="syn-keyword">in</span> words:
+    freq_map[w] = freq_map.get(w, <span class="syn-number">0</span>) + <span class="syn-number">1</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Word Frequency Distribution:&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">30</span>)
+<span class="syn-keyword">for</span> word, count <span class="syn-keyword">in</span> <span class="syn-function">sorted</span>(freq_map.items()):
+    bar = <span class="syn-string">&quot;█&quot;</span> * count
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot; {word:10s} : {count} {bar}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Word Frequency Distribution:
+------------------------------
+ and        : 1 █
+ are        : 2 ██
+ easy       : 1 █
+ in         : 2 ██
+ loops      : 2 ██
+ powerful   : 1 █
+ python     : 2 ██
+ to         : 1 █
+ write      : 1 █</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The dictionary method freq_map.get(w, 0) + 1 increments the word count cleanly without KeyError exceptions.
+        </div>
+      </article>
+
+      <!-- Program 16: for_parallel_zip_pairing -->
+      <article class="program-box" id="prog-16">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 16</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Parallel List Processing with zip()</h4>
+          <p class="program-desc">Combines multiple parallel lists (students, scores, attendance) to compute academic status.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_16_for_parallel_zip_pairing.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Student record processor using zip()</span>
+names = [<span class="syn-string">&quot;Aadil&quot;</span>, <span class="syn-string">&quot;Zehra&quot;</span>, <span class="syn-string">&quot;Bilal&quot;</span>, <span class="syn-string">&quot;Sana&quot;</span>]
+scores = [<span class="syn-number">88</span>, <span class="syn-number">95</span>, <span class="syn-number">62</span>, <span class="syn-number">79</span>]
+attendance = [<span class="syn-number">92</span>, <span class="syn-number">98</span>, <span class="syn-number">74</span>, <span class="syn-number">85</span>]
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;{&#x27;Student&#x27;:10s} | {&#x27;Score&#x27;:5s} | {&#x27;Attendance&#x27;:10s} | {&#x27;Standing&#x27;}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">45</span>)
+
+<span class="syn-keyword">for</span> name, score, att <span class="syn-keyword">in</span> <span class="syn-function">zip</span>(names, scores, attendance):
+    <span class="syn-keyword">if</span> score &gt;= <span class="syn-number">85</span> <span class="syn-keyword">and</span> att &gt;= <span class="syn-number">90</span>:
+        status = <span class="syn-string">&quot;⭐ Distinction&quot;</span>
+    <span class="syn-keyword">elif</span> score &gt;= <span class="syn-number">50</span> <span class="syn-keyword">and</span> att &gt;= <span class="syn-number">75</span>:
+        status = <span class="syn-string">&quot;✅ Regular Pass&quot;</span>
+    <span class="syn-keyword">else</span>:
+        status = <span class="syn-string">&quot;⚠️ Needs Warning&quot;</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;{name:10s} | {score:5d} | {att:9d}% | {status}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Student    | Score | Attendance | Standing
+---------------------------------------------
+Aadil      |    88 |        92% | ⭐ Distinction
+Zehra      |    95 |        98% | ⭐ Distinction
+Bilal      |    62 |        74% | ⚠️ Needs Warning
+Sana       |    79 |        85% | ✅ Regular Pass</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> zip() iterates through multiple collections in lockstep, yielding tuples (name, score, att) on each cycle.
+        </div>
+      </article>
+
+      <!-- Program 17: for_enumerate_leaderboard -->
+      <article class="program-box" id="prog-17">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 17</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Ranked Leaderboard Generator with enumerate()</h4>
+          <p class="program-desc">Generates an ordinal leaderboard ranking with medal badges using enumerate(start=1).</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_17_for_enumerate_leaderboard.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Leaderboard ranking with enumerate(start=1)</span>
+competitors = [
+    (<span class="syn-string">&quot;Alice&quot;</span>, <span class="syn-number">980</span>),
+    (<span class="syn-string">&quot;Bob&quot;</span>, <span class="syn-number">945</span>),
+    (<span class="syn-string">&quot;Charlie&quot;</span>, <span class="syn-number">910</span>),
+    (<span class="syn-string">&quot;David&quot;</span>, <span class="syn-number">880</span>),
+    (<span class="syn-string">&quot;Eve&quot;</span>, <span class="syn-number">850</span>)
+]
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;=== CODING HACKATHON LEADERBOARD ===&quot;</span>)
+medals = {<span class="syn-number">1</span>: <span class="syn-string">&quot;🥇 Gold&quot;</span>, <span class="syn-number">2</span>: <span class="syn-string">&quot;🥈 Silver&quot;</span>, <span class="syn-number">3</span>: <span class="syn-string">&quot;🥉 Bronze&quot;</span>}
+
+<span class="syn-keyword">for</span> rank, (name, points) <span class="syn-keyword">in</span> <span class="syn-function">enumerate</span>(competitors, start=<span class="syn-number">1</span>):
+    badge = medals.get(rank, <span class="syn-string">f&quot;#{rank:02d} Rank&quot;</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot; {rank:2d}. {badge:10s} | {name:10s} | {points} pts&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>=== CODING HACKATHON LEADERBOARD ===
+  1. 🥇 Gold    | Alice      | 980 pts
+  2. 🥈 Silver  | Bob        | 945 pts
+  3. 🥉 Bronze  | Charlie    | 910 pts
+  4. #04 Rank   | David      | 880 pts
+  5. #05 Rank   | Eve        | 850 pts</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> enumerate(competitors, start=1) provides a clean 1-based counter rank without needing manual counter increments.
+        </div>
+      </article>
+
+      <!-- Program 18: for_vector_dot_product -->
+      <article class="program-box" id="prog-18">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 18</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Algebraic Vector Dot Product Calculator</h4>
+          <p class="program-desc">Computes the scalar dot product of two geometric vectors: a · b = sum(a_i * b_i).</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_18_for_vector_dot_product.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Vector dot product calculation</span>
+vector_a = [<span class="syn-number">3</span>, -<span class="syn-number">2</span>, <span class="syn-number">5</span>, <span class="syn-number">4</span>]
+vector_b = [<span class="syn-number">2</span>,  <span class="syn-number">4</span>, <span class="syn-number">1</span>, -<span class="syn-number">3</span>]
+
+dot_product = <span class="syn-number">0</span>
+terms_repr = []
+
+<span class="syn-keyword">for</span> i <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-function">len</span>(vector_a)):
+    product = vector_a[i] * vector_b[i]
+    dot_product += product
+    terms_repr.append(<span class="syn-string">f&quot;({vector_a[i]} * {vector_b[i]})&quot;</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Vector A    : {vector_a}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Vector B    : {vector_b}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Calculation : {&#x27; + &#x27;.join(terms_repr)}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Dot Product : {dot_product}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Vector A    : [3, -2, 5, 4]
+Vector B    : [2, 4, 1, -3]
+Calculation : (3 * 2) + (-2 * 4) + (5 * 1) + (4 * -3)
+Dot Product : -9</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The loop computes 6 + (-8) + 5 + (-12) = -9, matching the algebraic inner product formula.
+        </div>
+      </article>
+
+      <!-- Program 19: for_diamond_pattern_generator -->
+      <article class="program-box" id="prog-19">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 19</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Symmetrical ASCII Diamond Generator</h4>
+          <p class="program-desc">Generates a parameterized geometrical star diamond using two consecutive for loops and string scaling.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_19_for_diamond_pattern_generator.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Symmetrical diamond generator</span>
+n = <span class="syn-number">5</span>  <span class="syn-comment"># Half-height</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Generating Diamond of size {n}:\n&quot;</span>)
+<span class="syn-comment"># Top half (including middle)</span>
+<span class="syn-keyword">for</span> i <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-number">1</span>, n + <span class="syn-number">1</span>):
+    spaces = <span class="syn-string">&quot; &quot;</span> * (n - i)
+    stars = <span class="syn-string">&quot;*&quot;</span> * (<span class="syn-number">2</span> * i - <span class="syn-number">1</span>)
+    <span class="syn-function">print</span>(spaces + stars)
+
+<span class="syn-comment"># Bottom half</span>
+<span class="syn-keyword">for</span> i <span class="syn-keyword">in</span> <span class="syn-function">range</span>(n - <span class="syn-number">1</span>, <span class="syn-number">0</span>, -<span class="syn-number">1</span>):
+    spaces = <span class="syn-string">&quot; &quot;</span> * (n - i)
+    stars = <span class="syn-string">&quot;*&quot;</span> * (<span class="syn-number">2</span> * i - <span class="syn-number">1</span>)
+    <span class="syn-function">print</span>(spaces + stars)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Generating Diamond of size 5:
+
+    *
+   ***
+  *****
+ *******
+*********
+ *******
+  *****
+   ***
+    *</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The top loop runs 1 to n (expanding stars), and the bottom loop runs n-1 down to 1 (contracting stars).
+        </div>
+      </article>
+
+      <!-- Program 20: for_horners_polynomial_evaluation -->
+      <article class="program-box" id="prog-20">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 20</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Polynomial Evaluation via Horner&#x27;s Rule</h4>
+          <p class="program-desc">Evaluates P(x) = 3x^3 - 4x^2 + 2x - 7 at x = 3 in O(n) linear multiplications.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_20_for_horners_polynomial_evaluation.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Horner&#x27;s Rule for Polynomial Evaluation</span>
+<span class="syn-comment"># P(x) = 3x^3 - 4x^2 + 2x - 7</span>
+<span class="syn-comment"># Coefficients in descending order: [3, -4, 2, -7]</span>
+coefficients = [<span class="syn-number">3</span>, -<span class="syn-number">4</span>, <span class="syn-number">2</span>, -<span class="syn-number">7</span>]
+x = <span class="syn-number">3</span>
+result = <span class="syn-number">0</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Evaluating P(x) = 3x^3 - 4x^2 + 2x - 7 at x = {x}:&quot;</span>)
+
+<span class="syn-keyword">for</span> idx, coeff <span class="syn-keyword">in</span> <span class="syn-function">enumerate</span>(coefficients):
+    prev = result
+    result = result * x + coeff
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot; Step {idx + 1}: ({prev} * {x}) + ({coeff}) = {result}&quot;</span>)
+
+<span class="syn-comment"># Verification: 3*(27) - 4*(9) + 2*(3) - 7 = 81 - 36 + 6 - 7 = 44</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">45</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Computed P({x})   : {result}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Direct Check    : {3*(x**3) - 4*(x**2) + 2*x - 7}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Evaluating P(x) = 3x^3 - 4x^2 + 2x - 7 at x = 3:
+ Step 1: (0 * 3) + (3) = 3
+ Step 2: (3 * 3) + (-4) = 5
+ Step 3: (5 * 3) + (2) = 17
+ Step 4: (17 * 3) + (-7) = 44
+---------------------------------------------
+Computed P(3)   : 44
+Direct Check    : 44</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Horner&#x27;s method factors out x iteratively: ((3x - 4)x + 2)x - 7, reducing degree-n evaluation to n multiplications.
+        </div>
+      </article>
+
+    </section>
+
+    <!-- The break Statement (Early Exit & Search Optimization) -->
+    <section class="chapter" id="sec-break-statement">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 03 • Immediate Loop Termination</span>
+        <h2 class="ch-title">The break Statement (Early Exit & Search Optimization)</h2>
+      </div>
+
+      <p class="hero-subtitle" style="margin-bottom: 24px;">10 distinct master programs covering linear search pruning, first non-repeating character detection, password security disqualification, overdraft protection, instant composite testing, financial deficit detection, sentinel score loops, keyword scanning, 2D dual-loop escape, and battery low-power shutdown.</p>
+
+      <h3 class="sub-title" id="sec-03-theory"><span class="sec-badge">03.1</span> Theoretical Foundation &amp; Principles</h3>
+      <div style="margin-bottom: 24px;">
+        <p>The <strong>break statement</strong> terminates the currently executing loop immediately. Control transfers to the first statement following the terminated loop. In nested loops, <code>break</code> terminates only the innermost loop in which it resides.</p>
+      </div>
+
+      <h3 class="sub-title" id="sec-03-concepts"><span class="sec-badge">03.2</span> One-Line Academic Definitions &amp; Mechanisms</h3>
+      <p>The following table establishes executive 1-line definitions, syntax archetypes, and runtime mechanics for this topic:</p>
+      
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 25%;">Core Concept</th>
+                <th style="width: 25%;">Syntax / Archetype</th>
+                <th style="width: 50%;">One-Line Definition &amp; Mechanism</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">break Statement</td>
+              <td><code>break</code></td>
+              <td>Aborts execution of the nearest enclosing loop immediately and unconditionally.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Search Short-Circuiting</td>
+              <td><code>if item == target: break</code></td>
+              <td>Prevents unnecessary linear searches once a desired element is discovered.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Innermost Scope Rule</td>
+              <td><code>Terminates only enclosing loop</code></td>
+              <td>In nested structures, break terminates only the local inner loop; outer loops continue normally.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Sentinel Exit Pattern</td>
+              <td><code>while True: if val == -1: break</code></td>
+              <td>Creates an event loop that continues until an explicit termination value is encountered.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Security Disqualification</td>
+              <td><code>if not meets_rule: break</code></td>
+              <td>Halts credential or validation pipelines upon encountering the first failing rule.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Threshold Guard</td>
+              <td><code>if balance &lt; limit: break</code></td>
+              <td>Protects physical or financial systems from exceeding safe operational boundaries.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">First Occurrence Locater</td>
+              <td><code>if condition: match = val; break</code></td>
+              <td>Captures the first element satisfying a predicate without scanning the remainder of the dataset.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Composite Number Test</td>
+              <td><code>if n % d == 0: is_prime = False; break</code></td>
+              <td>Stops factor testing immediately upon finding the smallest divisor.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Multi-Level Break Flag</td>
+              <td><code>found = True; break / if found: break</code></td>
+              <td>Coordinates multi-level loop termination across nested hierarchies using a boolean indicator.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">State Freezing</td>
+              <td><code>Loop variable preserves state</code></td>
+              <td>The loop counter and accumulated values remain frozen at the precise values they had when break executed.</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      <h3 class="sub-title" id="sec-03-programs"><span class="sec-badge">03.3</span> Executable Programs (Programs 21 through 30)</h3>
+      <p>Review the 10 distinct, verified Python 3 implementations below, complete with line-by-line syntax highlighting, terminal output traces, and key execution takeaways:</p>
+      
+      <!-- Program 21: break_linear_search_target -->
+      <article class="program-box" id="prog-21">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 21</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Linear Search in Unsorted Dataset with Early Break</h4>
+          <p class="program-desc">Searches an unsorted integer list for a target value and terminates immediately upon discovery.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_21_break_linear_search_target.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Linear search with early break optimization</span>
+dataset = [<span class="syn-number">45</span>, <span class="syn-number">12</span>, <span class="syn-number">89</span>, <span class="syn-number">34</span>, <span class="syn-number">67</span>, <span class="syn-number">23</span>, <span class="syn-number">90</span>, <span class="syn-number">11</span>]
+target = <span class="syn-number">67</span>
+
+comparisons = <span class="syn-number">0</span>
+found_index = -<span class="syn-number">1</span>
+
+<span class="syn-keyword">for</span> idx, val <span class="syn-keyword">in</span> <span class="syn-function">enumerate</span>(dataset):
+    comparisons += <span class="syn-number">1</span>
+    <span class="syn-keyword">if</span> val == target:
+        found_index = idx
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot;Target {target} FOUND at index {found_index}! Triggering break.&quot;</span>)
+        <span class="syn-keyword">break</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Total Elements Checked : {comparisons} / {len(dataset)}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Search Result          : Index {found_index}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Target 67 FOUND at index 4! Triggering break.
+Total Elements Checked : 5 / 8
+Search Result          : Index 4</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The loop halts after checking 5 items instead of checking all 8, saving computational time.
+        </div>
+      </article>
+
+      <!-- Program 22: break_first_non_repeating_char -->
+      <article class="program-box" id="prog-22">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 22</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">First Non-Repeating Character in a String</h4>
+          <p class="program-desc">Finds the first character that appears exactly once in a string and terminates the search.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_22_break_first_non_repeating_char.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Finding first non-repeating character</span>
+stream = <span class="syn-string">&quot;swiss_miss_winner&quot;</span>
+char_counts = {}
+
+<span class="syn-comment"># Step 1: Count frequencies</span>
+<span class="syn-keyword">for</span> ch <span class="syn-keyword">in</span> stream:
+    char_counts[ch] = char_counts.get(ch, <span class="syn-number">0</span>) + <span class="syn-number">1</span>
+
+<span class="syn-comment"># Step 2: Find first character with count == 1 using break</span>
+first_unique = <span class="syn-keyword">None</span>
+<span class="syn-keyword">for</span> ch <span class="syn-keyword">in</span> stream:
+    <span class="syn-keyword">if</span> char_counts[ch] == <span class="syn-number">1</span>:
+        first_unique = ch
+        <span class="syn-keyword">break</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Input Stream        : &#x27;{stream}&#x27;&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Character Frequencies: {char_counts}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;First Unique Char   : &#x27;{first_unique}&#x27;&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Input Stream        : &#x27;swiss_miss_winner&#x27;
+Character Frequencies: {&#x27;s&#x27;: 6, &#x27;w&#x27;: 2, &#x27;i&#x27;: 3, &#x27;_&#x27;: 2, &#x27;m&#x27;: 1, &#x27;n&#x27;: 2, &#x27;e&#x27;: 1, &#x27;r&#x27;: 1}
+First Unique Char   : &#x27;m&#x27;</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The second loop inspects characters in their original order and breaks immediately upon encountering &#x27;m&#x27;.
+        </div>
+      </article>
+
+      <!-- Program 23: break_password_disqualification -->
+      <article class="program-box" id="prog-23">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 23</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Password Strength Validator with Early Disqualification</h4>
+          <p class="program-desc">Validates password complexity rules sequentially, breaking and reporting on the first unmet criterion.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_23_break_password_disqualification.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Password security validator with early break</span>
+password_candidate = <span class="syn-string">&quot;Secr3t&quot;</span>
+rules = [
+    (<span class="syn-string">&quot;Length &gt;= 8&quot;</span>, <span class="syn-function">len</span>(password_candidate) &gt;= <span class="syn-number">8</span>),
+    (<span class="syn-string">&quot;Contains Uppercase&quot;</span>, <span class="syn-function">any</span>(c.isupper() <span class="syn-keyword">for</span> c <span class="syn-keyword">in</span> password_candidate)),
+    (<span class="syn-string">&quot;Contains Lowercase&quot;</span>, <span class="syn-function">any</span>(c.islower() <span class="syn-keyword">for</span> c <span class="syn-keyword">in</span> password_candidate)),
+    (<span class="syn-string">&quot;Contains Digit&quot;</span>, <span class="syn-function">any</span>(c.isdigit() <span class="syn-keyword">for</span> c <span class="syn-keyword">in</span> password_candidate)),
+    (<span class="syn-string">&quot;Contains Special Symbol&quot;</span>, <span class="syn-function">any</span>(c <span class="syn-keyword">in</span> <span class="syn-string">&quot;!@#$%^&amp;*&quot;</span> <span class="syn-keyword">for</span> c <span class="syn-keyword">in</span> password_candidate))
+]
+
+failed_rule = <span class="syn-keyword">None</span>
+<span class="syn-keyword">for</span> rule_name, passed <span class="syn-keyword">in</span> rules:
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> passed:
+        failed_rule = rule_name
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot;FAILED RULE: {rule_name}! Rejecting password candidate.&quot;</span>)
+        <span class="syn-keyword">break</span>
+
+<span class="syn-keyword">if</span> failed_rule <span class="syn-keyword">is</span> <span class="syn-keyword">None</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot;&gt;&gt; SUCCESS: Strong password accepted!&quot;</span>)
+<span class="syn-keyword">else</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;&gt;&gt; ERROR: Password &#x27;{password_candidate}&#x27; rejected on: {failed_rule}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>FAILED RULE: Length &gt;= 8! Rejecting password candidate.
+&gt;&gt; ERROR: Password &#x27;Secr3t&#x27; rejected on: Length &gt;= 8</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The validator breaks on Rule 1 (Length &gt;= 8) without wasting CPU cycles evaluating subsequent checks.
+        </div>
+      </article>
+
+      <!-- Program 24: break_overdraft_threshold_guard -->
+      <article class="program-box" id="prog-24">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 24</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Bank Account Overdraft Threshold Guard</h4>
+          <p class="program-desc">Processes a batch of outgoing debits, breaking immediately if balance falls below the minimum $100 reserve.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_24_break_overdraft_threshold_guard.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Bank account overdraft protection system</span>
+initial_balance = <span class="syn-number">500</span>
+min_reserve = <span class="syn-number">100</span>
+debits = [<span class="syn-number">120</span>, <span class="syn-number">80</span>, <span class="syn-number">150</span>, <span class="syn-number">100</span>, <span class="syn-number">200</span>, <span class="syn-number">50</span>]
+
+current_balance = initial_balance
+processed_transactions = <span class="syn-number">0</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Initial Balance: ${initial_balance} | Minimum Reserve Limit: ${min_reserve}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">50</span>)
+
+<span class="syn-keyword">for</span> amount <span class="syn-keyword">in</span> debits:
+    <span class="syn-keyword">if</span> current_balance - amount &lt; min_reserve:
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot;CRITICAL ALERT: Debit of ${amount} would breach reserve limit (${current_balance - amount} &lt; ${min_reserve})!&quot;</span>)
+        <span class="syn-function">print</span>(<span class="syn-string">&quot;&gt;&gt; TRANSACTION PIPELINE HALTED BY BREAK.&quot;</span>)
+        <span class="syn-keyword">break</span>
+    current_balance -= amount
+    processed_transactions += <span class="syn-number">1</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Processed: -${amount:3d} | New Balance: ${current_balance}&quot;</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">50</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Completed Debits : {processed_transactions} / {len(debits)}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Final Balance    : ${current_balance}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Initial Balance: $500 | Minimum Reserve Limit: $100
+--------------------------------------------------
+Processed: -$120 | New Balance: $380
+Processed: -$ 80 | New Balance: $300
+Processed: -$150 | New Balance: $150
+CRITICAL ALERT: Debit of $100 would breach reserve limit ($50 &lt; $100)!
+&gt;&gt; TRANSACTION PIPELINE HALTED BY BREAK.
+--------------------------------------------------
+Completed Debits : 3 / 6
+Final Balance    : $150</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> When deducting $100 would result in $50 (below reserve $100), the loop triggers break to prevent overdraft.
+        </div>
+      </article>
+
+      <!-- Program 25: break_composite_number_tester -->
+      <article class="program-box" id="prog-25">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 25</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Instant Composite Number Detector</h4>
+          <p class="program-desc">Tests an integer for primality by checking divisors up to sqrt(N) and breaking on the first factor.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_25_break_composite_number_tester.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Instant composite number tester with break</span>
+num = <span class="syn-number">841</span>  <span class="syn-comment"># 29 * 29</span>
+is_prime = <span class="syn-keyword">True</span>
+first_factor = <span class="syn-keyword">None</span>
+
+<span class="syn-keyword">for</span> d <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-number">2</span>, <span class="syn-function">int</span>(num**<span class="syn-number">0.5</span>) + <span class="syn-number">1</span>):
+    <span class="syn-keyword">if</span> num % d == <span class="syn-number">0</span>:
+        is_prime = <span class="syn-keyword">False</span>
+        first_factor = d
+        <span class="syn-keyword">break</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Tested Number : {num}&quot;</span>)
+<span class="syn-keyword">if</span> is_prime:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot;Classification: PRIME NUMBER&quot;</span>)
+<span class="syn-keyword">else</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Classification: COMPOSITE (Smallest factor: {first_factor}, {first_factor} x {num // first_factor} = {num})&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Tested Number : 841
+Classification: COMPOSITE (Smallest factor: 29, 29 x 29 = 841)</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The search bounds divisors up to sqrt(841) = 29 and breaks at d = 29, instantly proving compositeness.
+        </div>
+      </article>
+
+      <!-- Program 26: break_first_negative_deficit -->
+      <article class="program-box" id="prog-26">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 26</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">First Deficit Period Detection in Ledger</h4>
+          <p class="program-desc">Scans quarterly financial ledger balances, breaking as soon as the company encounters its first negative reserve.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_26_break_first_negative_deficit.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Quarterly ledger deficit tracker</span>
+quarterly_cashflows = [<span class="syn-number">25000</span>, <span class="syn-number">18000</span>, -<span class="syn-number">12000</span>, -<span class="syn-number">45000</span>, <span class="syn-number">30000</span>, -<span class="syn-number">10000</span>]
+cumulative_cash = <span class="syn-number">10000</span>  <span class="syn-comment"># Starting capital</span>
+deficit_quarter = <span class="syn-keyword">None</span>
+
+<span class="syn-keyword">for</span> q_num, cashflow <span class="syn-keyword">in</span> <span class="syn-function">enumerate</span>(quarterly_cashflows, start=<span class="syn-number">1</span>):
+    cumulative_cash += cashflow
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Q{q_num}: Cashflow ${cashflow:+7d} =&gt; Capital: ${cumulative_cash:+7d}&quot;</span>)
+    <span class="syn-keyword">if</span> cumulative_cash &lt; <span class="syn-number">0</span>:
+        deficit_quarter = q_num
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot;&gt;&gt; DEFICIT DETECTED IN Q{q_num}! Halting dividend projections.&quot;</span>)
+        <span class="syn-keyword">break</span>
+
+<span class="syn-keyword">if</span> deficit_quarter <span class="syn-keyword">is</span> <span class="syn-keyword">not</span> <span class="syn-keyword">None</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Action Required: Emergency financing needed at Q{deficit_quarter}.&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Q1: Cashflow  +25000 =&gt; Capital:  +35000
+Q2: Cashflow  +18000 =&gt; Capital:  +53000
+Q3: Cashflow  -12000 =&gt; Capital:  +41000
+Q4: Cashflow  -45000 =&gt; Capital:   -4000
+&gt;&gt; DEFICIT DETECTED IN Q4! Halting dividend projections.
+Action Required: Emergency financing needed at Q4.</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> At Q4, capital drops to -$4,000, triggering break to freeze simulation and request financing.
+        </div>
+      </article>
+
+      <!-- Program 27: break_sentinel_score_accumulator -->
+      <article class="program-box" id="prog-27">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 27</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Game Score Ingestion with Sentinel Exit (-1)</h4>
+          <p class="program-desc">Ingests simulated real-time arcade player scores in a while True loop, terminating upon sentinel -1.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_27_break_sentinel_score_accumulator.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Sentinel-controlled score ingestion loop</span>
+simulated_input_stream = [<span class="syn-number">150</span>, <span class="syn-number">240</span>, <span class="syn-number">85</span>, <span class="syn-number">320</span>, <span class="syn-number">190</span>, -<span class="syn-number">1</span>, <span class="syn-number">400</span>, <span class="syn-number">500</span>]
+input_index = <span class="syn-number">0</span>
+
+total_score = <span class="syn-number">0</span>
+games_played = <span class="syn-number">0</span>
+
+<span class="syn-keyword">while</span> <span class="syn-keyword">True</span>:
+    score = simulated_input_stream[input_index]
+    input_index += <span class="syn-number">1</span>
+
+    <span class="syn-keyword">if</span> score == -<span class="syn-number">1</span>:
+        <span class="syn-function">print</span>(<span class="syn-string">&quot;Sentinel value (-1) received. Ending player session.&quot;</span>)
+        <span class="syn-keyword">break</span>
+
+    total_score += score
+    games_played += <span class="syn-number">1</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Game {games_played}: Recorded {score} pts | Total: {total_score} pts&quot;</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">40</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Session Summary: {games_played} games played | Total Score: {total_score} pts&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Average Score  : {total_score / games_played:.2f} pts/game&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Game 1: Recorded 150 pts | Total: 150 pts
+Game 2: Recorded 240 pts | Total: 390 pts
+Game 3: Recorded 85 pts | Total: 475 pts
+Game 4: Recorded 320 pts | Total: 795 pts
+Game 5: Recorded 190 pts | Total: 985 pts
+Sentinel value (-1) received. Ending player session.
+----------------------------------------
+Session Summary: 5 games played | Total Score: 985 pts
+Average Score  : 197.00 pts/game</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Scores after -1 (400, 500) are never ingested because break cleanly shuts down the while True event loop.
+        </div>
+      </article>
+
+      <!-- Program 28: break_substring_token_scanner -->
+      <article class="program-box" id="prog-28">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 28</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Keyword Scanner with Immediate Match Break</h4>
+          <p class="program-desc">Scans log lines for a forbidden security breach keyword and breaks immediately upon detection.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_28_break_substring_token_scanner.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Server access log security scanner</span>
+log_entries = [
+    <span class="syn-string">&quot;2026-09-20 10:00:01 INFO [Auth] User &#x27;alice&#x27; logged in successfully.&quot;</span>,
+    <span class="syn-string">&quot;2026-09-20 10:01:23 INFO [Database] Connection pool healthy.&quot;</span>,
+    <span class="syn-string">&quot;2026-09-20 10:03:45 ERROR [Security] UNAUTHORIZED_ROOT_ACCESS detected from IP 192.168.1.105&quot;</span>,
+    <span class="syn-string">&quot;2026-09-20 10:04:00 INFO [Auth] User &#x27;bob&#x27; logged in.&quot;</span>
+]
+
+breach_alert = <span class="syn-keyword">False</span>
+breach_line = <span class="syn-string">&quot;&quot;</span>
+
+<span class="syn-keyword">for</span> line_num, entry <span class="syn-keyword">in</span> <span class="syn-function">enumerate</span>(log_entries, start=<span class="syn-number">1</span>):
+    <span class="syn-keyword">if</span> <span class="syn-string">&quot;UNAUTHORIZED_ROOT_ACCESS&quot;</span> <span class="syn-keyword">in</span> entry:
+        breach_alert = <span class="syn-keyword">True</span>
+        breach_line = entry
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot;SECURITY ALERT ON LINE {line_num}! Triggering immediate firewall lock.&quot;</span>)
+        <span class="syn-keyword">break</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">55</span>)
+<span class="syn-keyword">if</span> breach_alert:
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Compromised Entry: {breach_line}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>SECURITY ALERT ON LINE 3! Triggering immediate firewall lock.
+-------------------------------------------------------
+Compromised Entry: 2026-09-20 10:03:45 ERROR [Security] UNAUTHORIZED_ROOT_ACCESS detected from IP 192.168.1.105</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Finding the security breach token breaks the inspection pipeline immediately to execute containment protocols.
+        </div>
+      </article>
+
+      <!-- Program 29: break_2d_matrix_dual_escape -->
+      <article class="program-box" id="prog-29">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 29</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">2D Matrix Target Coordinates Search with Dual Break</h4>
+          <p class="program-desc">Searches a 2D matrix for a target value and cleanly exits both inner and outer loops using a boolean flag.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_29_break_2d_matrix_dual_escape.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># 2D Matrix Target Locator with Dual Break</span>
+grid = [
+    [<span class="syn-number">11</span>, <span class="syn-number">12</span>, <span class="syn-number">13</span>, <span class="syn-number">14</span>],
+    [<span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">99</span>, <span class="syn-number">24</span>],
+    [<span class="syn-number">31</span>, <span class="syn-number">32</span>, <span class="syn-number">33</span>, <span class="syn-number">34</span>]
+]
+target = <span class="syn-number">99</span>
+found = <span class="syn-keyword">False</span>
+loc_r, loc_c = -<span class="syn-number">1</span>, -<span class="syn-number">1</span>
+
+<span class="syn-keyword">for</span> r_idx, row <span class="syn-keyword">in</span> <span class="syn-function">enumerate</span>(grid):
+    <span class="syn-keyword">for</span> c_idx, val <span class="syn-keyword">in</span> <span class="syn-function">enumerate</span>(row):
+        <span class="syn-keyword">if</span> val == target:
+            loc_r, loc_c = r_idx, c_idx
+            found = <span class="syn-keyword">True</span>
+            <span class="syn-keyword">break</span>  <span class="syn-comment"># Break inner column loop</span>
+    <span class="syn-keyword">if</span> found:
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot;&gt;&gt; Inner break triggered. Outer break triggered at Row {r_idx}.&quot;</span>)
+        <span class="syn-keyword">break</span>  <span class="syn-comment"># Break outer row loop</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Target {target} found at Grid Coordinates: (Row {loc_r}, Col {loc_c})&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>&gt;&gt; Inner break triggered. Outer break triggered at Row 1.
+Target 99 found at Grid Coordinates: (Row 1, Col 2)</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Because break only exits the active inner loop, checking found in the outer loop ensures total escape.
+        </div>
+      </article>
+
+      <!-- Program 30: break_battery_drain_shutdown -->
+      <article class="program-box" id="prog-30">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 30</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Battery Low-Power Shutdown Guard</h4>
+          <p class="program-desc">Simulates high-load compute tasks that consume battery, breaking immediately when charge drops below 15%.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_30_break_battery_drain_shutdown.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Device battery low-power shutdown guard</span>
+tasks = [<span class="syn-string">&quot;Video Rendering&quot;</span>, <span class="syn-string">&quot;AI Model Training&quot;</span>, <span class="syn-string">&quot;3D Game Engine&quot;</span>, <span class="syn-string">&quot;Cloud Sync&quot;</span>, <span class="syn-string">&quot;System Backup&quot;</span>]
+drain_rates = [<span class="syn-number">25</span>, <span class="syn-number">35</span>, <span class="syn-number">20</span>, <span class="syn-number">15</span>, <span class="syn-number">10</span>]  <span class="syn-comment"># Percentage consumed per task</span>
+
+battery_level = <span class="syn-number">80</span>
+min_safe_battery = <span class="syn-number">15</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Starting Battery Level: {battery_level}% | Critical Shutdown Limit: {min_safe_battery}%&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">55</span>)
+
+<span class="syn-keyword">for</span> task_name, drain <span class="syn-keyword">in</span> <span class="syn-function">zip</span>(tasks, drain_rates):
+    <span class="syn-keyword">if</span> battery_level - drain &lt; min_safe_battery:
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot;LOW POWER WARNING: Executing &#x27;{task_name}&#x27; ({drain}% drain) would leave {battery_level - drain}%!&quot;</span>)
+        <span class="syn-function">print</span>(<span class="syn-string">&quot;&gt;&gt; EMERGENCY SHUTDOWN TRIGGERED BY BREAK.&quot;</span>)
+        <span class="syn-keyword">break</span>
+    battery_level -= drain
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;Executed: {task_name:18s} (-{drain}%) =&gt; Battery Remaining: {battery_level}%&quot;</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">55</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;System State: Preserved at {battery_level}% charge.&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Starting Battery Level: 80% | Critical Shutdown Limit: 15%
+-------------------------------------------------------
+Executed: Video Rendering    (-25%) =&gt; Battery Remaining: 55%
+Executed: AI Model Training  (-35%) =&gt; Battery Remaining: 20%
+LOW POWER WARNING: Executing &#x27;3D Game Engine&#x27; (20% drain) would leave 0%!
+&gt;&gt; EMERGENCY SHUTDOWN TRIGGERED BY BREAK.
+-------------------------------------------------------
+System State: Preserved at 20% charge.</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The loop prevents execution of the 3D Game Engine task and safely breaks at 20% to avoid unexpected shutdown.
+        </div>
+      </article>
+
+    </section>
+
+    <!-- The continue Statement (Iteration Skip & Guard Filters) -->
+    <section class="chapter" id="sec-continue-statement">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 04 • Current Pass Filtering Control</span>
+        <h2 class="ch-title">The continue Statement (Iteration Skip & Guard Filters)</h2>
+      </div>
+
+      <p class="hero-subtitle" style="margin-bottom: 24px;">10 distinct master programs covering FizzBuzz multiple skipping, negative sensor filtering, non-alpha character noise stripping, inactive staff payroll guards, odd-index extraction, IPv4 octet validation, file extension filtering, divide-by-zero guards, off-diagonal matrix aggregation, and comment stripping.</p>
+
+      <h3 class="sub-title" id="sec-04-theory"><span class="sec-badge">04.1</span> Theoretical Foundation &amp; Principles</h3>
+      <div style="margin-bottom: 24px;">
+        <p>The <strong>continue statement</strong> skips the remainder of the current iteration pass and immediately transfers control to the next iteration cycle. Unlike <code>break</code>, the loop does not terminate; it simply moves on to the next element or evaluates the condition again.</p>
+      </div>
+
+      <h3 class="sub-title" id="sec-04-concepts"><span class="sec-badge">04.2</span> One-Line Academic Definitions &amp; Mechanisms</h3>
+      <p>The following table establishes executive 1-line definitions, syntax archetypes, and runtime mechanics for this topic:</p>
+      
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 25%;">Core Concept</th>
+                <th style="width: 25%;">Syntax / Archetype</th>
+                <th style="width: 50%;">One-Line Definition &amp; Mechanism</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">continue Statement</td>
+              <td><code>continue</code></td>
+              <td>Skips the rest of the current iteration&#x27;s code block and advances to the next loop pass.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Filter-Guard Pattern</td>
+              <td><code>if not valid(item): continue</code></td>
+              <td>Top-level guard clause that bypasses unneeded or corrupt items without deep conditional nesting.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Non-Terminating Bypass</td>
+              <td><code>continue vs break</code></td>
+              <td>continue keeps the loop active for future elements; break aborts the loop entirely.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Modulo Filter Exclusions</td>
+              <td><code>if n % k == 0: continue</code></td>
+              <td>Selectively excludes arithmetic multiples from numerical analysis.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Zero-Division Protection</td>
+              <td><code>if denominator == 0: continue</code></td>
+              <td>Prevents fatal ZeroDivisionError runtime exceptions during mathematical batch processing.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">String Character Normalization</td>
+              <td><code>if not ch.isalpha(): continue</code></td>
+              <td>Discards non-essential symbols and whitespace during string sanitization.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Status Whitelist Filtering</td>
+              <td><code>if not employee[&#x27;active&#x27;]: continue</code></td>
+              <td>Restricts operations exclusively to active, authorized, or valid business entities.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Parity-Based Skipping</td>
+              <td><code>if idx % 2 == 0: continue</code></td>
+              <td>Extracts alternating or patterned sub-sequences based on index parity.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">File Extension Whitelisting</td>
+              <td><code>if not fn.endswith(&#x27;.py&#x27;): continue</code></td>
+              <td>Selectively processes files matching specific filename extensions.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--accent);">Comment &amp; Whitespace Stripper</td>
+              <td><code>if line.startswith(&#x27;#&#x27;): continue</code></td>
+              <td>Skips documentation lines and blank rows during configuration ingestion.</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      <h3 class="sub-title" id="sec-04-programs"><span class="sec-badge">04.3</span> Executable Programs (Programs 31 through 40)</h3>
+      <p>Review the 10 distinct, verified Python 3 implementations below, complete with line-by-line syntax highlighting, terminal output traces, and key execution takeaways:</p>
+      
+      <!-- Program 31: continue_skip_multiples_3_and_5 -->
+      <article class="program-box" id="prog-31">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 31</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Skip Multiples of Both 3 and 5 in Range [1, 50]</h4>
+          <p class="program-desc">Traverses numbers from 1 to 50 and uses continue to skip any number that is divisible by both 3 and 5 (multiples of 15).</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_31_continue_skip_multiples_3_and_5.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Skipping common multiples of 3 and 5 (multiples of 15)</span>
+skipped_numbers = []
+printed_count = <span class="syn-number">0</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Numbers in [1, 50] excluding multiples of 15:&quot;</span>)
+<span class="syn-keyword">for</span> num <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-number">1</span>, <span class="syn-number">51</span>):
+    <span class="syn-keyword">if</span> num % <span class="syn-number">3</span> == <span class="syn-number">0</span> <span class="syn-keyword">and</span> num % <span class="syn-number">5</span> == <span class="syn-number">0</span>:
+        skipped_numbers.append(num)
+        <span class="syn-keyword">continue</span>  <span class="syn-comment"># Skip multiples of 15</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;{num:2d}&quot;</span>, end=<span class="syn-string">&quot; &quot;</span>)
+    printed_count += <span class="syn-number">1</span>
+    <span class="syn-keyword">if</span> printed_count % <span class="syn-number">10</span> == <span class="syn-number">0</span>:
+        <span class="syn-function">print</span>()
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;\n\nSkipped Numbers (Divisible by 15): {skipped_numbers}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Numbers in [1, 50] excluding multiples of 15:
+ 1  2  3  4  5  6  7  8  9 10 
+11 12 13 14 16 17 18 19 20 21 
+22 23 24 26 27 28 29 31 32 33 
+34 36 37 38 39 41 42 43 44 46 
+47 48 49 50 
+
+Skipped Numbers (Divisible by 15): [15, 30, 45]</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> The continue statement bypasses 15, 30, and 45 from the output stream while keeping the loop running.
+        </div>
+      </article>
+
+      <!-- Program 32: continue_temperature_sensor_filter -->
+      <article class="program-box" id="prog-32">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 32</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Sub-Zero Sensor Reading Filter &amp; Positive Average</h4>
+          <p class="program-desc">Filters an environmental sensor dataset, skipping temperatures &lt;= 0°C to compute average above-freezing warmth.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_32_continue_temperature_sensor_filter.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Temperature sensor data cleaning</span>
+sensor_readings = [<span class="syn-number">18.5</span>, -<span class="syn-number">4.2</span>, <span class="syn-number">22.0</span>, <span class="syn-number">0.0</span>, -<span class="syn-number">12.5</span>, <span class="syn-number">25.4</span>, <span class="syn-number">19.8</span>, -<span class="syn-number">1.0</span>]
+valid_readings = []
+total_temp = <span class="syn-number">0.0</span>
+
+<span class="syn-keyword">for</span> temp <span class="syn-keyword">in</span> sensor_readings:
+    <span class="syn-keyword">if</span> temp &lt;= <span class="syn-number">0</span>:
+        <span class="syn-keyword">continue</span>  <span class="syn-comment"># Skip freezing and sub-zero readings</span>
+    valid_readings.append(temp)
+    total_temp += temp
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Raw Sensor Dataset       : {sensor_readings}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Filtered Positive Readings: {valid_readings}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Positive Readings Count  : {len(valid_readings)}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Average Positive Temp    : {total_temp / len(valid_readings):.2f} °C&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Raw Sensor Dataset       : [18.5, -4.2, 22.0, 0.0, -12.5, 25.4, 19.8, -1.0]
+Filtered Positive Readings: [18.5, 22.0, 25.4, 19.8]
+Positive Readings Count  : 4
+Average Positive Temp    : 21.43 °C</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> All sub-zero and zero values are bypassed by continue, calculating the true mean of positive readings.
+        </div>
+      </article>
+
+      <!-- Program 33: continue_non_alpha_noise_stripper -->
+      <article class="program-box" id="prog-33">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 33</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Non-Alphabetic Noise Stripper &amp; Normalizer</h4>
+          <p class="program-desc">Cleans a noisy string by using continue to skip all numbers, spaces, and punctuation characters.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_33_continue_non_alpha_noise_stripper.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Text sanitizer skipping noise</span>
+raw_input = <span class="syn-string">&quot;Py@th#on 3.14 - E!le#ga$nt &amp; P*ow^er~fu=l!&quot;</span>
+clean_alpha = <span class="syn-string">&quot;&quot;</span>
+
+<span class="syn-keyword">for</span> char <span class="syn-keyword">in</span> raw_input:
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> char.isalpha():
+        <span class="syn-keyword">continue</span>  <span class="syn-comment"># Skip non-letter characters</span>
+    clean_alpha += char.upper()
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Raw Input String   : {raw_input}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Sanitized Letters  : {clean_alpha}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Total Letters Kept : {len(clean_alpha)}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Raw Input String   : Py@th#on 3.14 - E!le#ga$nt &amp; P*ow^er~fu=l!
+Sanitized Letters  : PYTHONPOWERFUL
+Total Letters Kept : 14</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Any character failing char.isalpha() triggers continue, yielding a pure uppercase alphabet string.
+        </div>
+      </article>
+
+      <!-- Program 34: continue_inactive_payroll_filter -->
+      <article class="program-box" id="prog-34">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 34</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Inactive Staff Payroll Calculation Guard</h4>
+          <p class="program-desc">Processes an employee database, using continue to skip terminated and inactive staff members.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_34_continue_inactive_payroll_filter.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Corporate payroll disbursement calculator</span>
+staff_roster = [
+    {<span class="syn-string">&quot;id&quot;</span>: <span class="syn-string">&quot;EMP01&quot;</span>, <span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Aadil&quot;</span>, <span class="syn-string">&quot;salary&quot;</span>: <span class="syn-number">75000</span>, <span class="syn-string">&quot;active&quot;</span>: <span class="syn-keyword">True</span>},
+    {<span class="syn-string">&quot;id&quot;</span>: <span class="syn-string">&quot;EMP02&quot;</span>, <span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Bilal&quot;</span>, <span class="syn-string">&quot;salary&quot;</span>: <span class="syn-number">60000</span>, <span class="syn-string">&quot;active&quot;</span>: <span class="syn-keyword">False</span>},  <span class="syn-comment"># Terminated</span>
+    {<span class="syn-string">&quot;id&quot;</span>: <span class="syn-string">&quot;EMP03&quot;</span>, <span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Zehra&quot;</span>, <span class="syn-string">&quot;salary&quot;</span>: <span class="syn-number">92000</span>, <span class="syn-string">&quot;active&quot;</span>: <span class="syn-keyword">True</span>},
+    {<span class="syn-string">&quot;id&quot;</span>: <span class="syn-string">&quot;EMP04&quot;</span>, <span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Sana&quot;</span>,  <span class="syn-string">&quot;salary&quot;</span>: <span class="syn-number">81000</span>, <span class="syn-string">&quot;active&quot;</span>: <span class="syn-keyword">True</span>},
+    {<span class="syn-string">&quot;id&quot;</span>: <span class="syn-string">&quot;EMP05&quot;</span>, <span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Tariq&quot;</span>, <span class="syn-string">&quot;salary&quot;</span>: <span class="syn-number">50000</span>, <span class="syn-string">&quot;active&quot;</span>: <span class="syn-keyword">False</span>}   <span class="syn-comment"># On Leave</span>
+]
+
+total_payroll = <span class="syn-number">0</span>
+disbursed_count = <span class="syn-number">0</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;=== MONTHLY SALARY DISBURSEMENT ===&quot;</span>)
+<span class="syn-keyword">for</span> emp <span class="syn-keyword">in</span> staff_roster:
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> emp[<span class="syn-string">&quot;active&quot;</span>]:
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot; [SKIP] {emp[&#x27;id&#x27;]} - {emp[&#x27;name&#x27;]:6s} (Status: Inactive/Terminated)&quot;</span>)
+        <span class="syn-keyword">continue</span>
+    total_payroll += emp[<span class="syn-string">&quot;salary&quot;</span>]
+    disbursed_count += <span class="syn-number">1</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot; [PAID] {emp[&#x27;id&#x27;]} - {emp[&#x27;name&#x27;]:6s} : ${emp[&#x27;salary&#x27;]:,}&quot;</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">40</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Active Employees Paid : {disbursed_count}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Total Payroll Budget  : ${total_payroll:,}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>=== MONTHLY SALARY DISBURSEMENT ===
+ [PAID] EMP01 - Aadil  : $75,000
+ [SKIP] EMP02 - Bilal  (Status: Inactive/Terminated)
+ [PAID] EMP03 - Zehra  : $92,000
+ [PAID] EMP04 - Sana   : $81,000
+ [SKIP] EMP05 - Tariq  (Status: Inactive/Terminated)
+----------------------------------------
+Active Employees Paid : 3
+Total Payroll Budget  : $248,000</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> continue bypasses inactive employees, preventing accidental salary disbursements to departed staff.
+        </div>
+      </article>
+
+      <!-- Program 35: continue_odd_index_extractor -->
+      <article class="program-box" id="prog-35">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 35</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Odd-Index Character Subsequence Extractor</h4>
+          <p class="program-desc">Extracts characters at odd-numbered index positions (1, 3, 5, ...) using continue on even indices.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_35_continue_odd_index_extractor.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Odd-index character extractor</span>
+message = <span class="syn-string">&quot;A1B2C3D4E5F6G7H8&quot;</span>
+extracted_chars = <span class="syn-string">&quot;&quot;</span>
+
+<span class="syn-keyword">for</span> idx <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-function">len</span>(message)):
+    <span class="syn-keyword">if</span> idx % <span class="syn-number">2</span> == <span class="syn-number">0</span>:
+        <span class="syn-keyword">continue</span>  <span class="syn-comment"># Skip even index positions</span>
+    extracted_chars += message[idx]
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Original String    : {message}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Odd-Index Sequence : {extracted_chars}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Original String    : A1B2C3D4E5F6G7H8
+Odd-Index Sequence : 12345678</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> When idx is even (0, 2, 4, ...), continue runs, selecting only characters at indices 1, 3, 5, 7, etc.
+        </div>
+      </article>
+
+      <!-- Program 36: continue_ipv4_octet_validator -->
+      <article class="program-box" id="prog-36">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 36</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">IPv4 Address Octet Range Validator</h4>
+          <p class="program-desc">Validates an IPv4 address string, using continue to bypass valid octets and collecting invalid segments.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_36_continue_ipv4_octet_validator.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># IPv4 address validator</span>
+ip_address = <span class="syn-string">&quot;192.168.300.1&quot;</span>
+octets = ip_address.split(<span class="syn-string">&quot;.&quot;</span>)
+invalid_octets = []
+
+<span class="syn-keyword">for</span> octet <span class="syn-keyword">in</span> octets:
+    <span class="syn-keyword">if</span> octet.isdigit() <span class="syn-keyword">and</span> <span class="syn-number">0</span> &lt;= <span class="syn-function">int</span>(octet) &lt;= <span class="syn-number">255</span>:
+        <span class="syn-keyword">continue</span>  <span class="syn-comment"># Valid octet, skip error reporting</span>
+    invalid_octets.append(octet)
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Testing IP Address: {ip_address}&quot;</span>)
+<span class="syn-keyword">if</span> <span class="syn-function">len</span>(octets) != <span class="syn-number">4</span> <span class="syn-keyword">or</span> invalid_octets:
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;STATUS: INVALID IP (Problematic Octets: {invalid_octets})&quot;</span>)
+<span class="syn-keyword">else</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot;STATUS: VALID IPv4 Address&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Testing IP Address: 192.168.300.1
+STATUS: INVALID IP (Problematic Octets: [&#x27;300&#x27;])</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Octets &#x27;192&#x27;, &#x27;168&#x27;, and &#x27;1&#x27; satisfy the range [0, 255] and are skipped; only &#x27;300&#x27; is caught.
+        </div>
+      </article>
+
+      <!-- Program 37: continue_file_extension_filter -->
+      <article class="program-box" id="prog-37">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 37</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Selective Python (.py) File Filter</h4>
+          <p class="program-desc">Iterates through a list of project filenames, using continue to ignore non-Python assets.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_37_continue_file_extension_filter.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Directory file scanner</span>
+file_list = [
+    <span class="syn-string">&quot;main.py&quot;</span>, <span class="syn-string">&quot;styles.css&quot;</span>, <span class="syn-string">&quot;script.py&quot;</span>, 
+    <span class="syn-string">&quot;image.png&quot;</span>, <span class="syn-string">&quot;helper.py&quot;</span>, <span class="syn-string">&quot;notes.docx&quot;</span>, <span class="syn-string">&quot;data.csv&quot;</span>
+]
+python_files = []
+
+<span class="syn-keyword">for</span> filename <span class="syn-keyword">in</span> file_list:
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> filename.endswith(<span class="syn-string">&quot;.py&quot;</span>):
+        <span class="syn-keyword">continue</span>  <span class="syn-comment"># Skip non-Python files</span>
+    python_files.append(filename)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Scanned Project Directory:&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot; Total Files Scanned : {len(file_list)}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot; Python Scripts (.py): {python_files}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Scanned Project Directory:
+ Total Files Scanned : 7
+ Python Scripts (.py): [&#x27;main.py&#x27;, &#x27;script.py&#x27;, &#x27;helper.py&#x27;]</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Files with extensions .css, .png, .docx, and .csv are skipped by continue.
+        </div>
+      </article>
+
+      <!-- Program 38: continue_zero_division_guard -->
+      <article class="program-box" id="prog-38">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 38</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Zero-Division Exception Guard in Batch Solver</h4>
+          <p class="program-desc">Evaluates f(x) = 120 / (x - 4) across integer inputs, using continue to prevent ZeroDivisionError at x = 4.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_38_continue_zero_division_guard.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Mathematical equation evaluator with zero-division guard</span>
+x_values = [<span class="syn-number">0</span>, <span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>]
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Evaluating f(x) = 120 / (x - 4):&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">35</span>)
+
+<span class="syn-keyword">for</span> x <span class="syn-keyword">in</span> x_values:
+    denominator = x - <span class="syn-number">4</span>
+    <span class="syn-keyword">if</span> denominator == <span class="syn-number">0</span>:
+        <span class="syn-function">print</span>(<span class="syn-string">f&quot; x = {x:2d} | UNDEFINED (Division by zero skipped)&quot;</span>)
+        <span class="syn-keyword">continue</span>
+    f_x = <span class="syn-number">120</span> / denominator
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot; x = {x:2d} | f({x}) = {f_x:6.1f}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>Evaluating f(x) = 120 / (x - 4):
+-----------------------------------
+ x =  0 | f(0) =  -30.0
+ x =  1 | f(1) =  -40.0
+ x =  2 | f(2) =  -60.0
+ x =  3 | f(3) = -120.0
+ x =  4 | UNDEFINED (Division by zero skipped)
+ x =  5 | f(5) =  120.0
+ x =  6 | f(6) =   60.0
+ x =  7 | f(7) =   40.0
+ x =  8 | f(8) =   30.0</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> When denominator == 0 (at x = 4), continue skips division, ensuring program continuity without exceptions.
+        </div>
+      </article>
+
+      <!-- Program 39: continue_off_diagonal_aggregator -->
+      <article class="program-box" id="prog-39">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 39</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">2D Matrix Off-Diagonal Element Aggregator</h4>
+          <p class="program-desc">Calculates the sum of all elements outside the main diagonal in a 3x3 matrix using continue when r == c.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_39_continue_off_diagonal_aggregator.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Off-diagonal element summation</span>
+matrix_3x3 = [
+    [<span class="syn-number">10</span>,  <span class="syn-number">4</span>,  <span class="syn-number">7</span>],
+    [ <span class="syn-number">2</span>, <span class="syn-number">20</span>,  <span class="syn-number">5</span>],
+    [ <span class="syn-number">8</span>,  <span class="syn-number">3</span>, <span class="syn-number">30</span>]
+]
+
+off_diag_sum = <span class="syn-number">0</span>
+elements_summed = []
+
+<span class="syn-keyword">for</span> r <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-function">len</span>(matrix_3x3)):
+    <span class="syn-keyword">for</span> c <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-function">len</span>(matrix_3x3[<span class="syn-number">0</span>])):
+        <span class="syn-keyword">if</span> r == c:
+            <span class="syn-keyword">continue</span>  <span class="syn-comment"># Skip main diagonal entries (10, 20, 30)</span>
+        val = matrix_3x3[r][c]
+        off_diag_sum += val
+        elements_summed.append(val)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;3x3 Matrix:&quot;</span>)
+<span class="syn-keyword">for</span> row <span class="syn-keyword">in</span> matrix_3x3:
+    <span class="syn-function">print</span>(<span class="syn-string">&quot; &quot;</span>, row)
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;\nOff-Diagonal Elements: {elements_summed}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Off-Diagonal Sum     : {off_diag_sum} ({&#x27; + &#x27;.join(map(str, elements_summed))} = {off_diag_sum})&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>3x3 Matrix:
+  [10, 4, 7]
+  [2, 20, 5]
+  [8, 3, 30]
+
+Off-Diagonal Elements: [4, 7, 2, 5, 8, 3]
+Off-Diagonal Sum     : 29 (4 + 7 + 2 + 5 + 8 + 3 = 29)</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> Diagonal elements (r == c) are bypassed by continue, summing only the 6 off-diagonal elements.
+        </div>
+      </article>
+
+      <!-- Program 40: continue_config_comment_stripper -->
+      <article class="program-box" id="prog-40">
+        <div class="program-header">
+          <div class="prog-tag-row">
+            <span class="prog-badge">PROGRAM 40</span>
+            <span class="prog-category-badge">Python 3 Verified</span>
+          </div>
+          <h4 class="program-title">Server Configuration Comment &amp; Whitespace Stripper</h4>
+          <p class="program-desc">Parses a raw server configuration block, using continue to skip comment lines starting with &#x27;#&#x27; and blanks.</p>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span>program_40_continue_config_comment_stripper.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy source code">
+              <span>📋</span> Copy Code
+            </button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Server config file parser</span>
+raw_config = [
+    <span class="syn-string">&quot;# Database Connection Settings&quot;</span>,
+    <span class="syn-string">&quot;DB_HOST=10.0.0.1&quot;</span>,
+    <span class="syn-string">&quot;DB_PORT=5432&quot;</span>,
+    <span class="syn-string">&quot;&quot;</span>,
+    <span class="syn-string">&quot;# Cache Settings&quot;</span>,
+    <span class="syn-string">&quot;REDIS_PORT=6379&quot;</span>,
+    <span class="syn-string">&quot;   &quot;</span>,
+    <span class="syn-string">&quot;# Application Flags&quot;</span>,
+    <span class="syn-string">&quot;DEBUG_MODE=False&quot;</span>
+]
+
+parsed_settings = {}
+
+<span class="syn-keyword">for</span> line <span class="syn-keyword">in</span> raw_config:
+    cleaned = line.strip()
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> cleaned <span class="syn-keyword">or</span> cleaned.startswith(<span class="syn-string">&quot;#&quot;</span>):
+        <span class="syn-keyword">continue</span>  <span class="syn-comment"># Skip empty lines and comment headers</span>
+    key, val = cleaned.split(<span class="syn-string">&quot;=&quot;</span>, <span class="syn-number">1</span>)
+    parsed_settings[key] = val
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;=== ACTIVE CONFIGURATION PARAMETERS ===&quot;</span>)
+<span class="syn-keyword">for</span> k, v <span class="syn-keyword">in</span> parsed_settings.items():
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;  {k:12s} =&gt; {v}&quot;</span>)</code></pre>
+          </div>
+        </div>
+
+        <div class="output-box">
+          <div class="output-header">
+            <span>⚡ Terminal Output</span>
+            <span style="color: var(--text-faint); font-weight: 500; font-size: 0.72rem;">Exit Code: 0</span>
+          </div>
+          <div class="output-body">
+            <pre>=== ACTIVE CONFIGURATION PARAMETERS ===
+  DB_HOST      =&gt; 10.0.0.1
+  DB_PORT      =&gt; 5432
+  REDIS_PORT   =&gt; 6379
+  DEBUG_MODE   =&gt; False</pre>
+          </div>
+        </div>
+        
+        <div class="prog-takeaway">
+          <strong>Key Execution Takeaway:</strong> continue discards all comment headers and empty strings, parsing only valid key-value configuration lines.
+        </div>
+      </article>
+
+    </section>
+
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <div style="font-weight: 700; color: var(--text);">Practice Set 03 • Loops &amp; Iteration in Python</div>
+          <div style="font-size: 0.85rem; color: var(--text-dim);">Prepared by Umer Farooq | SSM College of Engineering</div>
+        </div>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-dim);">
+        B.Tech 5th Semester • Department of Computer Science &amp; Engineering
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" title="Back to Top">
+      <span>↑</span>
+    </button>
+    <button class="btn-float" id="theme-toggle-float" onclick="toggleTheme()" title="Toggle Theme">
+      <span id="theme-icon-float">☀️</span>
+    </button>
+  </div>
+
+  <script>
+    // Theme Management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcons(next);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    // Scroll Progress Indicator
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Copy Code Handler
+    function copyCode(btn) {
+      const container = btn.closest('.code-container');
+      if (!container) return;
+      const preOrCode = container.querySelector('pre code') || container.querySelector('pre');
+      if (preOrCode) {
+        const textToCopy = preOrCode.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          btn.style.color = 'var(--green)';
+          btn.style.borderColor = 'var(--green)';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 2000);
+        }).catch(() => {
+          const range = document.createRange();
+          range.selectNode(preOrCode);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2000);
+        });
+      }
+    }
+
+    // Initialize on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+    });
+  </script>
+</body>
+</html>

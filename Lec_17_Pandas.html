@@ -1,0 +1,3758 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Master Pandas in Python: Complete guide covering Series, DataFrame, Missing Data, Descriptive Statistics, Sorting, CSV operations, and advanced DataFrame operations. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Lecture 19: Pandas in Python – Complete Guide | SSM College of Engineering</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      /* IDE syntax highlighting tokens (Dark) */
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+      --syn-header: #f07178;
+      --syn-include: #f07178;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      /* IDE syntax highlighting tokens (Light) */
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #6b7280;
+      --syn-function: #2563eb;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0891b2;
+      --syn-punctuation: #0891b2;
+      --syn-variable: #0f172a;
+      --syn-format: #d97706;
+      --syn-header: #dc2626;
+      --syn-include: #dc2626;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16.5px;
+      line-height: 1.75;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      transition: width 0.1s ease;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(18, 20, 26, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 900;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="light"] .top-nav {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-brand .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(28, 32, 42, 0.95), rgba(24, 27, 34, 0.98));
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 30px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-theme="light"] .hero-banner {
+      background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tag-accent {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .tag-teal {
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    .tag-purple {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.12rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .hero-author-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .author-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 10px var(--accent-glow);
+    }
+
+    .author-details h4 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .author-details p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #e06c15);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px var(--accent-glow);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .meta-item .val {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .meta-item .lbl {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-header-pill {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #toc-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .toc-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+
+    .toc-card .ch-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .toc-card .ch-name {
+      font-family: var(--font-heading);
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .toc-card .ch-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+
+    .toc-pill-badge {
+      align-self: flex-start;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+    }
+
+    .chapter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .ch-header {
+      margin-bottom: 28px;
+    }
+
+    .ch-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    h2.ch-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    h3 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 24px 0 10px;
+    }
+
+    h4 {
+      font-family: var(--font-heading);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 18px 0 8px;
+    }
+
+    .program-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 28px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 16.5px;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    code {
+      font-family: var(--font-code);
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border);
+    }
+
+    .key {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    ul, ol {
+      margin: 6px 0 14px 24px;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 6px;
+      line-height: 1.65;
+    }
+
+    .highlight-box {
+      background: var(--blue-soft);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .highlight-box.tip {
+      background: var(--green-soft);
+      border-left-color: var(--green);
+    }
+
+    .highlight-box.warning {
+      background: var(--amber-soft);
+      border-left-color: var(--amber);
+    }
+
+    .highlight-box.important {
+      background: var(--red-soft);
+      border-left-color: var(--red);
+    }
+
+    .highlight-box.remember {
+      background: var(--purple-soft);
+      border-left-color: var(--purple);
+    }
+
+    .highlight-box strong {
+      color: var(--text);
+    }
+
+    .syntax-box {
+      background: var(--bg-alt);
+      border: 1px dashed var(--border-accent);
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin: 12px 0 16px;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      color: var(--teal);
+      overflow-x: auto;
+    }
+
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 16px 0;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .code-header {
+      background: #151821;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    [data-theme="light"] .code-header {
+      background: #e2e8f0;
+    }
+
+    .code-title {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .code-title {
+      color: #334155;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .copy-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .code-body pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text);
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .code-body pre {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .syn-keyword { color: var(--syn-keyword); font-weight: 700; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); font-weight: 700; }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+    .syn-format { color: var(--syn-format); font-weight: 700; }
+    .syn-header { color: var(--syn-header); }
+    .syn-include { color: var(--syn-include); }
+
+    .output-box {
+      background: #090a0d;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      margin: 12px 0 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] .output-box {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .output-header {
+      background: #11141c;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .output-header {
+      background: #0f172a;
+      color: #2dd4bf;
+      border-bottom-color: #334155;
+    }
+
+    .output-body pre {
+      padding: 12px 16px;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: #a9b7c6;
+      line-height: 1.5;
+      overflow-x: auto;
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .output-body pre {
+      color: #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--accent);
+      font-family: var(--font-heading);
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    tr:nth-child(even) td {
+      background: var(--table-stripe);
+    }
+
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    .float-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 800;
+    }
+
+    .btn-float {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-float:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .top-nav, #progress-container, .float-actions, .copy-btn, .btn-primary, .btn-nav, .hero-buttons { display: none !important; }
+      .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .hero-banner, .chapter, .toc-card, #toc-section, .code-container, .output-box {
+        background: #ffffff !important; color: #000000 !important; border: 1px solid #cccccc !important; box-shadow: none !important; page-break-inside: avoid;
+      }
+      .code-body pre, .output-body pre { color: #000000 !important; background: #f8fafc !important; }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 20px 16px 60px; }
+      .hero-banner { padding: 24px 20px; }
+      .hero-title { font-size: 1.75rem; }
+      .chapter { padding: 20px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <header class="top-nav">
+    <a href="index.html" class="nav-brand">
+      <span class="badge">LEC 19</span>
+      <span>Pandas in Python</span>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn-nav" title="Course Portal">
+        <span>🏠</span> Portal
+      </a>
+      <a href="Lec_17.html" class="btn-nav" title="Files &amp; Exceptions (Lec 17)">
+        <span>📂</span> Files
+      </a>
+      <a href="Lec_14_Dictionary.html" class="btn-nav" title="Dictionaries (Python)">
+        <span>📖</span> Dictionaries
+      </a>
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF">
+        <span>🖨️</span> Print PDF
+      </button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon-nav">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">Python Programming</span>
+        <span class="tag tag-teal">Pandas Library</span>
+        <span class="tag tag-purple">Comprehensive Guide</span>
+      </div>
+      <h1 class="hero-title">Pandas in Python — Complete Masterclass</h1>
+      <p class="hero-subtitle">
+        The ultimate comprehensive guide to Pandas. Covers <strong>Series</strong>, <strong>DataFrame</strong>, <strong>Missing Data</strong>, <strong>Descriptive Statistics</strong>, <strong>Sorting</strong>, <strong>CSV Operations</strong>, and advanced <strong>DataFrame Operations</strong> — with real code examples, outputs, and a detailed look at variance and skewness.
+      </p>
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()">
+            <span>🖨️</span> Save as PDF / Print
+          </button>
+        </div>
+      </div>
+      <div class="hero-meta-strip">
+        <div class="meta-item">
+          <span class="val">50+</span>
+          <span class="lbl">Code Examples</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">7</span>
+          <span class="lbl">Core Sections</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">100%</span>
+          <span class="lbl">Exam Coverage</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">15+</span>
+          <span class="lbl">Pandas Functions</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TABLE OF CONTENTS -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Quick Chapter Navigation</div>
+      <div class="toc-grid">
+        <a href="#sec-intro" class="toc-card">
+          <span class="ch-num">SECTION 01</span>
+          <span class="ch-name">1. Introduction to Pandas</span>
+          <span class="ch-desc">What is Pandas, why use it, installation, data structures, Pandas vs NumPy.</span>
+          <span class="toc-pill-badge">Fundamentals</span>
+        </a>
+        <a href="#sec-series" class="toc-card">
+          <span class="ch-num">SECTION 02</span>
+          <span class="ch-name">2. Series</span>
+          <span class="ch-desc">Creating Series, attributes, accessing data, operations.</span>
+          <span class="toc-pill-badge">1-D Data</span>
+        </a>
+        <a href="#sec-dataframe" class="toc-card">
+          <span class="ch-num">SECTION 03</span>
+          <span class="ch-name">3. DataFrame</span>
+          <span class="ch-desc">Creating DataFrames, basic info, selecting data, modifying.</span>
+          <span class="toc-pill-badge">2-D Data</span>
+        </a>
+        <a href="#sec-missing" class="toc-card">
+          <span class="ch-num">SECTION 04</span>
+          <span class="ch-name">4. Missing Data</span>
+          <span class="ch-desc">Detecting, filling, and removing missing values.</span>
+          <span class="toc-pill-badge">Data Cleaning</span>
+        </a>
+        <a href="#sec-stats" class="toc-card">
+          <span class="ch-num">SECTION 05</span>
+          <span class="ch-name">5. Descriptive Statistics</span>
+          <span class="ch-desc">Central tendency, dispersion, shape, relationship, describe().</span>
+          <span class="toc-pill-badge">Statistics</span>
+        </a>
+        <a href="#sec-sorting" class="toc-card">
+          <span class="ch-num">SECTION 06</span>
+          <span class="ch-name">6. Sorting</span>
+          <span class="ch-desc">sort_values(), sort_index(), ranking, nlargest/nsmallest.</span>
+          <span class="toc-pill-badge">Ordering</span>
+        </a>
+        <a href="#sec-csv" class="toc-card">
+          <span class="ch-num">SECTION 07</span>
+          <span class="ch-name">7. Working with CSV Files</span>
+          <span class="ch-desc">Reading, writing, and processing CSV files.</span>
+          <span class="toc-pill-badge">File I/O</span>
+        </a>
+        <a href="#sec-operations" class="toc-card">
+          <span class="ch-num">SECTION 08</span>
+          <span class="ch-name">8. DataFrame Operations</span>
+          <span class="ch-desc">Arithmetic, apply, map, grouping, merging, pivot tables.</span>
+          <span class="toc-pill-badge">Advanced</span>
+        </a>
+        <a href="#sec-projects" class="toc-card">
+          <span class="ch-num">SECTION 09</span>
+          <span class="ch-name">9. Practice Projects</span>
+          <span class="ch-desc">Student result analysis, employee data cleaning, sales data analysis.</span>
+          <span class="toc-pill-badge">Projects</span>
+        </a>
+        <a href="#sec-cheatsheet" class="toc-card">
+          <span class="ch-num">SECTION 10</span>
+          <span class="ch-name">10. Quick Reference Cheat Sheet</span>
+          <span class="ch-desc">Functions at a glance, important definitions, common mistakes.</span>
+          <span class="toc-pill-badge">Summary</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 01: INTRODUCTION TO PANDAS -->
+    <!-- ============================================================ -->
+    <section id="sec-intro" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 01 &bull; Fundamentals</div>
+        <h2 class="ch-title">1. Introduction to Pandas</h2>
+      </div>
+
+      <h3>1.1 What is Pandas?</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> Pandas is a free and open-source Python library used for data handling, data cleaning, and data analysis. It gives us easy-to-use data structures (Series and DataFrame) to store and work with data in the form of tables.
+      </div>
+      <p>The name "Pandas" comes from <strong>Panel Data</strong>, a term used in statistics for data with many rows and columns. It was created by <strong>Wes McKinney</strong> in 2008 and is built on top of the NumPy library.</p>
+      <p>Think of Pandas as Microsoft Excel inside Python. In Excel you open a sheet, sort it, filter it, find the average, and fix empty cells. Pandas lets you do all these things by writing small pieces of code, and it can handle millions of rows very quickly.</p>
+
+      <h3>1.2 Why do we use Pandas?</h3>
+      <ul>
+        <li><strong>Easy to use:</strong> a table of data can be created in one line of code.</li>
+        <li><strong>Fast:</strong> it is built on NumPy, so calculations on big data are quick.</li>
+        <li><strong>Handles missing data:</strong> it has ready-made methods to find, fill, or remove empty values.</li>
+        <li><strong>Reads and writes many file types:</strong> CSV, Excel, JSON, SQL, HTML, and more.</li>
+        <li><strong>Powerful operations:</strong> sorting, filtering, grouping, merging, joining, and reshaping data.</li>
+        <li><strong>Labelled data:</strong> every row and column has a name (label), so data is easy to find.</li>
+        <li><strong>Works with other libraries:</strong> NumPy, Matplotlib, Seaborn, and Scikit-learn.</li>
+      </ul>
+
+      <h3>1.3 Installation and Importing</h3>
+      <p>Pandas is not part of basic Python. It must be installed once using <code>pip</code>:</p>
+      <div class="syntax-box">
+        pip install pandas
+      </div>
+      <p>After installation, we import it in every program. By tradition, everybody uses the short name (alias) <code>pd</code>.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 1: Importing Pandas and checking its version</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 1</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd   <span class="syn-comment"># 'pd' is the standard short name for pandas</span>
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np    <span class="syn-comment"># NumPy is often used together with pandas</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">"Pandas is ready to use"</span>)
+<span class="syn-function">print</span>(<span class="syn-string">"Pandas version:"</span>, pd.__version__)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Pandas is ready to use
+Pandas version: 3.0.5</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>KEY IDEA:</strong> We write <code>import pandas as pd</code> so that later we can type <code>pd.Series()</code> or <code>pd.DataFrame()</code> instead of <code>pandas.Series()</code>. It saves typing and is the standard style in every textbook.
+      </div>
+
+      <h3>1.4 Data Structures of Pandas</h3>
+      <p>A data structure is a way of storing data in memory. Pandas mainly has two data structures:</p>
+      <table>
+        <tr><th>Point</th><th>Series</th><th>DataFrame</th></tr>
+        <tr><td>Dimension</td><td>1-Dimensional (one column)</td><td>2-Dimensional (rows and columns)</td></tr>
+        <tr><td>Looks like</td><td>A single column of Excel</td><td>A full Excel sheet / table</td></tr>
+        <tr><td>Labels</td><td>Has only an index (row labels)</td><td>Has an index (rows) and column names</td></tr>
+        <tr><td>Data type</td><td>All values usually of one type</td><td>Each column can have its own type</td></tr>
+        <tr><td>Created by</td><td><code>pd.Series()</code></td><td><code>pd.DataFrame()</code></td></tr>
+        <tr><td>Example</td><td>Marks of one subject</td><td>Roll no, name, and marks of many students</td></tr>
+      </table>
+      <div class="highlight-box remember">
+        <strong>NOTE:</strong> Pandas also had a third structure called <strong>Panel</strong> (3-dimensional), but it was removed in newer versions. For exams, remember only <strong>Series</strong> and <strong>DataFrame</strong>.
+      </div>
+
+      <h3>1.5 Pandas versus NumPy</h3>
+      <table>
+        <tr><th>NumPy</th><th>Pandas</th></tr>
+        <tr><td>Works mainly with numbers in arrays</td><td>Works with numbers, text, dates, and mixed data</td></tr>
+        <tr><td>Main object is <code>ndarray</code></td><td>Main objects are <code>Series</code> and <code>DataFrame</code></td></tr>
+        <tr><td>Uses position numbers (0, 1, 2...) only</td><td>Uses position numbers and also labels (names)</td></tr>
+        <tr><td>No built-in support for missing data</td><td>Strong support for missing data (NaN)</td></tr>
+        <tr><td>Good for mathematical work</td><td>Good for data analysis and data cleaning</td></tr>
+      </table>
+
+      <div class="highlight-box tip">
+        <strong>EXAM TIP:</strong> Most 5-mark theory answers start with a definition, then features/points, then a small example program with output. Follow this pattern for every topic in these notes.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 02: SERIES -->
+    <!-- ============================================================ -->
+    <section id="sec-series" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 02 &bull; 1-D Data</div>
+        <h2 class="ch-title">2. Series</h2>
+      </div>
+
+      <h3>2.1 What is a Series?</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> A <strong>Series</strong> is a one-dimensional, labelled array in Pandas that can store data of any type (numbers, text, True/False, etc.). It has two parts: the <strong>values</strong> (the data) and the <strong>index</strong> (the labels of the data).
+      </div>
+      <p>A Pandas Series is a one-dimensional labeled array capable of holding data of any type. It can be created from Python lists, NumPy arrays, dictionaries, scalar values, or data loaded from external sources such as CSV files, Excel files, and databases. The labels associated with a Series are called its <strong>index</strong>.</p>
+      <p>The word <strong>one-dimensional</strong> means that the data is arranged in a single sequence, like a list. Each element in a Series has two parts:</p>
+      <ul>
+        <li><strong>Index:</strong> The label used to identify an element. By default, Pandas assigns indexes starting from 0.</li>
+        <li><strong>Value:</strong> The actual data stored at that index.</li>
+      </ul>
+
+      <p>For example, consider the following Series:</p>
+      <table>
+        <tr><th>Index</th><th>Value</th></tr>
+        <tr><td>0</td><td>U</td></tr>
+        <tr><td>1</td><td>M</td></tr>
+        <tr><td>2</td><td>E</td></tr>
+        <tr><td>3</td><td>R</td></tr>
+        <tr><td>4</td><td>F</td></tr>
+      </table>
+      <p>Here, U has index 0, M has index 1, and so on.</p>
+
+      <div class="highlight-box remember">
+        Imagine one column of an Excel sheet. On the left you see the row numbers (the index) and next to them the data (the values). That is exactly a Series.
+      </div>
+
+      <h3>2.2 Creating a Series</h3>
+      <div class="syntax-box">
+        pd.Series(data, index=None, dtype=None, name=None)
+      </div>
+      <ul>
+        <li><strong>data:</strong> the values — can be a list, dictionary, NumPy array, or a single (scalar) value.</li>
+        <li><strong>index:</strong> the labels for the values. If we do not give it, Pandas uses 0, 1, 2, ...</li>
+        <li><strong>dtype:</strong> the data type of the values (int, float, object, etc.).</li>
+        <li><strong>name:</strong> a name for the Series.</li>
+      </ul>
+
+      <h4>(a) From a list</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 2: Series from a list (default index)</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 2</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+marks = [<span class="syn-number">85</span>, <span class="syn-number">90</span>, <span class="syn-number">78</span>, <span class="syn-number">92</span>]
+s = pd.Series(marks)
+<span class="syn-function">print</span>(s)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>0    85
+1    90
+2    78
+3    92
+dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+      <p>The numbers 0, 1, 2, 3 on the left are the default index given automatically by Pandas. <code>dtype: int64</code> tells us that values are 64-bit integers.</p>
+
+      <h4>(b) With a custom index</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 3: Series with our own index labels</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 3</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+marks = [<span class="syn-number">85</span>, <span class="syn-number">90</span>, <span class="syn-number">78</span>, <span class="syn-number">92</span>]
+subjects = [<span class="syn-string">"Maths"</span>, <span class="syn-string">"Physics"</span>, <span class="syn-string">"Chemistry"</span>, <span class="syn-string">"English"</span>]
+s = pd.Series(marks, index=subjects, name=<span class="syn-string">"Marks"</span>)
+<span class="syn-function">print</span>(s)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Maths        85
+Physics      90
+Chemistry    78
+English      92
+Name: Marks, dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(c) From a dictionary</h4>
+      <p>When we use a dictionary, the keys become the index and the values become the data.</p>
+      <div class="program-block">
+        <div class="program-title">📌 Program 4: Series from a dictionary</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 4</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+d = {<span class="syn-string">"Ravi"</span>: <span class="syn-number">50</span>, <span class="syn-string">"Anita"</span>: <span class="syn-number">60</span>, <span class="syn-string">"Kiran"</span>: <span class="syn-number">70</span>}
+s = pd.Series(d)
+<span class="syn-function">print</span>(s)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Ravi     50
+Anita    60
+Kiran    70
+dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(d) From a scalar value</h4>
+      <p>A single value is repeated for every index label. The index must be given here.</p>
+      <div class="program-block">
+        <div class="program-title">📌 Program 5: Series from a scalar value</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 5</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+s = pd.Series(<span class="syn-number">5</span>, index=[<span class="syn-string">"a"</span>, <span class="syn-string">"b"</span>, <span class="syn-string">"c"</span>])
+<span class="syn-function">print</span>(s)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>a    5
+b    5
+c    5
+dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(e) From a NumPy array</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 6: Series from a NumPy array</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 6</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+arr = np.array([<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>])
+s = pd.Series(arr)
+<span class="syn-function">print</span>(s)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>0    10
+1    20
+2    30
+3    40
+dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>2.3 Important Attributes of a Series</h3>
+      <p>An attribute is a property of an object. It gives us information and is written without brackets.</p>
+      <table>
+        <tr><th>Attribute</th><th>Meaning</th></tr>
+        <tr><td><code>s.values</code></td><td>All data values as a NumPy array</td></tr>
+        <tr><td><code>s.index</code></td><td>The index (labels) of the Series</td></tr>
+        <tr><td><code>s.dtype</code></td><td>Data type of the values</td></tr>
+        <tr><td><code>s.size</code></td><td>Total number of elements</td></tr>
+        <tr><td><code>s.shape</code></td><td>Shape as a tuple, e.g. (4,)</td></tr>
+        <tr><td><code>s.ndim</code></td><td>Number of dimensions (always 1)</td></tr>
+        <tr><td><code>s.name</code></td><td>Name of the Series</td></tr>
+        <tr><td><code>s.empty</code></td><td>True if the Series has no data</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 7: Series attributes</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 7</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+s = pd.Series([<span class="syn-number">85</span>, <span class="syn-number">90</span>, <span class="syn-number">78</span>, <span class="syn-number">92</span>], index=[<span class="syn-string">"Maths"</span>, <span class="syn-string">"Physics"</span>, <span class="syn-string">"Chemistry"</span>, <span class="syn-string">"English"</span>], name=<span class="syn-string">"Marks"</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">"Values :"</span>, s.values)
+<span class="syn-function">print</span>(<span class="syn-string">"Index :"</span>, <span class="syn-function">list</span>(s.index))
+<span class="syn-function">print</span>(<span class="syn-string">"Dtype :"</span>, s.dtype)
+<span class="syn-function">print</span>(<span class="syn-string">"Size :"</span>, s.size)
+<span class="syn-function">print</span>(<span class="syn-string">"Shape :"</span>, s.shape)
+<span class="syn-function">print</span>(<span class="syn-string">"Ndim :"</span>, s.ndim)
+<span class="syn-function">print</span>(<span class="syn-string">"Name :"</span>, s.name)
+<span class="syn-function">print</span>(<span class="syn-string">"Empty :"</span>, s.empty)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Values : [85 90 78 92]
+Index : ['Maths', 'Physics', 'Chemistry', 'English']
+Dtype : int64
+Size : 4
+Shape : (4,)
+Ndim : 1
+Name : Marks
+Empty : False</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>2.4 Accessing Data in a Series</h3>
+      <p>We can get data using the label (name) or the position (number). Slicing with labels includes the last label, but slicing with positions does not.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 8: Accessing elements and slicing</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 8</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+s = pd.Series([<span class="syn-number">85</span>, <span class="syn-number">90</span>, <span class="syn-number">78</span>, <span class="syn-number">92</span>, <span class="syn-number">66</span>], index=[<span class="syn-string">"a"</span>, <span class="syn-string">"b"</span>, <span class="syn-string">"c"</span>, <span class="syn-string">"d"</span>, <span class="syn-string">"e"</span>])
+
+<span class="syn-function">print</span>(<span class="syn-string">"By label s['b'] :"</span>, s[<span class="syn-string">"b"</span>])
+<span class="syn-function">print</span>(<span class="syn-string">"By position s.iloc[1]:"</span>, s.iloc[<span class="syn-number">1</span>])
+<span class="syn-function">print</span>(<span class="syn-string">"By label s.loc['c'] :"</span>, s.loc[<span class="syn-string">"c"</span>])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Slice s[0:3] (position, last excluded):"</span>)
+<span class="syn-function">print</span>(s[<span class="syn-number">0</span>:<span class="syn-number">3</span>])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Slice s['a':'c'] (label, last included):"</span>)
+<span class="syn-function">print</span>(s[<span class="syn-string">"a"</span>:<span class="syn-string">"c"</span>])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Many items s[['a', 'e']]:"</span>)
+<span class="syn-function">print</span>(s[[<span class="syn-string">"a"</span>, <span class="syn-string">"e"</span>]])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Marks above 80:"</span>)
+<span class="syn-function">print</span>(s[s &gt; <span class="syn-number">80</span>])</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>By label s['b'] : 90
+By position s.iloc[1]: 90
+By label s.loc['c'] : 78
+
+Slice s[0:3] (position, last excluded):
+a    85
+b    90
+c    78
+dtype: int64
+
+Slice s['a':'c'] (label, last included):
+a    85
+b    90
+c    78
+dtype: int64
+
+Many items s[['a', 'e']]:
+a    85
+e    66
+dtype: int64
+
+Marks above 80:
+a    85
+b    90
+d    92
+dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>KEY IDEA:</strong> <code>loc</code> uses labels, <code>iloc</code> uses integer positions. Remember: <strong>loc = label, iloc = integer position</strong>.
+      </div>
+
+      <h3>2.5 Operations on a Series</h3>
+      <p>Mathematical operations work on the whole Series at once. This is called <strong>vectorised operation</strong>, so we do not need a loop.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 9: Arithmetic and common functions on a Series</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 9</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+s = pd.Series([<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>])
+
+<span class="syn-function">print</span>(<span class="syn-string">"s + 5 :"</span>)
+<span class="syn-function">print</span>(s + <span class="syn-number">5</span>)
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"s * 2 :"</span>, <span class="syn-function">list</span>(s * <span class="syn-number">2</span>))
+<span class="syn-function">print</span>(<span class="syn-string">"Sum :"</span>, s.sum())
+<span class="syn-function">print</span>(<span class="syn-string">"Mean :"</span>, s.mean())
+<span class="syn-function">print</span>(<span class="syn-string">"Max :"</span>, s.max())
+<span class="syn-function">print</span>(<span class="syn-string">"Min :"</span>, s.min())
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"First 2 values (head):"</span>)
+<span class="syn-function">print</span>(s.head(<span class="syn-number">2</span>))
+<span class="syn-function">print</span>(<span class="syn-string">"Last 2 values (tail):"</span>)
+<span class="syn-function">print</span>(s.tail(<span class="syn-number">2</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>s + 5 :
+0    15
+1    25
+2    35
+3    45
+dtype: int64
+
+s * 2 : [20, 40, 60, 80]
+Sum : 100
+Mean : 25.0
+Max : 40
+Min : 10
+
+First 2 values (head):
+0    10
+1    20
+dtype: int64
+Last 2 values (tail):
+2    30
+3    40
+dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+
+      <p>When two Series are added, Pandas matches them by index label (this is called <strong>index alignment</strong>). If a label is missing in one Series, the result is NaN (empty).</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 10: Adding two Series (index alignment)</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 10</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+a = pd.Series([<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>], index=[<span class="syn-string">"x"</span>, <span class="syn-string">"y"</span>, <span class="syn-string">"z"</span>])
+b = pd.Series([<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>], index=[<span class="syn-string">"y"</span>, <span class="syn-string">"z"</span>, <span class="syn-string">"w"</span>])
+<span class="syn-function">print</span>(a + b)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>w     NaN
+x     NaN
+y    12.0
+z    23.0
+dtype: float64</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>2.6 Adding, Updating and Deleting Elements</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 11: Modify a Series</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 11</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+s = pd.Series([<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>], index=[<span class="syn-string">"a"</span>, <span class="syn-string">"b"</span>, <span class="syn-string">"c"</span>])
+
+s[<span class="syn-string">"d"</span>] = <span class="syn-number">40</span>    <span class="syn-comment"># add a new element</span>
+s[<span class="syn-string">"a"</span>] = <span class="syn-number">99</span>    <span class="syn-comment"># update an existing element</span>
+<span class="syn-function">print</span>(s)
+<span class="syn-function">print</span>()
+s = s.drop(<span class="syn-string">"b"</span>)  <span class="syn-comment"># delete the element with label 'b'</span>
+<span class="syn-function">print</span>(s)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>a    99
+b    20
+c    30
+d    40
+dtype: int64
+
+a    99
+c    30
+d    40
+dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 03: DATAFRAME -->
+    <!-- ============================================================ -->
+    <section id="sec-dataframe" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 03 &bull; 2-D Data</div>
+        <h2 class="ch-title">3. DataFrame</h2>
+      </div>
+
+      <h3>3.1 What is a DataFrame?</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> A <strong>DataFrame</strong> is a two-dimensional, labelled data structure in Pandas that stores data in rows and columns, just like a table in a database or a sheet in Excel. Each column can hold a different type of data.
+      </div>
+      <p>A DataFrame can be seen as a collection of Series that share the same index. Every column is a Series.</p>
+
+      <table>
+        <tr><th>Index</th><th>Name</th><th>Age</th><th>City</th></tr>
+        <tr><td>0</td><td>Ravi</td><td>21</td><td>Delhi</td></tr>
+        <tr><td>1</td><td>Anita</td><td>22</td><td>Mumbai</td></tr>
+        <tr><td>2</td><td>Kiran</td><td>20</td><td>Chennai</td></tr>
+      </table>
+
+      <p>In this table: the left-most numbers (0, 1, 2) are the <strong>index</strong> (row labels); Name, Age, City are the <strong>columns</strong> (column labels); and the cells hold the values.</p>
+
+      <h3>3.2 Creating a DataFrame</h3>
+      <div class="syntax-box">
+        pd.DataFrame(data, index=None, columns=None, dtype=None)
+      </div>
+
+      <h4>(a) From a dictionary of lists (most common)</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 12: DataFrame from a dictionary</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 12</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+data = {
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">20</span>, <span class="syn-number">23</span>],
+    <span class="syn-string">"City"</span>: [<span class="syn-string">"Delhi"</span>, <span class="syn-string">"Mumbai"</span>, <span class="syn-string">"Chennai"</span>, <span class="syn-string">"Pune"</span>]
+}
+df = pd.DataFrame(data)
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>   Name  Age     City
+0  Ravi   21    Delhi
+1  Anita  22   Mumbai
+2  Kiran  20  Chennai
+3  Sara   23     Pune</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(b) From a list of lists</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 13: DataFrame from a list of lists</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 13</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+rows = [[<span class="syn-string">"Ravi"</span>, <span class="syn-number">21</span>], [<span class="syn-string">"Anita"</span>, <span class="syn-number">22</span>], [<span class="syn-string">"Kiran"</span>, <span class="syn-number">20</span>]]
+df = pd.DataFrame(rows, columns=[<span class="syn-string">"Name"</span>, <span class="syn-string">"Age"</span>])
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>   Name  Age
+0  Ravi   21
+1  Anita  22
+2  Kiran  20</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(c) From a dictionary of Series</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 15: DataFrame from Series</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 15</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+maths = pd.Series([<span class="syn-number">80</span>, <span class="syn-number">90</span>, <span class="syn-number">70</span>], index=[<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>])
+phy = pd.Series([<span class="syn-number">75</span>, <span class="syn-number">85</span>, <span class="syn-number">65</span>], index=[<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>])
+df = pd.DataFrame({<span class="syn-string">"Maths"</span>: maths, <span class="syn-string">"Physics"</span>: phy})
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>       Maths  Physics
+Ravi      80       75
+Anita     90       85
+Kiran     70       65</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(d) From a NumPy array</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 16: DataFrame from a NumPy array</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 16</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+arr = np.array([[<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>], [<span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>]])
+df = pd.DataFrame(arr, columns=[<span class="syn-string">"A"</span>, <span class="syn-string">"B"</span>, <span class="syn-string">"C"</span>], index=[<span class="syn-string">"row1"</span>, <span class="syn-string">"row2"</span>])
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>      A  B  C
+row1  1  2  3
+row2  4  5  6</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>3.3 Displaying Basic Information about a DataFrame</h3>
+      <table>
+        <tr><th>Attribute / Method</th><th>What it shows</th></tr>
+        <tr><td><code>df.head(n)</code></td><td>First n rows (default 5)</td></tr>
+        <tr><td><code>df.tail(n)</code></td><td>Last n rows (default 5)</td></tr>
+        <tr><td><code>df.shape</code></td><td>(number of rows, number of columns)</td></tr>
+        <tr><td><code>df.size</code></td><td>Total number of values = rows x columns</td></tr>
+        <tr><td><code>df.ndim</code></td><td>Number of dimensions (2)</td></tr>
+        <tr><td><code>df.columns</code></td><td>Names of all columns</td></tr>
+        <tr><td><code>df.index</code></td><td>Row labels (index)</td></tr>
+        <tr><td><code>df.dtypes</code></td><td>Data type of every column</td></tr>
+        <tr><td><code>df.info()</code></td><td>Summary: columns, non-null counts, data types, memory</td></tr>
+        <tr><td><code>df.describe()</code></td><td>Statistics (count, mean, std, min, quartiles, max) of number columns</td></tr>
+        <tr><td><code>df.values</code></td><td>Data as a NumPy array</td></tr>
+        <tr><td><code>len(df)</code></td><td>Number of rows</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 17: Create a DataFrame from a dictionary and display basic information</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 17</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+<span class="syn-comment"># Step 1: create a dictionary</span>
+data = {
+    <span class="syn-string">"RollNo"</span>: [<span class="syn-number">101</span>, <span class="syn-number">102</span>, <span class="syn-number">103</span>, <span class="syn-number">104</span>, <span class="syn-number">105</span>],
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>, <span class="syn-string">"John"</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">20</span>, <span class="syn-number">23</span>, <span class="syn-number">21</span>],
+    <span class="syn-string">"Marks"</span>: [<span class="syn-number">78.5</span>, <span class="syn-number">88.0</span>, <span class="syn-number">92.5</span>, <span class="syn-number">67.0</span>, <span class="syn-number">81.5</span>]
+}
+
+<span class="syn-comment"># Step 2: convert the dictionary into a DataFrame</span>
+df = pd.DataFrame(data)
+
+<span class="syn-comment"># Step 3: display basic information</span>
+<span class="syn-function">print</span>(<span class="syn-string">"=== Full DataFrame ==="</span>)
+<span class="syn-function">print</span>(df)
+<span class="syn-function">print</span>(<span class="syn-string">"\n=== First 3 rows ==="</span>)
+<span class="syn-function">print</span>(df.head(<span class="syn-number">3</span>))
+<span class="syn-function">print</span>(<span class="syn-string">"\n=== Last 2 rows ==="</span>)
+<span class="syn-function">print</span>(df.tail(<span class="syn-number">2</span>))
+<span class="syn-function">print</span>(<span class="syn-string">"\n=== Shape (rows, columns) ==="</span>)
+<span class="syn-function">print</span>(df.shape)
+<span class="syn-function">print</span>(<span class="syn-string">"\n=== Column names ==="</span>)
+<span class="syn-function">print</span>(<span class="syn-function">list</span>(df.columns))
+<span class="syn-function">print</span>(<span class="syn-string">"\n=== Index ==="</span>)
+<span class="syn-function">print</span>(df.index)
+<span class="syn-function">print</span>(<span class="syn-string">"\n=== Data types ==="</span>)
+<span class="syn-function">print</span>(df.dtypes)
+<span class="syn-function">print</span>(<span class="syn-string">"\n=== Info ==="</span>)
+df.info()
+<span class="syn-function">print</span>(<span class="syn-string">"\n=== Statistical summary ==="</span>)
+<span class="syn-function">print</span>(df.describe())</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>=== Full DataFrame ===
+   RollNo   Name  Age  Marks
+0     101   Ravi   21   78.5
+1     102  Anita   22   88.0
+2     103  Kiran   20   92.5
+3     104   Sara   23   67.0
+4     105   John   21   81.5
+
+=== First 3 rows ===
+   RollNo   Name  Age  Marks
+0     101   Ravi   21   78.5
+1     102  Anita   22   88.0
+2     103  Kiran   20   92.5
+
+=== Last 2 rows ===
+   RollNo  Name  Age  Marks
+3     104  Sara   23   67.0
+4     105  John   21   81.5
+
+=== Shape (rows, columns) ===
+(5, 4)
+
+=== Column names ===
+['RollNo', 'Name', 'Age', 'Marks']
+
+=== Index ===
+RangeIndex(start=0, stop=5, step=1)
+
+=== Data types ===
+RollNo      int64
+Name       object
+Age         int64
+Marks     float64
+dtype: object
+
+=== Info ===
+<class 'pandas.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 4 columns):
+ #   Column  Non-Null Count  Dtype  
+---  ------  --------------  -----  
+ 0   RollNo  5 non-null      int64  
+ 1   Name    5 non-null      object 
+ 2   Age     5 non-null      int64  
+ 3   Marks   5 non-null      float64
+dtypes: float64(1), int64(2), object(1)
+memory usage: 292.0+ bytes
+
+=== Statistical summary ===
+          RollNo        Age      Marks
+count    5.000000   5.000000   5.000000
+mean   103.000000  21.400000  81.500000
+std      1.581139   1.140175   9.778804
+min    101.000000  20.000000  67.000000
+25%    102.000000  21.000000  78.500000
+50%    103.000000  21.000000  81.500000
+75%    104.000000  22.000000  88.000000
+max    105.000000  23.000000  92.500000</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box remember">
+        <strong>NOTE:</strong> <code>info()</code> prints its result by itself, so we write only <code>df.info()</code> and not <code>print(df.info())</code>. Also, <code>describe()</code> gives results only for numeric columns by default.
+      </div>
+
+      <h3>3.4 Selecting Data from a DataFrame</h3>
+      <h4>(a) Selecting columns</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 18: Select one or more columns</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 18</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.DataFrame({<span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>], <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">20</span>], <span class="syn-string">"City"</span>: [<span class="syn-string">"Delhi"</span>, <span class="syn-string">"Mumbai"</span>, <span class="syn-string">"Chennai"</span>]})
+
+<span class="syn-function">print</span>(<span class="syn-string">"One column (gives a Series):"</span>)
+<span class="syn-function">print</span>(df[<span class="syn-string">"Name"</span>])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Two columns (give a DataFrame, note double brackets):"</span>)
+<span class="syn-function">print</span>(df[[<span class="syn-string">"Name"</span>, <span class="syn-string">"City"</span>]])</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>One column (gives a Series):
+0    Ravi
+1   Anita
+2   Kiran
+Name: Name, dtype: object
+
+Two columns (give a DataFrame, note double brackets):
+    Name     City
+0   Ravi    Delhi
+1  Anita   Mumbai
+2  Kiran  Chennai</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(b) Selecting rows using loc and iloc</h4>
+      <table>
+        <tr><th>loc</th><th>iloc</th></tr>
+        <tr><td>Based on Labels (index names)</td><td>Integer positions (0, 1, 2...)</td></tr>
+        <tr><td>Slice end Included</td><td>Excluded</td></tr>
+        <tr><td>Example: <code>df.loc[1]</code>, <code>df.loc[0:2, "Name"]</code></td><td>Example: <code>df.iloc[1]</code>, <code>df.iloc[0:2, 0]</code></td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 19: loc and iloc</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 19</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.DataFrame({<span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>], <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">20</span>, <span class="syn-number">23</span>], <span class="syn-string">"City"</span>: [<span class="syn-string">"Delhi"</span>, <span class="syn-string">"Mumbai"</span>, <span class="syn-string">"Chennai"</span>, <span class="syn-string">"Pune"</span>]})
+
+<span class="syn-function">print</span>(<span class="syn-string">"df.loc[1] -&gt; row with label 1"</span>)
+<span class="syn-function">print</span>(df.loc[<span class="syn-number">1</span>])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"df.loc[0:2, ['Name', 'Age']] -&gt; rows 0 to 2 (included), 2 columns"</span>)
+<span class="syn-function">print</span>(df.loc[<span class="syn-number">0</span>:<span class="syn-number">2</span>, [<span class="syn-string">"Name"</span>, <span class="syn-string">"Age"</span>]])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"df.iloc[0:2] -&gt; first two rows (end excluded)"</span>)
+<span class="syn-function">print</span>(df.iloc[<span class="syn-number">0</span>:<span class="syn-number">2</span>])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"df.iloc[2, 1] -&gt; row 2, column 1"</span>)
+<span class="syn-function">print</span>(df.iloc[<span class="syn-number">2</span>, <span class="syn-number">1</span>])</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>df.loc[1] -> row with label 1
+Name    Anita
+Age        22
+City   Mumbai
+Name: 1, dtype: object
+
+df.loc[0:2, ['Name', 'Age']] -> rows 0 to 2 (included), 2 columns
+    Name  Age
+0   Ravi   21
+1  Anita   22
+2  Kiran   20
+
+df.iloc[0:2] -> first two rows (end excluded)
+    Name  Age     City
+0   Ravi   21    Delhi
+1  Anita   22   Mumbai
+
+df.iloc[2, 1] -> row 2, column 1
+20</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(c) Selecting rows by condition (filtering)</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 20: Filtering rows with conditions</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 20</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.DataFrame({<span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>], <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">20</span>, <span class="syn-number">23</span>], <span class="syn-string">"Marks"</span>: [<span class="syn-number">78</span>, <span class="syn-number">88</span>, <span class="syn-number">92</span>, <span class="syn-number">67</span>]})
+
+<span class="syn-function">print</span>(<span class="syn-string">"Students with Marks &gt; 80"</span>)
+<span class="syn-function">print</span>(df[df[<span class="syn-string">"Marks"</span>] &gt; <span class="syn-number">80</span>])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Age &gt; 20 AND Marks &gt; 70"</span>)
+<span class="syn-function">print</span>(df[(df[<span class="syn-string">"Age"</span>] &gt; <span class="syn-number">20</span>) &amp; (df[<span class="syn-string">"Marks"</span>] &gt; <span class="syn-number">70</span>)])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Name is Ravi OR Sara:"</span>)
+<span class="syn-function">print</span>(df[(df[<span class="syn-string">"Name"</span>] == <span class="syn-string">"Ravi"</span>) | (df[<span class="syn-string">"Name"</span>] == <span class="syn-string">"Sara"</span>)])</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Students with Marks > 80
+    Name  Age  Marks
+1  Anita   22     88
+2  Kiran   20     92
+
+Age > 20 AND Marks > 70
+    Name  Age  Marks
+0   Ravi   21     78
+1  Anita   22     88
+
+Name is Ravi OR Sara:
+   Name  Age  Marks
+0  Ravi   21     78
+3  Sara   23     67</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>EXAM TIP:</strong> A very common mistake is to write <code>df[df.Age &gt; 20 and df.Marks &gt; 70]</code>. This gives an error. Always use <code>&amp;</code>, <code>|</code>, and brackets for each condition.
+      </div>
+
+      <h3>3.5 Adding, Changing and Deleting Columns and Rows</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 21: Modify a DataFrame</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 21</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.DataFrame({<span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>], <span class="syn-string">"Maths"</span>: [<span class="syn-number">80</span>, <span class="syn-number">90</span>, <span class="syn-number">70</span>], <span class="syn-string">"Physics"</span>: [<span class="syn-number">75</span>, <span class="syn-number">85</span>, <span class="syn-number">65</span>]})
+
+<span class="syn-comment">#1. Add a new column</span>
+df[<span class="syn-string">"City"</span>] = [<span class="syn-string">"Delhi"</span>, <span class="syn-string">"Mumbai"</span>, <span class="syn-string">"Chennai"</span>]
+
+<span class="syn-comment">#2. Add a calculated column</span>
+df[<span class="syn-string">"Total"</span>] = df[<span class="syn-string">"Maths"</span>] + df[<span class="syn-string">"Physics"</span>]
+
+<span class="syn-comment">#3. Change values of a column</span>
+df[<span class="syn-string">"Maths"</span>] = df[<span class="syn-string">"Maths"</span>] + <span class="syn-number">5</span>
+
+<span class="syn-comment">#4. Insert a column at a given position (position, name, values)</span>
+df.insert(<span class="syn-number">1</span>, <span class="syn-string">"Roll"</span>, [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>])
+
+<span class="syn-comment">#5. Add a new row at the end using loc</span>
+df.loc[<span class="syn-number">3</span>] = [<span class="syn-string">"Sara"</span>, <span class="syn-number">4</span>, <span class="syn-number">60</span>, <span class="syn-number">55</span>, <span class="syn-string">"Pune"</span>, <span class="syn-number">115</span>]
+
+<span class="syn-function">print</span>(df)
+<span class="syn-function">print</span>()
+
+<span class="syn-comment">#6. Rename columns</span>
+df = df.rename(columns={<span class="syn-string">"Roll"</span>: <span class="syn-string">"RollNo"</span>})
+
+<span class="syn-comment">#7. Delete a column and a row</span>
+df = df.drop(<span class="syn-string">"City"</span>, axis=<span class="syn-number">1</span>) <span class="syn-comment"># axis=1 means column</span>
+df = df.drop(<span class="syn-number">0</span>, axis=<span class="syn-number">0</span>)      <span class="syn-comment"># axis=0 means row (index label 0)</span>
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>    Name  Roll  Maths  Physics     City  Total
+0   Ravi     1     85       75    Delhi    155
+1  Anita     2     95       85   Mumbai    175
+2  Kiran     3     75       65  Chennai    135
+3   Sara     4     60       55     Pune    115
+
+   Name  RollNo  Maths  Physics  Total
+1  Anita       2     95       85    175
+2  Kiran       3     75       65    135
+3   Sara       4     60       55    115</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>KEY IDEA:</strong> <code>axis=0</code> means rows (down) and <code>axis=1</code> means columns (across). Most methods return a new DataFrame, so we store the result back: <code>df = df.drop(...)</code>.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 04: MISSING DATA -->
+    <!-- ============================================================ -->
+    <section id="sec-missing" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 04 &bull; Data Cleaning</div>
+        <h2 class="ch-title">4. Missing Data</h2>
+      </div>
+
+      <h3>4.1 What is Missing Data?</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> Missing data means that some cells of a table are empty or have no value. In Pandas, a missing value is shown as <strong>NaN</strong> (Not a Number). For missing dates it is shown as <strong>NaT</strong> (Not a Time), and Python's own <code>None</code> is also treated as missing.
+      </div>
+      <p>Real-world data is rarely perfect. A person may not fill a form field, a sensor may stop working, or a file may get damaged. If we ignore the empty cells, calculations like average can become wrong, and many machine-learning programs even stop with an error. So handling missing data is an important step of data cleaning.</p>
+
+      <h3>4.2 Detecting Missing Data</h3>
+      <table>
+        <tr><th>Method</th><th>Use</th></tr>
+        <tr><td><code>df.isnull()</code> / <code>df.isna()</code></td><td>Returns True where the value is missing, False otherwise (both are same)</td></tr>
+        <tr><td><code>df.notnull()</code> / <code>df.notna()</code></td><td>Opposite: True where the value is present</td></tr>
+        <tr><td><code>df.isnull().sum()</code></td><td>Number of missing values in each column</td></tr>
+        <tr><td><code>df.isnull().sum().sum()</code></td><td>Total number of missing values in the whole DataFrame</td></tr>
+        <tr><td><code>df.isnull().any()</code></td><td>True for columns that have at least one missing value</td></tr>
+        <tr><td><code>df.info()</code></td><td>Shows Non-Null count of every column</td></tr>
+        <tr><td><code>df.isnull().mean() * 100</code></td><td>Percentage of missing values in each column</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 23: Create a DataFrame with missing values</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 23</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+data = {
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>, <span class="syn-string">"John"</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, np.nan, <span class="syn-number">20</span>, <span class="syn-number">23</span>, np.nan],
+    <span class="syn-string">"Marks"</span>: [<span class="syn-number">78.0</span>, <span class="syn-number">88.0</span>, np.nan, <span class="syn-number">67.0</span>, <span class="syn-number">81.0</span>],
+    <span class="syn-string">"City"</span>: [<span class="syn-string">"Delhi"</span>, <span class="syn-string">"Mumbai"</span>, <span class="syn-keyword">None</span>, <span class="syn-string">"Pune"</span>, <span class="syn-string">"Delhi"</span>]
+}
+df = pd.DataFrame(data)
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>    Name   Age  Marks    City
+0   Ravi  21.0   78.0   Delhi
+1  Anita   NaN   88.0  Mumbai
+2  Kiran  20.0    NaN    None
+3   Sara  23.0   67.0    Pune
+4   John   NaN   81.0   Delhi</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>4.3 Filling Missing Data</h3>
+      <p>Filling is better than removing when we do not want to lose data. The main method is <code>fillna()</code>.</p>
+
+      <h4>(a) Fill with a fixed value</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 25: fillna() with a constant</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 25</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+df = pd.DataFrame({
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>, <span class="syn-string">"John"</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, np.nan, <span class="syn-number">20</span>, <span class="syn-number">23</span>, np.nan],
+    <span class="syn-string">"Marks"</span>: [<span class="syn-number">78.0</span>, <span class="syn-number">88.0</span>, np.nan, <span class="syn-number">67.0</span>, <span class="syn-number">81.0</span>],
+    <span class="syn-string">"City"</span>: [<span class="syn-string">"Delhi"</span>, <span class="syn-string">"Mumbai"</span>, <span class="syn-keyword">None</span>, <span class="syn-string">"Pune"</span>, <span class="syn-string">"Delhi"</span>]
+})
+
+<span class="syn-function">print</span>(<span class="syn-string">"Fill all numeric gaps with 0:"</span>)
+<span class="syn-function">print</span>(df[[<span class="syn-string">"Age"</span>, <span class="syn-string">"Marks"</span>]].fillna(<span class="syn-number">0</span>))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nDifferent value for each column (use a dictionary):"</span>)
+<span class="syn-function">print</span>(df.fillna({<span class="syn-string">"Age"</span>: <span class="syn-number">18</span>, <span class="syn-string">"Marks"</span>: <span class="syn-number">0</span>, <span class="syn-string">"City"</span>: <span class="syn-string">"Unknown"</span>}))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Fill all numeric gaps with 0:
+    Age  Marks
+0  21.0   78.0
+1   0.0   88.0
+2  20.0    0.0
+3  23.0   67.0
+
+Different value for each column (use a dictionary):
+    Name   Age  Marks     City
+0   Ravi  21.0   78.0    Delhi
+1  Anita  18.0   88.0   Mumbai
+2  Kiran  20.0    0.0  Unknown
+3   Sara  23.0   67.0     Pune
+4   John  18.0   81.0    Delhi</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(b) Fill with mean, median or mode (statistical filling)</h4>
+      <p>This is the best and most common method for number data. For text (category) columns we use the mode (the most frequent value).</p>
+      <div class="program-block">
+        <div class="program-title">📌 Program 26: Fill with mean, median and mode</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 26</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+df = pd.DataFrame({
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>, <span class="syn-string">"John"</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, np.nan, <span class="syn-number">20</span>, <span class="syn-number">23</span>, np.nan],
+    <span class="syn-string">"Marks"</span>: [<span class="syn-number">78.0</span>, <span class="syn-number">88.0</span>, np.nan, <span class="syn-number">67.0</span>, <span class="syn-number">81.0</span>],
+    <span class="syn-string">"City"</span>: [<span class="syn-string">"Delhi"</span>, <span class="syn-string">"Mumbai"</span>, <span class="syn-keyword">None</span>, <span class="syn-string">"Pune"</span>, <span class="syn-string">"Delhi"</span>]
+})
+
+df[<span class="syn-string">"Age"</span>] = df[<span class="syn-string">"Age"</span>].fillna(df[<span class="syn-string">"Age"</span>].mean()) <span class="syn-comment"># mean of Age</span>
+df[<span class="syn-string">"Marks"</span>] = df[<span class="syn-string">"Marks"</span>].fillna(df[<span class="syn-string">"Marks"</span>].median()) <span class="syn-comment"># median of Marks</span>
+df[<span class="syn-string">"City"</span>] = df[<span class="syn-string">"City"</span>].fillna(df[<span class="syn-string">"City"</span>].mode()[<span class="syn-number">0</span>]) <span class="syn-comment"># most frequent city</span>
+
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>    Name   Age  Marks     City
+0   Ravi  21.000000   78.0    Delhi
+1  Anita  21.333333   88.0   Mumbai
+2  Kiran  20.000000   79.5    Delhi
+3   Sara  23.000000   67.0     Pune
+4   John  21.333333   81.0    Delhi</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(c) Forward fill and backward fill</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 27: ffill() and bfill()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 27</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+s = pd.Series([<span class="syn-number">10</span>, np.nan, np.nan, <span class="syn-number">40</span>, np.nan, <span class="syn-number">60</span>])
+
+<span class="syn-function">print</span>(<span class="syn-string">"Original :"</span>, <span class="syn-function">list</span>(s))
+<span class="syn-function">print</span>(<span class="syn-string">"Forward fill :"</span>, <span class="syn-function">list</span>(s.ffill()))
+<span class="syn-function">print</span>(<span class="syn-string">"Backward fill :"</span>, <span class="syn-function">list</span>(s.bfill()))
+<span class="syn-function">print</span>(<span class="syn-string">"Fill with limit=1 :"</span>, <span class="syn-function">list</span>(s.ffill(limit=<span class="syn-number">1</span>)))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Original : [10.0, nan, nan, 40.0, nan, 60.0]
+Forward fill : [10.0, 10.0, 10.0, 40.0, 40.0, 60.0]
+Backward fill : [10.0, 40.0, 40.0, 40.0, 60.0, 60.0]
+Fill with limit=1 : [10.0, 10.0, nan, 40.0, 40.0, 60.0]</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>4.4 Removing Missing Data</h3>
+      <p>The <code>dropna()</code> method deletes rows (or columns) that contain missing values. Use it when the number of missing values is small, otherwise we lose too much data.</p>
+
+      <div class="syntax-box">
+        df.dropna(axis=0, how="any", thresh=None, subset=None, inplace=False)
+      </div>
+
+      <table>
+        <tr><th>Parameter</th><th>Meaning</th></tr>
+        <tr><td><code>axis=0</code></td><td>Remove rows (default). <code>axis=1</code> removes columns</td></tr>
+        <tr><td><code>how="any"</code></td><td>Remove if any value is missing (default)</td></tr>
+        <tr><td><code>how="all"</code></td><td>Remove only if all values are missing</td></tr>
+        <tr><td><code>thresh=n</code></td><td>Keep a row only if it has at least n non-missing values</td></tr>
+        <tr><td><code>subset=[cols]</code></td><td>Look for missing values only in these columns</td></tr>
+        <tr><td><code>inplace=True</code></td><td>Change the original DataFrame (returns nothing)</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 30: dropna() options</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 30</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+df = pd.DataFrame({
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, np.nan, <span class="syn-number">20</span>, np.nan],
+    <span class="syn-string">"Marks"</span>: [<span class="syn-number">78.0</span>, <span class="syn-number">88.0</span>, np.nan, np.nan]
+})
+
+<span class="syn-function">print</span>(<span class="syn-string">"Original:"</span>)
+<span class="syn-function">print</span>(df)
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n1. dropna() - remove rows with any NaN"</span>)
+<span class="syn-function">print</span>(df.dropna())
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n2. dropna(how='all') - remove rows where ALL values are NaN"</span>)
+<span class="syn-function">print</span>(df.dropna(how=<span class="syn-string">"all"</span>))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n3. dropna(thresh=2) - keep rows with at least 2 real values"</span>)
+<span class="syn-function">print</span>(df.dropna(thresh=<span class="syn-number">2</span>))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n4. dropna(subset=['Marks']) - look only at Marks column"</span>)
+<span class="syn-function">print</span>(df.dropna(subset=[<span class="syn-string">'Marks'</span>]))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n5. dropna(axis=1) - remove columns with any NaN"</span>)
+<span class="syn-function">print</span>(df.dropna(axis=<span class="syn-number">1</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Original:
+    Name   Age  Marks
+0   Ravi  21.0   78.0
+1  Anita   NaN   88.0
+2  Kiran  20.0    NaN
+3   Sara   NaN    NaN
+
+1. dropna() - remove rows with any NaN
+   Name   Age  Marks
+0  Ravi  21.0   78.0
+
+2. dropna(how='all') - remove rows where ALL values are NaN
+    Name   Age  Marks
+0   Ravi  21.0   78.0
+1  Anita   NaN   88.0
+2  Kiran  20.0    NaN
+
+3. dropna(thresh=2) - keep rows with at least 2 real values
+    Name   Age  Marks
+0   Ravi  21.0   78.0
+1  Anita   NaN   88.0
+2  Kiran  20.0    NaN
+
+4. dropna(subset=['Marks']) - look only at Marks column
+    Name   Age  Marks
+0   Ravi  21.0   78.0
+1  Anita   NaN   88.0
+
+5. dropna(axis=1) - remove columns with any NaN
+    Name
+0   Ravi
+1  Anita
+2  Kiran
+3   Sara</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 05: DESCRIPTIVE STATISTICS -->
+    <!-- ============================================================ -->
+    <section id="sec-stats" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 05 &bull; Statistics</div>
+        <h2 class="ch-title">5. Descriptive Statistics</h2>
+      </div>
+
+      <h3>5.1 What are Descriptive Statistics?</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> Descriptive statistics are numbers that summarise and describe the main features of a data set. Instead of reading thousands of values, we use a few numbers (like average, minimum, maximum) to understand the data quickly.
+      </div>
+      <p>Example: the marks of 50 students are given. Saying "the average mark is 72 and the highest is 98" tells us much more than reading all 50 numbers. Average and highest are descriptive statistics.</p>
+
+      <table>
+        <tr><th>Type</th><th>What it tells us</th><th>Functions in Pandas</th></tr>
+        <tr><td>Count</td><td>How many values are there</td><td><code>count()</code>, <code>value_counts()</code>, <code>unique()</code></td></tr>
+        <tr><td>Central tendency</td><td>The "centre" or typical value</td><td><code>mean()</code>, <code>median()</code>, <code>mode()</code></td></tr>
+        <tr><td>Dispersion (spread)</td><td>How far the values are spread</td><td><code>min()</code>, <code>max()</code>, <code>var()</code>, <code>std()</code>, range, IQR</td></tr>
+        <tr><td>Position</td><td>Where a value stands in the data</td><td><code>quantile()</code>, <code>idxmax()</code>, <code>idxmin()</code></td></tr>
+        <tr><td>Shape</td><td>Whether data is balanced or leaning</td><td><code>skew()</code>, <code>kurt()</code></td></tr>
+        <tr><td>Relationship</td><td>How two columns are connected</td><td><code>corr()</code>, <code>cov()</code></td></tr>
+        <tr><td>Total / cumulative</td><td>Totals and running totals</td><td><code>sum()</code>, <code>prod()</code>, <code>cumsum()</code>, <code>cumprod()</code></td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 31: Sample data for this chapter</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 31</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.DataFrame({
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>, <span class="syn-string">"John"</span>, <span class="syn-string">"Meera"</span>, <span class="syn-string">"Arjun"</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">20</span>, <span class="syn-number">23</span>, <span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">20</span>],
+    <span class="syn-string">"Marks"</span>: [<span class="syn-number">45</span>, <span class="syn-number">60</span>, <span class="syn-number">60</span>, <span class="syn-number">72</span>, <span class="syn-number">85</span>, <span class="syn-number">90</span>, <span class="syn-number">98</span>],
+    <span class="syn-string">"Hours"</span>: [<span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>]
+})
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>    Name  Age  Marks  Hours
+0   Ravi   21     45      2
+1  Anita   22     60      3
+2  Kiran   20     60      3
+3   Sara   23     72      4
+4   John   21     85      5
+5  Meera   22     90      6
+6  Arjun   20     98      7</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>5.2 Measures of Central Tendency</h3>
+      <ul>
+        <li><strong>Mean (average):</strong> Sum of all values divided by the number of values.</li>
+        <li><strong>Median (middle value):</strong> The middle value when data is arranged in order. If the number of values is even, it is the average of the two middle values. The median is not affected by very large or very small values (outliers).</li>
+        <li><strong>Mode (most frequent value):</strong> The value that appears most often. A data set can have more than one mode, so <code>mode()</code> returns a Series.</li>
+      </ul>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 32: mean(), median() and mode()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 32</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-function">print</span>(<span class="syn-string">"Mean of Marks :"</span>, df[<span class="syn-string">"Marks"</span>].mean())
+<span class="syn-function">print</span>(<span class="syn-string">"Median of Marks :"</span>, df[<span class="syn-string">"Marks"</span>].median())
+<span class="syn-function">print</span>(<span class="syn-string">"Mode of Marks :"</span>, df[<span class="syn-string">"Marks"</span>].mode()[<span class="syn-number">0</span>])
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Mean of all numeric columns:"</span>)
+<span class="syn-function">print</span>(df[[<span class="syn-string">"Age"</span>, <span class="syn-string">"Marks"</span>, <span class="syn-string">"Hours"</span>]].mean())</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Mean of Marks : 72.85714285714286
+Median of Marks : 72.0
+Mode of Marks : 60
+
+Mean of all numeric columns:
+Age      21.285714
+Marks    72.857143
+Hours     4.285714
+dtype: float64</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>KEY IDEA:</strong> If data has outliers (e.g. marks 10, 20, 30, 40, 1000), the mean becomes very large and misleading (220), but the median (30) still shows the real centre. So for such data, the median is the better choice.
+      </div>
+
+      <h3>5.3 Measures of Dispersion (Spread)</h3>
+      <p>Dispersion tells us how spread out the data is. Two classes can have the same average marks, but in one class all students score near the average and in the other the marks are very different. Dispersion shows this difference.</p>
+
+      <table>
+        <tr><th>Measure</th><th>Meaning</th><th>Pandas</th></tr>
+        <tr><td>Minimum / Maximum</td><td>Smallest / largest value</td><td><code>min()</code>, <code>max()</code></td></tr>
+        <tr><td>Range</td><td>Maximum - Minimum</td><td><code>max() - min()</code></td></tr>
+        <tr><td>Variance</td><td>Average of the squared distances from the mean</td><td><code>var()</code></td></tr>
+        <tr><td>Standard deviation</td><td>Square root of variance (in the same unit as data)</td><td><code>std()</code></td></tr>
+        <tr><td>IQR (Inter-Quartile Range)</td><td>Q3 - Q1: spread of the middle 50% of data</td><td><code>quantile(0.75) - quantile(0.25)</code></td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 33: Dispersion measures</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 33</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>marks = df[<span class="syn-string">"Marks"</span>]
+<span class="syn-function">print</span>(<span class="syn-string">"Minimum :"</span>, marks.min())
+<span class="syn-function">print</span>(<span class="syn-string">"Maximum :"</span>, marks.max())
+<span class="syn-function">print</span>(<span class="syn-string">"Range :"</span>, marks.max() - marks.min())
+<span class="syn-function">print</span>(<span class="syn-string">"Variance :"</span>, <span class="syn-function">round</span>(marks.var(), <span class="syn-number">2</span>))
+<span class="syn-function">print</span>(<span class="syn-string">"Std Dev :"</span>, <span class="syn-function">round</span>(marks.std(), <span class="syn-number">2</span>))
+q1 = marks.quantile(<span class="syn-number">0.25</span>)
+q3 = marks.quantile(<span class="syn-number">0.75</span>)
+<span class="syn-function">print</span>(<span class="syn-string">"Q1 ="</span>, q1, <span class="syn-string">" Q3 ="</span>, q3, <span class="syn-string">" IQR ="</span>, q3 - q1)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Minimum : 45
+Maximum : 98
+Range : 53
+Variance : 363.48
+Std Dev : 19.07
+Q1 = 60.0  Q3 = 87.5  IQR = 27.5</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>5.4 Measures of Shape: Skewness and Kurtosis</h3>
+      <ul>
+        <li><strong>Skewness (skew()):</strong> Tells whether the data is balanced (symmetric) or leaning to one side. Skew = 0 means symmetric. Positive skew means a long tail on the right (a few very high values). Negative skew means a long tail on the left (a few very low values).</li>
+        <li><strong>Kurtosis (kurt()):</strong> Tells how sharp (peaked) or flat the data is and how heavy its tails are. Pandas gives "excess kurtosis" (a normal distribution has kurtosis 0).</li>
+      </ul>
+
+      <div class="highlight-box remember">
+        <strong>Formula for Skewness:</strong><br>
+        <code>Skewness = [n / ((n-1)(n-2))] * Σ((x_i - x̄) / s)^3</code><br>
+        Where <code>n</code> is the number of observations, <code>x̄</code> is the mean, and <code>s</code> is the standard deviation.
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 36: skew() and kurt()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 36</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+a = pd.Series([<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">3</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>])  <span class="syn-comment"># balanced data</span>
+b = pd.Series([<span class="syn-number">1</span>, <span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">3</span>, <span class="syn-number">50</span>])  <span class="syn-comment"># one very big value</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">"Skewness of a :"</span>, <span class="syn-function">round</span>(a.skew(), <span class="syn-number">2</span>), <span class="syn-string">"(near 0 = symmetric)"</span>)
+<span class="syn-function">print</span>(<span class="syn-string">"Skewness of b :"</span>, <span class="syn-function">round</span>(b.skew(), <span class="syn-number">2</span>), <span class="syn-string">"(positive = long right tail)"</span>)
+<span class="syn-function">print</span>(<span class="syn-string">"Kurtosis of a :"</span>, <span class="syn-function">round</span>(a.kurt(), <span class="syn-number">2</span>))
+<span class="syn-function">print</span>(<span class="syn-string">"Kurtosis of b :"</span>, <span class="syn-function">round</span>(b.kurt(), <span class="syn-number">2</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Skewness of a : 0.0 (near 0 = symmetric)
+Skewness of b : 2.63 (positive = long right tail)
+Kurtosis of a : -0.29
+Kurtosis of b : 6.95</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>5.5 The describe() Method (All-in-One Summary)</h3>
+      <p>The <code>describe()</code> method gives most of the important statistics in one command.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 38: describe()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 38</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-function">print</span>(<span class="syn-string">"Numeric columns (default):"</span>)
+<span class="syn-function">print</span>(df.describe().<span class="syn-function">round</span>(<span class="syn-number">2</span>))
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Text column using include='object':"</span>)
+<span class="syn-function">print</span>(df.describe(include=<span class="syn-string">"object"</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Numeric columns (default):
+          Age  Marks  Hours
+count    7.00   7.00   7.00
+mean    21.29  72.86   4.29
+std      1.11  19.07   1.80
+min     20.00  45.00   2.00
+25%     20.50  60.00   3.00
+50%     21.00  72.00   4.00
+75%     22.00  87.50   5.50
+max     23.00  98.00   7.00
+
+Text column using include='object':
+       Name
+count     7
+unique    7
+top    Ravi
+freq      1</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>5.6 Variance - A Detailed Calculation</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> Variance is a statistical measure that tells us how much the data values are spread out from their average (mean).
+      </div>
+      <p>In simple words:</p>
+      <ul>
+        <li><strong>Low variance:</strong> Data values are close to the mean.</li>
+        <li><strong>High variance:</strong> Data values are far away from the mean.</li>
+        <li><strong>Zero variance:</strong> All data values are exactly the same.</li>
+      </ul>
+
+      <p><strong>Step-by-step calculation using 5 numbers: [10, 20, 30, 40, 50]</strong></p>
+
+      <table>
+        <tr><th>Step</th><th>Calculation</th><th>Result</th></tr>
+        <tr><td>1. Find Mean</td><td>(10 + 20 + 30 + 40 + 50) / 5</td><td>30</td></tr>
+        <tr><td>2. Difference from Mean</td><td>x - Mean</td><td>-20, -10, 0, 10, 20</td></tr>
+        <tr><td>3. Square the differences</td><td>(x - Mean)^2</td><td>400, 100, 0, 100, 400</td></tr>
+        <tr><td>4. Sum of squares</td><td>400 + 100 + 0 + 100 + 400</td><td>1000</td></tr>
+        <tr><td>5. Apply Variance formula</td><td>Variance = 1000 / (5 - 1) = 1000 / 4</td><td>250</td></tr>
+        <tr><td>6. Standard Deviation</td><td>SD = √250</td><td>15.81</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program: Calculate Variance and Standard Deviation</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+s = pd.Series([<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>])
+
+<span class="syn-function">print</span>(<span class="syn-string">"Mean:"</span>, s.mean())
+<span class="syn-function">print</span>(<span class="syn-string">"Variance:"</span>, s.var())
+<span class="syn-function">print</span>(<span class="syn-string">"Standard Deviation:"</span>, s.std())</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Mean: 30.0
+Variance: 250.0
+Standard Deviation: 15.811388300841896</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 06: SORTING -->
+    <!-- ============================================================ -->
+    <section id="sec-sorting" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 06 &bull; Ordering</div>
+        <h2 class="ch-title">6. Sorting</h2>
+      </div>
+
+      <h3>6.1 What is Sorting?</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> Sorting means arranging the rows of data in a particular order — ascending (small to big, A to Z) or descending (big to small, Z to A) — according to the values of one or more columns, or according to the index.
+      </div>
+
+      <table>
+        <tr><th>Method</th><th>Sorts by</th><th>Example</th></tr>
+        <tr><td><code>sort_values()</code></td><td>The values of a column (or columns)</td><td>Sort students by marks</td></tr>
+        <tr><td><code>sort_index()</code></td><td>The index labels (row names) or column names</td><td>Sort rows by roll number</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 42: Sample DataFrame</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 42</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.DataFrame({
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>, <span class="syn-string">"John"</span>],
+    <span class="syn-string">"Class"</span>: [<span class="syn-string">"B"</span>, <span class="syn-string">"A"</span>, <span class="syn-string">"B"</span>, <span class="syn-string">"A"</span>, <span class="syn-string">"B"</span>],
+    <span class="syn-string">"Marks"</span>: [<span class="syn-number">78</span>, <span class="syn-number">88</span>, <span class="syn-number">92</span>, <span class="syn-number">88</span>, <span class="syn-number">67</span>]
+}, index=[<span class="syn-number">103</span>, <span class="syn-number">101</span>, <span class="syn-number">105</span>, <span class="syn-number">102</span>, <span class="syn-number">104</span>])
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>     Name Class  Marks
+103  Ravi     B     78
+101  Anita    A     88
+105  Kiran    B     92
+102  Sara     A     88
+104  John     B     67</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>6.2 Sorting by Values: sort_values()</h3>
+      <h4>(a) One column - ascending and descending</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 43: sort_values() on one column</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 43</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-function">print</span>(<span class="syn-string">"Ascending (default) by Marks:"</span>)
+<span class="syn-function">print</span>(df.sort_values(by=<span class="syn-string">"Marks"</span>))
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Descending by Marks:"</span>)
+<span class="syn-function">print</span>(df.sort_values(by=<span class="syn-string">"Marks"</span>, ascending=<span class="syn-keyword">False</span>))
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Sorted by Name (A to Z):"</span>)
+<span class="syn-function">print</span>(df.sort_values(<span class="syn-string">"Name"</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Ascending (default) by Marks:
+     Name Class  Marks
+104  John     B     67
+103  Ravi     B     78
+102  Sara     A     88
+101  Anita    A     88
+105  Kiran    B     92
+
+Descending by Marks:
+     Name Class  Marks
+105  Kiran    B     92
+102  Sara     A     88
+101  Anita    A     88
+103  Ravi     B     78
+104  John     B     67
+
+Sorted by Name (A to Z):
+     Name Class  Marks
+101  Anita    A     88
+104  John     B     67
+105  Kiran    B     92
+103  Ravi     B     78
+102  Sara     A     88</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(b) Many columns</h4>
+      <p>When we give a list of columns, Pandas sorts by the first column; if two rows have the same value, it uses the second column to decide.</p>
+      <div class="program-block">
+        <div class="program-title">📌 Program 44: sort_values() on many columns</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 44</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-function">print</span>(<span class="syn-string">"Class ascending, then Marks descending:"</span>)
+<span class="syn-function">print</span>(df.sort_values(by=[<span class="syn-string">'Class'</span>, <span class="syn-string">"Marks"</span>], ascending=[<span class="syn-keyword">True</span>, <span class="syn-keyword">False</span>]))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Class ascending, then Marks descending:
+     Name Class  Marks
+101  Anita    A     88
+102  Sara     A     88
+105  Kiran    B     92
+103  Ravi     B     78
+104  John     B     67</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>6.3 Sorting by Index: sort_index()</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 46: sort_index()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 46</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-function">print</span>(<span class="syn-string">"Sorted by row index (ascending):"</span>)
+<span class="syn-function">print</span>(df.sort_index())
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Sorted by row index (descending):"</span>)
+<span class="syn-function">print</span>(df.sort_index(ascending=<span class="syn-keyword">False</span>))
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Columns sorted by name (axis=1):"</span>)
+<span class="syn-function">print</span>(df.sort_index(axis=<span class="syn-number">1</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Sorted by row index (ascending):
+     Name Class  Marks
+101  Anita    A     88
+102  Sara     A     88
+103  Ravi     B     78
+104  John     B     67
+105  Kiran    B     92
+
+Sorted by row index (descending):
+     Name Class  Marks
+105  Kiran    B     92
+104  John     B     67
+103  Ravi     B     78
+102  Sara     A     88
+101  Anita    A     88
+
+Columns sorted by name (axis=1):
+    Class  Marks   Name
+103     B     78   Ravi
+101     A     88  Anita
+105     B     92  Kiran
+102     A     88   Sara
+104     B     67   John</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>KEY IDEA:</strong> <code>sort_values()</code> does not change the original DataFrame unless we use <code>inplace=True</code> or store the result: <code>df = df.sort_values(...)</code>. Mixing both (<code>df = df.sort_values(..., inplace=True)</code>) is a mistake, because it returns <code>None</code>.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 07: WORKING WITH CSV FILES -->
+    <!-- ============================================================ -->
+    <section id="sec-csv" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 07 &bull; File I/O</div>
+        <h2 class="ch-title">7. Working with CSV Files</h2>
+      </div>
+
+      <h3>7.1 What is a CSV File?</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> CSV stands for <strong>Comma Separated Values</strong>. It is a simple text file in which each line is one row of a table and the values in the row are separated by commas. The first line normally contains the column names.
+      </div>
+
+      <p>This is how a file called <code>students.csv</code> looks if opened in Notepad:</p>
+      <div class="output-box">
+        <div class="output-header">📄 students.csv</div>
+        <div class="output-body">
+          <pre>Name,Age,Marks
+Ravi,21,78
+Anita,22,88
+Kiran,20,92</pre>
+        </div>
+      </div>
+
+      <p>CSV files are very popular because they are small, simple, and can be opened by any program (Excel, Notepad, Google Sheets, databases). Pandas has two main functions for CSV files:</p>
+
+      <table>
+        <tr><th>Function</th><th>Work</th></tr>
+        <tr><td><code>df.to_csv("file.csv")</code></td><td>Writes (saves) a DataFrame into a CSV file</td></tr>
+        <tr><td><code>pd.read_csv("file.csv")</code></td><td>Reads (loads) a CSV file into a DataFrame</td></tr>
+      </table>
+
+      <h3>7.2 Writing a DataFrame to a CSV File: to_csv()</h3>
+      <div class="syntax-box">
+        df.to_csv(path, sep=",", index=True, header=True, columns=None, na_rep="", mode="w")
+      </div>
+
+      <table>
+        <tr><th>Parameter</th><th>Meaning</th></tr>
+        <tr><td><code>path</code></td><td>File name, e.g. <code>"students.csv"</code></td></tr>
+        <tr><td><code>index=False</code></td><td>Do not write the index (row numbers) in the file. Mostly we use this.</td></tr>
+        <tr><td><code>header=False</code></td><td>Do not write the column names</td></tr>
+        <tr><td><code>sep=";"</code></td><td>Use another separator instead of comma</td></tr>
+        <tr><td><code>columns=[...]</code></td><td>Write only the selected columns</td></tr>
+        <tr><td><code>na_rep="NA"</code></td><td>Text to write in place of missing values</td></tr>
+        <tr><td><code>mode="a"</code></td><td>Append (add) to an existing file instead of overwriting</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 49: Save a DataFrame as a CSV file</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 49</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.DataFrame({
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">21</span>, <span class="syn-number">22</span>, <span class="syn-number">20</span>, <span class="syn-number">23</span>],
+    <span class="syn-string">"Marks"</span>: [<span class="syn-number">78</span>, <span class="syn-number">88</span>, <span class="syn-number">92</span>, <span class="syn-number">67</span>]
+})
+
+df.to_csv(<span class="syn-string">"students.csv"</span>, index=<span class="syn-keyword">False</span>)
+<span class="syn-function">print</span>(<span class="syn-string">"File saved successfully"</span>)
+
+<span class="syn-comment"># Show what the file contains</span>
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-function">open</span>(<span class="syn-string">"students.csv"</span>).read())</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>File saved successfully
+
+Name,Age,Marks
+Ravi,21,78
+Anita,22,88
+Kiran,20,92
+Sara,23,67</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>7.3 Reading a CSV File: read_csv()</h3>
+      <div class="syntax-box">
+        pd.read_csv(filepath, sep=",", header="infer", names=None, index_col=None, usecols=None, nrows=None, skiprows=None, na_values=None, dtype=None)
+      </div>
+
+      <table>
+        <tr><th>Parameter</th><th>Meaning</th></tr>
+        <tr><td><code>filepath</code></td><td>Name or full path of the file (or a web link / URL)</td></tr>
+        <tr><td><code>sep</code></td><td>Separator character (default comma)</td></tr>
+        <tr><td><code>header</code></td><td>Row number to use as column names. <code>header=None</code> if file has no header row</td></tr>
+        <tr><td><code>names</code></td><td>Give our own column names (used with <code>header=None</code>)</td></tr>
+        <tr><td><code>index_col</code></td><td>Column to use as the index</td></tr>
+        <tr><td><code>usecols</code></td><td>Read only the listed columns</td></tr>
+        <tr><td><code>nrows</code></td><td>Read only the first n rows</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 50: Read a CSV file and see it</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 50</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.read_csv(<span class="syn-string">"students.csv"</span>)
+<span class="syn-function">print</span>(df)
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Shape :"</span>, df.shape)
+<span class="syn-function">print</span>()
+df.info()</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>    Name  Age  Marks
+0   Ravi   21     78
+1  Anita   22     88
+2  Kiran   20     92
+3   Sara   23     67
+
+Shape : (4, 3)
+
+<class 'pandas.DataFrame'>
+RangeIndex: 4 entries, 0 to 3
+Data columns (total 3 columns):
+ #   Column  Non-Null Count  Dtype 
+---  ------  --------------  ----- 
+ 0   Name    4 non-null      object
+ 1   Age     4 non-null      int64 
+ 2   Marks   4 non-null      int64 
+dtypes: int64(2), object(1)
+memory usage: 228.0+ bytes</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 51: usecols, nrows, index_col and skiprows</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 51</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+<span class="syn-function">print</span>(<span class="syn-string">"1. Only two columns:"</span>)
+<span class="syn-function">print</span>(pd.read_csv(<span class="syn-string">"students.csv"</span>, usecols=[<span class="syn-string">"Name"</span>, <span class="syn-string">"Marks"</span>]))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n2. Only first 2 rows (nrows=2):"</span>)
+<span class="syn-function">print</span>(pd.read_csv(<span class="syn-string">"students.csv"</span>, nrows=<span class="syn-number">2</span>))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n3. Name as the index (index_col):"</span>)
+<span class="syn-function">print</span>(pd.read_csv(<span class="syn-string">"students.csv"</span>, index_col=<span class="syn-string">"Name"</span>))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n4. Skip row 1 and 2 of the data (skiprows):"</span>)
+<span class="syn-function">print</span>(pd.read_csv(<span class="syn-string">"students.csv"</span>, skiprows=[<span class="syn-number">1</span>, <span class="syn-number">2</span>]))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>1. Only two columns:
+    Name  Marks
+0   Ravi     78
+1  Anita     88
+2  Kiran     92
+3   Sara     67
+
+2. Only first 2 rows (nrows=2):
+    Name  Age  Marks
+0   Ravi   21     78
+1  Anita   22     88
+
+3. Name as the index (index_col):
+       Age  Marks
+Name            
+Ravi    21     78
+Anita   22     88
+Kiran   20     92
+Sara    23     67
+
+4. Skip row 1 and 2 of the data (skiprows):
+    Name  Age  Marks
+0  Kiran   20     92
+1   Sara   23     67</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>7.5 Other File Formats</h3>
+      <p>Pandas can read and write many other formats in the same easy way:</p>
+      <table>
+        <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <tr><td>CSV</td><td><code>pd.read_csv("a.csv")</code></td><td><code>df.to_csv("a.csv")</code></td></tr>
+        <tr><td>Excel</td><td><code>pd.read_excel("a.xlsx")</code></td><td><code>df.to_excel("a.xlsx")</code></td></tr>
+        <tr><td>JSON</td><td><code>pd.read_json("a.json")</code></td><td><code>df.to_json("a.json")</code></td></tr>
+        <tr><td>HTML table</td><td><code>pd.read_html(url)</code></td><td><code>df.to_html()</code></td></tr>
+      </table>
+
+      <div class="highlight-box remember">
+        <strong>NOTE:</strong> Excel files need an extra package: <code>pip install openpyxl</code>. If the CSV file is not in the same folder as the program, give the full path, e.g. <code>pd.read_csv("C:/data/students.csv")</code>. If you get <code>FileNotFoundError</code>, the file name or folder is wrong.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 08: DATAFRAME OPERATIONS -->
+    <!-- ============================================================ -->
+    <section id="sec-operations" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 08 &bull; Advanced</div>
+        <h2 class="ch-title">8. Operations on DataFrame</h2>
+      </div>
+      <p>In this chapter we learn the most useful operations that we can perform on a DataFrame to analyse and change data. We will use this sales data for most of the examples.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 55: Sample sales data</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 55</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df = pd.DataFrame({
+    <span class="syn-string">"Product"</span>: [<span class="syn-string">"Pen"</span>, <span class="syn-string">"Book"</span>, <span class="syn-string">"Bag"</span>, <span class="syn-string">"Pen"</span>, <span class="syn-string">"Book"</span>, <span class="syn-string">"Bag"</span>],
+    <span class="syn-string">"Region"</span>: [<span class="syn-string">"North"</span>, <span class="syn-string">"North"</span>, <span class="syn-string">"North"</span>, <span class="syn-string">"South"</span>, <span class="syn-string">"South"</span>, <span class="syn-string">"South"</span>],
+    <span class="syn-string">"Price"</span>: [<span class="syn-number">10</span>, <span class="syn-number">50</span>, <span class="syn-number">400</span>, <span class="syn-number">10</span>, <span class="syn-number">50</span>, <span class="syn-number">400</span>],
+    <span class="syn-string">"Qty"</span>: [<span class="syn-number">100</span>, <span class="syn-number">40</span>, <span class="syn-number">5</span>, <span class="syn-number">150</span>, <span class="syn-number">30</span>, <span class="syn-number">8</span>]
+})
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>  Product Region  Price  Qty
+0     Pen  North     10  100
+1    Book  North     50   40
+2     Bag  North    400    5
+3     Pen  South     10  150
+4    Book  South     50   30
+5     Bag  South    400    8</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>8.1 Arithmetic Operations</h3>
+      <p>We can add, subtract, multiply, or divide columns directly. The operation is done row by row for the whole column at once.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 56: Column arithmetic</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 56</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>df[<span class="syn-string">"Revenue"</span>] = df[<span class="syn-string">"Price"</span>] * df[<span class="syn-string">"Qty"</span>]         <span class="syn-comment"># column x column</span>
+df[<span class="syn-string">"Price_with_tax"</span>] = df[<span class="syn-string">"Price"</span>] * <span class="syn-number">1.18</span>    <span class="syn-comment"># column x number</span>
+df[<span class="syn-string">"Half_Qty"</span>] = df[<span class="syn-string">"Qty"</span>] / <span class="syn-number">2</span>
+df[<span class="syn-string">"Qty_Squared"</span>] = df[<span class="syn-string">"Qty"</span>] ** <span class="syn-number">2</span>
+<span class="syn-function">print</span>(df)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>  Product Region  Price  Qty  Revenue  Price_with_tax  Half_Qty  Qty_Squared
+0     Pen  North     10  100     1000           11.8      50.0        10000
+1    Book  North     50   40     2000           59.0      20.0         1600
+2     Bag  North    400    5     2000          472.0       2.5           25
+3     Pen  South     10  150     1500           11.8      75.0        22500
+4    Book  South     50   30     1500           59.0      15.0          900
+5     Bag  South    400    8     3200          472.0       4.0           64</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>8.2 Applying Functions: apply() and map()</h3>
+      <table>
+        <tr><th>Method</th><th>Works on</th><th>Purpose</th></tr>
+        <tr><td><code>Series.map(func)</code></td><td>Every element of a Series</td><td>Change each value, or replace values using a dictionary</td></tr>
+        <tr><td><code>Series.apply(func)</code></td><td>Every element of a Series</td><td>Apply a function (e.g. lambda) to each value</td></tr>
+        <tr><td><code>DataFrame.apply(func, axis)</code></td><td>Whole columns (axis=0) or whole rows (axis=1)</td><td>Apply a function to each column / row</td></tr>
+        <tr><td><code>DataFrame.map(func)</code></td><td>Every single cell</td><td>Element-wise change</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 58: apply() and map()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 58</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment">#1. apply() on a Series with a lambda function</span>
+df[<span class="syn-string">"Size"</span>] = df[<span class="syn-string">"Qty"</span>].apply(<span class="syn-keyword">lambda</span> q: <span class="syn-string">"High"</span> <span class="syn-keyword">if</span> q &gt;= <span class="syn-number">100</span> <span class="syn-keyword">else</span> <span class="syn-string">"Low"</span>)
+
+<span class="syn-comment">#2. map() with a dictionary to replace values</span>
+df[<span class="syn-string">"Region_Code"</span>] = df[<span class="syn-string">"Region"</span>].map({<span class="syn-string">"North"</span>: <span class="syn-string">"N"</span>, <span class="syn-string">"South"</span>: <span class="syn-string">"S"</span>})
+
+<span class="syn-comment">#3. apply() on rows (axis=1) using several columns</span>
+df[<span class="syn-string">"Revenue"</span>] = df.apply(<span class="syn-keyword">lambda</span> row: row[<span class="syn-string">"Price"</span>] * row[<span class="syn-string">"Qty"</span>], axis=<span class="syn-number">1</span>)
+
+<span class="syn-comment">#4. apply() on columns (axis=0)</span>
+<span class="syn-function">print</span>(<span class="syn-string">"Maximum of numeric columns:"</span>)
+<span class="syn-function">print</span>(df[[<span class="syn-string">"Price"</span>, <span class="syn-string">"Qty"</span>]].apply(<span class="syn-function">max</span>))
+
+<span class="syn-comment">#5. DataFrame.map() - every single cell (here: double each number)</span>
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(df[[<span class="syn-string">"Price"</span>, <span class="syn-string">"Qty"</span>]].map(<span class="syn-keyword">lambda</span> x: x * <span class="syn-number">2</span>))
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(df[[<span class="syn-string">"Product"</span>, <span class="syn-string">"Qty"</span>, <span class="syn-string">"Size"</span>, <span class="syn-string">"Region_Code"</span>, <span class="syn-string">"Revenue"</span>]])</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Maximum of numeric columns:
+Price    400
+Qty      150
+dtype: int64
+
+   Price  Qty
+0     20  200
+1    100   80
+2    800   10
+3     20  300
+4    100   60
+5    800   16
+
+  Product  Qty  Size Region_Code  Revenue
+0     Pen  100  High           N     1000
+1    Book   40   Low           N     2000
+2     Bag    5   Low           N     2000
+3     Pen  150  High           S     1500
+4    Book   30   Low           S     1500
+5     Bag    8   Low           S     3200</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>8.3 Filtering and Searching Data</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 60: isin(), between(), query() and str.contains()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 60</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-function">print</span>(<span class="syn-string">"1. isin() - Pen or Bag only:"</span>)
+<span class="syn-function">print</span>(df[df[<span class="syn-string">"Product"</span>].isin([<span class="syn-string">"Pen"</span>, <span class="syn-string">"Bag"</span>])][[<span class="syn-string">"Product"</span>, <span class="syn-string">"Region"</span>, <span class="syn-string">"Qty"</span>]])
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n2. between() - Price between 20 and 100:"</span>)
+<span class="syn-function">print</span>(df[df[<span class="syn-string">"Price"</span>].between(<span class="syn-number">20</span>, <span class="syn-number">100</span>)][[<span class="syn-string">"Product"</span>, <span class="syn-string">"Price"</span>]])
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n3. query() - Region is South and Qty above 20:"</span>)
+<span class="syn-function">print</span>(df.query(<span class="syn-string">"Region == 'South' and Qty &gt; 20"</span>)[[<span class="syn-string">"Product"</span>, <span class="syn-string">"Region"</span>, <span class="syn-string">"Qty"</span>]])
+
+<span class="syn-function">print</span>(<span class="syn-string">"\n4. str.contains() - product name contains 'oo':"</span>)
+<span class="syn-function">print</span>(df[df[<span class="syn-string">"Product"</span>].str.contains(<span class="syn-string">"oo"</span>)][[<span class="syn-string">"Product"</span>, <span class="syn-string">"Region"</span>]])</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>1. isin() - Pen or Bag only:
+  Product Region  Qty
+0     Pen  North  100
+2     Bag  North    5
+3     Pen  South  150
+5     Bag  South    8
+
+2. between() - Price between 20 and 100:
+  Product  Price
+1    Book     50
+4    Book     50
+
+3. query() - Region is South and Qty above 20:
+  Product Region  Qty
+3     Pen  South  150
+4    Book  South   30
+
+4. str.contains() - product name contains 'oo':
+  Product Region
+1    Book  North
+4    Book  South</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>8.4 Grouping and Aggregation: groupby()</h3>
+      <p><code>groupby()</code> splits the data into groups (like all rows of "Pen", all rows of "Book") and then applies a function such as sum or mean to every group. It works in three steps: <strong>Split → Apply → Combine</strong>.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 61: groupby() and agg()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 61</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-function">print</span>(<span class="syn-string">"Total Qty of each product:"</span>)
+<span class="syn-function">print</span>(df.groupby(<span class="syn-string">"Product"</span>)[<span class="syn-string">"Qty"</span>].sum())
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nAverage Revenue of each region:"</span>)
+<span class="syn-function">print</span>(df.groupby(<span class="syn-string">"Region"</span>)[<span class="syn-string">"Revenue"</span>].mean())
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nMany functions at once with agg():"</span>)
+<span class="syn-function">print</span>(df.groupby(<span class="syn-string">"Region"</span>).agg({<span class="syn-string">"Qty"</span>: <span class="syn-string">"sum"</span>, <span class="syn-string">"Revenue"</span>: [<span class="syn-string">"min"</span>, <span class="syn-string">"max"</span>]}))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nGroup by two columns:"</span>)
+<span class="syn-function">print</span>(df.groupby([<span class="syn-string">"Region"</span>, <span class="syn-string">"Product"</span>])[<span class="syn-string">"Qty"</span>].sum())</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Total Qty of each product:
+Product
+Bag     13
+Book    70
+Pen    250
+Name: Qty, dtype: int64
+
+Average Revenue of each region:
+Region
+North    1666.666667
+South    2066.666667
+Name: Revenue, dtype: float64
+
+Many functions at once with agg():
+         Qty Revenue     
+         sum     min   max
+Region                   
+North    145    1000  2000
+South    188    1500  3200
+
+Group by two columns:
+Region  Product
+North   Bag         5
+        Book       40
+        Pen       100
+South   Bag         8
+        Book       30
+        Pen       150
+Name: Qty, dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>8.5 Combining DataFrame: concat(), merge(), join()</h3>
+      <h4>(a) concat() - stack tables together</h4>
+      <div class="program-block">
+        <div class="program-title">📌 Program 62: concat()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 62</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+a = pd.DataFrame({<span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>], <span class="syn-string">"Marks"</span>: [<span class="syn-number">78</span>, <span class="syn-number">88</span>]})
+b = pd.DataFrame({<span class="syn-string">"Name"</span>: [<span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>], <span class="syn-string">"Marks"</span>: [<span class="syn-number">92</span>, <span class="syn-number">67</span>]})
+
+<span class="syn-function">print</span>(<span class="syn-string">"Rows below rows (axis=0):"</span>)
+<span class="syn-function">print</span>(pd.concat([a, b], ignore_index=<span class="syn-keyword">True</span>))
+
+c = pd.DataFrame({<span class="syn-string">"City"</span>: [<span class="syn-string">"Delhi"</span>, <span class="syn-string">"Pune"</span>]})
+<span class="syn-function">print</span>(<span class="syn-string">"\nSide by side (axis=1):"</span>)
+<span class="syn-function">print</span>(pd.concat([a, c], axis=<span class="syn-number">1</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Rows below rows (axis=0):
+    Name  Marks
+0   Ravi     78
+1  Anita     88
+2  Kiran     92
+3   Sara     67
+
+Side by side (axis=1):
+    Name  Marks   City
+0   Ravi     78  Delhi
+1  Anita     88   Pune</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>(b) merge() - join tables on a common column (like SQL JOIN)</h4>
+      <table>
+        <tr><th>how=</th><th>Meaning (SQL name)</th></tr>
+        <tr><td><code>"inner"</code></td><td>Only rows whose key is present in both tables (default)</td></tr>
+        <tr><td><code>"left"</code></td><td>All rows of the left table + matching rows of right</td></tr>
+        <tr><td><code>"right"</code></td><td>All rows of the right table + matching rows of left</td></tr>
+        <tr><td><code>"outer"</code></td><td>All rows of both tables; NaN where no match</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 63: merge()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 63</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+students = pd.DataFrame({<span class="syn-string">"ID"</span>: [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>], <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>]})
+marks = pd.DataFrame({<span class="syn-string">"ID"</span>: [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">4</span>], <span class="syn-string">"Marks"</span>: [<span class="syn-number">78</span>, <span class="syn-number">88</span>, <span class="syn-number">60</span>]})
+
+<span class="syn-function">print</span>(<span class="syn-string">"Inner merge:"</span>)
+<span class="syn-function">print</span>(pd.merge(students, marks, on=<span class="syn-string">"ID"</span>, how=<span class="syn-string">"inner"</span>))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nLeft merge:"</span>)
+<span class="syn-function">print</span>(pd.merge(students, marks, on=<span class="syn-string">"ID"</span>, how=<span class="syn-string">"left"</span>))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nOuter merge:"</span>)
+<span class="syn-function">print</span>(pd.merge(students, marks, on=<span class="syn-string">"ID"</span>, how=<span class="syn-string">"outer"</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Inner merge:
+   ID   Name  Marks
+0   1   Ravi     78
+1   2  Anita     88
+
+Left merge:
+   ID   Name  Marks
+0   1   Ravi   78.0
+1   2  Anita   88.0
+2   3  Kiran    NaN
+
+Outer merge:
+   ID   Name  Marks
+0   1   Ravi   78.0
+1   2  Anita   88.0
+2   3  Kiran    NaN
+3   4    NaN   60.0</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>8.6 Handling Duplicate Data</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 64: duplicated() and drop_duplicates()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 64</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+df2 = pd.DataFrame({<span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Ravi"</span>, <span class="syn-string">"Kiran"</span>], <span class="syn-string">"Marks"</span>: [<span class="syn-number">78</span>, <span class="syn-number">88</span>, <span class="syn-number">78</span>, <span class="syn-number">92</span>]})
+
+<span class="syn-function">print</span>(<span class="syn-string">"Is the row a duplicate?"</span>)
+<span class="syn-function">print</span>(df2.duplicated())
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nAfter removing duplicates:"</span>)
+<span class="syn-function">print</span>(df2.drop_duplicates())
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nKeep the last copy (keep='last'):"</span>)
+<span class="syn-function">print</span>(df2.drop_duplicates(keep=<span class="syn-string">"last"</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Is the row a duplicate?
+0    False
+1    False
+2     True
+3    False
+dtype: bool
+
+After removing duplicates:
+    Name  Marks
+0   Ravi     78
+1  Anita     88
+3  Kiran     92
+
+Keep the last copy (keep='last'):
+    Name  Marks
+1  Anita     88
+2   Ravi     78
+3  Kiran     92</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>8.7 Pivot Table and Crosstab</h3>
+      <p>A pivot table summarises data in a compact table form (like the Pivot Table of Excel): one column becomes the rows, another becomes the columns, and a function is applied to the values.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 65: pivot_table() and crosstab()</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 65</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-function">print</span>(<span class="syn-string">"Total Qty - Product (rows) x Region (columns):"</span>)
+<span class="syn-function">print</span>(pd.pivot_table(df, values=<span class="syn-string">"Qty"</span>, index=<span class="syn-string">"Product"</span>, columns=<span class="syn-string">"Region"</span>, aggfunc=<span class="syn-string">"sum"</span>))
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nCount of records:"</span>)
+<span class="syn-function">print</span>(pd.crosstab(df[<span class="syn-string">"Product"</span>], df[<span class="syn-string">"Region"</span>]))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Total Qty - Product (rows) x Region (columns):
+Region   North  South
+Product              
+Bag          5      8
+Book        40     30
+Pen        100    150
+
+Count of records:
+Region   North  South
+Product              
+Bag          1      1
+Book         1      1
+Pen          1      1</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 09: PRACTICE PROJECTS -->
+    <!-- ============================================================ -->
+    <section id="sec-projects" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">💻 Section 09 &bull; Projects</div>
+        <h2 class="ch-title">9. Practice Projects</h2>
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 68: Student Result Analysis</div>
+        <p class="prog-desc"><strong>Aim:</strong> Create a DataFrame from a dictionary, find total, percentage, and result, sort by percentage, and display the statistics.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 68</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+
+<span class="syn-comment"># 1. Create a DataFrame from a dictionary</span>
+data = {
+    <span class="syn-string">"RollNo"</span>: [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>],
+    <span class="syn-string">"Name"</span>: [<span class="syn-string">"Ravi"</span>, <span class="syn-string">"Anita"</span>, <span class="syn-string">"Kiran"</span>, <span class="syn-string">"Sara"</span>, <span class="syn-string">"John"</span>],
+    <span class="syn-string">"Maths"</span>: [<span class="syn-number">78</span>, <span class="syn-number">92</span>, <span class="syn-number">55</span>, <span class="syn-number">40</span>, <span class="syn-number">88</span>],
+    <span class="syn-string">"Physics"</span>: [<span class="syn-number">65</span>, <span class="syn-number">85</span>, <span class="syn-number">60</span>, <span class="syn-number">35</span>, <span class="syn-number">90</span>],
+    <span class="syn-string">"Chemistry"</span>: [<span class="syn-number">70</span>, <span class="syn-number">88</span>, <span class="syn-number">58</span>, <span class="syn-number">45</span>, <span class="syn-number">84</span>]
+}
+df = pd.DataFrame(data)
+
+<span class="syn-comment"># 2. Basic information</span>
+<span class="syn-function">print</span>(<span class="syn-string">"Shape:"</span>, df.shape)
+<span class="syn-function">print</span>(<span class="syn-string">"Columns:"</span>, <span class="syn-function">list</span>(df.columns))
+
+<span class="syn-comment"># 3. Calculate Total and Percentage</span>
+subjects = [<span class="syn-string">"Maths"</span>, <span class="syn-string">"Physics"</span>, <span class="syn-string">"Chemistry"</span>]
+df[<span class="syn-string">"Total"</span>] = df[subjects].sum(axis=<span class="syn-number">1</span>)
+df[<span class="syn-string">"Percentage"</span>] = (df[<span class="syn-string">"Total"</span>] / <span class="syn-number">300</span> * <span class="syn-number">100</span>).round(<span class="syn-number">2</span>)
+
+<span class="syn-comment"># 4. Result column: Pass if every subject is 40 or more</span>
+df[<span class="syn-string">"Result"</span>] = df[subjects].<span class="syn-function">min</span>(axis=<span class="syn-number">1</span>).apply(<span class="syn-keyword">lambda</span> m: <span class="syn-string">"Pass"</span> <span class="syn-keyword">if</span> m &gt;= <span class="syn-number">40</span> <span class="syn-keyword">else</span> <span class="syn-string">"Fail"</span>)
+
+<span class="syn-comment"># 5. Sort by Percentage (highest first)</span>
+df = df.sort_values(<span class="syn-string">"Percentage"</span>, ascending=<span class="syn-keyword">False</span>).reset_index(drop=<span class="syn-keyword">True</span>)
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(df)
+
+<span class="syn-comment"># 6. Statistics</span>
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">"Class average percentage:"</span>, <span class="syn-function">round</span>(df[<span class="syn-string">"Percentage"</span>].mean(), <span class="syn-number">2</span>))
+<span class="syn-function">print</span>(<span class="syn-string">"Highest total :"</span>, df[<span class="syn-string">"Total"</span>].max())
+<span class="syn-function">print</span>(<span class="syn-string">"Topper :"</span>, df.loc[<span class="syn-number">0</span>, <span class="syn-string">"Name"</span>])
+<span class="syn-function">print</span>(<span class="syn-string">"Pass count:"</span>)
+<span class="syn-function">print</span>(df[<span class="syn-string">"Result"</span>].value_counts())</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Shape: (5, 5)
+Columns: ['RollNo', 'Name', 'Maths', 'Physics', 'Chemistry']
+
+   RollNo   Name  Maths  Physics  Chemistry  Total  Percentage Result
+0       2  Anita     92       85         88    265       88.33   Pass
+1       5   John     88       90         84    262       87.33   Pass
+2       1   Ravi     78       65         70    213       71.00   Pass
+3       3  Kiran     55       60         58    173       57.67   Pass
+4       4   Sara     40       35         45    120       40.00   Fail
+
+Class average percentage: 68.87
+Highest total : 265
+Topper : Anita
+Pass count:
+Result
+Pass    4
+Fail    1
+Name: count, dtype: int64</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 69: Employee Data Cleaning</div>
+        <p class="prog-desc"><strong>Aim:</strong> Detect missing values in an employee data set, fill them using suitable methods, and remove rows that cannot be repaired.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 69</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pandas <span class="syn-keyword">as</span> pd
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+data = {
+    <span class="syn-string">"Emp"</span>: [<span class="syn-string">"A"</span>, <span class="syn-string">"B"</span>, <span class="syn-string">"C"</span>, <span class="syn-string">"D"</span>, <span class="syn-string">"E"</span>, <span class="syn-string">"F"</span>],
+    <span class="syn-string">"Dept"</span>: [<span class="syn-string">"HR"</span>, <span class="syn-string">"IT"</span>, <span class="syn-keyword">None</span>, <span class="syn-string">"IT"</span>, <span class="syn-string">"HR"</span>, <span class="syn-string">"IT"</span>],
+    <span class="syn-string">"Salary"</span>: [<span class="syn-number">30000</span>, np.nan, <span class="syn-number">45000</span>, <span class="syn-number">50000</span>, np.nan, <span class="syn-number">52000</span>],
+    <span class="syn-string">"Age"</span>: [<span class="syn-number">25</span>, <span class="syn-number">30</span>, np.nan, <span class="syn-number">35</span>, <span class="syn-number">28</span>, np.nan]
+}
+df = pd.DataFrame(data)
+
+<span class="syn-comment"># Step 1: detect</span>
+<span class="syn-function">print</span>(<span class="syn-string">"Missing values per column:"</span>)
+<span class="syn-function">print</span>(df.isnull().sum())
+
+<span class="syn-comment"># Step 2: fill</span>
+df[<span class="syn-string">"Salary"</span>] = df[<span class="syn-string">"Salary"</span>].fillna(df[<span class="syn-string">"Salary"</span>].mean()) <span class="syn-comment"># mean for salary</span>
+df[<span class="syn-string">"Age"</span>] = df[<span class="syn-string">"Age"</span>].fillna(df[<span class="syn-string">"Age"</span>].median())       <span class="syn-comment"># median for age</span>
+df[<span class="syn-string">"Dept"</span>] = df[<span class="syn-string">"Dept"</span>].fillna(df[<span class="syn-string">"Dept"</span>].mode()[<span class="syn-number">0</span>])     <span class="syn-comment"># mode for text</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">"\nAfter filling:"</span>)
+<span class="syn-function">print</span>(df)
+<span class="syn-function">print</span>(<span class="syn-string">"\nMissing values now:"</span>, df.isnull().sum().sum())
+
+<span class="syn-comment"># Step 3: statistics of the cleaned data</span>
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(df[[<span class="syn-string">"Salary"</span>, <span class="syn-string">"Age"</span>]].describe().<span class="syn-function">round</span>(<span class="syn-number">2</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Missing values per column:
+Emp       0
+Dept      1
+Salary    2
+Age       2
+dtype: int64
+
+After filling:
+  Emp Dept   Salary   Age
+0   A   HR  30000.0  25.0
+1   B   IT  44250.0  30.0
+2   C   IT  45000.0  29.0
+3   D   IT  50000.0  35.0
+4   E   HR  44250.0  28.0
+5   F   IT  52000.0  29.0
+
+Missing values now: 0
+         Salary    Age
+count       6.0   6.00
+mean    44250.0  29.33
+std      7703.9   3.27
+min     30000.0  25.00
+25%     44250.0  28.25
+50%     44625.0  29.00
+75%     48750.0  29.75
+max     52000.0  35.00</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 10: QUICK REFERENCE CHEAT SHEET -->
+    <!-- ============================================================ -->
+    <section id="sec-cheatsheet" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📋 Section 10 &bull; Summary</div>
+        <h2 class="ch-title">10. Quick Reference Cheat Sheet</h2>
+      </div>
+
+      <h3>Pandas Functions at a Glance</h3>
+      <table>
+        <tr><th>Topic</th><th>Important functions / attributes</th></tr>
+        <tr><td>Import</td><td><code>import pandas as pd</code></td></tr>
+        <tr><td>Series</td><td><code>pd.Series()</code>, <code>.values</code>, <code>.index</code>, <code>.dtype</code>, <code>.size</code>, <code>.loc[]</code>, <code>.iloc[]</code></td></tr>
+        <tr><td>DataFrame creation</td><td><code>pd.DataFrame(dict)</code>, <code>pd.DataFrame(list, columns=[...])</code></td></tr>
+        <tr><td>Basic information</td><td><code>head()</code>, <code>tail()</code>, <code>shape</code>, <code>columns</code>, <code>index</code>, <code>dtypes</code>, <code>info()</code>, <code>describe()</code></td></tr>
+        <tr><td>Selecting</td><td><code>df["col"]</code>, <code>df[["c1", "c2"]]</code>, <code>loc</code>, <code>iloc</code>, <code>df[df["col"] &gt; 5]</code></td></tr>
+        <tr><td>Add / delete</td><td><code>df["new"] = ...</code>, <code>insert()</code>, <code>drop()</code>, <code>rename()</code></td></tr>
+        <tr><td>Missing data</td><td><code>isnull()</code>, <code>notnull()</code>, <code>fillna()</code>, <code>ffill()</code>, <code>bfill()</code>, <code>interpolate()</code>, <code>dropna()</code></td></tr>
+        <tr><td>Statistics</td><td><code>mean()</code>, <code>median()</code>, <code>mode()</code>, <code>std()</code>, <code>var()</code>, <code>min()</code>, <code>max()</code>, <code>sum()</code>, <code>quantile()</code>, <code>corr()</code>, <code>skew()</code></td></tr>
+        <tr><td>Sorting</td><td><code>sort_values()</code>, <code>sort_index()</code>, <code>rank()</code>, <code>nlargest()</code>, <code>nsmallest()</code></td></tr>
+        <tr><td>CSV files</td><td><code>pd.read_csv()</code>, <code>df.to_csv()</code></td></tr>
+        <tr><td>Operations</td><td><code>apply()</code>, <code>map()</code>, <code>groupby()</code>, <code>agg()</code>, <code>merge()</code>, <code>concat()</code>, <code>pivot_table()</code>, <code>drop_duplicates()</code></td></tr>
+      </table>
+
+      <h3>Important Definitions</h3>
+      <table>
+        <tr><th>Term</th><th>Definition</th></tr>
+        <tr><td>Pandas</td><td>Python library for data handling and analysis; name from "Panel Data".</td></tr>
+        <tr><td>Series</td><td>One-dimensional labelled array (one column of data with index).</td></tr>
+        <tr><td>DataFrame</td><td>Two-dimensional labelled table with rows and columns.</td></tr>
+        <tr><td>Index</td><td>The labels given to the rows.</td></tr>
+        <tr><td>NaN</td><td>"Not a Number" — the symbol for a missing value.</td></tr>
+        <tr><td>Descriptive statistics</td><td>Numbers that summarise the main features of data (mean, median, std, etc.).</td></tr>
+        <tr><td>Mean / Median / Mode</td><td>Average / middle value / most frequent value.</td></tr>
+        <tr><td>Standard deviation</td><td>Measure of how far the values are spread from the mean.</td></tr>
+        <tr><td>Sorting</td><td>Arranging rows in ascending or descending order.</td></tr>
+        <tr><td>CSV</td><td>Comma Separated Values — a text file in which values are separated by commas.</td></tr>
+        <tr><td>groupby</td><td>Splits data into groups and applies a function on each group.</td></tr>
+        <tr><td>merge</td><td>Joins two DataFrames using a common column (like SQL join).</td></tr>
+      </table>
+
+      <h3>Common Mistakes to Avoid</h3>
+      <ul>
+        <li>Writing <code>pd.DataFrame()</code> or <code>pd.Series()</code> — the correct names are <code>pd.DataFrame()</code> and <code>pd.Series()</code> (capital D, F, and S).</li>
+        <li>Using <code>and</code> / <code>or</code> for conditions — use <code>&amp;</code> / <code>|</code> with brackets.</li>
+        <li>Writing <code>print(df.info())</code> — it prints <code>None</code> at the end. Write only <code>df.info()</code>.</li>
+        <li>Forgetting to store the result: <code>df.dropna()</code> does not change <code>df</code>. Write <code>df = df.dropna()</code>.</li>
+        <li>Using unequal list lengths in a dictionary when creating a DataFrame — it gives a <code>ValueError</code>.</li>
+        <li>Forgetting <code>index=False</code> in <code>to_csv()</code>, which adds an extra "Unnamed: 0" column when the file is read again.</li>
+        <li>Writing attributes with brackets (<code>df.shape()</code>) or methods without brackets (<code>df.head</code>). Attributes: <code>shape</code>, <code>columns</code>, <code>dtypes</code>. Methods: <code>head()</code>, <code>info()</code>, <code>describe()</code>.</li>
+        <li>Confusing <code>loc</code> (labels, end included) and <code>iloc</code> (positions, end excluded).</li>
+      </ul>
+
+      <h3>How to Write the Answers in the Exam</h3>
+      <table>
+        <tr><th>Type of paper question</th><th>Structure to follow</th></tr>
+        <tr><td>Theory: "Explain ... in Pandas"</td><td>Definition → Features / types → Table of methods → Short example with output</td></tr>
+        <tr><td>Program: "Write a program ..."</td><td>Import → Create data → Operations (with comments) → <code>print</code> → Output</td></tr>
+        <tr><td>"Discuss various methods ..."</td><td>Write each method with its syntax, one line of meaning, and a tiny example</td></tr>
+        <tr><td>"Explain in detail ..." (long answer)</td><td>Introduction → Classification → Each point with formula + program → Summary table</td></tr>
+      </table>
+
+      <div class="highlight-box tip">
+        <strong>EXAM TIP:</strong> Always write the import statement, use meaningful variable names, put a comment on each step, and write the expected output. A neat and complete program carries full marks even if there is a small mistake.
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text);">Prepared by Umer Farooq</h4>
+          <p style="font-size: 0.85rem; color: var(--text-dim);">Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <a href="index.html" class="btn-nav">
+          <span>🏠</span> Course Portal
+        </a>
+        <a href="Lec_17.html" class="btn-nav">
+          <span>📂</span> Files &amp; Exceptions
+        </a>
+        <a href="Lec_14_Dictionary.html" class="btn-nav">
+          <span>📖</span> Dictionaries
+        </a>
+        <button class="btn-nav" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <span>⬆️</span> Back to Top
+        </button>
+        <button class="btn-nav" onclick="window.print()">
+          <span>🖨️</span> Print Notes
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="toggleTheme()" title="Toggle Theme">
+      <span id="theme-icon-float">☀️</span>
+    </button>
+    <button class="btn-float" onclick="window.print()" title="Print Page">
+      <span>🖨️</span>
+    </button>
+    <button class="btn-float" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to Top">
+      <span>▲</span>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcons(next);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    function copyCode(btn) {
+      const container = btn.closest('.code-container');
+      if (!container) return;
+      const codeBlock = container.querySelector('pre code') || container.querySelector('pre');
+      if (codeBlock) {
+        const textToCopy = codeBlock.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          btn.style.color = 'var(--green)';
+          btn.style.borderColor = 'var(--green)';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 2000);
+        }).catch(() => {
+          const range = document.createRange();
+          range.selectNode(codeBlock);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2000);
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+    });
+  </script>
+</body>
+
+</html>

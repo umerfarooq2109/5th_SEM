@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Master Tuples in Python: Complete guide to tuple creation, indexing, slicing, operations, methods, packing/unpacking, and differences from lists. Includes 15+ solved programs. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Lecture 12: Tuples in Python – Complete Guide | SSM College of Engineering</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      /* IDE syntax highlighting tokens (Dark) */
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+      --syn-header: #f07178;
+      --syn-include: #f07178;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      /* IDE syntax highlighting tokens (Light) */
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #6b7280;
+      --syn-function: #2563eb;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0891b2;
+      --syn-punctuation: #0891b2;
+      --syn-variable: #0f172a;
+      --syn-format: #d97706;
+      --syn-header: #dc2626;
+      --syn-include: #dc2626;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16.5px;
+      line-height: 1.75;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      transition: width 0.1s ease;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(18, 20, 26, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 900;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="light"] .top-nav {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-brand .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(28, 32, 42, 0.95), rgba(24, 27, 34, 0.98));
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 30px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-theme="light"] .hero-banner {
+      background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tag-accent {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .tag-teal {
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    .tag-purple {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.12rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .hero-author-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .author-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 10px var(--accent-glow);
+    }
+
+    .author-details h4 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .author-details p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #e06c15);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px var(--accent-glow);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .meta-item .val {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .meta-item .lbl {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-header-pill {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #toc-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .toc-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+
+    .toc-card .ch-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .toc-card .ch-name {
+      font-family: var(--font-heading);
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .toc-card .ch-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+
+    .toc-pill-badge {
+      align-self: flex-start;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+    }
+
+    .chapter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .ch-header {
+      margin-bottom: 28px;
+    }
+
+    .ch-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    h2.ch-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    h3 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 24px 0 10px;
+    }
+
+    h4 {
+      font-family: var(--font-heading);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 18px 0 8px;
+    }
+
+    .program-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 28px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 16.5px;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    code {
+      font-family: var(--font-code);
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border);
+    }
+
+    .key {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    ul, ol {
+      margin: 6px 0 14px 24px;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 6px;
+      line-height: 1.65;
+    }
+
+    .highlight-box {
+      background: var(--blue-soft);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .highlight-box.tip {
+      background: var(--green-soft);
+      border-left-color: var(--green);
+    }
+
+    .highlight-box.warning {
+      background: var(--amber-soft);
+      border-left-color: var(--amber);
+    }
+
+    .highlight-box.important {
+      background: var(--red-soft);
+      border-left-color: var(--red);
+    }
+
+    .highlight-box.remember {
+      background: var(--purple-soft);
+      border-left-color: var(--purple);
+    }
+
+    .highlight-box strong {
+      color: var(--text);
+    }
+
+    .syntax-box {
+      background: var(--bg-alt);
+      border: 1px dashed var(--border-accent);
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin: 12px 0 16px;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      color: var(--teal);
+      overflow-x: auto;
+    }
+
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 16px 0;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .code-header {
+      background: #151821;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    [data-theme="light"] .code-header {
+      background: #e2e8f0;
+    }
+
+    .code-title {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .code-title {
+      color: #334155;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .copy-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .code-body pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text);
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .code-body pre {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .syn-keyword { color: var(--syn-keyword); font-weight: 700; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); font-weight: 700; }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+    .syn-format { color: var(--syn-format); font-weight: 700; }
+    .syn-header { color: var(--syn-header); }
+    .syn-include { color: var(--syn-include); }
+
+    .output-box {
+      background: #090a0d;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      margin: 12px 0 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] .output-box {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .output-header {
+      background: #11141c;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .output-header {
+      background: #0f172a;
+      color: #2dd4bf;
+      border-bottom-color: #334155;
+    }
+
+    .output-body pre {
+      padding: 12px 16px;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: #a9b7c6;
+      line-height: 1.5;
+      overflow-x: auto;
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .output-body pre {
+      color: #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--accent);
+      font-family: var(--font-heading);
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    tr:nth-child(even) td {
+      background: var(--table-stripe);
+    }
+
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    .float-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 800;
+    }
+
+    .btn-float {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-float:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .top-nav, #progress-container, .float-actions, .copy-btn, .btn-primary, .btn-nav, .hero-buttons { display: none !important; }
+      .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .hero-banner, .chapter, .toc-card, #toc-section, .code-container, .output-box {
+        background: #ffffff !important; color: #000000 !important; border: 1px solid #cccccc !important; box-shadow: none !important; page-break-inside: avoid;
+      }
+      .code-body pre, .output-body pre { color: #000000 !important; background: #f8fafc !important; }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 20px 16px 60px; }
+      .hero-banner { padding: 24px 20px; }
+      .hero-title { font-size: 1.75rem; }
+      .chapter { padding: 20px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <header class="top-nav">
+    <a href="index.html" class="nav-brand">
+      <span class="badge">LEC 12</span>
+      <span>Tuples in Python</span>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn-nav" title="Course Portal">
+        <span>🏠</span> Portal
+      </a>
+      <a href="Lec_11.html" class="btn-nav" title="Dynamic Memory (C)">
+        <span>💾</span> DMA (C)
+      </a>
+      <a href="Lec_8.html" class="btn-nav" title="Pattern Printing (C)">
+        <span>⭐</span> Patterns (C)
+      </a>
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF">
+        <span>🖨️</span> Print PDF
+      </button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon-nav">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">Python Programming</span>
+        <span class="tag tag-teal">Chapter: Tuples</span>
+        <span class="tag tag-purple">15+ Solved Programs</span>
+      </div>
+      <h1 class="hero-title">Tuples in Python — Complete Masterclass</h1>
+      <p class="hero-subtitle">
+        The ultimate comprehensive guide to Python tuples. Covers <strong>tuple creation</strong>, <strong>immutability</strong>, <strong>indexing &amp; slicing</strong>, <strong>operations</strong>, <strong>methods</strong>, <strong>packing &amp; unpacking</strong>, and <strong>differences from lists</strong> — with real code examples, outputs, and practical programs.
+      </p>
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()">
+            <span>🖨️</span> Save as PDF / Print
+          </button>
+        </div>
+      </div>
+      <div class="hero-meta-strip">
+        <div class="meta-item">
+          <span class="val">15+</span>
+          <span class="lbl">Solved Programs</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">8</span>
+          <span class="lbl">Core Sections</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">100%</span>
+          <span class="lbl">Exam Coverage</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">12</span>
+          <span class="lbl">Key Operations</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TABLE OF CONTENTS -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Quick Chapter Navigation</div>
+      <div class="toc-grid">
+        <a href="#sec-intro" class="toc-card">
+          <span class="ch-num">SECTION 01</span>
+          <span class="ch-name">1. Introduction to Tuples</span>
+          <span class="ch-desc">Definition, features, creation, index numbers.</span>
+          <span class="toc-pill-badge">Fundamentals</span>
+        </a>
+        <a href="#sec-creation" class="toc-card">
+          <span class="ch-num">SECTION 02</span>
+          <span class="ch-name">2. Ways to Create Tuples</span>
+          <span class="ch-desc">Empty, normal, without brackets, single item, conversion, mixed types.</span>
+          <span class="toc-pill-badge">Creation</span>
+        </a>
+        <a href="#sec-operations" class="toc-card">
+          <span class="ch-num">SECTION 03</span>
+          <span class="ch-name">3. Operations on Tuples</span>
+          <span class="ch-desc">Indexing, slicing, concatenation, repetition, membership, length.</span>
+          <span class="toc-pill-badge">Operations</span>
+        </a>
+        <a href="#sec-methods" class="toc-card">
+          <span class="ch-num">SECTION 04</span>
+          <span class="ch-name">4. Tuple Methods &amp; Functions</span>
+          <span class="ch-desc"><code>count()</code>, <code>index()</code>, <code>len()</code>, <code>min()</code>, <code>max()</code>, <code>sum()</code>, <code>sorted()</code>.</span>
+          <span class="toc-pill-badge">Methods</span>
+        </a>
+        <a href="#sec-important" class="toc-card">
+          <span class="ch-num">SECTION 05</span>
+          <span class="ch-name">5. Important Points</span>
+          <span class="ch-desc">Single-item tuple, tuples with mutable items, tuple return, tuple comparison.</span>
+          <span class="toc-pill-badge">Gotchas</span>
+        </a>
+        <a href="#sec-diff" class="toc-card">
+          <span class="ch-num">SECTION 06</span>
+          <span class="ch-name">6. Tuple vs List</span>
+          <span class="ch-desc">Comparison table, memory check, when to use which.</span>
+          <span class="toc-pill-badge">Comparison</span>
+        </a>
+        <a href="#sec-programs" class="toc-card">
+          <span class="ch-num">SECTION 07</span>
+          <span class="ch-name">7. Programs on Tuples</span>
+          <span class="ch-desc">Creating, indexing, slicing, concatenation, membership, unpacking, student report.</span>
+          <span class="toc-pill-badge">Programs 1 – 15</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 01: INTRODUCTION TO TUPLES -->
+    <!-- ============================================================ -->
+    <section id="sec-intro" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 01 &bull; Fundamentals</div>
+        <h2 class="ch-title">1. Introduction to Tuples</h2>
+      </div>
+
+      <h3>1.1 What is a Tuple?</h3>
+      <div class="highlight-box important">
+        <strong>Definition:</strong> A tuple is an ordered collection of items in Python. Once a tuple is created, its items cannot be changed (added, removed, or replaced). This property is called <strong>immutable</strong>.
+      </div>
+      <p>Think of a tuple like a sealed box of items. You can look at the items inside, count them, and copy them, but you cannot change what is inside the box.</p>
+      <p>A tuple is written with round brackets <code>()</code> and the items are separated by commas.</p>
+
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Basic Tuple</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>fruits = (<span class="syn-string">&quot;apple&quot;</span>, <span class="syn-string">&quot;banana&quot;</span>, <span class="syn-string">&quot;cherry&quot;</span>)
+<span class="syn-function">print</span>(fruits)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>('apple', 'banana', 'cherry')</pre>
+        </div>
+      </div>
+
+      <h3>1.2 Main Features of a Tuple</h3>
+      <ul>
+        <li><strong>Ordered</strong> — items stay in the same order in which you wrote them.</li>
+        <li><strong>Immutable</strong> — you cannot change, add, or delete items after creation.</li>
+        <li><strong>Allows duplicates</strong> — the same value can come many times, like <code>(1, 2, 2, 3)</code>.</li>
+        <li><strong>Can store different data types</strong> — numbers, text, boolean, even other tuples or lists together.</li>
+        <li><strong>Indexed</strong> — every item has a position number. The first item has index 0.</li>
+        <li><strong>Faster than a list</strong> — because Python knows it will never change.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 02: WAYS TO CREATE TUPLES -->
+    <!-- ============================================================ -->
+    <section id="sec-creation" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 02 &bull; Creation</div>
+        <h2 class="ch-title">2. Ways to Create a Tuple</h2>
+      </div>
+
+      <table>
+        <tr><th>Type</th><th>Syntax</th><th>Meaning</th></tr>
+        <tr><td>Empty tuple</td><td><code>t = ()</code></td><td>A tuple with no items</td></tr>
+        <tr><td>Normal tuple</td><td><code>t = (10, 20, 30)</code></td><td>Tuple with 3 items</td></tr>
+        <tr><td>Without brackets</td><td><code>t = 10, 20, 30</code></td><td>Brackets are optional (called packing)</td></tr>
+        <tr><td>Single item tuple</td><td><code>t = (5,)</code></td><td>A comma is a must!</td></tr>
+        <tr><td>Using tuple()</td><td><code>t = tuple([1, 2, 3])</code></td><td>Convert a list/string to tuple</td></tr>
+        <tr><td>Mixed types</td><td><code>t = (1, &quot;Hi&quot;, 3.5, True)</code></td><td>Different data types together</td></tr>
+      </table>
+
+      <div class="program-block" id="prog-1">
+        <div class="program-title">📌 Program 1: Creating Tuples in Different Ways</div>
+        <p class="prog-desc"><strong>Definition:</strong> Creating a tuple means storing items inside round brackets, or separating values with commas, or converting another data type using <code>tuple()</code>.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 1</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>t1 = ()                    <span class="syn-comment"># empty tuple</span>
+t2 = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>)          <span class="syn-comment"># normal tuple</span>
+t3 = <span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>              <span class="syn-comment"># without brackets (packing)</span>
+t4 = (<span class="syn-number">5</span>,)                    <span class="syn-comment"># single item tuple</span>
+t5 = <span class="syn-function">tuple</span>([<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>])       <span class="syn-comment"># convert from list</span>
+t6 = (<span class="syn-number">1</span>, <span class="syn-string">&quot;Hi&quot;</span>, <span class="syn-number">3.5</span>, <span class="syn-keyword">True</span>)    <span class="syn-comment"># mixed types</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Tuple 1:&quot;</span>, t1)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Type of Tuple 1:&quot;</span>, <span class="syn-function">type</span>(t1))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Id of Tuple 1:&quot;</span>, <span class="syn-function">id</span>(t1))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Tuple 2:&quot;</span>, t2)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Tuple 3:&quot;</span>, t3)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Tuple 4:&quot;</span>, t4)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Tuple 5:&quot;</span>, t5)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Tuple 6:&quot;</span>, t6)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Tuple 1: ()
+Type of Tuple 1: <class 'tuple'>
+Id of Tuple 1: 140735655112408
+Tuple 2: (10, 20, 30)
+Tuple 3: (10, 20, 30)
+Tuple 4: (5,)
+Tuple 5: (1, 2, 3)
+Tuple 6: (1, 'Hi', 3.5, True)</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>2.1 Index Numbers (Positive and Negative)</h3>
+      <p>Every item in a tuple has two index numbers: a positive one counted from the left and a negative one counted from the right.</p>
+      <table>
+        <tr><th>Item</th><th>"A"</th><th>"B"</th><th>"C"</th><th>"D"</th><th>"E"</th></tr>
+        <tr><td><strong>Positive index</strong></td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+        <tr><td><strong>Negative index</strong></td><td>-5</td><td>-4</td><td>-3</td><td>-2</td><td>-1</td></tr>
+      </table>
+      <div class="highlight-box remember">
+        <strong>Remember:</strong> The first item is at index <strong>0</strong>, not 1. The last item is always at index <strong>-1</strong>.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 03: OPERATIONS ON TUPLES -->
+    <!-- ============================================================ -->
+    <section id="sec-operations" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 03 &bull; Operations</div>
+        <h2 class="ch-title">3. Operations on Tuples</h2>
+      </div>
+      <p>Even though a tuple cannot be changed, we can still do many useful operations on it. The table below is a quick summary.</p>
+
+      <table>
+        <tr><th>Operation</th><th>Example</th><th>Result / Use</th></tr>
+        <tr><td>Indexing</td><td><code>t[0]</code></td><td>Gets one item</td></tr>
+        <tr><td>Slicing</td><td><code>t[1:4]</code></td><td>Gets a part of the tuple</td></tr>
+        <tr><td>Concatenation</td><td><code>t1 + t2</code></td><td>Joins two tuples into a new one</td></tr>
+        <tr><td>Repetition</td><td><code>t * 3</code></td><td>Repeats the tuple 3 times</td></tr>
+        <tr><td>Membership</td><td><code>x in t</code></td><td>True if x is present</td></tr>
+        <tr><td>Length</td><td><code>len(t)</code></td><td>Number of items</td></tr>
+        <tr><td>Minimum / Maximum</td><td><code>min(t), max(t)</code></td><td>Smallest / largest item</td></tr>
+        <tr><td>Sum</td><td><code>sum(t)</code></td><td>Adds all numbers</td></tr>
+        <tr><td>Sorting</td><td><code>sorted(t)</code></td><td>Returns a new sorted list</td></tr>
+        <tr><td>Unpacking</td><td><code>a, b, c = t</code></td><td>Gives each item to a variable</td></tr>
+        <tr><td>Iteration</td><td><code>for x in t:</code></td><td>Visits each item one by one</td></tr>
+        <tr><td>Conversion</td><td><code>list(t), tuple(l)</code></td><td>Change between tuple and list</td></tr>
+        <tr><td>Delete tuple</td><td><code>del t</code></td><td>Deletes the whole tuple</td></tr>
+      </table>
+
+      <div class="program-block" id="prog-2">
+        <div class="program-title">📌 Program 2: Demonstrating All Operations</div>
+        <p class="prog-desc">A single program demonstrating indexing, slicing, concatenation, repetition, membership, length, min/max, sum, sorting, unpacking, iteration, and conversion.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 2</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># a. Indexing</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;First element:&quot;</span>, my_tuple[<span class="syn-number">0</span>])
+
+<span class="syn-comment"># b. Slicing</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Sliced tuple:&quot;</span>, my_tuple[<span class="syn-number">1</span>:<span class="syn-number">4</span>])
+
+<span class="syn-comment"># c. Concatenation</span>
+tuple1 = (<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>)
+tuple2 = (<span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>)
+result = tuple1 + tuple2
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Concatenated tuple:&quot;</span>, result)
+
+<span class="syn-comment"># d. Repetition</span>
+my_tuple = (<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>)
+result = my_tuple * <span class="syn-number">3</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Repeated tuple:&quot;</span>, result)
+
+<span class="syn-comment"># e. Membership</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Is 20 in tuple?&quot;</span>, <span class="syn-number">20</span> <span class="syn-keyword">in</span> my_tuple)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Is 60 in tuple?&quot;</span>, <span class="syn-number">60</span> <span class="syn-keyword">in</span> my_tuple)
+
+<span class="syn-comment"># f. Length</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Length of tuple:&quot;</span>, <span class="syn-function">len</span>(my_tuple))
+
+<span class="syn-comment"># g. Minimum / Maximum</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Minimum value:&quot;</span>, <span class="syn-function">min</span>(my_tuple))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Maximum value:&quot;</span>, <span class="syn-function">max</span>(my_tuple))
+
+<span class="syn-comment"># h. Sum</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Sum of tuple:&quot;</span>, <span class="syn-function">sum</span>(my_tuple))
+
+<span class="syn-comment"># i. Sorting</span>
+my_tuple = (<span class="syn-number">30</span>, <span class="syn-number">10</span>, <span class="syn-number">50</span>, <span class="syn-number">20</span>, <span class="syn-number">40</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Sorted tuple:&quot;</span>, <span class="syn-function">sorted</span>(my_tuple))
+
+<span class="syn-comment"># j. Unpacking</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>)
+a, b, c = my_tuple
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Unpacked values:&quot;</span>, a, b, c)
+
+<span class="syn-comment"># k. Iteration</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>)
+<span class="syn-keyword">for</span> x <span class="syn-keyword">in</span> my_tuple:
+    <span class="syn-function">print</span>(x)
+
+<span class="syn-comment"># l. Conversion</span>
+my_tuple = (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>)
+my_list = <span class="syn-function">list</span>(my_tuple)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Converted list:&quot;</span>, my_list)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>First element: 10
+Sliced tuple: (20, 30, 40)
+Concatenated tuple: (1, 2, 3, 4, 5, 6)
+Repeated tuple: (1, 2, 3, 1, 2, 3, 1, 2, 3)
+Is 20 in tuple? True
+Is 60 in tuple? False
+Length of tuple: 5
+Minimum value: 10
+Maximum value: 50
+Sum of tuple: 150
+Sorted tuple: [10, 20, 30, 40, 50]
+Unpacked values: 10 20 30
+10
+20
+30
+40
+50
+Converted list: [10, 20, 30]</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 04: TUPLE METHODS & FUNCTIONS -->
+    <!-- ============================================================ -->
+    <section id="sec-methods" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 04 &bull; Methods</div>
+        <h2 class="ch-title">4. Tuple Methods &amp; Built-in Functions</h2>
+      </div>
+
+      <h3>4.1 Tuple Methods</h3>
+      <p>A tuple has only two built-in methods because it cannot be changed.</p>
+      <table>
+        <tr><th>Method</th><th>Use</th><th>Example</th></tr>
+        <tr><td><code>count(x)</code></td><td>Tells how many times x appears</td><td><code>(1,2,2,3).count(2)</code> gives <strong>2</strong></td></tr>
+        <tr><td><code>index(x)</code></td><td>Gives the first position of x</td><td><code>(5,6,7).index(7)</code> gives <strong>2</strong></td></tr>
+      </table>
+
+      <div class="program-block" id="prog-3">
+        <div class="program-title">📌 Program 3: count() and index() Methods</div>
+        <p class="prog-desc"><strong>Definition:</strong> <code>count(x)</code> returns how many times x appears in the tuple. <code>index(x)</code> returns the position of the first x. You can also give a start position: <code>index(x, start)</code>.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 3</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>nums = (<span class="syn-number">5</span>, <span class="syn-number">3</span>, <span class="syn-number">8</span>, <span class="syn-number">3</span>, <span class="syn-number">9</span>, <span class="syn-number">3</span>, <span class="syn-number">1</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Count of 3 :&quot;</span>, nums.count(<span class="syn-number">3</span>))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Index of 8 :&quot;</span>, nums.index(<span class="syn-number">8</span>))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;First index of 3 :&quot;</span>, nums.index(<span class="syn-number">3</span>))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Index of 3 from 2 :&quot;</span>, nums.index(<span class="syn-number">3</span>, <span class="syn-number">2</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Count of 3 : 3
+Index of 8 : 2
+First index of 3 : 1
+Index of 3 from 2 : 3</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>4.2 Built-in Functions Used with Tuples</h3>
+      <table>
+        <tr><th>Function</th><th>What it does</th></tr>
+        <tr><td><code>len()</code></td><td>Returns the number of items</td></tr>
+        <tr><td><code>min()</code> / <code>max()</code></td><td>Returns the smallest / biggest item</td></tr>
+        <tr><td><code>sum()</code></td><td>Returns the total of all numbers</td></tr>
+        <tr><td><code>sorted()</code></td><td>Returns a new list in sorted order (the tuple stays the same)</td></tr>
+        <tr><td><code>tuple()</code></td><td>Creates a tuple from a list, string, range, etc.</td></tr>
+        <tr><td><code>any()</code> / <code>all()</code></td><td><code>any</code> is True if at least one item is True; <code>all</code> is True if every item is True</td></tr>
+      </table>
+
+      <div class="program-block" id="prog-4">
+        <div class="program-title">📌 Program 4: min(), max(), sum(), and sorted()</div>
+        <p class="prog-desc"><strong>Definition:</strong> These built-in functions work on tuples: <code>min()</code> finds the smallest item, <code>max()</code> the largest, <code>sum()</code> adds all numbers, and <code>sorted()</code> gives a new sorted list.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 4</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>marks = (<span class="syn-number">45</span>, <span class="syn-number">78</span>, <span class="syn-number">92</span>, <span class="syn-number">67</span>, <span class="syn-number">88</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Minimum :&quot;</span>, <span class="syn-function">min</span>(marks))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Maximum :&quot;</span>, <span class="syn-function">max</span>(marks))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Total   :&quot;</span>, <span class="syn-function">sum</span>(marks))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Average :&quot;</span>, <span class="syn-function">sum</span>(marks) / <span class="syn-function">len</span>(marks))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Sorted  :&quot;</span>, <span class="syn-function">sorted</span>(marks))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Sorted tuple :&quot;</span>, <span class="syn-function">tuple</span>(<span class="syn-function">sorted</span>(marks)))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Descending   :&quot;</span>, <span class="syn-function">sorted</span>(marks, reverse=<span class="syn-keyword">True</span>))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Minimum : 45
+Maximum : 92
+Total   : 370
+Average : 74.0
+Sorted  : [45, 67, 78, 88, 92]
+Sorted tuple : (45, 67, 78, 88, 92)
+Descending   : [92, 88, 78, 67, 45]</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 05: IMPORTANT POINTS -->
+    <!-- ============================================================ -->
+    <section id="sec-important" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 05 &bull; Gotchas</div>
+        <h2 class="ch-title">5. Important Points</h2>
+      </div>
+
+      <h3>Point 1: A single-item tuple needs a comma</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Single-Item Tuple</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>a = (<span class="syn-number">5</span>)     <span class="syn-comment"># this is just an integer</span>
+b = (<span class="syn-number">5</span>,)    <span class="syn-comment"># this is a tuple</span>
+<span class="syn-function">print</span>(<span class="syn-function">type</span>(a))
+<span class="syn-function">print</span>(<span class="syn-function">type</span>(b))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre><class 'int'>
+<class 'tuple'></pre>
+        </div>
+      </div>
+
+      <h3>Point 2: A tuple can hold a list, and that list CAN change</h3>
+      <p>The tuple itself is fixed, but if one of its items is a list, the list inside can still be changed.</p>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Tuple with Mutable Item</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>t = (<span class="syn-number">1</span>, [<span class="syn-number">2</span>, <span class="syn-number">3</span>], <span class="syn-number">4</span>)
+t[<span class="syn-number">1</span>].append(<span class="syn-number">99</span>)   <span class="syn-comment"># changing the list inside the tuple</span>
+<span class="syn-function">print</span>(t)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>(1, [2, 3, 99], 4)</pre>
+        </div>
+      </div>
+
+      <h3>Point 4: A function can return many values, and Python returns them as a tuple</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Multiple Return Values</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">def</span> <span class="syn-function">min_max</span>(numbers):
+    <span class="syn-keyword">return</span> <span class="syn-function">min</span>(numbers), <span class="syn-function">max</span>(numbers)
+
+result = <span class="syn-function">min_max</span>([<span class="syn-number">4</span>, <span class="syn-number">9</span>, <span class="syn-number">1</span>, <span class="syn-number">7</span>])
+<span class="syn-function">print</span>(result)
+<span class="syn-function">print</span>(<span class="syn-function">type</span>(result))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>(1, 9)
+<class 'tuple'></pre>
+        </div>
+      </div>
+
+      <h3>Point 5: Tuples are compared item by item</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Tuple Comparison</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-function">print</span>((<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>) &lt; (<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">4</span>))
+<span class="syn-function">print</span>((<span class="syn-number">5</span>, <span class="syn-number">1</span>) &gt; (<span class="syn-number">4</span>, <span class="syn-number">100</span>))
+<span class="syn-function">print</span>((<span class="syn-number">1</span>, <span class="syn-number">2</span>) == (<span class="syn-number">1</span>, <span class="syn-number">2</span>))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>True
+True
+True</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 06: TUPLE VS LIST -->
+    <!-- ============================================================ -->
+    <section id="sec-diff" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 06 &bull; Comparison</div>
+        <h2 class="ch-title">6. Difference Between Tuple and List</h2>
+      </div>
+      <p>Both tuples and lists store many items in one variable, and both are ordered and allow duplicates. The big difference is that a list can be changed and a tuple cannot.</p>
+
+      <div class="highlight-box remember">
+        <strong>Easy way to remember:</strong><br>
+        List = a notebook written with a pencil (you can erase and write again).<br>
+        Tuple = a book printed with ink (you can read it, but you cannot change it).
+      </div>
+
+      <table>
+        <tr><th>Point</th><th>Tuple</th><th>List</th></tr>
+        <tr><td>Brackets</td><td>Round brackets <code>( )</code></td><td>Square brackets <code>[ ]</code></td></tr>
+        <tr><td>Changeable?</td><td>No, it is immutable</td><td>Yes, it is mutable</td></tr>
+        <tr><td>Add / remove items</td><td>Not possible</td><td>Possible with <code>append()</code>, <code>remove()</code>, <code>pop()</code></td></tr>
+        <tr><td>Methods available</td><td>Only 2: <code>count()</code>, <code>index()</code></td><td>Many: <code>append</code>, <code>insert</code>, <code>sort</code>, <code>reverse</code>, etc.</td></tr>
+        <tr><td>Speed</td><td>Faster</td><td>Slightly slower</td></tr>
+        <tr><td>Memory used</td><td>Less</td><td>More</td></tr>
+        <tr><td>Safety</td><td>Data is protected from accidental change</td><td>Data can be changed by mistake</td></tr>
+        <tr><td>Example</td><td><code>(10, 20, 30)</code></td><td><code>[10, 20, 30]</code></td></tr>
+      </table>
+
+      <h3>6.2 Memory Check</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Memory Check</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">import</span> sys
+
+t = (<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>)
+l = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>]
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Tuple uses less memory than list:&quot;</span>, sys.getsizeof(t) &lt; sys.getsizeof(l))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Tuple uses less memory than list: True</pre>
+        </div>
+      </div>
+
+      <h3>6.3 When Should I Use Which?</h3>
+      <div class="highlight-box tip">
+        <strong>Simple Rule:</strong><br>
+        Use a <strong>tuple</strong> when the data should <strong>never change</strong> (birth date, GPS location, days of the week).<br>
+        Use a <strong>list</strong> when the data will <strong>grow, shrink, or change</strong> (to-do list, student names, scores).
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 07: PROGRAMS ON TUPLES -->
+    <!-- ============================================================ -->
+    <section id="sec-programs" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">💻 Section 07 &bull; Programs</div>
+        <h2 class="ch-title">7. Programs on Tuples and Operations</h2>
+      </div>
+      <p>Each program starts with a short definition, then the code, then its output.</p>
+
+      <div class="program-block" id="prog-5">
+        <div class="program-title">📌 Program 5: Indexing and Slicing</div>
+        <p class="prog-desc"><strong>Definition:</strong> Indexing means getting one item using its position number. Slicing means getting a part of the tuple using <code>[start:stop:step]</code>. The stop position is not included.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 5</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>colors = (<span class="syn-string">&quot;red&quot;</span>, <span class="syn-string">&quot;green&quot;</span>, <span class="syn-string">&quot;blue&quot;</span>, <span class="syn-string">&quot;yellow&quot;</span>, <span class="syn-string">&quot;black&quot;</span>)
+
+<span class="syn-function">print</span>(colors[<span class="syn-number">0</span>])       <span class="syn-comment"># first item</span>
+<span class="syn-function">print</span>(colors[-<span class="syn-number">1</span>])      <span class="syn-comment"># last item</span>
+<span class="syn-function">print</span>(colors[<span class="syn-number">1</span>:<span class="syn-number">4</span>])     <span class="syn-comment"># index 1 to 3</span>
+<span class="syn-function">print</span>(colors[:<span class="syn-number">3</span>])      <span class="syn-comment"># from start to index 2</span>
+<span class="syn-function">print</span>(colors[<span class="syn-number">2</span>:])      <span class="syn-comment"># from index 2 to end</span>
+<span class="syn-function">print</span>(colors[::<span class="syn-number">2</span>])     <span class="syn-comment"># every 2nd item</span>
+<span class="syn-function">print</span>(colors[::-<span class="syn-number">1</span>])    <span class="syn-comment"># reversed tuple</span></code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>red
+black
+('green', 'blue', 'yellow')
+('red', 'green', 'blue')
+('blue', 'yellow', 'black')
+('red', 'blue', 'black')
+('black', 'yellow', 'blue', 'green', 'red')</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block" id="prog-6">
+        <div class="program-title">📌 Program 6: Concatenation and Repetition</div>
+        <p class="prog-desc"><strong>Definition:</strong> Concatenation <code>(+)</code> joins two or more tuples to make a new tuple. Repetition <code>(*)</code> repeats a tuple many times. Both operations create a new tuple and the old ones stay the same.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 6</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>a = (<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>)
+b = (<span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Join :&quot;</span>, a + b)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Repeat :&quot;</span>, a * <span class="syn-number">3</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Repeat Hi :&quot;</span>, (<span class="syn-string">&quot;Hi&quot;</span>,) * <span class="syn-number">4</span>)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Join : (1, 2, 3, 4, 5, 6)
+Repeat : (1, 2, 3, 1, 2, 3, 1, 2, 3)
+Repeat Hi : ('Hi', 'Hi', 'Hi', 'Hi')</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block" id="prog-7">
+        <div class="program-title">📌 Program 7: Membership and Length</div>
+        <p class="prog-desc"><strong>Definition:</strong> The <code>in</code> operator checks whether an item is present in the tuple. The <code>not in</code> operator checks that it is absent. The <code>len()</code> function gives the total number of items.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 7</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>fruits = (<span class="syn-string">&quot;apple&quot;</span>, <span class="syn-string">&quot;banana&quot;</span>, <span class="syn-string">&quot;mango&quot;</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;mango&quot;</span> <span class="syn-keyword">in</span> fruits)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;grapes&quot;</span> <span class="syn-keyword">in</span> fruits)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;grapes&quot;</span> <span class="syn-keyword">not in</span> fruits)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Total fruits:&quot;</span>, <span class="syn-function">len</span>(fruits))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>True
+False
+True
+Total fruits: 3</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block" id="prog-8">
+        <div class="program-title">📌 Program 8: Tuple Packing and Unpacking</div>
+        <p class="prog-desc"><strong>Definition:</strong> Packing means putting many values into one tuple. Unpacking means taking the items out and giving them to separate variables. A star <code>*</code> variable can collect the extra items.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 8</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>student = (<span class="syn-string">&quot;Ravi&quot;</span>, <span class="syn-number">20</span>, <span class="syn-string">&quot;CSE&quot;</span>)    <span class="syn-comment"># packing</span>
+name, age, branch = student         <span class="syn-comment"># unpacking</span>
+<span class="syn-function">print</span>(name, age, branch)
+
+numbers = (<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>)
+first, *middle, last = numbers      <span class="syn-comment"># star unpacking</span>
+<span class="syn-function">print</span>(first)
+<span class="syn-function">print</span>(middle)
+<span class="syn-function">print</span>(last)
+
+a, b = <span class="syn-number">10</span>, <span class="syn-number">20</span>
+a, b = b, a                         <span class="syn-comment"># swapping</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;After swap:&quot;</span>, a, b)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Ravi 20 CSE
+1
+[2, 3, 4]
+5
+After swap: 20 10</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block" id="prog-9">
+        <div class="program-title">📌 Program 9: Student Report using Tuples (Practical Program)</div>
+        <p class="prog-desc"><strong>Definition:</strong> This real-life program stores student names and their marks in nested tuples. It uses unpacking, <code>sum()</code>, <code>len()</code>, a formatted print, and <code>max()</code> with a key to find the topper.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 9</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code>students = (
+    (<span class="syn-string">&quot;Asha&quot;</span>,  (<span class="syn-number">85</span>, <span class="syn-number">90</span>, <span class="syn-number">78</span>)),
+    (<span class="syn-string">&quot;Bilal&quot;</span>, (<span class="syn-number">92</span>, <span class="syn-number">88</span>, <span class="syn-number">95</span>)),
+    (<span class="syn-string">&quot;Chen&quot;</span>,  (<span class="syn-number">70</span>, <span class="syn-number">65</span>, <span class="syn-number">80</span>)),
+)
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Name    Total   Average&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">24</span>)
+
+<span class="syn-keyword">for</span> name, marks <span class="syn-keyword">in</span> students:
+    total = <span class="syn-function">sum</span>(marks)
+    avg = total / <span class="syn-function">len</span>(marks)
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;{name:&lt;7} {total:&lt;7} {avg:.2f}&quot;</span>)
+
+topper = students[<span class="syn-number">0</span>]
+highest_marks = <span class="syn-function">sum</span>(topper[<span class="syn-number">1</span>])
+
+<span class="syn-keyword">for</span> s <span class="syn-keyword">in</span> students:
+    total = <span class="syn-function">sum</span>(s[<span class="syn-number">1</span>])
+    <span class="syn-keyword">if</span> total &gt; highest_marks:
+        highest_marks = total
+        topper = s
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Topper of the class:&quot;</span>, topper[<span class="syn-number">0</span>])</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Name    Total   Average
+------------------------
+Asha    253     84.33
+Bilal   275     91.67
+Chen    215     71.67
+Topper of the class: Bilal</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text);">Prepared by Umer Farooq</h4>
+          <p style="font-size: 0.85rem; color: var(--text-dim);">Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <a href="index.html" class="btn-nav">
+          <span>🏠</span> Course Portal
+        </a>
+        <a href="Lec_11.html" class="btn-nav">
+          <span>💾</span> DMA (C)
+        </a>
+        <a href="Lec_8.html" class="btn-nav">
+          <span>⭐</span> Patterns (C)
+        </a>
+        <button class="btn-nav" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <span>⬆️</span> Back to Top
+        </button>
+        <button class="btn-nav" onclick="window.print()">
+          <span>🖨️</span> Print Notes
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="toggleTheme()" title="Toggle Theme">
+      <span id="theme-icon-float">☀️</span>
+    </button>
+    <button class="btn-float" onclick="window.print()" title="Print Page">
+      <span>🖨️</span>
+    </button>
+    <button class="btn-float" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to Top">
+      <span>▲</span>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcons(next);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    function copyCode(btn) {
+      const container = btn.closest('.code-container');
+      if (!container) return;
+      const codeBlock = container.querySelector('pre code') || container.querySelector('pre');
+      if (codeBlock) {
+        const textToCopy = codeBlock.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          btn.style.color = 'var(--green)';
+          btn.style.borderColor = 'var(--green)';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 2000);
+        }).catch(() => {
+          const range = document.createRange();
+          range.selectNode(codeBlock);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2000);
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+    });
+  </script>
+</body>
+
+</html>

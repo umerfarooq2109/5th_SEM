@@ -1,0 +1,2916 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecture 2 — Identifiers, Variables, Expressions & Data Types | SSM College of Eng.</title>
+  <meta name="description"
+    content="Comprehensive lecture notes on Identifiers, Variables, Memory Models, Expressions, IEEE-754 Floating-Point Representation, and Data Types in Python. Prepared by Umer Farooq for BTech 5th Semester.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #14161b;
+      --bg-alt: #191c22;
+      --card: #1c1f27;
+      --cell-bg: #1f232b;
+      --cell-border: #2c313c;
+      --border: #262a33;
+      --text: #e9e7e2;
+      --text-dim: #9198a6;
+      --text-faint: #5f6673;
+      --accent: #f3872e;
+      --accent-soft: rgba(243, 135, 46, .13);
+      --teal: #5fe4c8;
+      --teal-soft: rgba(95, 228, 200, .1);
+      --purple: #c9a6f5;
+      --purple-soft: rgba(201, 166, 245, .1);
+      --red: #ef7a6a;
+      --red-soft: rgba(239, 122, 106, .1);
+      --shadow: rgba(0, 0, 0, .55);
+    }
+
+    html[data-theme="light"] {
+      --bg: #faf8f5;
+      --bg-alt: #f1eee7;
+      --card: #ffffff;
+      --cell-bg: #f6f3ee;
+      --cell-border: #e3ddd0;
+      --border: #e9e3d7;
+      --text: #201e1a;
+      --text-dim: #5c584f;
+      --text-faint: #8a8477;
+      --accent: #d9660f;
+      --accent-soft: rgba(217, 102, 15, .1);
+      --teal: #0a8f79;
+      --teal-soft: rgba(10, 143, 121, .08);
+      --purple: #7c53c9;
+      --purple-soft: rgba(124, 83, 201, .08);
+      --red: #c1483d;
+      --red-soft: rgba(193, 72, 61, .08);
+      --shadow: rgba(120, 110, 90, .15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .35s ease, color .35s ease;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    ::selection {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal));
+      z-index: 200;
+      transition: width .1s ease-out;
+    }
+
+    #theme-toggle {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 150;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px var(--shadow);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    #theme-toggle:hover {
+      border-color: var(--accent);
+      transform: scale(1.06);
+    }
+
+    #theme-toggle svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    #back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 150;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      color: #14161b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .2s ease;
+    }
+
+    #back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #back-to-top:hover {
+      transform: translateY(-3px);
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 100px 0;
+    }
+
+    #hero {
+      padding-top: 130px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--accent);
+      opacity: .5;
+    }
+
+    h1.hero-title {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+      margin-bottom: 22px;
+    }
+
+    .hero-title .hl {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-dim);
+      max-width: 650px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .hero-stat .lbl {
+      font-size: 12.5px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    #toc .hero-sub {
+      margin-bottom: 46px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 20px 18px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color .2s ease, transform .2s ease;
+      position: relative;
+    }
+
+    .toc-card.ready:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .toc-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .toc-title {
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+
+    .toc-desc {
+      font-size: 12.5px;
+      color: var(--text-dim);
+    }
+
+    .toc-pill {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .04em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .toc-pill.ready {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .chapter {
+      border-top: 1px solid var(--border);
+      scroll-margin-top: 30px;
+    }
+
+    .ch-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .ch-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .ch-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-faint);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    h2.ch-title {
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 800;
+      letter-spacing: -.01em;
+      margin-bottom: 18px;
+    }
+
+    .step-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin: 40px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-label::before {
+      content: "";
+      width: 14px;
+      height: 1px;
+      background: var(--text-faint);
+    }
+
+    p.body-text {
+      color: var(--text-dim);
+      font-size: 16px;
+      max-width: 660px;
+      margin-bottom: 16px;
+    }
+
+    strong.emph {
+      color: var(--text);
+    }
+
+    .info-card {
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin: 18px 0;
+      border-left: 3px solid;
+      font-size: 14.5px;
+    }
+
+    .info-card .info-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 700;
+    }
+
+    .info-card p {
+      color: var(--text-dim);
+    }
+
+    .info-card.remember {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .info-card.remember .info-label {
+      color: var(--teal);
+    }
+
+    .info-card.mistake {
+      background: var(--red-soft);
+      border-color: var(--red);
+    }
+
+    .info-card.mistake .info-label {
+      color: var(--red);
+    }
+
+    .info-card.insight {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .info-card.insight .info-label {
+      color: var(--accent);
+    }
+
+    .info-card.tip {
+      background: var(--purple-soft);
+      border-color: var(--purple);
+    }
+
+    .info-card.tip .info-label {
+      color: var(--purple);
+    }
+
+    .info-card.usecase {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .info-card.usecase .info-label {
+      color: var(--teal);
+    }
+
+    .code-block {
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 18px 0;
+    }
+
+    .code-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--cell-border);
+    }
+
+    .code-head .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .code-lang {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .code-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 5px 11px;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+
+    .code-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    pre.code-body {
+      padding: 18px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .kw {
+      color: var(--purple);
+    }
+
+    .str {
+      color: var(--teal);
+    }
+
+    .fn {
+      color: #7fb4ff;
+    }
+
+    .cmt {
+      color: var(--text-faint);
+    }
+
+    .num {
+      color: var(--teal);
+    }
+
+    .op {
+      color: var(--accent);
+    }
+
+    html[data-theme="light"] .fn {
+      color: #2563b0;
+    }
+
+    .code-output {
+      border-top: 1px dashed var(--cell-border);
+      background: rgba(0, 0, 0, .25);
+    }
+
+    html[data-theme="light"] .code-output {
+      background: rgba(0, 0, 0, .04);
+    }
+
+    .code-output .out-label {
+      padding: 8px 20px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .code-output .out-label::before {
+      content: "▶";
+      font-size: 9px;
+      color: var(--accent);
+    }
+
+    .code-output pre {
+      padding: 6px 20px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--teal);
+      white-space: pre;
+    }
+
+    .df-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--cell-border);
+      margin: 16px 0;
+    }
+
+    .df-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+    }
+
+    .df-table thead th {
+      background: var(--bg-alt);
+      color: var(--text-dim);
+      padding: 10px 16px;
+      border-bottom: 2px solid var(--cell-border);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .df-table td {
+      padding: 9px 16px;
+      border-bottom: 1px solid var(--cell-border);
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .df-table tbody tr:hover td {
+      background: var(--accent-soft);
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 14px 0;
+    }
+
+    .task-list li {
+      padding: 9px 0 9px 26px;
+      position: relative;
+      color: var(--text-dim);
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .task-list li:last-child {
+      border-bottom: none;
+    }
+
+    .task-list li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .flow-diagram {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      padding: 20px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin: 20px 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .flow-diagram .stage-num {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .flow-diagram .stage-desc {
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .pull-quote {
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--text);
+      border-left: 3px solid var(--accent);
+      padding-left: 22px;
+      margin: 30px 0;
+    }
+
+    .quiz-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 26px 24px;
+      margin: 30px 0;
+    }
+
+    .quiz-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 3px 10px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .quiz-q {
+      font-weight: 700;
+      font-size: 15.5px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-opts {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .quiz-opt {
+      text-align: left;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 9px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Manrope', sans-serif;
+      transition: all .15s ease;
+    }
+
+    .quiz-opt:hover {
+      border-color: var(--accent);
+    }
+
+    .quiz-opt.correct {
+      border-color: var(--teal);
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .quiz-opt.wrong {
+      border-color: var(--red);
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .quiz-feedback {
+      margin-top: 14px;
+      font-size: 13.5px;
+      color: var(--text-dim);
+      display: none;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+      animation: fadeIn .3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Enhanced Vibrant Institutional Footer */
+    footer {
+      text-align: center;
+      padding: 60px 24px 80px;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      border-top: 2px solid var(--accent);
+      background: linear-gradient(180deg, var(--bg), rgba(243, 135, 46, .08));
+    }
+
+    footer .inst-name {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    footer .lec-title {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    footer .author-tag {
+      color: var(--teal);
+      font-weight: 600;
+      margin-top: 6px;
+      font-size: 13.5px;
+    }
+
+    @media (max-width: 760px) {
+      .toc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 64px 0;
+      }
+
+      #hero {
+        padding-top: 100px;
+      }
+    }
+
+    /* === Enhanced Typography & Bigger Font Hierarchy === */
+    body {
+      font-size: 16.5px;
+      line-height: 1.75;
+    }
+
+    p.body-text,
+    .body-text {
+      font-size: 16.5px !important;
+      line-height: 1.75 !important;
+    }
+
+    .info-card {
+      font-size: 15.5px !important;
+      line-height: 1.7 !important;
+    }
+
+    .info-card .info-label {
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
+    }
+
+    pre.code-body {
+      font-size: 14.5px !important;
+      line-height: 1.6 !important;
+    }
+
+    .code-output pre {
+      font-size: 14px !important;
+    }
+
+    .df-table {
+      font-size: 14.5px !important;
+    }
+
+    .dim-table {
+      font-size: 15px !important;
+    }
+
+    .dim-table th {
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
+    }
+
+    .task-list li {
+      font-size: 15.5px !important;
+      line-height: 1.7 !important;
+    }
+
+    .toc-title {
+      font-size: 16.5px !important;
+    }
+
+    .toc-desc {
+      font-size: 13.5px !important;
+    }
+
+    .quiz-q {
+      font-size: 17px !important;
+    }
+
+    .quiz-opt {
+      font-size: 15px !important;
+    }
+
+    .quiz-feedback {
+      font-size: 14.5px !important;
+    }
+
+    .ast-tree {
+      font-size: 15px !important;
+    }
+
+    .flow-diagram {
+      font-size: 14px !important;
+    }
+
+    .flow-diagram .stage-desc {
+      font-size: 12.5px !important;
+    }
+
+    /* === Floating Tools & Print Button === */
+    .floating-tools {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 200;
+      display: flex;
+      gap: 10px;
+    }
+
+    .tool-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 18px var(--shadow);
+      color: var(--text);
+      transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--accent);
+      transform: scale(1.06);
+      background: var(--card-hover, var(--cell-bg));
+    }
+
+    .tool-btn svg {
+      width: 19px;
+      height: 19px;
+      fill: currentColor;
+    }
+
+    #theme-toggle {
+      position: static !important;
+      box-shadow: none !important;
+    }
+
+    /* === Author Profile Card in Hero === */
+    .author-card-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 8px 20px 8px 10px;
+      border-radius: 999px;
+      margin: 18px 0 28px;
+      box-shadow: 0 6px 20px var(--shadow);
+      transition: border-color .2s ease, transform .2s ease;
+    }
+
+    .author-card-hero:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .author-img-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid var(--accent);
+      box-shadow: 0 0 14px var(--accent-soft);
+      display: block;
+    }
+
+    .author-details {
+      text-align: left;
+      line-height: 1.35;
+    }
+
+    .author-role {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-faint);
+    }
+
+    .author-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* === Hero Action Buttons (Print & Navigation) === */
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 24px 0 36px;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .2s ease;
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    .hero-btn.primary-btn {
+      background: var(--accent);
+      color: #12141a;
+      border: none;
+    }
+
+    .hero-btn.primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px var(--accent-soft);
+    }
+
+    .hero-btn.outline-btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .hero-btn.outline-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background: var(--card-hover, var(--cell-bg));
+    }
+
+    .hero-btn svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    /* === Footer Author Badge === */
+    footer {
+      font-size: 14px !important;
+      padding: 50px 0 30px !important;
+    }
+
+    .footer-author-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      background: var(--card);
+      padding: 6px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .footer-author-img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--accent);
+    }
+
+    /* ========================================================= */
+    /* Comprehensive Print / PDF Stylesheet                      */
+    /* ========================================================= */
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 12pt !important;
+        line-height: 1.6 !important;
+      }
+
+      /* Hide web-only UI elements */
+      #progress-bar,
+      .floating-tools,
+      #theme-toggle,
+      #back-to-top,
+      #lightbox,
+      .copy-btn,
+      .code-btn,
+      .zoom-hint,
+      .hero-actions,
+      .quiz-options,
+      .quiz-feedback,
+      button {
+        display: none !important;
+      }
+
+      .wrap {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      #hero {
+        padding: 20px 0 25px !important;
+      }
+
+      .eyebrow {
+        border-color: #d97706 !important;
+        color: #b45309 !important;
+      }
+
+      .author-card-hero {
+        border-color: #cbd5e1 !important;
+        background: #f8fafc !important;
+        box-shadow: none !important;
+      }
+
+      .hero-title {
+        color: #0f172a !important;
+      }
+
+      .hero-title .hl {
+        color: #d97706 !important;
+        -webkit-text-fill-color: #d97706 !important;
+      }
+
+      .hero-sub {
+        color: #475569 !important;
+      }
+
+      .chapter,
+      section {
+        padding: 25px 0 !important;
+        page-break-before: always;
+      }
+
+      #hero,
+      section:first-of-type,
+      .chapter:first-of-type {
+        page-break-before: auto !important;
+      }
+
+      /* Avoid awkward splits */
+      .card,
+      .table-container,
+      table,
+      pre,
+      .code-block,
+      .info-card,
+      .callout,
+      tr,
+      .toc-card,
+      .quiz-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        color: #0f172a !important;
+      }
+
+      table,
+      .df-table,
+      .dim-table {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+      }
+
+      th {
+        background: #f1f5f9 !important;
+        color: #b45309 !important;
+        border-bottom: 2px solid #94a3b8 !important;
+      }
+
+      td {
+        border-bottom: 1px solid #e2e8f0 !important;
+        color: #1e293b !important;
+      }
+
+      tr:nth-child(even) td {
+        background: #f8fafc !important;
+      }
+
+      pre.code-body,
+      .code-block pre,
+      .code-box pre {
+        background: #0f172a !important;
+        color: #7dd3fc !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+
+      .info-card {
+        background: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+      }
+
+      .info-card.tip {
+        border-color: #10b981 !important;
+        background: #ecfdf5 !important;
+      }
+
+      .info-card.warn {
+        border-color: #ef4444 !important;
+        background: #fef2f2 !important;
+      }
+
+      .info-card.analogy {
+        border-color: #f59e0b !important;
+        background: #fffbeb !important;
+      }
+
+      .info-card.note {
+        border-color: #3b82f6 !important;
+        background: #eff6ff !important;
+      }
+
+      @page {
+        margin: 15mm 12mm 15mm 12mm;
+        size: A4 portrait;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="progress-bar"></div>
+  <!-- Floating Tools -->
+  <div class="floating-tools">
+    <button class="tool-btn" id="print-btn" title="Print Notes / Save as PDF" onclick="window.print()"
+      aria-label="Print or Save as PDF">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+      </svg>
+    </button>
+    <button id="theme-toggle" class="tool-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round"></svg>
+    </button>
+  </div>
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round">
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </svg>
+  </button>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section id="hero">
+    <div class="wrap">
+      <div class="eyebrow">SSM College of Eng.</div>
+      <h1 class="hero-title">BTech 5th Sem — <span class="hl">Python Programming</span></h1>
+      <p class="hero-sub" style="font-size:15px; color:var(--text-faint); margin-bottom:8px;">Lecture 2</p>
+      <p class="hero-sub">Identifiers, Variables, Expressions,<br>IEEE-754 Floating-Point &amp; Data Types</p>
+      <!-- Prepared by Umer Farooq with Circular Profile Picture -->
+      <div>
+        <div class="author-card-hero">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img-circle">
+          <div class="author-details">
+            <div class="author-role">Prepared by</div>
+            <div class="author-name">Umer Farooq</div>
+          </div>
+        </div>
+      </div>
+      <!-- Print / PDF & Browse Action Buttons -->
+      <div class="hero-actions">
+        <button class="hero-btn primary-btn" onclick="window.print()">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+          </svg>
+          Print / Save as PDF
+        </button>
+        <a href="#toc" class="hero-btn outline-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+          </svg>
+          Browse Topics
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">5</div>
+          <div class="lbl">Core Parts</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">22</div>
+          <div class="lbl">Tables &amp; Schematics</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">25+</div>
+          <div class="lbl">Code Demos with Output</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ TABLE OF CONTENTS ═══════════════════ -->
+  <section id="toc">
+    <div class="wrap">
+      <div class="eyebrow">Lecture Map</div>
+      <h2 class="ch-title" style="text-align:center;">5 key topics, from hardware memory to software logic</h2>
+      <p class="hero-sub" style="text-align:center;">Master how Python stores objects in memory, evaluates expressions,
+        encodes floats at the bit level, and handles data types.</p>
+      <div class="toc-grid">
+        <a href="#s1" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">01</span><span class="toc-title">Identifiers &amp; Memory Model</span><span
+            class="toc-desc">Sticky
+            notes, balloon analogy, dynamic typing, and underscore conventions.</span></a>
+        <a href="#s2" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">02</span><span class="toc-title">Assignments &amp; Expressions</span><span
+            class="toc-desc">RHS-first rule, chained bindings, arithmetic, relational, logical, string, and
+            walrus.</span></a>
+        <a href="#s3" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">03</span><span class="toc-title">Named Constants &amp; Keywords</span><span
+            class="toc-desc">UPPERCASE rules, Enum, Final type hints, and the 35 Python keywords.</span></a>
+        <a href="#s4" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">04</span><span class="toc-title">Numeric Types &amp; IEEE-754 Floats</span><span
+            class="toc-desc">Arbitrary int, normalization, 64-bit IEEE 754, why 0.1+0.2 != 0.3, and complex
+            numbers.</span></a>
+        <a href="#s5" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">05</span><span class="toc-title">Boolean Type &amp; Truthiness</span><span
+            class="toc-desc">bool as subclass of int, truthy vs falsy evaluation, and the bool() function.</span></a>
+        <a href="#summary" class="toc-card ready"><span class="toc-pill ready">Summary</span><span
+            class="toc-num">06</span><span class="toc-title">Lecture Summary &amp; Review</span><span
+            class="toc-desc">Key architectural takeaways, best practices, and challenge quizzes.</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 1: IDENTIFIERS & MEMORY MODEL ═══════════════════ -->
+  <section class="chapter" id="s1">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 01</span><span class="ch-badge">Memory &amp; Names</span></div>
+      <h2 class="ch-title">Identifiers, Variables &amp; The Python Memory Model</h2>
+
+      <div class="step-label">1.1 — What is an Identifier?</div>
+      <p class="body-text">An <strong class="emph">identifier</strong> is the name you give to any entity in your
+        program — a variable, function, class, module, or object — so that you (and the interpreter) can refer to it
+        later.</p>
+
+      <div class="info-card insight">
+        <span class="info-label">Sticky Note vs Box Analogy</span>
+        <p>An identifier (variable name) is <strong>not the actual object</strong>. It is just a name that points to
+          the object in memory.<br><br>
+          • <strong>The Box:</strong> The object stored in memory (holds the data).<br>
+          • <strong>The Sticky Note:</strong> The variable/identifier attached to the box.<br>
+          The name on the sticky note tells Python which object you are referring to.</p>
+      </div>
+
+      <p class="body-text"><strong>Why are identifiers needed?</strong> Computers store data at raw physical memory
+        addresses like <span class="mono">0x7ffee23a1c4c</span>, which are impossible for humans to memorize or work
+        with at scale. Identifiers assign human-friendly labels to these memory locations, exactly like how a house has
+        a complex geographic coordinate or street registration number, but people call it "Grandma's House" for
+        conversational ease.</p>
+
+      <div class="step-label">1.2 — Unicode Identifiers in Python 3</div>
+      <p class="body-text">Python 3 allows Unicode characters in identifiers, meaning variable names can be written in
+        different natural languages and mathematical scripts:</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">unicode_identifiers.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Valid Unicode identifiers in Python 3</span>
+café = <span class="str">"coffee"</span>
+Δ = <span class="num">5</span>             <span class="cmt"># Greek Delta</span>
+北京 = <span class="str">"Beijing"</span>    <span class="cmt"># Chinese characters</span>
+
+<span class="fn">print</span>(café)
+<span class="fn">print</span>(Δ * <span class="num">10</span>)
+<span class="fn">print</span>(北京)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>coffee
+50
+Beijing</pre>
+        </div>
+      </div>
+
+      <div class="info-card mistake">
+        <span class="info-label">Important Limitation</span>
+        <p>Python has strict rules about which Unicode characters can be used. For example, <strong>emojis</strong>
+          (such
+          as 🐍 or 🚀) are not allowed as identifiers in Python syntax and will raise a <span class="mono">SyntaxError:
+            invalid character in identifier</span>.</p>
+      </div>
+
+      <div class="step-label">1.3 — Lexer Rules for Valid Identifiers</div>
+      <p class="body-text">These rules are strictly enforced by the Python lexer before your program ever runs:</p>
+      <ul class="task-list">
+        <li>Must start with a letter (<span class="mono">a–z</span>, <span class="mono">A–Z</span>) or an underscore
+          (<span class="mono">_</span>) — <strong>never with a digit</strong>.</li>
+        <li>Remaining characters can be letters, digits (<span class="mono">0–9</span>), or underscores.</li>
+        <li>Cannot be a Python <strong>keyword</strong> (reserved words like <span class="mono">if</span>, <span
+            class="mono">while</span>, <span class="mono">class</span>, <span class="mono">for</span>, <span
+            class="mono">def</span>, <span class="mono">True</span>, <span class="mono">None</span>).</li>
+        <li><strong>Case-sensitive:</strong> <span class="mono">Age</span>, <span class="mono">age</span>, and <span
+            class="mono">AGE</span> are three completely separate identifiers.</li>
+        <li>No spaces or special symbols (<span class="mono">@</span>, <span class="mono">-</span>, <span
+            class="mono">%</span>, <span class="mono">$</span>) allowed anywhere in the identifier.</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">valid_vs_invalid_identifiers.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Valid identifiers</span>
+name = <span class="str">"Ayesha"</span>
+_count = <span class="num">100</span>
+student1 = <span class="str">"Rahul"</span>
+total_marks = <span class="num">95.5</span>
+_temp2 = <span class="kw">True</span>
+
+<span class="cmt"># Invalid identifiers (uncommenting any line causes SyntaxError):</span>
+<span class="cmt"># 1name = "Error"       # Cannot start with digit</span>
+<span class="cmt"># total-marks = 90      # Hyphen '-' is treated as subtraction operator</span>
+<span class="cmt"># class = "Computer"    # 'class' is a reserved keyword</span>
+<span class="cmt"># my name = "Umer"      # Spaces are not allowed</span>
+<span class="cmt"># user@domain = "test"  # '@' is a special symbol (decorator syntax)</span></pre>
+      </div>
+
+      <div class="step-label">1.4 — PEP 8 Naming Conventions</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Rule</th>
+              <th>Example</th>
+              <th>Why / Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Use lowercase letters</td>
+              <td><span class="mono">age, name</span></td>
+              <td>Standard Python style for variables &amp; functions</td>
+            </tr>
+            <tr>
+              <td>Separate words with underscore</td>
+              <td><span class="mono">first_name, total_marks</span></td>
+              <td>Snake_case format improves visual readability</td>
+            </tr>
+            <tr>
+              <td>Be descriptive, not vague</td>
+              <td><span class="mono">student_age</span> (not <span class="mono">sa</span>)</td>
+              <td>Self-documenting code prevents confusion</td>
+            </tr>
+            <tr>
+              <td>Don't start with a digit</td>
+              <td><span class="mono">name1</span> (not <span class="mono">1name</span>)</td>
+              <td>Lexer requirement — digits at start indicate numeric literals</td>
+            </tr>
+            <tr>
+              <td>No spaces or symbols</td>
+              <td><span class="mono">user_name</span> (not <span class="mono">user name</span>)</td>
+              <td>Symbols have syntactic meaning in Python grammar</td>
+            </tr>
+            <tr>
+              <td>Case-sensitive</td>
+              <td><span class="mono">Age ≠ age ≠ AGE</span></td>
+              <td>Treated as three distinct variable bindings</td>
+            </tr>
+            <tr>
+              <td>Avoid built-in names</td>
+              <td>Avoid <span class="mono">list, str, type, id, dict</span></td>
+              <td>Shadows/overwrites Python's built-in functions</td>
+            </tr>
+            <tr>
+              <td>Boolean variable naming</td>
+              <td><span class="mono">is_valid, has_permission, can_edit</span></td>
+              <td>Reads naturally as a yes/no question</td>
+            </tr>
+            <tr>
+              <td>Constants (fixed values)</td>
+              <td><span class="mono">MAX_LIMIT = 100, PI = 3.14159</span></td>
+              <td>UPPERCASE signals to developers: "Do not modify"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">1.5 — Special Underscore Conventions</div>
+      <p class="body-text">In Python, the underscore (<span class="mono">_</span>) is not just a character; it conveys
+        critical semantics to the interpreter and developers:</p>
+
+      <div class="step-label">1. Single Leading Underscore (_name) — "Internal Use Only"</div>
+      <p class="body-text">A single underscore at the beginning indicates that a variable or function is intended for
+        internal module/class use. While Python does not strictly enforce private access, it exhibits one crucial
+        interpreter-level behavior:</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">module_underscore_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Inside my_module.py</span>
+name = <span class="str">"Akeel"</span>
+age = <span class="num">20</span>
+_secret_key = <span class="str">"admin@123"</span>   <span class="cmt"># Leading underscore</span>
+
+<span class="cmt"># If another file executes:</span>
+<span class="cmt"># from my_module import *</span>
+<span class="cmt"># Python automatically imports 'name' and 'age', but SKIPS '_secret_key'!</span></pre>
+      </div>
+
+      <div class="step-label">2. Single Trailing Underscore (name_) — "Avoid Keyword Conflicts"</div>
+      <p class="body-text">When the most natural name for a variable happens to be a reserved Python keyword (such as
+        <span class="mono">class</span>, <span class="mono">def</span>, <span class="mono">type</span>, <span
+          class="mono">in</span>), PEP 8 recommends appending a single trailing underscore:
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">trailing_underscore_example.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Invalid: class = "CSE"  --> SyntaxError: invalid syntax</span>
+
+<span class="cmt"># Valid PEP 8 convention:</span>
+class_ = <span class="str">"CSE 5th Sem"</span>
+type_ = <span class="str">"admin"</span>
+<span class="fn">print</span>(<span class="str">f"Registered: {class_}, Role: {type_}"</span>)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Registered: CSE 5th Sem, Role: admin</pre>
+        </div>
+      </div>
+
+      <div class="step-label">3. Dunder Names (__name__) — "Interpreter Special Attributes"</div>
+      <p class="body-text">Names surrounded by double underscores ("dunder" methods/attributes) are reserved for
+        special Python system hooks. When a Python file is run directly from the command line, Python sets its internal
+        <span class="mono">__name__</span> variable to <span class="str">"__main__"</span>:
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">main_guard_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="kw">def</span> <span class="fn">calculate_gpa</span>(marks):
+    <span class="kw">return</span> <span class="fn">sum</span>(marks) / <span class="fn">len</span>(marks)
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="cmt"># This code ONLY executes if you run this file directly</span>
+    sample_marks = [<span class="num">85</span>, <span class="num">90</span>, <span class="num">78</span>]
+    <span class="fn">print</span>(<span class="str">"Direct Execution GPA:"</span>, calculate_gpa(sample_marks))</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Direct Execution GPA: 84.33333333333333</pre>
+        </div>
+      </div>
+
+      <div class="step-label">1.6 — What is a Variable in Python?</div>
+      <p class="body-text">In languages like C or C++, a variable is a <strong class="emph">labeled box</strong> — a
+        fixed physical memory slot that directly stores raw binary bits, where the box type cannot ever change. In
+        Python, a variable is a <strong class="emph">named reference (pointer)</strong> to an object existing in heap
+        memory.</p>
+
+      <div class="flow-diagram"><span class="stage-num">C Language (Box Model):</span>
+        Variable [ x ] (Type: int, Address: 0x1000) ──> Directly holds bits [ 00001010 ]
+
+        <span class="stage-num">Python (Tag / Pointer Model):</span>
+        Name Tag [ x ] ───────────────────────────────> Heap Object [ int: 10, id: 0x7fff4021 ]
+      </div>
+
+      <div class="info-card remember">
+        <span class="info-label">The 3 Properties of Every Python Object</span>
+        <p>Every entity created in Python is an object with three immutable characteristics:<br>
+          1. <strong>Identity (id):</strong> The unique memory address where the object resides (retrieved via <span
+            class="mono">id(x)</span>).<br>
+          2. <strong>Type:</strong> What data type it is (retrieved via <span class="mono">type(x)</span>).<br>
+          3. <strong>Value:</strong> The actual data stored inside the object.</p>
+      </div>
+
+      <div class="step-label">1.7 — The Balloon &amp; String Tag Analogy</div>
+      <p class="body-text">Think of objects in memory as balloons floating in a room, each balloon carrying a value. A
+        variable name is a string tag with a label tied to a balloon:</p>
+      <ul class="task-list">
+        <li><span class="mono">x = 5</span> &rarr; "Take a balloon holding value 5, and tie a tag labeled <span
+            class="mono">x</span> to it."</li>
+        <li><span class="mono">y = x</span> &rarr; You do <strong>NOT</strong> create a new balloon. You tie a second
+          tag, <span class="mono">y</span>, onto the <strong>exact same balloon</strong>. Both names share identical
+          memory identity (<span class="mono">id(x) == id(y)</span>).</li>
+        <li><span class="mono">x = 10</span> &rarr; You untie tag <span class="mono">x</span> from balloon 5 and tie it
+          to a brand-new balloon holding 10. Tag <span class="mono">y</span> remains securely attached to balloon 5.
+        </li>
+        <li>If no tags point to balloon 5 anymore, Python's automatic <strong class="emph">Garbage Collector
+            (GC)</strong> deallocates it to reclaim RAM.</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">memory_identity_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body">x = <span class="num">5</span>
+y = x
+<span class="fn">print</span>(<span class="str">"Same object?"</span>, <span class="fn">id</span>(x) == <span class="fn">id</span>(y))   <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"x is y?"</span>, x <span class="kw">is</span> y)               <span class="cmt"># True (identity comparison)</span>
+
+x = <span class="num">10</span>  <span class="cmt"># Rebinding tag x to a new object (10)</span>
+<span class="fn">print</span>(<span class="str">"After rebinding x:"</span>)
+<span class="fn">print</span>(<span class="str">"x ="</span>, x, <span class="str">"| y ="</span>, y)
+<span class="fn">print</span>(<span class="str">"Same object now?"</span>, <span class="fn">id</span>(x) == <span class="fn">id</span>(y)) <span class="cmt"># False</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Same object? True
+x is y? True
+After rebinding x:
+x = 10 | y = 5
+Same object now? False</pre>
+        </div>
+      </div>
+
+      <div class="step-label">1.8 — What Happens When You "Change" a Variable?</div>
+      <p class="body-text">When you write <span class="mono">x = 10</span> followed by <span class="mono">x =
+          20</span>, you did <strong>NOT</strong> change the integer 10 into 20. In Python, integers are <strong
+          class="emph">immutable</strong> (cannot be edited in-place):</p>
+      <ol class="task-list" style="list-style:decimal; padding-left:24px;">
+        <li>Python created an object <span class="mono">10</span>, and pointed <span class="mono">x</span> at it.</li>
+        <li>Python created a brand-new object <span class="mono">20</span>, and moved the label <span
+            class="mono">x</span> to point at 20.</li>
+        <li>The old object <span class="mono">10</span> has zero active references and is swept away by garbage
+          collection.</li>
+      </ol>
+
+      <div class="step-label">1.9 — Dynamic Typing Explained</div>
+      <p class="body-text">Because variable names are merely untyped pointers and type information is stored inside the
+        heap object itself, you can rebind the same name to objects of completely different types at runtime:</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">dynamic_typing_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body">val = <span class="num">100</span>          <span class="cmt"># val references an 'int' object</span>
+<span class="fn">print</span>(val, <span class="fn">type</span>(val))
+
+val = <span class="str">"Python"</span>      <span class="cmt"># val now references a 'str' object</span>
+<span class="fn">print</span>(val, <span class="fn">type</span>(val))
+
+val = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]      <span class="cmt"># val now references a 'list' object</span>
+<span class="fn">print</span>(val, <span class="fn">type</span>(val))</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>100 &lt;class 'int'&gt;
+Python &lt;class 'str'&gt;
+[1, 2, 3] &lt;class 'list'&gt;</pre>
+        </div>
+      </div>
+
+      <!-- Quiz 1 -->
+      <div class="step-label">Practice Challenge 1</div>
+      <div class="quiz-block">
+        <span class="quiz-tag">Memory &amp; Variables</span>
+        <div class="quiz-q">What is the output of the following Python code?<br><span class="mono">a = 50; b = a; a = a
+            + 1; print(b)</span></div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'l2q1')">50 — because 'b' still references the
+            original object 50, while 'a' was rebound to 51</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q1')">51 — because 'a' and 'b' share the same
+            variable box</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q1')">SyntaxError — you cannot assign 'a' to 'b'
+            before modifying it</button>
+        </div>
+        <div class="quiz-feedback" id="l2q1-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 2: ASSIGNMENTS & EXPRESSIONS ═══════════════════ -->
+  <section class="chapter" id="s2">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 02</span><span class="ch-badge">Evaluation Engine</span></div>
+      <h2 class="ch-title">Assignment Statements &amp; Types of Expressions</h2>
+
+      <div class="step-label">2.1 — Forms of Assignment Statements</div>
+      <p class="body-text">An assignment statement binds a name (identifier) to an object using the <span
+          class="mono">=</span> operator. Python supports three primary assignment patterns:</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">assignment_patterns.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># 1. Simple Assignment</span>
+x = <span class="num">10</span>
+
+<span class="cmt"># 2. Chained Assignment (All names bound to the EXACT SAME object)</span>
+x = y = z = <span class="num">0</span>
+<span class="fn">print</span>(<span class="str">"Chained check:"</span>, <span class="fn">id</span>(x) == <span class="fn">id</span>(y) == <span class="fn">id</span>(z))  <span class="cmt"># True!</span>
+
+<span class="cmt"># 3. Simultaneous / Multiple Assignment (Tuple Unpacking)</span>
+a, b = <span class="num">5</span>, <span class="num">10</span>
+<span class="fn">print</span>(<span class="str">f"Before swap: a={a}, b={b}"</span>)
+
+<span class="cmt"># Swapping variables without a temporary third variable!</span>
+a, b = b, a
+<span class="fn">print</span>(<span class="str">f"After swap:  a={a}, b={b}"</span>)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Chained check: True
+Before swap: a=5, b=10
+After swap:  a=10, b=5</pre>
+        </div>
+      </div>
+
+      <div class="step-label">2.2 — The Critical "RHS-First" Evaluation Rule</div>
+      <p class="body-text">When Python executes <span class="mono">x = 5 + 3</span> or <span class="mono">x = x +
+          1</span>, the internal execution proceeds in two discrete stages:</p>
+      <ol class="task-list" style="list-style:decimal; padding-left:24px;">
+        <li><strong>Right-Hand Side (RHS) is evaluated completely first:</strong> <span class="mono">5 + 3</span> &rarr;
+          produces the integer object <span class="mono">8</span>.</li>
+        <li><strong>Binding occurs second:</strong> Only after the object is fully created does Python bind the name on
+          the left (<span class="mono">x</span>) to that resulting object.</li>
+      </ol>
+      <p class="body-text">This is why <span class="mono">x = x + 1</span> works seamlessly: Python reads the old value
+        of <span class="mono">x</span>, adds 1, produces a new integer object, and rebinds <span class="mono">x</span>
+        to
+        that new object.</p>
+
+      <div class="step-label">2.3 — Expressions vs Statements</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Expression</th>
+              <th>Statement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Core Purpose</td>
+              <td>Evaluates to produce a <strong>single value</strong></td>
+              <td>Performs an <strong>action or control flow</strong></td>
+            </tr>
+            <tr>
+              <td>Return Value</td>
+              <td>Always returns a result (reduces to a value)</td>
+              <td>Does not necessarily produce a value</td>
+            </tr>
+            <tr>
+              <td>Examples</td>
+              <td><span class="mono">5 + 3</span>, <span class="mono">x > 10</span>, <span
+                  class="mono">len("abc")</span>, <span class="mono">a and b</span></td>
+              <td><span class="mono">x = 5</span>, <span class="mono">if x > 0:</span>, <span class="mono">for i in
+                  range(5):</span>, <span class="mono">import math</span></td>
+            </tr>
+            <tr>
+              <td>Can be printed?</td>
+              <td><span class="mono">print(5 + 3)</span> &rarr; Valid!</td>
+              <td><span class="mono">print(x = 5)</span> &rarr; SyntaxError!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Deep Dive into Expression Types -->
+      <div class="step-label">2.4 — Deep Dive: All Types of Expressions in Python</div>
+      <p class="body-text">Below is the complete, rigorous breakdown of every expression category with full explanatory
+        notes, runnable code, and exact outputs.</p>
+
+      <!-- A. Arithmetic Expressions -->
+      <div class="step-label">A. Arithmetic Expressions</div>
+      <p class="body-text">Arithmetic expressions combine numeric operands with mathematical operators to calculate a
+        numeric result. Python strictly respects operator precedence (PEMDAS / BODMAS: Parentheses &rarr; Exponentiation
+        <span class="mono">**</span> &rarr; Multiplication/Division/Modulus <span class="mono">* / // %</span> &rarr;
+        Addition/Subtraction <span class="mono">+ -</span>).
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">arithmetic_expressions.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Operands and Operators</span>
+a = <span class="num">15</span>
+b = <span class="num">4</span>
+
+<span class="fn">print</span>(<span class="str">"Addition (a + b):"</span>, a + b)           <span class="cmt"># 19</span>
+<span class="fn">print</span>(<span class="str">"Subtraction (a - b):"</span>, a - b)        <span class="cmt"># 11</span>
+<span class="fn">print</span>(<span class="str">"Multiplication (a * b):"</span>, a * b)     <span class="cmt"># 60</span>
+<span class="fn">print</span>(<span class="str">"Division (a / b):"</span>, a / b)           <span class="cmt"># 3.75 (Always returns float)</span>
+<span class="fn">print</span>(<span class="str">"Floor Division (a // b):"</span>, a // b)   <span class="cmt"># 3 (Chops off decimal)</span>
+<span class="fn">print</span>(<span class="str">"Modulus / Remainder (a % b):"</span>, a % b)<span class="cmt"># 3</span>
+<span class="fn">print</span>(<span class="str">"Exponentiation (a ** b):"</span>, a ** b)   <span class="cmt"># 15^4 = 50625</span>
+
+<span class="cmt"># Precedence demonstration: 10 + 2 * 3 ** 2 = 10 + (2 * 9) = 28</span>
+complex_calc = <span class="num">10</span> + <span class="num">2</span> * <span class="num">3</span> ** <span class="num">2</span>
+<span class="fn">print</span>(<span class="str">"Precedence Result (10 + 2 * 3 ** 2):"</span>, complex_calc)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Addition (a + b): 19
+Subtraction (a - b): 11
+Multiplication (a * b): 60
+Division (a / b): 3.75
+Floor Division (a // b): 3
+Modulus / Remainder (a % b): 3
+Exponentiation (a ** b): 50625
+Precedence Result (10 + 2 * 3 ** 2): 28</pre>
+        </div>
+      </div>
+
+      <!-- B. Relational Expressions -->
+      <div class="step-label">B. Relational / Comparison Expressions</div>
+      <p class="body-text">Relational expressions compare two operands and <strong>always evaluate to a Boolean value
+          (<span class="mono">True</span> or <span class="mono">False</span>)</strong>. Python uniquely supports
+        <em>chained comparisons</em> (e.g., <span class="mono">10 &lt;= score &lt;= 100</span>), which are evaluated
+        efficiently from left to right with short-circuiting.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">relational_expressions.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body">score = <span class="num">85</span>
+passing_grade = <span class="num">50</span>
+
+<span class="fn">print</span>(<span class="str">"Equal (score == 85):"</span>, score == <span class="num">85</span>)            <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"Not Equal (score != 50):"</span>, score != <span class="num">50</span>)        <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"Greater Than (score > 90):"</span>, score > <span class="num">90</span>)        <span class="cmt"># False</span>
+<span class="fn">print</span>(<span class="str">"Less Than or Equal (score <= 85):"</span>, score <= <span class="num">85</span>)<span class="cmt"># True</span>
+
+<span class="cmt"># Python Chained Comparison: 50 <= score <= 100</span>
+is_valid_grade = <span class="num">50</span> <= score <= <span class="num">100</span>
+<span class="fn">print</span>(<span class="str">"Chained Comparison (50 <= score <= 100):"</span>, is_valid_grade)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Equal (score == 85): True
+Not Equal (score != 50): True
+Greater Than (score > 90): False
+Less Than or Equal (score <= 85): True
+Chained Comparison (50 <= score <= 100): True</pre>
+        </div>
+      </div>
+
+      <!-- C. Logical Expressions -->
+      <div class="step-label">C. Logical Expressions</div>
+      <p class="body-text">Logical expressions combine Boolean or truthy/falsy conditions using the keywords <span
+          class="mono">and</span>, <span class="mono">or</span>, and <span class="mono">not</span>. Python uses
+        <strong>short-circuit evaluation</strong>:
+        <br>• <span class="mono">and</span> stops and returns the first falsy operand, or the last truthy operand if all
+        are true.
+        <br>• <span class="mono">or</span> stops and returns the first truthy operand, or the last falsy operand if all
+        are false.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">logical_expressions.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body">has_id = <span class="kw">True</span>
+is_registered = <span class="kw">False</span>
+is_admin = <span class="kw">True</span>
+
+<span class="fn">print</span>(<span class="str">"has_id and is_registered:"</span>, has_id <span class="kw">and</span> is_registered) <span class="cmt"># False</span>
+<span class="fn">print</span>(<span class="str">"has_id or is_registered:"</span>, has_id <span class="kw">or</span> is_registered)   <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"not is_registered:"</span>, <span class="kw">not</span> is_registered)             <span class="cmt"># True</span>
+
+<span class="cmt"># Short-circuit value returning demo:</span>
+<span class="fn">print</span>(<span class="str">"'Python' and 'Rocks':"</span>, <span class="str">"Python"</span> <span class="kw">and</span> <span class="str">"Rocks"</span>) <span class="cmt"># Returns 'Rocks'</span>
+<span class="fn">print</span>(<span class="str">"'' or 'Default':"</span>, <span class="str">""</span> <span class="kw">or</span> <span class="str">"Default"</span>)         <span class="cmt"># Returns 'Default'</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>has_id and is_registered: False
+has_id or is_registered: True
+not is_registered: True
+'Python' and 'Rocks': Rocks
+'' or 'Default': Default</pre>
+        </div>
+      </div>
+
+      <!-- D. String Expressions -->
+      <div class="step-label">D. String Expressions</div>
+      <p class="body-text">String expressions manipulate text sequences via concatenation (<span class="mono">+</span>),
+        repetition (<span class="mono">*</span>), slicing (<span class="mono">[start:stop:step]</span>), formatted
+        f-strings (<span class="mono">f"{var}"</span>), and membership checking (<span class="mono">in</span>).</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">string_expressions.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body">str1 = <span class="str">"Python"</span>
+str2 = <span class="str">"Programming"</span>
+
+<span class="cmt"># Concatenation (+)</span>
+full_title = str1 + <span class="str">" "</span> + str2
+<span class="fn">print</span>(<span class="str">"Concatenation:"</span>, full_title)
+
+<span class="cmt"># Repetition (*)</span>
+divider = <span class="str">"-"</span> * <span class="num">30</span>
+<span class="fn">print</span>(<span class="str">"Repetition:"</span>, divider)
+
+<span class="cmt"># Slicing & Indexing</span>
+<span class="fn">print</span>(<span class="str">"First char (str1[0]):"</span>, str1[<span class="num">0</span>])
+<span class="fn">print</span>(<span class="str">"Slice (str1[0:4]):"</span>, str1[<span class="num">0</span>:<span class="num">4</span>])
+<span class="fn">print</span>(<span class="str">"Reversed (str1[::-1]):"</span>, str1[::-<span class="num">1</span>])
+
+<span class="cmt"># Formatted f-string & Membership (in)</span>
+version = <span class="num">3.12</span>
+<span class="fn">print</span>(<span class="str">f"Formatted String: Welcome to {str1} {version}!"</span>)
+<span class="fn">print</span>(<span class="str">"Membership ('thon' in str1):"</span>, <span class="str">"thon"</span> <span class="kw">in</span> str1)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Concatenation: Python Programming
+Repetition: ------------------------------
+First char (str1[0]): P
+Slice (str1[0:4]): Pyth
+Reversed (str1[::-1]): nohtyP
+Formatted String: Welcome to Python 3.12!
+Membership ('thon' in str1): True</pre>
+        </div>
+      </div>
+
+      <!-- E. Assignment Expression (Walrus Operator) -->
+      <div class="step-label">E. Assignment Expression (Walrus Operator :=)</div>
+      <p class="body-text">Introduced in <strong>Python 3.8 (PEP 572)</strong>, the <strong class="emph">walrus operator
+          (<span class="mono">:=</span>)</strong> allows assigning a value to a variable <em>as part of an
+          expression</em>, instead of requiring a separate statement. This eliminates duplicate calculations in loops
+        and condition checks:</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">walrus_operator_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># WITHOUT Walrus Operator (Traditional Way — computations repeated):</span>
+scores = [<span class="num">80</span>, <span class="num">95</span>, <span class="num">70</span>, <span class="num">88</span>, <span class="num">92</span>]
+n = <span class="fn">len</span>(scores)
+<span class="kw">if</span> n > <span class="num">3</span>:
+    <span class="fn">print</span>(<span class="str">f"Traditional Check: Processing {n} student scores."</span>)
+
+<span class="cmt"># WITH Walrus Operator (Assign & check in one single line):</span>
+<span class="kw">if</span> (total := <span class="fn">sum</span>(scores)) > <span class="num">400</span>:
+    <span class="fn">print</span>(<span class="str">f"Walrus Check: Distinction cohort! Total marks = {total}"</span>)
+
+<span class="cmt"># Classic use case: reading user input in a while loop</span>
+<span class="cmt"># while (user_input := input("Enter command: ")) != "quit":</span>
+<span class="cmt">#     print(f"Executing: {user_input}")</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Traditional Check: Processing 5 student scores.
+Walrus Check: Distinction cohort! Total marks = 425</pre>
+        </div>
+      </div>
+
+      <!-- F. Bitwise Expressions -->
+      <div class="step-label">F. Bitwise Expressions</div>
+      <p class="body-text">Bitwise expressions operate directly on the underlying binary bits of integer operands: AND
+        (<span class="mono">&amp;</span>), OR (<span class="mono">|</span>), XOR (<span class="mono">^</span>), NOT
+        (<span class="mono">~</span>), Left Shift (<span class="mono">&lt;&lt;</span>), and Right Shift (<span
+          class="mono">&gt;&gt;</span>).</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">bitwise_expressions.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body">a = <span class="num">10</span>  <span class="cmt"># Binary: 1010</span>
+b = <span class="num">4</span>   <span class="cmt"># Binary: 0100</span>
+
+<span class="fn">print</span>(<span class="str">"Bitwise AND (10 & 4):"</span>, a & b)   <span class="cmt"># 1010 & 0100 = 0000 (0)</span>
+<span class="fn">print</span>(<span class="str">"Bitwise OR  (10 | 4):"</span>, a | b)   <span class="cmt"># 1010 | 0100 = 1110 (14)</span>
+<span class="fn">print</span>(<span class="str">"Bitwise XOR (10 ^ 4):"</span>, a ^ b)   <span class="cmt"># 1010 ^ 0100 = 1110 (14)</span>
+<span class="fn">print</span>(<span class="str">"Bitwise NOT (~10):"</span>, ~a)         <span class="cmt"># -(10 + 1) = -11</span>
+<span class="fn">print</span>(<span class="str">"Left Shift (10 << 1):"</span>, a << <span class="num">1</span>)  <span class="cmt"># 10 * 2^1 = 20 (10100)</span>
+<span class="fn">print</span>(<span class="str">"Right Shift (10 >> 1):"</span>, a >> <span class="num">1</span>) <span class="cmt"># 10 // 2^1 = 5 (0101)</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Bitwise AND (10 & 4): 0
+Bitwise OR  (10 | 4): 14
+Bitwise XOR (10 ^ 4): 14
+Bitwise NOT (~10): -11
+Left Shift (10 << 1): 20
+Right Shift (10 >> 1): 5</pre>
+        </div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="step-label">Practice Challenge 2</div>
+      <div class="quiz-block">
+        <span class="quiz-tag">Expressions &amp; Walrus</span>
+        <div class="quiz-q">What is the value of <span class="mono">x</span> and <span class="mono">result</span> after
+          executing: <span class="mono">result = (x := 4 * 2) + 10</span>?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'l2q2')">x = 8, result = 18 — walrus assigns 8 to 'x'
+            during the evaluation, then 10 is added</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q2')">SyntaxError — walrus operator cannot be
+            used inside arithmetic expressions</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q2')">x = 18, result = 18</button>
+        </div>
+        <div class="quiz-feedback" id="l2q2-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 3: NAMED CONSTANTS & KEYWORDS ═══════════════════ -->
+  <section class="chapter" id="s3">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 03</span><span class="ch-badge">Code Architecture</span></div>
+      <h2 class="ch-title">Named Constants &amp; Python Keywords</h2>
+
+      <div class="step-label">3.1 — What is a Named Constant?</div>
+      <p class="body-text">A <strong class="emph">named constant</strong> is an identifier whose assigned value is
+        intended to remain fixed throughout the entire lifecycle of a program. It is assigned a descriptive name so that
+        the code is self-explanatory, and if business logic changes, the value only needs to be updated in one
+        centralized
+        place.</p>
+
+      <div class="info-card insight">
+        <span class="info-label">Convention vs Hardware Enforcement</span>
+        <p>Unlike languages such as C++ (<span class="mono">const</span>) or Java (<span class="mono">final</span>),
+          <strong>Python does not have a built-in keyword that prevents reassignment</strong>. Constants in Python are
+          governed by strong developer convention: writing the identifier in <strong>ALL_CAPS</strong> signals "Do not
+          touch or reassign this value."
+        </p>
+      </div>
+
+      <div class="step-label">3.2 — Why We Use Constants (The 3 Pillars)</div>
+      <ul class="task-list">
+        <li><strong>Eliminating Magic Numbers:</strong> Writing <span class="mono">if age &gt;= 18:</span> is ambiguous;
+          writing <span class="mono">if age &gt;= LEGAL_VOTING_AGE:</span> is completely self-documenting.</li>
+        <li><strong>Centralized Maintainability:</strong> If a tax rate changes from 5% to 8%, you change one single
+          line (<span class="mono">GST_RATE = 0.08</span>) at the top of your module rather than hunting for every rogue
+          <span class="mono">0.05</span> across 10,000 lines of code.
+        </li>
+        <li><strong>Preventing Silent Bugs:</strong> Grouping fixed parameters together avoids accidental typo
+          discrepancies across different calculation modules.</li>
+      </ul>
+
+      <div class="step-label">3.3 — Where Constants are Declared</div>
+      <p class="body-text">In professional engineering practice, constants are placed:</p>
+      <ul class="task-list">
+        <li>At the top of a script file (directly below docstrings and imports).</li>
+        <li>Inside a dedicated configuration file, such as <span class="mono">config.py</span> or <span
+            class="mono">constants.py</span>, and imported across the project.</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">constants_config_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="cmt"># config.py — Centralized project settings</span>
+DATABASE_PORT = <span class="num">5432</span>
+MAX_CONNECTIONS = <span class="num">100</span>
+PI = <span class="num">3.141592653589793</span>
+APP_NAME = <span class="str">"SSM Student Portal"</span>
+
+<span class="kw">def</span> <span class="fn">compute_circle_area</span>(radius):
+    <span class="kw">return</span> PI * (radius ** <span class="num">2</span>)
+
+<span class="fn">print</span>(<span class="str">f"{APP_NAME} | DB Port: {DATABASE_PORT}"</span>)
+<span class="fn">print</span>(<span class="str">"Circle Area (r=7):"</span>, compute_circle_area(<span class="num">7</span>))</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>SSM Student Portal | DB Port: 5432
+Circle Area (r=7): 153.93804002589985</pre>
+        </div>
+      </div>
+
+      <div class="step-label">3.4 — Advanced Constant Techniques: Enum &amp; Final</div>
+      <p class="body-text">When strictness or grouping is needed, Python provides two modern standard-library solutions:
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">enum_and_final_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="kw">from</span> enum <span class="kw">import</span> Enum
+<span class="kw">from</span> typing <span class="kw">import</span> Final
+
+<span class="cmt"># 1. Using Enum for related constant groups</span>
+<span class="kw">class</span> <span class="fn">UserRole</span>(Enum):
+    STUDENT = <span class="num">1</span>
+    FACULTY = <span class="num">2</span>
+    ADMIN = <span class="num">3</span>
+
+current_user = UserRole.FACULTY
+<span class="fn">print</span>(<span class="str">"Role Name:"</span>, current_user.name, <span class="str">"| Value:"</span>, current_user.value)
+
+<span class="cmt"># 2. Using typing.Final for static analyzer enforcement (mypy)</span>
+MAX_ATTEMPTS: Final[int] = <span class="num">3</span>
+<span class="cmt"># Static type checkers like mypy will flag MAX_ATTEMPTS = 5 as an error!</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Role Name: FACULTY | Value: 2</pre>
+        </div>
+      </div>
+
+      <div class="step-label">3.5 — Python Keywords</div>
+      <p class="body-text">Keywords are reserved words that have hardcoded syntactic meaning in Python's core grammar.
+        You cannot use them as identifiers (variable names, function names, or class names). In Python 3.12, there are
+        <strong>35 reserved keywords</strong>.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">inspect_keywords.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> keyword
+
+<span class="fn">print</span>(<span class="str">"Total Keywords in this Python version:"</span>, <span class="fn">len</span>(keyword.kwlist))
+<span class="fn">print</span>(<span class="str">"Keywords list:"</span>)
+<span class="fn">print</span>(keyword.kwlist)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Total Keywords in this Python version: 35
+Keywords list:
+['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']</pre>
+        </div>
+      </div>
+
+      <!-- Quiz 3 -->
+      <div class="step-label">Practice Challenge 3</div>
+      <div class="quiz-block">
+        <span class="quiz-tag">Constants &amp; Keywords</span>
+        <div class="quiz-q">Which of the following identifiers is legally allowed in Python syntax?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'l2q3')">pass_word — valid snake_case identifier
+            (pass is a keyword, but pass_word is not)</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q3')">pass — directly allowed as variable
+            name</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q3')">global — allowed as long as it is
+            uppercase</button>
+        </div>
+        <div class="quiz-feedback" id="l2q3-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 4: NUMERIC TYPES & FLOATING POINT ═══════════════════ -->
+  <section class="chapter" id="s4">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 04</span><span class="ch-badge">Hardware &amp; Bit
+          Architecture</span></div>
+      <h2 class="ch-title">Numeric Data Types &amp; The Deep Dive on IEEE-754 Floats</h2>
+
+      <div class="step-label">4.1 — Built-in Numeric Types in Python</div>
+      <p class="body-text">Python provides three distinct built-in numeric data types:</p>
+      <ul class="task-list">
+        <li><strong class="emph">int (Integer):</strong> Whole numbers (positive, negative, zero) of <strong>arbitrary
+            precision</strong>.</li>
+        <li><strong class="emph">float (Floating-Point):</strong> Real decimal numbers represented internally via the
+          <strong>IEEE-754 double precision (64-bit)</strong> standard.
+        </li>
+        <li><strong class="emph">complex (Complex Numbers):</strong> Numbers consisting of a real and imaginary
+          component (<span class="mono">a + bj</span>).</li>
+      </ul>
+
+      <div class="step-label">4.2 — Integers &amp; Arbitrary Precision</div>
+      <p class="body-text">In languages like C or Java, an integer has a fixed bit-width (e.g., 32-bit: <span
+          class="mono">-2,147,483,648</span> to <span class="mono">+2,147,483,647</span>). Exceeding this boundary
+        causes a catastrophic <em>integer overflow</em>. In Python, <strong>integers have no fixed maximum
+          size</strong>. CPython stores large integers dynamically as an array of digits in heap memory, bounded solely
+        by available system RAM.</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">integer_bases_and_precision.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># 1. Arbitrary Precision — No Overflow!</span>
+huge_num = <span class="num">123456789012345678901234567890</span> ** <span class="num">2</span>
+<span class="fn">print</span>(<span class="str">"Huge square:"</span>, huge_num)
+
+<span class="cmt"># 2. Integer Literals in Different Number Bases:</span>
+dec = <span class="num">100</span>          <span class="cmt"># Decimal (Base 10)</span>
+bin_val = <span class="num">0b1010</span>    <span class="cmt"># Binary (Base 2, prefix 0b) -> 10</span>
+oct_val = <span class="num">0o17</span>      <span class="cmt"># Octal (Base 8, prefix 0o)   -> 15</span>
+hex_val = <span class="num">0x1A</span>      <span class="cmt"># Hexadecimal (Base 16, prefix 0x) -> 26</span>
+
+<span class="fn">print</span>(<span class="str">f"Bases: Bin={bin_val}, Oct={oct_val}, Hex={hex_val}"</span>)
+
+<span class="cmt"># 3. Visual separator underscores (Python 3.6+)</span>
+salary = <span class="num">1_500_000</span>   <span class="cmt"># Exactly equal to 1500000</span>
+<span class="fn">print</span>(<span class="str">"Salary formatted:"</span>, salary)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Huge square: 152415787532388367504953515183000000000000000000000000000000
+Bases: Bin=10, Oct=15, Hex=26
+Salary formatted: 1500000</pre>
+        </div>
+      </div>
+
+      <div class="step-label">4.3 — The Hardware Problem: How Numbers are Stored</div>
+      <p class="body-text">Inside a computer CPU, data is physically stored in hardware registers composed of electronic
+        circuits called <strong class="emph">flip-flops</strong>. A flip-flop is bistable: it can only physically hold
+        voltage states representing <span class="mono">0</span> or <span class="mono">1</span>.</p>
+      <ul class="task-list">
+        <li>An integer like <span class="mono">4</span> is stored directly as binary <span class="mono">0100</span>.
+        </li>
+        <li>A float like <span class="mono">4.0</span> or <span class="mono">2.5</span> presents a hardware crisis:
+          <strong>a flip-flop cannot physically hold a decimal point or dot (.)!</strong>
+        </li>
+        <li>Therefore, no computer ever stores a decimal point directly in silicon registers. It stores a normalized
+          mathematical representation!</li>
+      </ul>
+
+      <div class="step-label">4.4 — Fixed-Point vs Floating-Point Numbers</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Aspect</th>
+              <th>Fixed-Point Representation</th>
+              <th>Floating-Point Representation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Point Position</td>
+              <td>Predefined, fixed position (e.g., always 2 decimal places)</td>
+              <td>Variable position — the point "floats" dynamically</td>
+            </tr>
+            <tr>
+              <td>How Handled</td>
+              <td>Ignore the dot, calculate on whole digits, reinsert dot on display</td>
+              <td>Requires mathematical <strong>Normalization</strong> into Sign, Exponent, Mantissa</td>
+            </tr>
+            <tr>
+              <td>Examples</td>
+              <td><span class="mono">7.32 + 3.25 + 6.52 &rarr; 732 + 325 + 652 = 1708 &rarr; 17.08</span></td>
+              <td><span class="mono">73.2, 649.0, 0.00101, 5.63</span></td>
+            </tr>
+            <tr>
+              <td>Limitation</td>
+              <td>Cannot scale to both microscopic and astronomical numbers</td>
+              <td>Handles vast ranges, but subject to binary fractional precision rounding</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">4.5 — The Normalization Process</div>
+      <p class="body-text"><strong class="emph">Normalization</strong> is the process of converting any floating-point
+        number into a standard form so that the decimal point always appears at one predictable, canonical position.</p>
+
+      <div class="info-card insight">
+        <span class="info-label">Rule of Normalization</span>
+        <p><strong>Decimal Normalization Rule:</strong> There must be exactly <strong>one non-zero digit</strong> to the
+          left of the decimal point.<br>
+          • <span class="mono">73.2 &rarr; 7.32 &times; 10¹</span><br>
+          • <span class="mono">649.0 &rarr; 6.49 &times; 10²</span><br>
+          • <span class="mono">5.63 &rarr; 5.63 &times; 10⁰</span> (Already normalized)<br>
+          • <span class="mono">0.00847 &rarr; 8.47 &times; 10⁻³</span></p>
+      </div>
+
+      <p class="body-text">Once normalized, any number is completely defined by two components:</p>
+      <ul class="task-list">
+        <li><strong class="emph">Mantissa:</strong> The digits of the number without the point (defines the
+          significance/precision).</li>
+        <li><strong class="emph">Exponent:</strong> The power that specifies how far and in which direction the point
+          must shift.</li>
+      </ul>
+
+      <div class="step-label">4.6 — Binary Normalization &amp; The "Hidden Leading 1" Trick</div>
+      <p class="body-text">In base-2 (binary), there is only <strong>one non-zero digit: 1</strong>. Therefore, every
+        single normalized binary number without exception begins with <span class="mono">1.</span>:</p>
+      <div class="flow-diagram"><span class="stage-num">Normalized Binary Formula:</span>
+        1 . (mantissa_bits) &times; 2^(exponent)</div>
+
+      <div class="info-card remember">
+        <span class="info-label">Why the Leading 1 is NOT Stored in Hardware</span>
+        <p>Since every normalized binary number always begins with <span class="mono">1.</span>, storing that leading 1
+          would waste 1 bit of precious silicon register space. IEEE-754 hardware simply assumes this <strong>implicit
+            leading 1</strong> and only stores the fractional bits after the point. This gives <strong>53 bits of
+            effective precision while only storing 52 bits</strong>!</p>
+      </div>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Original Binary Number</th>
+              <th>Normalized Form</th>
+              <th>True Exponent</th>
+              <th>Stored Mantissa (Leading 1 dropped)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">101.1011</span></td>
+              <td><span class="mono">1.011011 &times; 2²</span></td>
+              <td>+2 (point moved 2 left)</td>
+              <td><span class="mono">011011</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">11111.01</span></td>
+              <td><span class="mono">1.111101 &times; 2⁴</span></td>
+              <td>+4 (point moved 4 left)</td>
+              <td><span class="mono">111101</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">0.00101</span></td>
+              <td><span class="mono">1.01 &times; 2⁻³</span></td>
+              <td>-3 (point moved 3 right)</td>
+              <td><span class="mono">01</span></td>
+            </tr>
+            <tr>
+              <td><span class="mono">-10.01</span></td>
+              <td><span class="mono">-1.001 &times; 2¹</span></td>
+              <td>+1 (point moved 1 left)</td>
+              <td><span class="mono">001</span> (Sign S=1)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">4.7 — IEEE-754 64-Bit Double-Precision Standard</div>
+      <p class="body-text">Python floats use the standard 64-bit IEEE-754 format. A 64-bit register is partitioned into
+        three fields:</p>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Bit Width</th>
+              <th>Function</th>
+              <th>Formula / Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--accent); font-weight:700;">Sign (S)</td>
+              <td>1 bit (Bit 63)</td>
+              <td>Determines positive or negative</td>
+              <td><span class="mono">S = 0 (+) | S = 1 (-) &rarr; (-1)^S</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--purple); font-weight:700;">Biased Exponent (E)</td>
+              <td>11 bits (Bits 62–52)</td>
+              <td>Stores power of 2 with bias offset</td>
+              <td><span class="mono">Biased_E = True_E + 1023</span> (Bias for 64-bit)</td>
+            </tr>
+            <tr>
+              <td style="color:var(--teal); font-weight:700;">Mantissa (M)</td>
+              <td>52 bits (Bits 51–0)</td>
+              <td>Stores fractional bits after "1."</td>
+              <td>52 bits (padded with trailing zeros)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">4.8 — Full Worked Example: Encoding 0.001001₂ in 64-bit IEEE 754</div>
+      <p class="body-text">Let's follow the exact engineering procedure to encode <span class="mono">0.001001₂</span>
+        into 64-bit IEEE 754:</p>
+      <ol class="task-list" style="list-style:decimal; padding-left:24px;">
+        <li><strong>Step 1 (Normalize):</strong> Shift the point 3 positions to the right &rarr; <span
+            class="mono">1.001 &times; 2⁻³</span> (True Exponent = <span class="mono">-3</span>).</li>
+        <li><strong>Step 2 (Sign Bit):</strong> Number is positive &rarr; <span class="mono">S = 0</span>.</li>
+        <li><strong>Step 3 (Biased Exponent):</strong> <span class="mono">Biased E = True E + Bias = -3 + 1023 =
+            1020</span>.
+          <br>Convert <span class="mono">1020</span> to 11-bit binary &rarr; <span class="mono">01111111100₂</span>.
+        </li>
+        <li><strong>Step 4 (Mantissa):</strong> Drop the leading 1 from <span class="mono">1.001</span> &rarr; keep
+          <span class="mono">001</span>.
+          <br>Pad with 49 trailing zeros to fill 52 bits &rarr; <span
+            class="mono">0010000000000000000000000000000000000000000000000000</span>.
+        </li>
+        <li><strong>Step 5 (Full 64-bit Output):</strong>
+          <br><span class="mono">0 | 01111111100 | 0010000000000000000000000000000000000000000000000000</span>
+        </li>
+      </ol>
+
+      <div class="step-label">4.9 — Full Worked Reversal: Decoding 64-bit IEEE 754 Back to Decimal</div>
+      <p class="body-text">Given the stored 64-bit register pattern above, we reverse the decoding pipeline step by
+        step:</p>
+      <ol class="task-list" style="list-style:decimal; padding-left:24px;">
+        <li><strong>Sign:</strong> <span class="mono">S = 0 &rarr; (-1)⁰ = +1</span>.</li>
+        <li><strong>Exponent:</strong> Stored <span class="mono">01111111100₂ = 1020 &rarr; True E = 1020 - 1023 =
+            -3</span>.</li>
+        <li><strong>Mantissa:</strong> Restore the hidden leading 1 &rarr; <span class="mono">1.001₂</span>.</li>
+        <li><strong>Un-normalize:</strong> Shift the point 3 places left &rarr; <span class="mono">0.001001₂</span>.
+        </li>
+        <li><strong>Convert to Decimal:</strong> <span class="mono">0&times;2⁻¹ + 0&times;2⁻² + 1&times;2⁻³ +
+            0&times;2⁻⁴ + 0&times;2⁻⁵ + 1&times;2⁻⁶ = 1/8 + 1/64 = 0.125 + 0.015625 = 0.140625₁₀</span>.</li>
+      </ol>
+
+      <div class="step-label">4.10 — The Famous Mystery: Why 0.1 + 0.2 = 0.30000000000000004</div>
+      <p class="body-text">In Python (and virtually every modern programming language), typing <span class="mono">0.1 +
+          0.2</span> produces <span class="mono">0.30000000000000004</span>. This is not a Python bug — it is a
+        mathematical property of base-2 fractional representation.</p>
+
+      <div class="info-card insight">
+        <span class="info-label">Base-10 vs Base-2 Repeating Fractions</span>
+        <p>In decimal, <span class="mono">1/3</span> produces the infinitely repeating fraction <span
+            class="mono">0.333333...</span>. No finite number of decimal digits can ever write 1/3 exactly.<br><br>
+          Similarly, in binary, the numbers <span class="mono">0.1₁₀</span> and <span class="mono">0.2₁₀</span> produce
+          <strong>infinitely repeating binary fractions</strong>:
+          <br>• <span class="mono">0.1₁₀ = 0.00011001100110011...₂</span> (repeats '0011' forever)
+          <br>• <span class="mono">0.2₁₀ = 0.0011001100110011...₂</span> (repeats '0011' forever)
+        </p>
+      </div>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Operation (Converting 0.1 to Binary)</th>
+              <th>Binary Digit</th>
+              <th>Remaining Fraction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>0.1 &times; 2 = 0.2</td>
+              <td>0</td>
+              <td>0.2</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0.2 &times; 2 = 0.4</td>
+              <td>0</td>
+              <td>0.4</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0.4 &times; 2 = 0.8</td>
+              <td>0</td>
+              <td>0.8</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0.8 &times; 2 = 1.6</td>
+              <td>1</td>
+              <td>0.6</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>0.6 &times; 2 = 1.2</td>
+              <td>1</td>
+              <td>0.2</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>0.2 &times; 2 = 0.4</td>
+              <td>0</td>
+              <td>0.4 (Pattern Repeats from Step 2!)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="body-text">Because the 64-bit double precision mantissa only holds 52 bits, the infinite repeating
+        pattern is <strong>truncated and rounded</strong> at bit 52. When added together and converted back to decimal
+        for display, the tiny accumulated rounding difference shows up as <span class="mono">0.30000000000000004</span>.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">float_precision_handling.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="kw">import</span> math
+<span class="kw">from</span> decimal <span class="kw">import</span> Decimal
+
+<span class="cmt"># 1. The Precision Quirk</span>
+raw_sum = <span class="num">0.1</span> + <span class="num">0.2</span>
+<span class="fn">print</span>(<span class="str">"0.1 + 0.2 ="</span>, raw_sum)
+<span class="fn">print</span>(<span class="str">"Is 0.1 + 0.2 == 0.3?"</span>, raw_sum == <span class="num">0.3</span>)  <span class="cmt"># False!</span>
+
+<span class="cmt"># Solution 1: round() for display</span>
+<span class="fn">print</span>(<span class="str">"Using round():"</span>, <span class="fn">round</span>(raw_sum, <span class="num">2</span>))
+
+<span class="cmt"># Solution 2: math.isclose() for safe comparison in conditions</span>
+<span class="fn">print</span>(<span class="str">"Using math.isclose():"</span>, math.isclose(raw_sum, <span class="num">0.3</span>)) <span class="cmt"># True!</span>
+
+<span class="cmt"># Solution 3: decimal.Decimal for financial/banking accuracy</span>
+d1 = Decimal(<span class="str">'0.1'</span>)
+d2 = Decimal(<span class="str">'0.2'</span>)
+<span class="fn">print</span>(<span class="str">"Decimal Exact Sum:"</span>, d1 + d2)  <span class="cmt"># Exactly 0.3</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>0.1 + 0.2 = 0.30000000000000004
+Is 0.1 + 0.2 == 0.3? False
+Using round(): 0.3
+Using math.isclose(): True
+Decimal Exact Sum: 0.3</pre>
+        </div>
+      </div>
+
+      <div class="step-label">4.11 — Complex Numbers &amp; Engineering Applications</div>
+      <p class="body-text">A complex number has the form <span class="mono">a + bj</span>, where <span
+          class="mono">a</span> is the real part and <span class="mono">b</span> is the imaginary part. Python uses
+        <strong class="emph">j</strong> instead of the mathematical <span class="mono">i</span>.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">complex_numbers_electrical_demo.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body">z = <span class="num">3</span> + <span class="num">4j</span>
+<span class="fn">print</span>(<span class="str">"Type of z:"</span>, <span class="fn">type</span>(z))
+<span class="fn">print</span>(<span class="str">"Real part:"</span>, z.real, <span class="str">"| Imaginary part:"</span>, z.imag) <span class="cmt"># Both stored as float!</span>
+
+<span class="cmt"># Real-World Engineering Example: AC Circuit Analysis</span>
+<span class="cmt"># Voltage = Current * Impedance (V = I * Z)</span>
+current = <span class="num">5</span> - <span class="num">2j</span>      <span class="cmt"># Amperes</span>
+impedance = <span class="num">10</span> + <span class="num">4j</span>   <span class="cmt"># Ohms</span>
+voltage = current * impedance
+
+<span class="fn">print</span>(<span class="str">f"AC Voltage: {voltage} Volts"</span>)
+<span class="fn">print</span>(<span class="str">f"Voltage Magnitude: {abs(voltage):.2f} V"</span>)</pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Type of z: &lt;class 'complex'&gt;
+Real part: 3.0 | Imaginary part: 4.0
+AC Voltage: (58+0j) Volts
+Voltage Magnitude: 58.00 V</pre>
+        </div>
+      </div>
+
+      <div class="step-label">4.12 — Numeric Type Conversion &amp; Implicit Coercion</div>
+      <p class="body-text">When different numeric types interact in an expression, Python applies <strong
+          class="emph">implicit type coercion</strong> by widening to the more precise type in the hierarchy:</p>
+      <div class="flow-diagram"><span class="stage-num">Type Widening Hierarchy:</span>
+        int ───> float ───> complex</div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">type_conversion_gotchas.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="cmt"># 1. int() TRUNCATES towards zero (does NOT round!)</span>
+<span class="fn">print</span>(<span class="str">"int(5.9):"</span>, <span class="fn">int</span>(<span class="num">5.9</span>))       <span class="cmt"># 5</span>
+<span class="fn">print</span>(<span class="str">"int(-5.9):"</span>, <span class="fn">int</span>(-<span class="num">5.9</span>))     <span class="cmt"># -5</span>
+<span class="fn">print</span>(<span class="str">"round(5.9):"</span>, <span class="fn">round</span>(<span class="num">5.9</span>))   <span class="cmt"># 6</span>
+
+<span class="cmt"># 2. Division Rule: '/' ALWAYS returns float, '//' gives int</span>
+<span class="fn">print</span>(<span class="str">"10 / 2  ="</span>, <span class="num">10</span> / <span class="num">2</span>, <span class="fn">type</span>(<span class="num">10</span> / <span class="num">2</span>))   <span class="cmt"># 5.0 &lt;class 'float'&gt;</span>
+<span class="fn">print</span>(<span class="str">"10 // 2 ="</span>, <span class="num">10</span> // <span class="num">2</span>, <span class="fn">type</span>(<span class="num">10</span> // <span class="num">2</span>)) <span class="cmt"># 5 &lt;class 'int'&gt;</span>
+
+<span class="cmt"># 3. Implicit Coercion Mixing:</span>
+<span class="fn">print</span>(<span class="str">"5 + 2.5 ="</span>, <span class="num">5</span> + <span class="num">2.5</span>)              <span class="cmt"># float (7.5)</span>
+<span class="fn">print</span>(<span class="str">"5 + (2+3j) ="</span>, <span class="num">5</span> + (<span class="num">2</span>+<span class="num">3j</span>))        <span class="cmt"># complex (7+3j)</span>
+<span class="fn">print</span>(<span class="str">"2.5 + (2+3j) ="</span>, <span class="num">2.5</span> + (<span class="num">2</span>+<span class="num">3j</span>))    <span class="cmt"># complex (4.5+3j)</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>int(5.9): 5
+int(-5.9): -5
+round(5.9): 6
+10 / 2  = 5.0 &lt;class 'float'&gt;
+10 // 2 = 5 &lt;class 'int'&gt;
+5 + 2.5 = 7.5
+5 + (2+3j) = (7+3j)
+2.5 + (2+3j) = (4.5+3j)</pre>
+        </div>
+      </div>
+
+      <!-- Quiz 4 -->
+      <div class="step-label">Practice Challenge 4</div>
+      <div class="quiz-block">
+        <span class="quiz-tag">IEEE 754 &amp; Numeric Types</span>
+        <div class="quiz-q">Why does IEEE-754 double precision drop the leading 1 from the stored mantissa?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'l2q4')">Because in binary, every normalized number
+            always starts with '1.', so omitting it frees 1 bit to give 53 bits of effective precision</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q4')">Because 1 cannot be represented in a
+            hardware flip-flop</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q4')">Because the leading bit is used to store
+            the sign instead</button>
+        </div>
+        <div class="quiz-feedback" id="l2q4-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 5: BOOLEAN TYPE & TRUTHINESS ═══════════════════ -->
+  <section class="chapter" id="s5">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 05</span><span class="ch-badge">Boolean Logic</span></div>
+      <h2 class="ch-title">The Boolean Type &amp; Truthy / Falsy Evaluation</h2>
+
+      <div class="step-label">5.1 — What is a Boolean?</div>
+      <p class="body-text">A Boolean is a data type in Python that can hold only two possible values: <strong
+          class="emph">True</strong> or <strong class="emph">False</strong>. It is named after <strong
+          class="emph">George Boole</strong>, a 19th-century mathematician who formalized algebraic logic. In simple
+        terms,
+        a Boolean answers a binary "yes or no" proposition.</p>
+
+      <div class="info-card remember">
+        <span class="info-label">Critical Architectural Fact: bool is a Subclass of int</span>
+        <p>In Python, the <span class="mono">bool</span> type is technically a subclass of <span
+            class="mono">int</span>. This means:<br>
+          • <span class="mono">True</span> has an underlying integer value of <strong>1</strong>.<br>
+          • <span class="mono">False</span> has an underlying integer value of <strong>0</strong>.<br>
+          • <span class="mono">isinstance(True, int)</span> returns <strong>True</strong>.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">bool_subclass_int_proof.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="fn">print</span>(<span class="str">"True + True ="</span>, <span class="kw">True</span> + <span class="kw">True</span>)     <span class="cmt"># 1 + 1 = 2</span>
+<span class="fn">print</span>(<span class="str">"False + 5   ="</span>, <span class="kw">False</span> + <span class="num">5</span>)       <span class="cmt"># 0 + 5 = 5</span>
+<span class="fn">print</span>(<span class="str">"True == 1   :"</span>, <span class="kw">True</span> == <span class="num">1</span>)       <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"False == 0  :"</span>, <span class="kw">False</span> == <span class="num">0</span>)      <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"isinstance(True, int):"</span>, <span class="fn">isinstance</span>(<span class="kw">True</span>, <span class="fn">int</span>)) <span class="cmt"># True</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>True + True = 2
+False + 5   = 5
+True == 1   : True
+False == 0  : True
+isinstance(True, int): True</pre>
+        </div>
+      </div>
+
+      <div class="step-label">5.2 — Truthy and Falsy Values</div>
+      <p class="body-text">Python does not merely test explicit <span class="mono">True</span> and <span
+          class="mono">False</span> values in conditionals (<span class="mono">if</span>, <span
+          class="mono">while</span>) — it evaluates any object's inherent <em>truthiness</em>.</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Classification</th>
+              <th>Values</th>
+              <th>Behavior in 'if' Condition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--red); font-weight:700;">Falsy Values</td>
+              <td>
+                <span class="mono">False</span>, <span class="mono">None</span>, <span class="mono">0</span>, <span
+                  class="mono">0.0</span>, <span class="mono">0j</span>, <span class="mono">""</span> (empty string),
+                <span class="mono">[]</span> (empty list), <span class="mono">{}</span> (empty dict), <span
+                  class="mono">()</span> (empty tuple), <span class="mono">set()</span> (empty set)
+              </td>
+              <td>Evaluates to <span class="mono">False</span> (block does not execute)</td>
+            </tr>
+            <tr>
+              <td style="color:var(--teal); font-weight:700;">Truthy Values</td>
+              <td>
+                Any non-zero number (e.g., <span class="mono">5</span>, <span class="mono">-10</span>, <span
+                  class="mono">0.1</span>)<br>
+                Any non-empty string (e.g., <span class="mono">"Python"</span>, <span class="mono">" "</span> with a
+                space, <span class="mono">"0"</span>, <span class="mono">"False"</span>)<br>
+                Any non-empty collection (e.g., <span class="mono">[0]</span>, <span class="mono">{'key': 'val'}</span>)
+              </td>
+              <td>Evaluates to <span class="mono">True</span> (block executes)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-card mistake">
+        <span class="info-label">Classic Beginner Trap</span>
+        <p>The string <span class="mono">"False"</span> (enclosed in quotes) is <strong>TRUTHY</strong>! Because it is a
+          non-empty string of 5 characters. Only the keyword <span class="mono">False</span> (without quotes) is falsy.
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">truthy_falsy_in_action.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="cmt"># 1. Empty container check</span>
+cart = []
+<span class="kw">if</span> <span class="kw">not</span> cart:
+    <span class="fn">print</span>(<span class="str">"Cart is empty! Please add items."</span>)
+
+<span class="cmt"># 2. String truthiness check</span>
+text1 = <span class="str">"False"</span>   <span class="cmt"># Non-empty string -> Truthy!</span>
+text2 = <span class="str">""</span>        <span class="cmt"># Empty string -> Falsy!</span>
+
+<span class="fn">print</span>(<span class="str">"bool('False') ="</span>, <span class="fn">bool</span>(text1))  <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"bool('')      ="</span>, <span class="fn">bool</span>(text2))  <span class="cmt"># False</span>
+<span class="fn">print</span>(<span class="str">"bool('0')     ="</span>, <span class="fn">bool</span>(<span class="str">"0"</span>))    <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"bool(None)    ="</span>, <span class="fn">bool</span>(<span class="kw">None</span>))   <span class="cmt"># False</span>
+<span class="fn">print</span>(<span class="str">"bool([0])     ="</span>, <span class="fn">bool</span>([<span class="num">0</span>]))    <span class="cmt"># True (list contains 1 item)</span></pre>
+        <div class="code-output">
+          <div class="out-label">Output</div>
+          <pre>Cart is empty! Please add items.
+bool('False') = True
+bool('')      = False
+bool('0')     = True
+bool(None)    = False
+bool([0])     = True</pre>
+        </div>
+      </div>
+
+      <div class="step-label">5.3 — Key Points to Remember for Exams &amp; Interviews</div>
+      <ul class="task-list">
+        <li><span class="mono">bool</span> is a direct subclass of <span class="mono">int</span> (<span
+            class="mono">True == 1</span>, <span class="mono">False == 0</span>).</li>
+        <li>Python is strictly case-sensitive: <span class="mono">true</span> and <span class="mono">false</span> do not
+          exist and will raise <span class="mono">NameError</span>; only <span class="mono">True</span> and <span
+            class="mono">False</span> are valid.</li>
+        <li>Comparison operators (<span class="mono">==, !=, &lt;, &gt;, &lt;=, &gt;=</span>) always return a pure
+          Boolean.</li>
+        <li>Logical operators (<span class="mono">and, or</span>) return the actual operand that determined the result
+          (short-circuiting).</li>
+        <li><span class="mono">bool()</span> without arguments returns <span class="mono">False</span>.</li>
+      </ul>
+
+      <!-- Quiz 5 -->
+      <div class="step-label">Practice Challenge 5</div>
+      <div class="quiz-block">
+        <span class="quiz-tag">Boolean &amp; Truthiness</span>
+        <div class="quiz-q">What will be printed by: <span class="mono">if bool(" "): print("YES") else:
+            print("NO")</span>?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'l2q5')">YES — because a string with a space ' ' is
+            non-empty and therefore truthy</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q5')">NO — whitespace is ignored by Python and
+            treated as empty</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'l2q5')">SyntaxError — bool() cannot accept
+            spaces</button>
+        </div>
+        <div class="quiz-feedback" id="l2q5-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SUMMARY ═══════════════════ -->
+  <section class="chapter" id="summary">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Summary</span><span class="ch-badge">Complete</span></div>
+      <h2 class="ch-title">Lecture 2 Summary &amp; Key Takeaways</h2>
+      <p class="body-text">In this lecture, we unpacked the core foundation of Python's data representation and runtime
+        mechanics:</p>
+      <ul class="task-list">
+        <li><strong class="emph">Identifiers &amp; Variables:</strong> Python variables are names pointing to heap
+          objects (the balloon &amp; tag model). Integers are immutable; variables are dynamically typed references.
+        </li>
+        <li><strong class="emph">Assignments &amp; Expressions:</strong> Assignment statements follow the RHS-first
+          evaluation rule. Expressions always reduce to a single value across arithmetic, comparison, logical, string,
+          and walrus (<span class="mono">:=</span>) categories.</li>
+        <li><strong class="emph">Constants &amp; Keywords:</strong> Constants use the UPPERCASE convention and <span
+            class="mono">Enum</span>/<span class="mono">Final</span> structures. Python reserves 35 grammar keywords.
+        </li>
+        <li><strong class="emph">IEEE-754 Floating-Point:</strong> Because CPU flip-flops cannot hold decimal points,
+          floats use normalization into Sign, Biased Exponent, and Mantissa with a hidden leading 1. Infinitely
+          repeating binary fractions explain why <span class="mono">0.1 + 0.2 != 0.3</span>.</li>
+        <li><strong class="emph">Boolean Logic:</strong> <span class="mono">bool</span> subclasses <span
+            class="mono">int</span> (<span class="mono">True == 1</span>). Conditionals evaluate truthiness, where only
+          empty collections, <span class="mono">0</span>, <span class="mono">None</span>, and <span
+            class="mono">False</span> are falsy.</li>
+      </ul>
+      <div class="pull-quote">"Understanding how hardware registers encode numbers and how Python references heap
+        objects is what distinguishes a proficient software engineer from an ordinary code typist."</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ VIBRANT INSTITUTIONAL FOOTER ═══════════════════ -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-author-badge">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-author-img">
+        <span>Prepared by <strong>Umer Farooq</strong></span>
+      </div>
+      <p>SSM College of Engineering & Technology • B.Tech 5th Semester • Python Programming • Lecture 2</p>
+    </div>
+  </footer>
+
+  <script>
+    // ========== Theme Toggle ==========
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', html.dataset.theme);
+      updateThemeIcon();
+    }
+    function updateThemeIcon() {
+      const icon = document.getElementById('theme-icon');
+      if (!icon) return;
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      icon.innerHTML = isDark
+        ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+      updateThemeIcon();
+    })();
+
+    // ========== Progress Bar & Back to Top ==========
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('progress-bar');
+      const btt = document.getElementById('back-to-top');
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (bar) bar.style.width = (scrollTop / scrollHeight * 100) + '%';
+      if (btt) btt.classList.toggle('show', scrollTop > 400);
+    });
+
+    // ========== Copy Code ==========
+    function copyCode(btn) {
+      const code = btn.closest('.code-block').querySelector('pre.code-body');
+      navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 1500);
+      });
+    }
+
+    // ========== Quiz Feedback ==========
+    const quizFeedback = {
+      l2q1: {
+        correct: "Correct — Python integers are immutable. When 'a' was incremented, a new object 51 was created and 'a' was rebound to it. 'b' continues pointing to the original object 50.",
+        wrong: "Not quite — In Python, variables do not hold values directly. 'b' was bound to object 50, and changing 'a' rebinds 'a' to a new object without altering 'b'."
+      },
+      l2q2: {
+        correct: "Correct — The walrus operator (:=) evaluates 4 * 2 = 8, assigns 8 to variable 'x', and returns 8 to the enclosing expression, resulting in 8 + 10 = 18.",
+        wrong: "Not quite — The walrus operator (:=) allows assignment directly within the arithmetic expression: x becomes 8, and the expression evaluates to 18."
+      },
+      l2q3: {
+        correct: "Correct — 'pass' is a reserved keyword, but 'pass_word' is a distinct, valid identifier allowed in Python syntax.",
+        wrong: "Not quite — 'pass' and 'global' are reserved keywords and cannot be used as variable identifiers."
+      },
+      l2q4: {
+        correct: "Correct — In binary normalization, every number has the form 1.mantissa. Since the 1 is guaranteed, omitting it in hardware storage gives 53 bits of precision using only 52 bits of storage.",
+        wrong: "Not quite — Dropping the leading 1 is a deliberate hardware optimization (hidden bit trick) to maximize numerical precision."
+      },
+      l2q5: {
+        correct: "Correct — ' ' (a string with a single space) has a length of 1 and is non-empty, making it Truthy. Therefore, bool(' ') is True and YES is printed.",
+        wrong: "Not quite — Only an entirely empty string '' has length 0 and is Falsy. Any string with characters, including whitespace, is Truthy."
+      }
+    };
+
+    function answerQuiz(btn, isCorrect, groupId) {
+      const group = btn.closest('.quiz-opts');
+      group.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      const fb = document.getElementById(groupId + '-feedback');
+      if (fb) {
+        fb.classList.add('show');
+        const msg = quizFeedback[groupId];
+        fb.innerHTML = msg ? (isCorrect ? msg.correct : msg.wrong) : (isCorrect ? 'Correct!' : 'Not quite.');
+      }
+    }
+  </script>
+
+</body>
+
+</html>

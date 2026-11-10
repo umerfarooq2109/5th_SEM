@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Exhaustive Master Notes on Python Conditional Statements: The if statement (one-way), two-way if-else, nested if, and multi-way if-elif-else statements. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Lecture 5: Decision Making &amp; Conditional Statements in Python | SSM College of Engineering</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      /* IDE syntax highlighting tokens (Dark) */
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      /* IDE syntax highlighting tokens (Light) */
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #6b7280;
+      --syn-function: #2563eb;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0891b2;
+      --syn-punctuation: #0891b2;
+      --syn-variable: #0f172a;
+      --syn-format: #d97706;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16.5px;
+      line-height: 1.75;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    /* Scroll Progress Indicator */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      transition: width 0.1s ease;
+    }
+
+    /* Top Sticky Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(18, 20, 26, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 900;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="light"] .top-nav {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-brand .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(28, 32, 42, 0.95), rgba(24, 27, 34, 0.98));
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 30px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-theme="light"] .hero-banner {
+      background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tag-accent {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .tag-teal {
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    .tag-purple {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.12rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .hero-author-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .author-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 10px var(--accent-glow);
+    }
+
+    .author-details h4 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .author-details p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #e06c15);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px var(--accent-glow);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    /* Hero Meta Strip (Stats) */
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .meta-item .val {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .meta-item .lbl {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Section Header Pill / Eyebrow */
+    .section-header-pill {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Table of Contents Grid & Cards */
+    #toc-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .toc-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+
+    .toc-card .ch-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .toc-card .ch-name {
+      font-family: var(--font-heading);
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .toc-card .ch-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+
+    .toc-pill-badge {
+      align-self: flex-start;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+    }
+
+    /* Chapter Containers */
+    .chapter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .ch-header {
+      margin-bottom: 28px;
+    }
+
+    .ch-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    h2.ch-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    /* Subheadings */
+    h3.sub-title {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 36px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid var(--teal);
+      padding-left: 12px;
+    }
+
+    h3.sub-title .sec-badge {
+      background: var(--teal);
+      color: #0e1015;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] h3.sub-title .sec-badge {
+      color: #ffffff;
+    }
+
+    h4.sub-sub-title {
+      font-family: var(--font-heading);
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 24px 0 12px;
+    }
+
+    /* Content Typography */
+    p {
+      color: var(--text);
+      font-size: 16.5px;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    ul, ol {
+      margin-left: 24px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    code {
+      font-family: var(--font-code);
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin: 24px 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: var(--bg-alt);
+      color: var(--teal);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 2px solid var(--border-accent);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    tr:nth-child(even) {
+      background: var(--table-stripe);
+    }
+
+    tr:hover {
+      background: var(--card-hover);
+    }
+
+    /* Code Container & macOS Window Header */
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 24px 0;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .code-header {
+      background: #151821;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    [data-theme="light"] .code-header {
+      background: #e2e8f0;
+    }
+
+    .code-title {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .code-title {
+      color: #334155;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .copy-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .code-body pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text);
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .code-body pre {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    /* Syntax Highlighting */
+    .syn-keyword { color: var(--syn-keyword); font-weight: 700; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); font-weight: 700; }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+    .syn-format { color: var(--syn-format); font-weight: 700; }
+
+    /* Output Window Box */
+    .output-box {
+      background: #090a0d;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      margin: 12px 0 28px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] .output-box {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .output-header {
+      background: #11141c;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .output-header {
+      background: #0f172a;
+      color: #2dd4bf;
+      border-bottom-color: #334155;
+    }
+
+    .output-body pre {
+      padding: 12px 16px;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: #a9b7c6;
+      line-height: 1.5;
+      overflow-x: auto;
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .output-body pre {
+      color: #e2e8f0;
+    }
+
+    /* Concept Cards & Grids */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .concept-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .concept-card h4 {
+      color: var(--teal);
+      font-family: var(--font-heading);
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .concept-card p {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      margin-bottom: 0;
+    }
+
+    /* Callout Alert Boxes */
+    .callout {
+      background: var(--cell-bg);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 18px 20px;
+      margin: 24px 0;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .callout.tip {
+      border-left-color: var(--teal);
+      background: var(--teal-soft);
+    }
+
+    .callout.important {
+      border-left-color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .callout.remember {
+      border-left-color: var(--purple);
+      background: var(--purple-soft);
+    }
+
+    .callout-head, .callout-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .callout-head span, .callout-title span {
+      font-size: 1.2rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .callout.tip .callout-head { color: var(--teal); }
+    .callout.important .callout-head { color: var(--red); }
+    .callout.remember .callout-head { color: var(--purple); }
+
+    .callout-body {
+      color: var(--text);
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    .callout-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Site Footer */
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    /* Floating Action Buttons */
+    .float-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 800;
+    }
+
+    .btn-float {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-float:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+
+    /* Lightbox Modal */
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      z-index: 1200;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      border: 2px solid var(--border-accent);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 12pt;
+      }
+
+      .top-nav,
+      #progress-container,
+      .float-actions,
+      .copy-btn,
+      .btn-primary,
+      .btn-nav,
+      .hero-buttons {
+        display: none !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .hero-banner,
+      .chapter,
+      .toc-card,
+      #toc-section,
+      .code-container,
+      .output-box,
+      .table-container,
+      .callout,
+      .concept-card {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #cccccc !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+
+      .code-body pre,
+      .output-body pre {
+        color: #000000 !important;
+        background: #f8fafc !important;
+      }
+
+      h2.ch-title,
+      h3.sub-title,
+      h4.sub-sub-title,
+      .author-details h4 {
+        color: #000000 !important;
+      }
+
+      a {
+        color: #000000 !important;
+        text-decoration: underline;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 16px 60px;
+      }
+
+      .hero-banner {
+        padding: 24px 20px;
+      }
+
+      .hero-title {
+        font-size: 1.75rem;
+      }
+
+      .chapter {
+        padding: 20px 16px;
+      }
+
+      h2.ch-title {
+        font-size: 1.5rem;
+      }
+
+      h3.sub-title {
+        font-size: 1.25rem;
+      }
+
+      .hero-author-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- Top Sticky Navigation -->
+  <header class="top-nav">
+    <a href="#" class="nav-brand">
+      <span class="badge">LEC 05</span>
+      <span>Python Programming</span>
+    </a>
+    <div class="nav-actions">
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF">
+        <span>🖨️</span> Print PDF
+      </button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon-nav">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Banner -->
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">B.Tech Computer Science &amp; Engineering</span>
+        <span class="tag tag-teal">Chapter 1: Decision Making &amp; Control Flow</span>
+        <span class="tag tag-purple">Notes</span>
+      </div>
+      <h1 class="hero-title">Decision Making &amp; Conditional Statements in Python</h1>
+      <p class="hero-subtitle">
+        An exhaustive master-level academic guide covering the one-way <code>if</code> statement, two-way <code>if-else</code> structures, deep hierarchical <code>nested if</code> trees, multi-way <code>if-elif-else</code> ladders, Boolean flags, generator evaluation with <code>any()</code>, and a full-scale automated console banking ATM simulation system.
+      </p>
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()">
+            <span>🖨️</span> Save as PDF / Print
+          </button>
+        </div>
+      </div>
+      <div class="hero-meta-strip">
+        <div class="meta-item">
+          <span class="val">4</span>
+          <span class="lbl">Major Parts</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">30+</span>
+          <span class="lbl">IDE Code Programs</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">12+</span>
+          <span class="lbl">Comparison &amp; Trace Tables</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">100%</span>
+          <span class="lbl">Complete Notes</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Table of Contents -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Table of Contents &amp; Quick Navigation</div>
+      <div class="toc-grid">
+        <a href="#part-1" class="toc-card">
+          <span class="ch-num">PART 01</span>
+          <span class="ch-name">1. The if Statement (One-Way)</span>
+          <span class="ch-desc">Concept, syntax, indentation rules, truthiness evaluation, password checker with any(), and generator traces.</span>
+          <span class="toc-pill-badge">6 Programs</span>
+        </a>
+        <a href="#part-2" class="toc-card">
+          <span class="ch-num">PART 02</span>
+          <span class="ch-name">2. Two-Way if-else Statement</span>
+          <span class="ch-desc">Mutual exclusion, flowchart execution model, ternary operator, even/odd, authentication, and palindrome detector.</span>
+          <span class="toc-pill-badge">9 Programs</span>
+        </a>
+        <a href="#part-3" class="toc-card">
+          <span class="ch-num">PART 03</span>
+          <span class="ch-name">3. Nested if Statements</span>
+          <span class="ch-desc">Hierarchical prerequisite decision trees, triangle classification, detention grading, cinema pricing, and loan approval.</span>
+          <span class="toc-pill-badge">8 Programs</span>
+        </a>
+        <a href="#part-4" class="toc-card">
+          <span class="ch-num">PART 04</span>
+          <span class="ch-name">4. Multi-Way if-elif-else</span>
+          <span class="ch-desc">Top-down matching ladders, keyword comparison table, grading, traffic light, electricity billing, and ATM Capstone.</span>
+          <span class="toc-pill-badge">13 Programs</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Content Sections -->
+    
+    <!-- ========================================== -->
+    <!-- PART 1: THE IF STATEMENT (ONE-WAY DECISION) -->
+    <!-- ========================================== -->
+    <section id="part-1" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">PART 01</span>
+        <h2 class="ch-title">1. The if Statement (One-Way Decision)</h2>
+      </div>
+
+      <h3 class="sub-title" id="sec-1-1"><span class="sec-badge">1.1</span> What is an if Statement?</h3>
+      <p>
+        An <code>if</code> statement lets your program make a decision. It checks a condition, and if that condition evaluates to <strong>True</strong>, it runs a designated block of code. If the condition is <strong>False</strong>, that block is simply skipped — the program moves on to whatever statement comes after it.
+      </p>
+      <p>
+        Think of it like a real-life instruction: <em>"If it is raining, take an umbrella."</em> If it is <strong>NOT</strong> raining, you simply don't take the umbrella — there is no alternative instruction given. This is exactly what makes <code>if</code> a <strong>one-way decision</strong>.
+      </p>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h4>🛣️ One-Way Decision Flow</h4>
+          <p>The program follows a single guarded branch. If the test condition passes, code executes; otherwise, execution flows past the block without any action.</p>
+        </div>
+        <div class="concept-card">
+          <h4>⚖️ Truthy &amp; Falsy Evaluation</h4>
+          <p>Python evaluates any expression after <code>if</code>. Non-zero numbers, non-empty strings, and non-empty collections evaluate to <code>True</code>; <code>0</code>, <code>None</code>, and <code>""</code> evaluate to <code>False</code>.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-title" id="sec-1-2"><span class="sec-badge">1.2</span> General Syntax</h3>
+      <p>
+        Notice two syntactic fundamentals carefully: the line ends with a colon (<code>:</code>), and the code that belongs to the <code>if</code> block is <strong>indented</strong> (standard 4 spaces). Python uses indentation to define block scope.
+      </p>
+            <p>General syntax of a single-alternative selection structure in Python:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> if_syntax.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-keyword">if</span> <span class="syn-variable">condition</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># block of statements executed only when condition is True</span>
+    <span class="syn-variable">statement_1</span>
+    <span class="syn-variable">statement_2</span></code></pre>
+                </div>
+            </div>
+
+      <h3 class="sub-title" id="sec-1-3"><span class="sec-badge">1.3</span> Foundational Example &amp; Execution Mechanics</h3>
+      <p>
+        In this foundational example, Python checks whether <code>age >= 18</code>. Since <code>age = 20</code>, the boolean condition evaluates to <code>True</code>, executing the indented <code>print()</code> statement.
+      </p>
+            <p>If age had been 15, the condition would be False, skipping the print line entirely.</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> voting_check.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">age</span> <span class="syn-operator">=</span> <span class="syn-number">20</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">age</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">18</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;You are eligible to vote.&quot;</span><span class="syn-punctuation">)</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Program continues to the next statement.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>You are eligible to vote.
+Program continues to the next statement.</pre></div>
+            </div>
+
+      <div class="callout important">
+        <div class="callout-head"><span>⚠️</span> Important Point: Indentation is Not Optional</div>
+        <div class="callout-body">
+          <p>
+            In languages like C, C++, or Java, indentation is purely for human readability — curly braces <code>{ }</code> define scope. In Python, there are no curly braces for block scoping: <strong>indentation itself is the grammar</strong>. Incorrect indentation raises an <code>IndentationError</code> or causes subtle logical bugs.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="sub-title" id="sec-1-4"><span class="sec-badge">1.4</span> Key Points Often Missed by Beginners</h3>
+      <ul>
+        <li><strong>Flexible Condition Expressions:</strong> The condition does not need to be a simple variable comparison. It can be any logical expression, function call, or compound statement joined with <code>and</code>, <code>or</code>, <code>not</code>.</li>
+        <li><strong>Multi-line Blocks:</strong> An <code>if</code> block can contain as many lines as needed, provided all lines share the exact same indentation level.</li>
+        <li><strong>Silent Continuation:</strong> When an <code>if</code> condition is <code>False</code> without an <code>else</code> branch, execution silently continues to the next statement without error.</li>
+        <li><strong>Mandatory Colon:</strong> Forgetting the colon (<code>:</code>) after the condition causes an immediate <code>SyntaxError</code>.</li>
+      </ul>
+
+      <h3 class="sub-title" id="sec-1-5"><span class="sec-badge">1.5</span> Worked Programs from Lecture Notes</h3>
+
+      <h4 class="sub-sub-title">Program 1.1: Check Divisibility by Both 3 and 5</h4>
+      <p>Uses the modulus operator <code>%</code> and the logical <code>and</code> operator to verify if a number has no remainder when divided by both 3 and 5.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> divisible_3_and_5.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">num</span> <span class="syn-operator">=</span> <span class="syn-number">15</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">num</span> <span class="syn-operator">%</span> <span class="syn-number">3</span> <span class="syn-operator">==</span> <span class="syn-number">0</span> <span class="syn-keyword">and</span> <span class="syn-variable">num</span> <span class="syn-operator">%</span> <span class="syn-number">5</span> <span class="syn-operator">==</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;{num} is divisible by both 3 and 5.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>15 is divisible by both 3 and 5.</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 1.2: Password Requirements Checker (Multiple Independent if Statements)</h4>
+      <p>
+        Demonstrates using <strong>independent <code>if</code> statements</strong> where each condition is evaluated sequentially. Uses boolean flags (<code>length_ok</code>, <code>has_digit</code>) and Python's built-in <code>any()</code> with generator comprehension.
+      </p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> password_checker.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-comment"># Program to check password requirements using SEPARATE if statements</span>
+<span class="syn-comment"># (each condition is checked independently, not chained with elif)</span>
+
+<span class="syn-variable">password</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;ABC123&quot;</span>  <span class="syn-comment"># or input(&quot;Enter The Password: &quot;)</span>
+<span class="syn-variable">length_ok</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+<span class="syn-variable">has_digit</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+
+<span class="syn-keyword">if</span> <span class="syn-function">len</span><span class="syn-punctuation">(</span><span class="syn-variable">password</span><span class="syn-punctuation">)</span> <span class="syn-operator">&lt;</span> <span class="syn-number">6</span><span class="syn-operator">:</span>
+    <span class="syn-variable">length_ok</span> <span class="syn-operator">=</span> <span class="syn-keyword">False</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Warning: Password is too short (minimum 6 characters). Password:&quot;</span><span class="syn-punctuation">,</span> <span class="syn-variable">password</span><span class="syn-punctuation">)</span>
+
+<span class="syn-keyword">if</span> <span class="syn-keyword">not</span> <span class="syn-function">any</span><span class="syn-punctuation">(</span><span class="syn-variable">ch</span><span class="syn-punctuation">.</span><span class="syn-function">isdigit</span><span class="syn-punctuation">(</span><span class="syn-punctuation">)</span> <span class="syn-keyword">for</span> <span class="syn-variable">ch</span> <span class="syn-keyword">in</span> <span class="syn-variable">password</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-variable">has_digit</span> <span class="syn-operator">=</span> <span class="syn-keyword">False</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Warning: At least one digit required in password. Password:&quot;</span><span class="syn-punctuation">,</span> <span class="syn-variable">password</span><span class="syn-punctuation">)</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">length_ok</span> <span class="syn-keyword">and</span> <span class="syn-variable">has_digit</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Password meets the basic requirements and password is&quot;</span><span class="syn-punctuation">,</span> <span class="syn-variable">password</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Password meets the basic requirements and password is ABC123</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Dissecting the Password Evaluation Pipeline</h4>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Syntax Component</th>
+              <th>Technical Meaning</th>
+              <th>Operation in Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>len(password)</code></td>
+              <td>Returns total count of characters</td>
+              <td><code>len("ABC123") == 6</code></td>
+            </tr>
+            <tr>
+              <td><code>&lt; 6</code></td>
+              <td>Relational boundary test</td>
+              <td><code>6 &lt; 6</code> evaluates to <code>False</code></td>
+            </tr>
+            <tr>
+              <td><code>length_ok = False</code></td>
+              <td>Flag mutation upon failure</td>
+              <td>Not executed because condition is False</td>
+            </tr>
+            <tr>
+              <td><code>for ch in password</code></td>
+              <td>Sequential character iteration</td>
+              <td>Yields <code>'A', 'B', 'C', '1', '2', '3'</code></td>
+            </tr>
+            <tr>
+              <td><code>ch.isdigit()</code></td>
+              <td>Character class predicate</td>
+              <td>Returns <code>True</code> for <code>'1', '2', '3'</code>; <code>False</code> for letters</td>
+            </tr>
+            <tr>
+              <td><code>any(...)</code></td>
+              <td>Short-circuit existential quantifier</td>
+              <td>Returns <code>True</code> as soon as first digit is encountered</td>
+            </tr>
+            <tr>
+              <td><code>not any(...)</code></td>
+              <td>Inversion of existential test</td>
+              <td><code>not True</code> yields <code>False</code> (no warning triggered)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 class="sub-sub-title">Step-by-Step Generator Iteration Trace for "ABC123"</h4>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Iteration</th>
+              <th>Character (<code>ch</code>)</th>
+              <th><code>ch.isdigit()</code> Test</th>
+              <th>State / Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><code>'A'</code></td>
+              <td><code>False</code></td>
+              <td>Continue to next character</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><code>'B'</code></td>
+              <td><code>False</code></td>
+              <td>Continue to next character</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><code>'C'</code></td>
+              <td><code>False</code></td>
+              <td>Continue to next character</td>
+            </tr>
+            <tr style="background: var(--accent-soft);">
+              <td>4</td>
+              <td><code>'1'</code></td>
+              <td><code>True</code></td>
+              <td><strong>Short-circuit hit!</strong> <code>any()</code> immediately returns <code>True</code></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><code>'2'</code></td>
+              <td>—</td>
+              <td><em>Never evaluated (bypassed for efficiency)</em></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><code>'3'</code></td>
+              <td>—</td>
+              <td><em>Never evaluated (bypassed for efficiency)</em></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Extra Practical Programs for Section 1 -->
+      <h3 class="sub-title" id="sec-1-6"><span class="sec-badge">1.6</span> Additional Master Programs (One-Way Decision)</h3>
+
+      <h4 class="sub-sub-title">Extra Program 1.3: E-Commerce Shopping Cart Discount Threshold</h4>
+      <p>Applies a seasonal $15 voucher discount only if the cart value exceeds the minimum qualification limit of $100.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> cart_discount.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">cart_total</span> <span class="syn-operator">=</span> <span class="syn-number">145.50</span>
+<span class="syn-variable">discount_applied</span> <span class="syn-operator">=</span> <span class="syn-keyword">False</span>
+
+<span class="syn-comment"># Independent one-way conditional</span>
+<span class="syn-keyword">if</span> <span class="syn-variable">cart_total</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">100.0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">cart_total</span> <span class="syn-operator">-=</span> <span class="syn-number">15.00</span>
+    <span class="syn-variable">discount_applied</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Congratulations! $15 discount applied to your order.&quot;</span><span class="syn-punctuation">)</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Final Payable Amount: ${cart_total:.2f}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Congratulations! $15 discount applied to your order.
+Final Payable Amount: $130.50</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 1.4: Server Thermal Warning Alert</h4>
+      <p>Monitors CPU core temperature sensors and logs critical high-temperature throttle alerts.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> thermal_monitor.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">cpu_temp</span> <span class="syn-operator">=</span> <span class="syn-number">82.5</span>  <span class="syn-comment"># Celsius</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">cpu_temp</span> <span class="syn-operator">&gt;</span> <span class="syn-number">75.0</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;WARNING: High CPU temperature detected ({cpu_temp}°C)!&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Engaging emergency cooling fans at 100% RPM.&quot;</span><span class="syn-punctuation">)</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;System status check complete. Current temp: {cpu_temp}°C&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>WARNING: High CPU temperature detected (82.5°C)!
+Engaging emergency cooling fans at 100% RPM.
+System status check complete. Current temp: 82.5°C</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 1.5: String Content Validation (Whitespace &amp; Format Audit)</h4>
+      <p>Checks user-submitted username for illegal embedded whitespace and enforces automated normalization.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> username_validator.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">username</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;umer farooq&quot;</span>
+<span class="syn-variable">needs_formatting</span> <span class="syn-operator">=</span> <span class="syn-keyword">False</span>
+
+<span class="syn-keyword">if</span> <span class="syn-string">&quot; &quot;</span> <span class="syn-keyword">in</span> <span class="syn-variable">username</span><span class="syn-operator">:</span>
+    <span class="syn-variable">needs_formatting</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Notice: Username &#x27;</span><span class="syn-punctuation">{</span><span class="syn-variable">username</span><span class="syn-punctuation">}</span><span class="syn-string">&#x27; contains spaces.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-variable">sanitized</span> <span class="syn-operator">=</span> <span class="syn-variable">username</span><span class="syn-punctuation">.</span><span class="syn-variable">replace</span><span class="syn-punctuation">(</span><span class="syn-string">&quot; &quot;</span><span class="syn-punctuation">,</span> <span class="syn-string">&quot;_&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Auto-suggested handle: &#x27;</span><span class="syn-punctuation">{</span><span class="syn-variable">sanitized</span><span class="syn-punctuation">}</span><span class="syn-string">&#x27;&quot;</span><span class="syn-punctuation">)</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Validation processed. Flag status: {needs_formatting}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Notice: Username &#x27;umer farooq&#x27; contains spaces.
+Auto-suggested handle: &#x27;umer_farooq&#x27;
+Validation processed. Flag status: True</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 1.6: Inventory Reorder Point Trigger</h4>
+      <p>Checks stock quantity against minimum safety stock levels and triggers reorder requests.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> inventory_trigger.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">item_name</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Core i7 Processor&quot;</span>
+<span class="syn-variable">stock_qty</span> <span class="syn-operator">=</span> <span class="syn-number">4</span>
+<span class="syn-variable">reorder_threshold</span> <span class="syn-operator">=</span> <span class="syn-number">10</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">stock_qty</span> <span class="syn-operator">&lt;=</span> <span class="syn-variable">reorder_threshold</span><span class="syn-operator">:</span>
+    <span class="syn-variable">reorder_units</span> <span class="syn-operator">=</span> <span class="syn-number">50</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;ALERT: Low inventory for {item_name} (Current: {stock_qty} units).&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Automatic Purchase Order generated for {reorder_units} units.&quot;</span><span class="syn-punctuation">)</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Stock audit finished for {item_name}.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>ALERT: Low inventory for Core i7 Processor (Current: 4 units).
+Automatic Purchase Order generated for 50 units.
+Stock audit finished for Core i7 Processor.</pre></div>
+            </div>
+    </section>
+    
+    
+    <!-- ========================================== -->
+    <!-- PART 2: TWO-WAY IF-ELSE STATEMENT         -->
+    <!-- ========================================== -->
+    <section id="part-2" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">PART 02</span>
+        <h2 class="ch-title">2. Two-Way if-else Statement</h2>
+      </div>
+
+      <h3 class="sub-title" id="sec-2-1"><span class="sec-badge">2.1</span> What is a Two-Way if-else Statement?</h3>
+      <p>
+        A plain <code>if</code> statement only tells Python what to do when the condition is <strong>True</strong> — it has nothing to say about the <strong>False</strong> case. The <code>if-else</code> statement fixes this by providing two distinct pathways: one to follow when the condition evaluates to True, and a completely separate alternative when it is False.
+      </p>
+      <p>
+        <strong>Real-Life Analogy:</strong> <em>"If it is raining, take an umbrella; otherwise, wear sunglasses."</em> Now there is an explicit, proactive instruction for both possibilities.
+      </p>
+      <p>
+        The term <strong>"two-way"</strong> refers to the fact that there are exactly two mutually exclusive branches:
+      </p>
+      <ul>
+        <li><strong>The <code>if</code> branch:</strong> Executes if and only if the test condition evaluates to <code>True</code>.</li>
+        <li><strong>The <code>else</code> branch:</strong> Executes if and only if the test condition evaluates to <code>False</code>.</li>
+        <li><strong>Mutual Exclusion Guarantee:</strong> Exactly one of these two blocks will run — <em>never both, and never neither</em>.</li>
+      </ul>
+
+      <h3 class="sub-title" id="sec-2-2"><span class="sec-badge">2.2</span> General Syntax &amp; Execution Model</h3>
+            <p>Syntax of a two-alternative selection structure in Python:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> if_else_syntax.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-keyword">if</span> <span class="syn-variable">condition</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># block of statements executed when condition is True</span>
+    <span class="syn-variable">statement_1</span>
+    <span class="syn-variable">statement_2</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># block of statements executed when condition is False</span>
+    <span class="syn-variable">statement_3</span>
+    <span class="syn-variable">statement_4</span></code></pre>
+                </div>
+            </div>
+
+      <h3 class="sub-title" id="sec-2-3"><span class="sec-badge">2.3</span> Important Rules &amp; Points to Remember</h3>
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h4>🚫 else Never Takes a Condition</h4>
+          <p>Writing <code>else condition:</code> is a fatal <code>SyntaxError</code>. The <code>else</code> keyword is a blanket catch-all that automatically handles everything that made the <code>if</code> condition False.</p>
+        </div>
+        <div class="concept-card">
+          <h4>📏 Colons &amp; Vertical Alignment</h4>
+          <p>Both <code>if</code> and <code>else</code> must end with a colon (<code>:</code>) and must start at the exact same indentation column.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-title" id="sec-2-4"><span class="sec-badge">2.4</span> Worked Programs from Lecture Notes</h3>
+
+      <h4 class="sub-sub-title">Program 2.1: Even or Odd Number Checker</h4>
+      <p>Uses arithmetic modulus <code>% 2</code> to determine parity.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> even_odd.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">num</span> <span class="syn-operator">=</span> <span class="syn-number">17</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">num</span> <span class="syn-operator">%</span> <span class="syn-number">2</span> <span class="syn-operator">==</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;{num} is an Even number.&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;{num} is an Odd number.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>17 is an Odd number.</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 2.2: Pass or Fail Checker</h4>
+      <p>Checks if student marks satisfy the standard academic benchmark of 40%.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> pass_fail.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">marks</span> <span class="syn-operator">=</span> <span class="syn-number">68</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">40</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Result: PASS&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Congratulations on clearing the examination!&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Result: FAIL&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Please reappear for the supplementary examination.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Result: PASS
+Congratulations on clearing the examination!</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 2.3: Greater of Two Numbers</h4>
+      <p>Compares two numerical values and identifies the maximum.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> max_two.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">a</span> <span class="syn-operator">=</span> <span class="syn-number">45</span>
+<span class="syn-variable">b</span> <span class="syn-operator">=</span> <span class="syn-number">82</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">a</span> <span class="syn-operator">&gt;</span> <span class="syn-variable">b</span><span class="syn-operator">:</span>
+    <span class="syn-variable">max_val</span> <span class="syn-operator">=</span> <span class="syn-variable">a</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;{a} is greater than {b}&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">max_val</span> <span class="syn-operator">=</span> <span class="syn-variable">b</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;{b} is greater than or equal to {a}&quot;</span><span class="syn-punctuation">)</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Maximum value is: {max_val}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>82 is greater than or equal to 45
+Maximum value is: 82</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 2.4: Simple User Authentication Checker</h4>
+      <p>Verifies username and password credentials against registered credentials.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> user_auth.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">stored_user</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;admin&quot;</span>
+<span class="syn-variable">stored_pass</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;SecurePass789&quot;</span>
+
+<span class="syn-variable">input_user</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;admin&quot;</span>
+<span class="syn-variable">input_pass</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;SecurePass789&quot;</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">input_user</span> <span class="syn-operator">==</span> <span class="syn-variable">stored_user</span> <span class="syn-keyword">and</span> <span class="syn-variable">input_pass</span> <span class="syn-operator">==</span> <span class="syn-variable">stored_pass</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Access Granted. Welcome to the Administrative Portal.&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Access Denied. Invalid credentials provided.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Access Granted. Welcome to the Administrative Portal.</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 2.5: Python Conditional Expression (Ternary Operator)</h4>
+      <p>
+        Python provides a compact one-line shorthand for <code>if-else</code> known as a <strong>Conditional Expression</strong> or <strong>Ternary Operator</strong>: <code>value_if_true if condition else value_if_false</code>.
+      </p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> ternary_demo.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">age</span> <span class="syn-operator">=</span> <span class="syn-number">22</span>
+<span class="syn-comment"># One-line conditional expression</span>
+<span class="syn-variable">status</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Adult&quot;</span> <span class="syn-keyword">if</span> <span class="syn-variable">age</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">18</span> <span class="syn-keyword">else</span> <span class="syn-string">&quot;Minor&quot;</span>
+
+<span class="syn-comment"># Practical numeric clamping</span>
+<span class="syn-variable">score</span> <span class="syn-operator">=</span> <span class="syn-number">105</span>
+<span class="syn-variable">clamped_score</span> <span class="syn-operator">=</span> <span class="syn-number">100</span> <span class="syn-keyword">if</span> <span class="syn-variable">score</span> <span class="syn-operator">&gt;</span> <span class="syn-number">100</span> <span class="syn-keyword">else</span> <span class="syn-variable">score</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Age: {age} -&gt; Status: {status}&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Original Score: {score} -&gt; Clamped Score: {clamped_score}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Age: 22 -&gt; Status: Adult
+Original Score: 105 -&gt; Clamped Score: 100</pre></div>
+            </div>
+
+      <!-- Extra Practical Programs for Section 2 -->
+      <h3 class="sub-title" id="sec-2-5"><span class="sec-badge">2.5</span> Additional Master Programs (Two-Way Decision)</h3>
+
+      <h4 class="sub-sub-title">Extra Program 2.6: Bank Account Withdrawal Authorization</h4>
+      <p>Validates whether an account holder has sufficient cleared funds before debiting.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> bank_withdrawal.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">account_balance</span> <span class="syn-operator">=</span> <span class="syn-number">2500.00</span>
+<span class="syn-variable">withdrawal_amount</span> <span class="syn-operator">=</span> <span class="syn-number">800.00</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">withdrawal_amount</span> <span class="syn-operator">&lt;=</span> <span class="syn-variable">account_balance</span><span class="syn-operator">:</span>
+    <span class="syn-variable">account_balance</span> <span class="syn-operator">-=</span> <span class="syn-variable">withdrawal_amount</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Withdrawal of ${withdrawal_amount:.2f} approved.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Remaining Balance: ${account_balance:.2f}&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Transaction Declined: Insufficient funds available.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Available Balance: ${account_balance:.2f}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Withdrawal of $800.00 approved.
+Remaining Balance: $1700.00</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 2.7: Character Vowel or Consonant Classifier</h4>
+      <p>Extracts a character, normalizes casing with <code>.lower()</code>, and checks membership against vowel tuple.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> vowel_consonant.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">char</span> <span class="syn-operator">=</span> <span class="syn-string">&#x27;E&#x27;</span>
+<span class="syn-variable">normalized</span> <span class="syn-operator">=</span> <span class="syn-variable">char</span><span class="syn-punctuation">.</span><span class="syn-function">lower</span><span class="syn-punctuation">(</span><span class="syn-punctuation">)</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">normalized</span> <span class="syn-keyword">in</span> <span class="syn-punctuation">(</span><span class="syn-string">&#x27;a&#x27;</span><span class="syn-punctuation">,</span> <span class="syn-string">&#x27;e&#x27;</span><span class="syn-punctuation">,</span> <span class="syn-string">&#x27;i&#x27;</span><span class="syn-punctuation">,</span> <span class="syn-string">&#x27;o&#x27;</span><span class="syn-punctuation">,</span> <span class="syn-string">&#x27;u&#x27;</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;&#x27;</span><span class="syn-punctuation">{</span><span class="syn-variable">char</span><span class="syn-punctuation">}</span><span class="syn-string">&#x27; is a Vowel.&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">normalized</span><span class="syn-punctuation">.</span><span class="syn-function">isalpha</span><span class="syn-punctuation">(</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;&#x27;</span><span class="syn-punctuation">{</span><span class="syn-variable">char</span><span class="syn-punctuation">}</span><span class="syn-string">&#x27; is a Consonant.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;&#x27;</span><span class="syn-punctuation">{</span><span class="syn-variable">char</span><span class="syn-punctuation">}</span><span class="syn-string">&#x27; is not an alphabetic letter.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>&#x27;E&#x27; is a Vowel.</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 2.8: E-Commerce Shipping Fee Determination</h4>
+      <p>Calculates dynamic shipping costs: orders of $50 or more earn free shipping; otherwise a standard flat $7.99 fee is added.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> shipping_eval.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">order_subtotal</span> <span class="syn-operator">=</span> <span class="syn-number">38.50</span>
+<span class="syn-variable">free_shipping_threshold</span> <span class="syn-operator">=</span> <span class="syn-number">50.00</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">order_subtotal</span> <span class="syn-operator">&gt;=</span> <span class="syn-variable">free_shipping_threshold</span><span class="syn-operator">:</span>
+    <span class="syn-variable">shipping_fee</span> <span class="syn-operator">=</span> <span class="syn-number">0.00</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;You qualified for FREE Express Shipping!&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">shipping_fee</span> <span class="syn-operator">=</span> <span class="syn-number">7.99</span>
+    <span class="syn-variable">shortage</span> <span class="syn-operator">=</span> <span class="syn-variable">free_shipping_threshold</span> <span class="syn-operator">-</span> <span class="syn-variable">order_subtotal</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Add ${shortage:.2f} more to your cart to unlock FREE shipping.&quot;</span><span class="syn-punctuation">)</span>
+
+<span class="syn-variable">final_bill</span> <span class="syn-operator">=</span> <span class="syn-variable">order_subtotal</span> <span class="syn-operator">+</span> <span class="syn-variable">shipping_fee</span>
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Order Total: ${final_bill:.2f}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Add $11.50 more to your cart to unlock FREE shipping.
+Order Total: $46.49</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 2.9: String Palindrome Detector</h4>
+      <p>Verifies if a word reads identically forwards and backwards using slice reversal <code>[::-1]</code>.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> palindrome_check.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">word</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Radar&quot;</span>
+<span class="syn-variable">clean_word</span> <span class="syn-operator">=</span> <span class="syn-variable">word</span><span class="syn-punctuation">.</span><span class="syn-function">strip</span><span class="syn-punctuation">(</span><span class="syn-punctuation">)</span><span class="syn-punctuation">.</span><span class="syn-function">lower</span><span class="syn-punctuation">(</span><span class="syn-punctuation">)</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">clean_word</span> <span class="syn-operator">==</span> <span class="syn-variable">clean_word</span><span class="syn-punctuation">[</span><span class="syn-operator">::-</span><span class="syn-number">1</span><span class="syn-punctuation">]</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;&#x27;</span><span class="syn-punctuation">{</span><span class="syn-variable">word</span><span class="syn-punctuation">}</span><span class="syn-string">&#x27; is a valid Palindrome!&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;&#x27;</span><span class="syn-punctuation">{</span><span class="syn-variable">word</span><span class="syn-punctuation">}</span><span class="syn-string">&#x27; is NOT a palindrome.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>&#x27;Radar&#x27; is a valid Palindrome!</pre></div>
+            </div>
+    </section>
+    
+    
+    <!-- ========================================== -->
+    <!-- PART 3: NESTED IF STATEMENTS               -->
+    <!-- ========================================== -->
+    <section id="part-3" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">PART 03</span>
+        <h2 class="ch-title">3. Nested if Statements (Decisions within Decisions)</h2>
+      </div>
+
+      <h3 class="sub-title" id="sec-3-1"><span class="sec-badge">3.1</span> What is a Nested if Statement?</h3>
+      <p>
+        A <strong>nested if statement</strong> occurs when an entire <code>if</code>, <code>if-else</code>, or <code>if-elif-else</code> block is placed <em>inside</em> the body of another <code>if</code> or <code>else</code> statement.
+      </p>
+      <p>
+        <strong>Real-Life Analogy:</strong> Think of an airport security checkpoint:
+      </p>
+      <ol>
+        <li><strong>Outer Check:</strong> <em>Do you have a valid boarding pass?</em> If <code>False</code>, you cannot enter the airport.</li>
+        <li><strong>Inner Check:</strong> <em>Did you pass baggage screening?</em> If <code>True</code>, you proceed to the boarding gate; if <code>False</code>, security intervention is required.</li>
+      </ol>
+      <p>
+        The inner question is only ever asked if you successfully cleared the outer checkpoint. If the outer condition fails, the entire inner decision tree is skipped completely.
+      </p>
+
+      <h3 class="sub-title" id="sec-3-2"><span class="sec-badge">3.2</span> General Syntax &amp; Indentation Architecture</h3>
+      <p>
+        In Python, block nesting is defined purely by <strong>indentation levels</strong>:
+      </p>
+            <p>Structural hierarchy of a 2-tier nested conditional block:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> nested_if_syntax.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-keyword">if</span> <span class="syn-variable">outer_condition</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># Runs only when outer_condition is True</span>
+    <span class="syn-variable">statement_outer_1</span>
+
+    <span class="syn-keyword">if</span> <span class="syn-variable">inner_condition</span><span class="syn-operator">:</span>
+        <span class="syn-comment"># Runs only when BOTH outer_condition AND inner_condition are True</span>
+        <span class="syn-variable">statement_inner_1</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-comment"># Runs when outer_condition is True BUT inner_condition is False</span>
+        <span class="syn-variable">statement_inner_2</span>
+
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># Runs when outer_condition itself is False</span>
+    <span class="syn-comment"># (The inner if is never even checked)</span>
+    <span class="syn-variable">statement_outer_2</span></code></pre>
+                </div>
+            </div>
+
+      <h3 class="sub-title" id="sec-3-3"><span class="sec-badge">3.3</span> Critical Rules of Nested Execution</h3>
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h4>🔑 Prerequisite Dependency</h4>
+          <p>The inner conditional block is completely shielded by the outer condition. It is executed if and only if the outer block evaluates to <code>True</code>.</p>
+        </div>
+        <div class="concept-card">
+          <h4>📐 Multi-Level Indentation</h4>
+          <p>Outer statements use 4 spaces (Level 1); inner statements use 8 spaces (Level 2); deeper nesting uses 12 spaces (Level 3).</p>
+        </div>
+      </div>
+
+      <h3 class="sub-title" id="sec-3-4"><span class="sec-badge">3.4</span> Worked Programs from Lecture Notes</h3>
+
+      <h4 class="sub-sub-title">Program 3.1: Academic Evaluation with Attendance Detention &amp; Distinction</h4>
+      <p>
+        An academic grading system where a student must first pass the minimum marks threshold (<code>marks >= 40</code>). If passed, attendance is checked (<code>attendance >= 75%</code>). If attendance is insufficient, the student is marked as <strong>DETAINED</strong> regardless of marks.
+      </p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> academic_evaluation.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">marks</span> <span class="syn-operator">=</span> <span class="syn-number">78</span>
+<span class="syn-variable">attendance_percent</span> <span class="syn-operator">=</span> <span class="syn-number">68</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">40</span><span class="syn-operator">:</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">attendance_percent</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">75</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Result: PASS&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">if</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">90</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Grade: A+ (Honors Distinction)&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">elif</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">75</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Grade: A&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">elif</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">60</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Grade: B&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Grade: C&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Result: DETAINED (Insufficient attendance below mandatory 75% limit)&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Result: FAIL (Marks below passing cutoff)&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Result: DETAINED (Insufficient attendance below mandatory 75% limit)</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 3.2: Triangle Validity &amp; Geometric Classification</h4>
+      <p>
+        First validates the <strong>Triangle Inequality Theorem</strong> (the sum of any two sides must exceed the third side). If valid, a nested classifier determines whether the triangle is <strong>Equilateral</strong> (all sides equal), <strong>Isosceles</strong> (two sides equal), or <strong>Scalene</strong> (all sides distinct).
+      </p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> triangle_classifier.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">side_a</span> <span class="syn-operator">=</span> <span class="syn-number">5</span>
+<span class="syn-variable">side_b</span> <span class="syn-operator">=</span> <span class="syn-number">5</span>
+<span class="syn-variable">side_c</span> <span class="syn-operator">=</span> <span class="syn-number">8</span>
+
+<span class="syn-comment"># Outer Check: Triangle Inequality Theorem</span>
+<span class="syn-keyword">if</span> <span class="syn-punctuation">(</span><span class="syn-variable">side_a</span> <span class="syn-operator">+</span> <span class="syn-variable">side_b</span> <span class="syn-operator">&gt;</span> <span class="syn-variable">side_c</span><span class="syn-punctuation">)</span> <span class="syn-keyword">and</span> <span class="syn-punctuation">(</span><span class="syn-variable">side_b</span> <span class="syn-operator">+</span> <span class="syn-variable">side_c</span> <span class="syn-operator">&gt;</span> <span class="syn-variable">side_a</span><span class="syn-punctuation">)</span> <span class="syn-keyword">and</span> <span class="syn-punctuation">(</span><span class="syn-variable">side_a</span> <span class="syn-operator">+</span> <span class="syn-variable">side_c</span> <span class="syn-operator">&gt;</span> <span class="syn-variable">side_b</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Geometric Status: A valid triangle can be formed.&quot;</span><span class="syn-punctuation">)</span>
+    
+    <span class="syn-comment"># Inner Nested Classification</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">side_a</span> <span class="syn-operator">==</span> <span class="syn-variable">side_b</span> <span class="syn-operator">==</span> <span class="syn-variable">side_c</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Triangle Type: Equilateral (All 3 sides equal)&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-keyword">if</span> <span class="syn-variable">side_a</span> <span class="syn-operator">==</span> <span class="syn-variable">side_b</span> <span class="syn-keyword">or</span> <span class="syn-variable">side_b</span> <span class="syn-operator">==</span> <span class="syn-variable">side_c</span> <span class="syn-keyword">or</span> <span class="syn-variable">side_a</span> <span class="syn-operator">==</span> <span class="syn-variable">side_c</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Triangle Type: Isosceles (2 sides equal)&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Triangle Type: Scalene (All 3 sides distinct)&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Geometric Status: Invalid side lengths; cannot enclose a triangle.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Geometric Status: A valid triangle can be formed.
+Triangle Type: Isosceles (2 sides equal)</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 3.3: Cinema Ticket Pricing by Age Bracket &amp; Show Timing</h4>
+      <p>
+        Applies nested conditional logic to enforce age restrictions on late-night shows and calculate time-slot discounts.
+      </p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> cinema_pricing.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">age</span> <span class="syn-operator">=</span> <span class="syn-number">8</span>
+<span class="syn-variable">show_time</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;night&quot;</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">age</span> <span class="syn-operator">&lt;</span> <span class="syn-number">12</span><span class="syn-operator">:</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">show_time</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;night&quot;</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Booking Notice: Children under 12 cannot book unaccompanied night shows.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Ticket Price: $5.00 (Child rate, day matinee)&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">age</span> <span class="syn-operator">&lt;</span> <span class="syn-number">60</span><span class="syn-operator">:</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">show_time</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;night&quot;</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Ticket Price: $12.00 (Adult rate, prime night show)&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Ticket Price: $10.00 (Adult rate, regular day show)&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Ticket Price: $6.00 (Senior citizen concession rate, any show timing)&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Booking Notice: Children under 12 cannot book unaccompanied night shows.</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 3.4: Modular BMI Health Classification Function</h4>
+      <p>
+        Calculates Body Mass Index ($BMI = rac{	ext{weight}}{	ext{height}^2}$) and uses nested boundary checks to categorize health status.
+      </p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> bmi_calculator.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-keyword">def</span> <span class="syn-variable">bmi_category</span><span class="syn-punctuation">(</span><span class="syn-variable">weight_kg</span><span class="syn-punctuation">,</span> <span class="syn-variable">height_m</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-variable">bmi</span> <span class="syn-operator">=</span> <span class="syn-variable">weight_kg</span> <span class="syn-operator">/</span> <span class="syn-punctuation">(</span><span class="syn-variable">height_m</span> <span class="syn-operator">**</span> <span class="syn-number">2</span><span class="syn-punctuation">)</span>
+    
+    <span class="syn-keyword">if</span> <span class="syn-variable">bmi</span> <span class="syn-operator">&lt;</span> <span class="syn-number">25.0</span><span class="syn-operator">:</span>
+        <span class="syn-keyword">if</span> <span class="syn-variable">bmi</span> <span class="syn-operator">&lt;</span> <span class="syn-number">18.5</span><span class="syn-operator">:</span>
+            <span class="syn-variable">category</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Underweight&quot;</span>
+        <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+            <span class="syn-variable">category</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Normal weight (Healthy range)&quot;</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-keyword">if</span> <span class="syn-variable">bmi</span> <span class="syn-operator">&lt;</span> <span class="syn-number">30.0</span><span class="syn-operator">:</span>
+            <span class="syn-variable">category</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Overweight&quot;</span>
+        <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+            <span class="syn-variable">category</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Obese&quot;</span>
+            
+    <span class="syn-keyword">return</span> <span class="syn-function">round</span><span class="syn-punctuation">(</span><span class="syn-variable">bmi</span><span class="syn-punctuation">,</span> <span class="syn-number">2</span><span class="syn-punctuation">)</span><span class="syn-punctuation">,</span> <span class="syn-variable">category</span>
+
+<span class="syn-variable">result_bmi</span><span class="syn-punctuation">,</span> <span class="syn-variable">result_category</span> <span class="syn-operator">=</span> <span class="syn-variable">bmi_category</span><span class="syn-punctuation">(</span><span class="syn-number">72</span><span class="syn-punctuation">,</span> <span class="syn-number">1.75</span><span class="syn-punctuation">)</span>
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Calculated BMI: {result_bmi}&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Health Category: {result_category}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Calculated BMI: 23.51
+Health Category: Normal weight (Healthy range)</pre></div>
+            </div>
+
+      <!-- Extra Practical Programs for Section 3 -->
+      <h3 class="sub-title" id="sec-3-5"><span class="sec-badge">3.5</span> Additional Master Programs (Nested Decisions)</h3>
+
+      <h4 class="sub-sub-title">Extra Program 3.5: Personal Loan Underwriting &amp; Interest Tiering</h4>
+      <p>A multi-tiered loan approval engine evaluating age, annual salary, and credit bureau score.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> loan_underwriting.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">applicant_age</span> <span class="syn-operator">=</span> <span class="syn-number">28</span>
+<span class="syn-variable">annual_income</span> <span class="syn-operator">=</span> <span class="syn-number">52000.00</span>
+<span class="syn-variable">credit_score</span> <span class="syn-operator">=</span> <span class="syn-number">760</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">applicant_age</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">21</span><span class="syn-operator">:</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">annual_income</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">35000.00</span><span class="syn-operator">:</span>
+        <span class="syn-keyword">if</span> <span class="syn-variable">credit_score</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">750</span><span class="syn-operator">:</span>
+            <span class="syn-variable">interest_rate</span> <span class="syn-operator">=</span> <span class="syn-number">4.75</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Loan APPROVED! Tier-1 Prime Interest Rate: {interest_rate}%&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">elif</span> <span class="syn-variable">credit_score</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">650</span><span class="syn-operator">:</span>
+            <span class="syn-variable">interest_rate</span> <span class="syn-operator">=</span> <span class="syn-number">7.50</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Loan APPROVED! Tier-2 Standard Interest Rate: {interest_rate}%&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Loan REJECTED: Credit score below minimum safety cutoff (650).&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Loan REJECTED: Annual income below $35,000 threshold.&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Loan REJECTED: Applicant must be at least 21 years of age.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Loan APPROVED! Tier-1 Prime Interest Rate: 4.75%</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 3.6: Multi-Factor Authentication (MFA) Security Gateway</h4>
+      <p>Simulates cloud security login requiring correct password, valid one-time OTP, and active subscription token.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> mfa_gateway.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">password_correct</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+<span class="syn-variable">otp_valid</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+<span class="syn-variable">account_suspended</span> <span class="syn-operator">=</span> <span class="syn-keyword">False</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">password_correct</span><span class="syn-operator">:</span>
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> <span class="syn-variable">account_suspended</span><span class="syn-operator">:</span>
+        <span class="syn-keyword">if</span> <span class="syn-variable">otp_valid</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;MFA SUCCESS: Identity verified. Session Token issued.&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;MFA FAILED: Invalid or expired 6-digit OTP code.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;MFA BLOCKED: Account is administratively suspended.&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;MFA FAILED: Incorrect password provided.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>MFA SUCCESS: Identity verified. Session Token issued.</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 3.7: Blood Donor Clinical Qualification Screener</h4>
+      <p>Medical decision tree checking age (18–65), minimum body weight (50 kg), and blood hemoglobin levels.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> blood_donation_screener.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">donor_age</span> <span class="syn-operator">=</span> <span class="syn-number">24</span>
+<span class="syn-variable">donor_weight_kg</span> <span class="syn-operator">=</span> <span class="syn-number">58.0</span>
+<span class="syn-variable">hemoglobin_g_dl</span> <span class="syn-operator">=</span> <span class="syn-number">13.8</span>
+
+<span class="syn-keyword">if</span> <span class="syn-number">18</span> <span class="syn-operator">&lt;=</span> <span class="syn-variable">donor_age</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">65</span><span class="syn-operator">:</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">donor_weight_kg</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">50.0</span><span class="syn-operator">:</span>
+        <span class="syn-keyword">if</span> <span class="syn-variable">hemoglobin_g_dl</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">12.5</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;CLINICAL CLEARANCE: Qualified for whole blood donation.&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+            <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;DEFERRED: Hemoglobin level ({hemoglobin_g_dl} g/dL) is below 12.5 g/dL.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;DEFERRED: Body weight ({donor_weight_kg} kg) is below 50.0 kg requirement.&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;DEFERRED: Donor age ({donor_age}) is outside permissible 18-65 range.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>CLINICAL CLEARANCE: Qualified for whole blood donation.</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 3.8: Complete Hierarchical Century Leap Year Algorithm</h4>
+      <p>Demonstrates nested conditional branching implementing the exact Gregorian calendar leap year specification.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> nested_leap_year.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">year</span> <span class="syn-operator">=</span> <span class="syn-number">2000</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">year</span> <span class="syn-operator">%</span> <span class="syn-number">4</span> <span class="syn-operator">==</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">year</span> <span class="syn-operator">%</span> <span class="syn-number">100</span> <span class="syn-operator">==</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+        <span class="syn-keyword">if</span> <span class="syn-variable">year</span> <span class="syn-operator">%</span> <span class="syn-number">400</span> <span class="syn-operator">==</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+            <span class="syn-variable">is_leap</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+            <span class="syn-variable">reason</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;divisible by 400 (Century Leap Year)&quot;</span>
+        <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+            <span class="syn-variable">is_leap</span> <span class="syn-operator">=</span> <span class="syn-keyword">False</span>
+            <span class="syn-variable">reason</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;divisible by 100 but not by 400 (Century Non-Leap Year)&quot;</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-variable">is_leap</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+        <span class="syn-variable">reason</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;divisible by 4 and not a century year&quot;</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">is_leap</span> <span class="syn-operator">=</span> <span class="syn-keyword">False</span>
+    <span class="syn-variable">reason</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;not divisible by 4&quot;</span>
+
+<span class="syn-variable">status_str</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;LEAP YEAR&quot;</span> <span class="syn-keyword">if</span> <span class="syn-variable">is_leap</span> <span class="syn-keyword">else</span> <span class="syn-string">&quot;NOT A LEAP YEAR&quot;</span>
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;The year {year} is {status_str} because it is {reason}.&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>The year 2000 is LEAP YEAR because it is divisible by 400 (Century Leap Year).</pre></div>
+            </div>
+    </section>
+    
+    
+    <!-- ========================================== -->
+    <!-- PART 4: MULTI-WAY IF-ELIF-ELSE STATEMENT   -->
+    <!-- ========================================== -->
+    <section id="part-4" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">PART 04</span>
+        <h2 class="ch-title">4. The if – elif – else Statement (Multi-Way Decision)</h2>
+      </div>
+
+      <h3 class="sub-title" id="sec-4-1"><span class="sec-badge">4.1</span> What is a Multi-Way if-elif-else Statement?</h3>
+      <p>
+        When you need your program to choose among <strong>more than two mutually exclusive possibilities</strong>, a simple <code>if-else</code> is insufficient. Python provides the <code>elif</code> keyword (short for <em>"else if"</em>) to build a multi-way decision ladder.
+      </p>
+      <p>
+        <strong>Top-Down Evaluation Semantics:</strong> Python evaluates the conditions sequentially from top to bottom. As soon as it encounters the <strong>first condition that evaluates to True</strong>, it executes that block of code and immediately skips the rest of the entire chain. If none of the conditions match, the optional fallback <code>else</code> block executes.
+      </p>
+
+      <h3 class="sub-title" id="sec-4-2"><span class="sec-badge">4.2</span> General Syntax</h3>
+            <p>Structural syntax of Python's multi-alternative decision chain:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> if_elif_else_syntax.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-keyword">if</span> <span class="syn-variable">condition_1</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># Runs if condition_1 is True</span>
+    <span class="syn-variable">statement_1</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">condition_2</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># Runs if condition_1 was False and condition_2 is True</span>
+    <span class="syn-variable">statement_2</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">condition_3</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># Runs if condition_1 and 2 were False, and condition_3 is True</span>
+    <span class="syn-variable">statement_3</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-comment"># Runs if NONE of the above conditions were True</span>
+    <span class="syn-variable">statement_fallback</span></code></pre>
+                </div>
+            </div>
+
+      <h3 class="sub-title" id="sec-4-3"><span class="sec-badge">4.3</span> Keyword Comparison: if vs elif vs else</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Keyword</th>
+              <th>Technical Purpose</th>
+              <th>Allowed Frequency</th>
+              <th>Requires Condition Expression?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>if</code></td>
+              <td>Initiates the conditional chain; evaluates the first test.</td>
+              <td><strong>Exactly one</strong> (Mandatory start)</td>
+              <td><strong>Yes</strong> (Mandatory boolean expression)</td>
+            </tr>
+            <tr>
+              <td><code>elif</code></td>
+              <td>Tests supplementary conditions only if all preceding tests failed.</td>
+              <td><strong>Zero or more</strong> (Arbitrary count)</td>
+              <td><strong>Yes</strong> (Mandatory boolean expression)</td>
+            </tr>
+            <tr>
+              <td><code>else</code></td>
+              <td>Default fallback block; executes when all prior conditions were False.</td>
+              <td><strong>Zero or one</strong> (Optional, must be last)</td>
+              <td><strong>No</strong> (Never takes an expression)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-title" id="sec-4-4"><span class="sec-badge">4.4</span> Worked Examples from Lecture Notes</h3>
+
+      <h4 class="sub-sub-title">Program 4.1: Number Sign Classifier</h4>
+      <p>Classifies any integer or floating-point value as positive, negative, or zero.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> number_sign.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">num</span> <span class="syn-operator">=</span> <span class="syn-operator">-</span><span class="syn-number">7</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">num</span> <span class="syn-operator">&gt;</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Classification: Positive number&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">num</span> <span class="syn-operator">&lt;</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Classification: Negative number&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Classification: Zero&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Classification: Negative number</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 4.2: Standard Academic Grading System</h4>
+      <p>Maps numerical exam marks to standard letter grades.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> grade_calculator.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">marks</span> <span class="syn-operator">=</span> <span class="syn-number">78</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">90</span><span class="syn-operator">:</span>
+    <span class="syn-variable">grade</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;A&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">75</span><span class="syn-operator">:</span>
+    <span class="syn-variable">grade</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;B&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">60</span><span class="syn-operator">:</span>
+    <span class="syn-variable">grade</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;C&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">marks</span> <span class="syn-operator">&gt;=</span> <span class="syn-number">40</span><span class="syn-operator">:</span>
+    <span class="syn-variable">grade</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;D&quot;</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">grade</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;F (Fail)&quot;</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Student Marks: {marks} | Awarded Grade: {grade}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Student Marks: 78 | Awarded Grade: B</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 4.3: Traffic Light State Machine</h4>
+      <p>Simulates an automated traffic signal controller with defensive input handling.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> traffic_light.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">signal</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;yellow&quot;</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">signal</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;red&quot;</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Action: STOP (Vehicle must halt behind line)&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">signal</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;yellow&quot;</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Action: GET READY (Prepare to halt or proceed with caution)&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">signal</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;green&quot;</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Action: GO (Proceed through intersection)&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Action: INVALID SIGNAL (Signal malfunction - treat as 4-way stop)&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Action: GET READY (Prepare to halt or proceed with caution)</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 4.4: Admission Ticket Pricing by Age Brackets</h4>
+      <p>Computes tiered entrance ticket rates based on age categories.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> ticket_pricing.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">age</span> <span class="syn-operator">=</span> <span class="syn-number">15</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">age</span> <span class="syn-operator">&lt;</span> <span class="syn-number">5</span><span class="syn-operator">:</span>
+    <span class="syn-variable">price</span> <span class="syn-operator">=</span> <span class="syn-number">0.00</span>   <span class="syn-comment"># Toddlers enter free</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">age</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">12</span><span class="syn-operator">:</span>
+    <span class="syn-variable">price</span> <span class="syn-operator">=</span> <span class="syn-number">5.00</span>   <span class="syn-comment"># Children</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">age</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">17</span><span class="syn-operator">:</span>
+    <span class="syn-variable">price</span> <span class="syn-operator">=</span> <span class="syn-number">8.00</span>   <span class="syn-comment"># Teenagers</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">age</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">60</span><span class="syn-operator">:</span>
+    <span class="syn-variable">price</span> <span class="syn-operator">=</span> <span class="syn-number">12.00</span>  <span class="syn-comment"># Adults</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">price</span> <span class="syn-operator">=</span> <span class="syn-number">6.00</span>   <span class="syn-comment"># Senior Citizens</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Age: {age} | Ticket Price: ${price:.2f}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Age: 15 | Ticket Price: $8.00</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 4.5: Arithmetic Calculator Dispatcher</h4>
+      <p>Executes binary arithmetic operations based on operator symbol string.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> calculator.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">a</span><span class="syn-punctuation">,</span> <span class="syn-variable">b</span><span class="syn-punctuation">,</span> <span class="syn-variable">op</span> <span class="syn-operator">=</span> <span class="syn-number">12</span><span class="syn-punctuation">,</span> <span class="syn-number">4</span><span class="syn-punctuation">,</span> <span class="syn-string">&quot;/&quot;</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">op</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;+&quot;</span><span class="syn-operator">:</span>
+    <span class="syn-variable">result</span> <span class="syn-operator">=</span> <span class="syn-variable">a</span> <span class="syn-operator">+</span> <span class="syn-variable">b</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">op</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;-&quot;</span><span class="syn-operator">:</span>
+    <span class="syn-variable">result</span> <span class="syn-operator">=</span> <span class="syn-variable">a</span> <span class="syn-operator">-</span> <span class="syn-variable">b</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">op</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;*&quot;</span><span class="syn-operator">:</span>
+    <span class="syn-variable">result</span> <span class="syn-operator">=</span> <span class="syn-variable">a</span> <span class="syn-operator">*</span> <span class="syn-variable">b</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">op</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;/&quot;</span><span class="syn-operator">:</span>
+    <span class="syn-variable">result</span> <span class="syn-operator">=</span> <span class="syn-variable">a</span> <span class="syn-operator">/</span> <span class="syn-variable">b</span> <span class="syn-keyword">if</span> <span class="syn-variable">b</span> <span class="syn-operator">!=</span> <span class="syn-number">0</span> <span class="syn-keyword">else</span> <span class="syn-string">&quot;Error: Division by zero&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">op</span> <span class="syn-operator">==</span> <span class="syn-string">&quot;%&quot;</span><span class="syn-operator">:</span>
+    <span class="syn-variable">result</span> <span class="syn-operator">=</span> <span class="syn-variable">a</span> <span class="syn-operator">%</span> <span class="syn-variable">b</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">result</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Error: Unsupported operator&quot;</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Calculation: {a} {op} {b} = {result}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Calculation: 12 / 4 = 3.0</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 4.6: Day of the Week Number with Tuple Membership</h4>
+      <p>Maps 1–7 to days of the week, demonstrating tuple membership <code>in (6, 7)</code> for weekend grouping.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> day_of_week.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">day_num</span> <span class="syn-operator">=</span> <span class="syn-number">3</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">day_num</span> <span class="syn-operator">==</span> <span class="syn-number">1</span><span class="syn-operator">:</span>
+    <span class="syn-variable">day</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Monday&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">day_num</span> <span class="syn-operator">==</span> <span class="syn-number">2</span><span class="syn-operator">:</span>
+    <span class="syn-variable">day</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Tuesday&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">day_num</span> <span class="syn-operator">==</span> <span class="syn-number">3</span><span class="syn-operator">:</span>
+    <span class="syn-variable">day</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Wednesday&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">day_num</span> <span class="syn-operator">==</span> <span class="syn-number">4</span><span class="syn-operator">:</span>
+    <span class="syn-variable">day</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Thursday&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">day_num</span> <span class="syn-operator">==</span> <span class="syn-number">5</span><span class="syn-operator">:</span>
+    <span class="syn-variable">day</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Friday&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">day_num</span> <span class="syn-keyword">in</span> <span class="syn-punctuation">(</span><span class="syn-number">6</span><span class="syn-punctuation">,</span> <span class="syn-number">7</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-variable">day</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Weekend (Saturday / Sunday)&quot;</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">day</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Invalid day index&quot;</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Day {day_num} is: {day}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Day 3 is: Wednesday</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 4.7: Health BMI Category Ladder</h4>
+      <p>Classifies Body Mass Index values across clinical boundaries.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> bmi_ladder.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">bmi</span> <span class="syn-operator">=</span> <span class="syn-number">27.4</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">bmi</span> <span class="syn-operator">&lt;</span> <span class="syn-number">18.5</span><span class="syn-operator">:</span>
+    <span class="syn-variable">category</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Underweight&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">bmi</span> <span class="syn-operator">&lt;</span> <span class="syn-number">25.0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">category</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Normal weight&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">bmi</span> <span class="syn-operator">&lt;</span> <span class="syn-number">30.0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">category</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Overweight&quot;</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">category</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Obese&quot;</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Measured BMI: {bmi} | Health Category: {category}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Measured BMI: 27.4 | Health Category: Overweight</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 4.8: Parcel Shipping Cost Estimator by Weight</h4>
+      <p>Calculates courier delivery rates by tier bracket.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> parcel_shipping.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">weight_kg</span> <span class="syn-operator">=</span> <span class="syn-number">4.5</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">weight_kg</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">1.0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">cost</span> <span class="syn-operator">=</span> <span class="syn-number">3.00</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">weight_kg</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">5.0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">cost</span> <span class="syn-operator">=</span> <span class="syn-number">6.50</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">weight_kg</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">10.0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">cost</span> <span class="syn-operator">=</span> <span class="syn-number">9.00</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">cost</span> <span class="syn-operator">=</span> <span class="syn-number">15.00</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Parcel Weight: {weight_kg} kg | Shipping Fee: ${cost:.2f}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Parcel Weight: 4.5 kg | Shipping Fee: $6.50</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Program 4.9: Month to Season Classifier using Tuple Membership</h4>
+      <p>Determines astronomical/meteorological season from month index using tuple matching.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> season_classifier.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">month</span> <span class="syn-operator">=</span> <span class="syn-number">11</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">month</span> <span class="syn-keyword">in</span> <span class="syn-punctuation">(</span><span class="syn-number">12</span><span class="syn-punctuation">,</span> <span class="syn-number">1</span><span class="syn-punctuation">,</span> <span class="syn-number">2</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-variable">season</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Winter&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">month</span> <span class="syn-keyword">in</span> <span class="syn-punctuation">(</span><span class="syn-number">3</span><span class="syn-punctuation">,</span> <span class="syn-number">4</span><span class="syn-punctuation">,</span> <span class="syn-number">5</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-variable">season</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Spring&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">month</span> <span class="syn-keyword">in</span> <span class="syn-punctuation">(</span><span class="syn-number">6</span><span class="syn-punctuation">,</span> <span class="syn-number">7</span><span class="syn-punctuation">,</span> <span class="syn-number">8</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-variable">season</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Summer&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">month</span> <span class="syn-keyword">in</span> <span class="syn-punctuation">(</span><span class="syn-number">9</span><span class="syn-punctuation">,</span> <span class="syn-number">10</span><span class="syn-punctuation">,</span> <span class="syn-number">11</span><span class="syn-punctuation">)</span><span class="syn-operator">:</span>
+    <span class="syn-variable">season</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Autumn&quot;</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">season</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Invalid Month Index&quot;</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Month {month} falls in: {season}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Month 11 falls in: Autumn</pre></div>
+            </div>
+
+      <!-- Extra Practical Programs for Section 4 -->
+      <h3 class="sub-title" id="sec-4-5"><span class="sec-badge">4.5</span> Additional Master Programs (Multi-Way Decisions)</h3>
+
+      <h4 class="sub-sub-title">Extra Program 4.10: Progressive Tiered Electricity Bill Calculator</h4>
+      <p>Calculates consumer electricity charges based on slab consumption rates.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> electricity_billing.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">units_consumed</span> <span class="syn-operator">=</span> <span class="syn-number">245</span>
+<span class="syn-variable">total_bill</span> <span class="syn-operator">=</span> <span class="syn-number">0.0</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">units_consumed</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">100</span><span class="syn-operator">:</span>
+    <span class="syn-variable">total_bill</span> <span class="syn-operator">=</span> <span class="syn-variable">units_consumed</span> <span class="syn-operator">*</span> <span class="syn-number">1.50</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">units_consumed</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">200</span><span class="syn-operator">:</span>
+    <span class="syn-variable">total_bill</span> <span class="syn-operator">=</span> <span class="syn-punctuation">(</span><span class="syn-number">100</span> <span class="syn-operator">*</span> <span class="syn-number">1.50</span><span class="syn-punctuation">)</span> <span class="syn-operator">+</span> <span class="syn-punctuation">(</span><span class="syn-punctuation">(</span><span class="syn-variable">units_consumed</span> <span class="syn-operator">-</span> <span class="syn-number">100</span><span class="syn-punctuation">)</span> <span class="syn-operator">*</span> <span class="syn-number">2.50</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">units_consumed</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">300</span><span class="syn-operator">:</span>
+    <span class="syn-variable">total_bill</span> <span class="syn-operator">=</span> <span class="syn-punctuation">(</span><span class="syn-number">100</span> <span class="syn-operator">*</span> <span class="syn-number">1.50</span><span class="syn-punctuation">)</span> <span class="syn-operator">+</span> <span class="syn-punctuation">(</span><span class="syn-number">100</span> <span class="syn-operator">*</span> <span class="syn-number">2.50</span><span class="syn-punctuation">)</span> <span class="syn-operator">+</span> <span class="syn-punctuation">(</span><span class="syn-punctuation">(</span><span class="syn-variable">units_consumed</span> <span class="syn-operator">-</span> <span class="syn-number">200</span><span class="syn-punctuation">)</span> <span class="syn-operator">*</span> <span class="syn-number">4.00</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">total_bill</span> <span class="syn-operator">=</span> <span class="syn-punctuation">(</span><span class="syn-number">100</span> <span class="syn-operator">*</span> <span class="syn-number">1.50</span><span class="syn-punctuation">)</span> <span class="syn-operator">+</span> <span class="syn-punctuation">(</span><span class="syn-number">100</span> <span class="syn-operator">*</span> <span class="syn-number">2.50</span><span class="syn-punctuation">)</span> <span class="syn-operator">+</span> <span class="syn-punctuation">(</span><span class="syn-number">100</span> <span class="syn-operator">*</span> <span class="syn-number">4.00</span><span class="syn-punctuation">)</span> <span class="syn-operator">+</span> <span class="syn-punctuation">(</span><span class="syn-punctuation">(</span><span class="syn-variable">units_consumed</span> <span class="syn-operator">-</span> <span class="syn-number">300</span><span class="syn-punctuation">)</span> <span class="syn-operator">*</span> <span class="syn-number">6.00</span><span class="syn-punctuation">)</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Units Consumed: {units_consumed} kWh&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Calculated Electricity Bill: ${total_bill:.2f}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Units Consumed: 245 kWh
+Calculated Electricity Bill: $580.00</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 4.11: 2D Cartesian Coordinate Quadrant Identifier</h4>
+      <p>Analyzes Cartesian coordinate pairs <code>(x, y)</code> and identifies origin, axis alignment, or quadrant.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> quadrant_locator.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">x</span><span class="syn-punctuation">,</span> <span class="syn-variable">y</span> <span class="syn-operator">=</span> <span class="syn-operator">-</span><span class="syn-number">4.5</span><span class="syn-punctuation">,</span> <span class="syn-number">8.2</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">x</span> <span class="syn-operator">==</span> <span class="syn-number">0</span> <span class="syn-keyword">and</span> <span class="syn-variable">y</span> <span class="syn-operator">==</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">location</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Origin (0, 0)&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">x</span> <span class="syn-operator">==</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">location</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Y-Axis&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">y</span> <span class="syn-operator">==</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">location</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;X-Axis&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">x</span> <span class="syn-operator">&gt;</span> <span class="syn-number">0</span> <span class="syn-keyword">and</span> <span class="syn-variable">y</span> <span class="syn-operator">&gt;</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">location</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Quadrant I (+x, +y)&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">x</span> <span class="syn-operator">&lt;</span> <span class="syn-number">0</span> <span class="syn-keyword">and</span> <span class="syn-variable">y</span> <span class="syn-operator">&gt;</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">location</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Quadrant II (-x, +y)&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">x</span> <span class="syn-operator">&lt;</span> <span class="syn-number">0</span> <span class="syn-keyword">and</span> <span class="syn-variable">y</span> <span class="syn-operator">&lt;</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+    <span class="syn-variable">location</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Quadrant III (-x, -y)&quot;</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">location</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Quadrant IV (+x, -y)&quot;</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Point ({x}, {y}) is located in: {location}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Point (-4.5, 8.2) is located in: Quadrant II (-x, +y)</pre></div>
+            </div>
+
+      <h4 class="sub-sub-title">Extra Program 4.12: Restaurant Party Size Table Allocator</h4>
+      <p>Allocates optimal dining arrangements based on group size.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> restaurant_allocator.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-variable">party_size</span> <span class="syn-operator">=</span> <span class="syn-number">5</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">party_size</span> <span class="syn-operator">==</span> <span class="syn-number">1</span><span class="syn-operator">:</span>
+    <span class="syn-variable">seating</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Bar Counter Stool&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">party_size</span> <span class="syn-operator">==</span> <span class="syn-number">2</span><span class="syn-operator">:</span>
+    <span class="syn-variable">seating</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Cozy 2-Top Bistro Table&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">party_size</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">4</span><span class="syn-operator">:</span>
+    <span class="syn-variable">seating</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Standard 4-Top Dining Booth&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">party_size</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">6</span><span class="syn-operator">:</span>
+    <span class="syn-variable">seating</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Family 6-Top Central Table&quot;</span>
+<span class="syn-keyword">elif</span> <span class="syn-variable">party_size</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">12</span><span class="syn-operator">:</span>
+    <span class="syn-variable">seating</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Executive Banquet Round Table&quot;</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">seating</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;Private Dining Room Reservation Required&quot;</span>
+
+<span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Party of {party_size} guests -&gt; Allocated Seating: {seating}&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>Party of 5 guests -&gt; Allocated Seating: Family 6-Top Central Table</pre></div>
+            </div>
+
+      <!-- Capstone Project from Notes -->
+      <h3 class="sub-title" id="sec-4-6"><span class="sec-badge">4.6</span> Master Capstone Project: Automated ATM Console Banking Simulation</h3>
+      <p>
+        An integrated real-world application from the lecture notes showcasing PIN authentication loops, nested input validations, menu dispatching via <code>if-elif-else</code>, overdraft protection, and transaction logging.
+      </p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> atm_banking_system.py</div>
+                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="syn-comment"># =========================================================</span>
+<span class="syn-comment"># ATM CONSOLE BANKING SIMULATION SYSTEM</span>
+<span class="syn-comment"># Features: PIN Authentication, Balance Inquiry, Deposit,</span>
+<span class="syn-comment">#           Withdrawal with Overdraft Protection, Mini Statement</span>
+<span class="syn-comment"># =========================================================</span>
+
+<span class="syn-variable">pin</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;1234&quot;</span>
+<span class="syn-variable">balance</span> <span class="syn-operator">=</span> <span class="syn-number">10000.00</span>
+<span class="syn-variable">transactions</span> <span class="syn-operator">=</span> <span class="syn-punctuation">[</span><span class="syn-string">&quot;Initial Balance: $10000.00&quot;</span><span class="syn-punctuation">]</span>
+<span class="syn-variable">attempts</span> <span class="syn-operator">=</span> <span class="syn-number">0</span>
+<span class="syn-variable">max_attempts</span> <span class="syn-operator">=</span> <span class="syn-number">3</span>
+<span class="syn-variable">is_logged_in</span> <span class="syn-operator">=</span> <span class="syn-keyword">False</span>
+
+<span class="syn-comment"># 1. PIN Verification Loop (Simulated 1 valid attempt)</span>
+<span class="syn-variable">entered_pin</span> <span class="syn-operator">=</span> <span class="syn-string">&quot;1234&quot;</span>
+<span class="syn-keyword">if</span> <span class="syn-variable">entered_pin</span> <span class="syn-operator">==</span> <span class="syn-variable">pin</span><span class="syn-operator">:</span>
+    <span class="syn-variable">is_logged_in</span> <span class="syn-operator">=</span> <span class="syn-keyword">True</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;PIN Accepted. Authentication Successful!\n&quot;</span><span class="syn-punctuation">)</span>
+<span class="syn-keyword">else</span><span class="syn-operator">:</span>
+    <span class="syn-variable">attempts</span> <span class="syn-operator">+=</span> <span class="syn-number">1</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Invalid PIN. Remaining attempts: {max_attempts - attempts}&quot;</span><span class="syn-punctuation">)</span>
+
+<span class="syn-keyword">if</span> <span class="syn-variable">is_logged_in</span><span class="syn-operator">:</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;=&quot;</span> <span class="syn-operator">*</span> <span class="syn-number">45</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;       WELCOME TO SSM DIGITAL BANK ATM&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;=&quot;</span> <span class="syn-operator">*</span> <span class="syn-number">45</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;1. Check Account Balance&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;2. Deposit Funds&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;3. Withdraw Cash&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;4. View Mini Statement&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;5. Exit Session&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;=&quot;</span> <span class="syn-operator">*</span> <span class="syn-number">45</span><span class="syn-punctuation">)</span>
+
+    <span class="syn-comment"># Simulated Actions Demonstration</span>
+    <span class="syn-comment"># Action A: Deposit $2500</span>
+    <span class="syn-variable">deposit_amount</span> <span class="syn-operator">=</span> <span class="syn-number">2500.00</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">deposit_amount</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Error: Deposit amount must be positive.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-variable">balance</span> <span class="syn-operator">+=</span> <span class="syn-variable">deposit_amount</span>
+        <span class="syn-variable">transactions</span><span class="syn-punctuation">.</span><span class="syn-function">append</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Deposited: +${deposit_amount:.2f}&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Successfully deposited ${deposit_amount:.2f}. Updated Balance: ${balance:.2f}&quot;</span><span class="syn-punctuation">)</span>
+
+    <span class="syn-comment"># Action B: Withdraw $4000</span>
+    <span class="syn-variable">withdraw_amount</span> <span class="syn-operator">=</span> <span class="syn-number">4000.00</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">withdraw_amount</span> <span class="syn-operator">&lt;=</span> <span class="syn-number">0</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Error: Withdrawal amount must be positive.&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">elif</span> <span class="syn-variable">withdraw_amount</span> <span class="syn-operator">&gt;</span> <span class="syn-variable">balance</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Declined: Insufficient funds! Current Balance: ${balance:.2f}&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">else</span><span class="syn-operator">:</span>
+        <span class="syn-variable">balance</span> <span class="syn-operator">-=</span> <span class="syn-variable">withdraw_amount</span>
+        <span class="syn-variable">transactions</span><span class="syn-punctuation">.</span><span class="syn-function">append</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Withdrawn: -${withdraw_amount:.2f}&quot;</span><span class="syn-punctuation">)</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Successfully withdrawn ${withdraw_amount:.2f}. Updated Balance: ${balance:.2f}\n&quot;</span><span class="syn-punctuation">)</span>
+
+    <span class="syn-comment"># Action C: Print Mini Statement</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;--- MINI STATEMENT (Last Transactions) ---&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-keyword">for</span> <span class="syn-variable">tx</span> <span class="syn-keyword">in</span> <span class="syn-variable">transactions</span><span class="syn-operator">:</span>
+        <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;  • {tx}&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">f&quot;Available Balance: ${balance:.2f}&quot;</span><span class="syn-punctuation">)</span>
+    <span class="syn-function">print</span><span class="syn-punctuation">(</span><span class="syn-string">&quot;Thank you for banking with SSM Digital Bank!&quot;</span><span class="syn-punctuation">)</span></code></pre>
+                </div>
+            </div>
+            <div class="output-box">
+                <div class="output-header"><span class="icon">▶</span> Terminal Output</div>
+                <div class="output-body"><pre>PIN Accepted. Authentication Successful!
+
+=============================================
+       WELCOME TO SSM DIGITAL BANK ATM
+=============================================
+1. Check Account Balance
+2. Deposit Funds
+3. Withdraw Cash
+4. View Mini Statement
+5. Exit Session
+=============================================
+Successfully deposited $2500.00. Updated Balance: $12500.00
+Successfully withdrawn $4000.00. Updated Balance: $8500.00
+
+--- MINI STATEMENT (Last Transactions) ---
+  • Initial Balance: $10000.00
+  • Deposited: +$2500.00
+  • Withdrawn: -$4000.00
+Available Balance: $8500.00
+Thank you for banking with SSM Digital Bank!</pre></div>
+            </div>
+    </section>
+    
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text);">Prepared by Umer Farooq</h4>
+          <p style="font-size: 0.85rem; color: var(--text-dim);">Department of Computer Science &amp; Engineering | SSM
+            College of Engineering</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button class="btn-nav" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <span>⬆️</span> Back to Top
+        </button>
+        <button class="btn-nav" onclick="window.print()">
+          <span>🖨️</span> Print Notes
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="toggleTheme()" title="Toggle Theme">
+      <span id="theme-icon-float">☀️</span>
+    </button>
+    <button class="btn-float" onclick="window.print()" title="Print Page">
+      <span>🖨️</span>
+    </button>
+    <button class="btn-float" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to Top">
+      <span>▲</span>
+    </button>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Enlarged Diagram">
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Theme Management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcons(next);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    // Scroll Progress Indicator
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Copy Code Handler
+    function copyCode(btn) {
+      const container = btn.closest('.code-container');
+      if (!container) return;
+      const preOrCode = container.querySelector('pre code') || container.querySelector('pre');
+      if (preOrCode) {
+        const textToCopy = preOrCode.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          btn.style.color = 'var(--green)';
+          btn.style.borderColor = 'var(--green)';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 2000);
+        }).catch(() => {
+          // Fallback
+          const range = document.createRange();
+          range.selectNode(preOrCode);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2000);
+        });
+      }
+    }
+
+    // Lightbox Modal
+    function openLightbox(src) {
+      const modal = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      if (modal && img) {
+        img.src = src;
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('lightbox');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Initialize on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+    });
+  </script>
+</body>
+</html>

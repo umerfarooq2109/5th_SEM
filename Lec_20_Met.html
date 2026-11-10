@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Master Data Visualization in Python: Complete guide covering Matplotlib line plots, subplots, and Seaborn themes with examples and outputs. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Lecture 22: Data Visualization with Matplotlib &amp; Seaborn | SSM College of Engineering</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      /* IDE syntax highlighting tokens (Dark) */
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+      --syn-header: #f07178;
+      --syn-include: #f07178;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      /* IDE syntax highlighting tokens (Light) */
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #6b7280;
+      --syn-function: #2563eb;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0891b2;
+      --syn-punctuation: #0891b2;
+      --syn-variable: #0f172a;
+      --syn-format: #d97706;
+      --syn-header: #dc2626;
+      --syn-include: #dc2626;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16.5px;
+      line-height: 1.75;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      transition: width 0.1s ease;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(18, 20, 26, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 900;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="light"] .top-nav {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-brand .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(28, 32, 42, 0.95), rgba(24, 27, 34, 0.98));
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 30px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-theme="light"] .hero-banner {
+      background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tag-accent {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .tag-teal {
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    .tag-purple {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.12rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .hero-author-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .author-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 10px var(--accent-glow);
+    }
+
+    .author-details h4 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .author-details p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #e06c15);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px var(--accent-glow);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .meta-item .val {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .meta-item .lbl {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-header-pill {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #toc-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .toc-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+
+    .toc-card .ch-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .toc-card .ch-name {
+      font-family: var(--font-heading);
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .toc-card .ch-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+
+    .toc-pill-badge {
+      align-self: flex-start;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+    }
+
+    .chapter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .ch-header {
+      margin-bottom: 28px;
+    }
+
+    .ch-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    h2.ch-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    h3 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 24px 0 10px;
+    }
+
+    h4 {
+      font-family: var(--font-heading);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 18px 0 8px;
+    }
+
+    .program-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 28px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 16.5px;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    code {
+      font-family: var(--font-code);
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border);
+    }
+
+    .key {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    ul, ol {
+      margin: 6px 0 14px 24px;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 6px;
+      line-height: 1.65;
+    }
+
+    .highlight-box {
+      background: var(--blue-soft);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .highlight-box.tip {
+      background: var(--green-soft);
+      border-left-color: var(--green);
+    }
+
+    .highlight-box.warning {
+      background: var(--amber-soft);
+      border-left-color: var(--amber);
+    }
+
+    .highlight-box.important {
+      background: var(--red-soft);
+      border-left-color: var(--red);
+    }
+
+    .highlight-box.remember {
+      background: var(--purple-soft);
+      border-left-color: var(--purple);
+    }
+
+    .highlight-box strong {
+      color: var(--text);
+    }
+
+    .syntax-box {
+      background: var(--bg-alt);
+      border: 1px dashed var(--border-accent);
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin: 12px 0 16px;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      color: var(--teal);
+      overflow-x: auto;
+    }
+
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 16px 0;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .code-header {
+      background: #151821;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    [data-theme="light"] .code-header {
+      background: #e2e8f0;
+    }
+
+    .code-title {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .code-title {
+      color: #334155;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .copy-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .code-body pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text);
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .code-body pre {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .syn-keyword { color: var(--syn-keyword); font-weight: 700; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); font-weight: 700; }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+    .syn-format { color: var(--syn-format); font-weight: 700; }
+    .syn-header { color: var(--syn-header); }
+    .syn-include { color: var(--syn-include); }
+
+    .output-box {
+      background: #090a0d;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      margin: 12px 0 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] .output-box {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .output-header {
+      background: #11141c;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .output-header {
+      background: #0f172a;
+      color: #2dd4bf;
+      border-bottom-color: #334155;
+    }
+
+    .output-body pre {
+      padding: 12px 16px;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: #a9b7c6;
+      line-height: 1.5;
+      overflow-x: auto;
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .output-body pre {
+      color: #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--accent);
+      font-family: var(--font-heading);
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    tr:nth-child(even) td {
+      background: var(--table-stripe);
+    }
+
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    .float-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 800;
+    }
+
+    .btn-float {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-float:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+
+    .image-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .image-caption {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .top-nav, #progress-container, .float-actions, .copy-btn, .btn-primary, .btn-nav, .hero-buttons { display: none !important; }
+      .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .hero-banner, .chapter, .toc-card, #toc-section, .code-container, .output-box, .image-container {
+        background: #ffffff !important; color: #000000 !important; border: 1px solid #cccccc !important; box-shadow: none !important; page-break-inside: avoid;
+      }
+      .code-body pre, .output-body pre { color: #000000 !important; background: #f8fafc !important; }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 20px 16px 60px; }
+      .hero-banner { padding: 24px 20px; }
+      .hero-title { font-size: 1.75rem; }
+      .chapter { padding: 20px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <header class="top-nav">
+    <a href="index.html" class="nav-brand">
+      <span class="badge">LEC 22</span>
+      <span>Data Visualization: Matplotlib &amp; Seaborn</span>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn-nav" title="Course Portal">
+        <span>🏠</span> Portal
+      </a>
+      <a href="Lec_21_OOP.html" class="btn-nav" title="OOP in Python (Lecture 21)">
+        <span>🏛️</span> OOP
+      </a>
+      <a href="Lec_20_NumPy.html" class="btn-nav" title="NumPy (Lecture 20)">
+        <span>🔢</span> NumPy
+      </a>
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF">
+        <span>🖨️</span> Print PDF
+      </button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon-nav">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">Python Programming</span>
+        <span class="tag tag-teal">Data Visualization</span>
+        <span class="tag tag-purple">Complete Guide</span>
+      </div>
+      <h1 class="hero-title">Data Visualization with Matplotlib &amp; Seaborn</h1>
+      <p class="hero-subtitle">
+        The ultimate comprehensive guide to creating stunning graphs and charts in Python. Covers <strong>line plots</strong>, <strong>subplots</strong>, <strong>styling</strong>, and <strong>Seaborn themes</strong> — with real code examples and visual outputs.
+      </p>
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()">
+            <span>🖨️</span> Save as PDF / Print
+          </button>
+        </div>
+      </div>
+      <div class="hero-meta-strip">
+        <div class="meta-item">
+          <span class="val">15+</span>
+          <span class="lbl">Code Examples</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">5</span>
+          <span class="lbl">Core Sections</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">100%</span>
+          <span class="lbl">Exam Coverage</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">10+</span>
+          <span class="lbl">Visual Outputs</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TABLE OF CONTENTS -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Quick Chapter Navigation</div>
+      <div class="toc-grid">
+        <a href="#sec-intro" class="toc-card">
+          <span class="ch-num">PART 01</span>
+          <span class="ch-name">1. Introduction to Matplotlib &amp; Seaborn</span>
+          <span class="ch-desc">What are these libraries, installation, Figure &amp; Axes concepts.</span>
+          <span class="toc-pill-badge">Fundamentals</span>
+        </a>
+        <a href="#sec-line-plots" class="toc-card">
+          <span class="ch-num">PART 02</span>
+          <span class="ch-name">2. Line Plots — Basic to Advanced</span>
+          <span class="ch-desc">First plot, styling, markers, multiple lines, annotations, sine waves.</span>
+          <span class="toc-pill-badge">Line Plots</span>
+        </a>
+        <a href="#sec-subplots" class="toc-card">
+          <span class="ch-num">PART 03</span>
+          <span class="ch-name">3. Subplots</span>
+          <span class="ch-desc">Multiple plots in one figure, 2x2 grids, shared axes.</span>
+          <span class="toc-pill-badge">Subplots</span>
+        </a>
+        <a href="#sec-seaborn" class="toc-card">
+          <span class="ch-num">PART 04</span>
+          <span class="ch-name">4. Seaborn Line Plots</span>
+          <span class="ch-desc">Seaborn basics, themes, grouped data, color palettes.</span>
+          <span class="toc-pill-badge">Seaborn</span>
+        </a>
+        <a href="#sec-practice" class="toc-card">
+          <span class="ch-num">PART 05</span>
+          <span class="ch-name">5. Practice Programs</span>
+          <span class="ch-desc">Temperature tracker, student dashboard, and more.</span>
+          <span class="toc-pill-badge">Projects</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- PART 01: INTRODUCTION -->
+    <!-- ============================================================ -->
+    <section id="sec-intro" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Part 01 &bull; Fundamentals</div>
+        <h2 class="ch-title">1. Introduction to Matplotlib &amp; Seaborn</h2>
+      </div>
+
+      <h3>1.1 What is Matplotlib?</h3>
+      <div class="highlight-box important">
+        <strong>DEFINITION:</strong> Matplotlib is the most popular Python library for creating graphs and charts. It was created by <strong>John Hunter</strong> in 2003 and is inspired by MATLAB's plotting system.
+      </div>
+      <p>Think of Matplotlib as a drawing toolkit for data. You give it numbers, and it draws beautiful pictures (graphs) from those numbers.</p>
+
+      <p><strong>Key features of Matplotlib:</strong></p>
+      <ul>
+        <li>Create line plots, bar charts, scatter plots, histograms, pie charts, and more.</li>
+        <li>Full control over every part of the graph (colors, fonts, labels, sizes).</li>
+        <li>Can save plots as PNG, JPG, SVG, PDF files.</li>
+        <li>Works with NumPy, Pandas, and other data libraries.</li>
+        <li>Free and open-source.</li>
+      </ul>
+
+      <h3>1.2 What is Seaborn?</h3>
+      <p>Seaborn is built on top of Matplotlib. It makes statistical plots easier to create and automatically makes them look more beautiful. Think of it as a "premium skin" for Matplotlib.</p>
+
+      <table>
+        <tr><th>Feature</th><th>Matplotlib</th><th>Seaborn</th></tr>
+        <tr><td>Level</td><td>Low-level (more control)</td><td>High-level (easier to use)</td></tr>
+        <tr><td>Default look</td><td>Basic, needs customization</td><td>Beautiful by default</td></tr>
+        <tr><td>Best for</td><td>Any type of plot</td><td>Statistical data visualization</td></tr>
+        <tr><td>Data format</td><td>Lists, arrays</td><td>Pandas DataFrames (preferred)</td></tr>
+        <tr><td>Customization</td><td>Very detailed control</td><td>Built-in themes and palettes</td></tr>
+        <tr><td>Learning curve</td><td>Moderate</td><td>Easier for beginners</td></tr>
+      </table>
+
+      <h3>1.3 Installation and Importing</h3>
+      <div class="syntax-box">
+        # Install (run in terminal / command prompt)<br>
+        pip install matplotlib<br>
+        pip install seaborn<br><br>
+        # Import in your Python script<br>
+        import matplotlib.pyplot as plt  # 'plt' is the standard alias<br>
+        import seaborn as sns            # 'sns' is the standard alias<br>
+        import numpy as np               # we need NumPy for data
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>💡 KEY IDEA:</strong> We always import <code>matplotlib.pyplot as plt</code> (not the whole matplotlib). The pyplot module gives us simple functions like <code>plt.plot()</code>, <code>plt.show()</code>, etc.
+      </div>
+
+      <h3>1.4 How Matplotlib Works: Figure and Axes</h3>
+      <p>Before we start plotting, you need to understand two important concepts:</p>
+      <ul>
+        <li><strong>Figure</strong> = The entire window or image. Think of it as a blank canvas or a piece of paper.</li>
+        <li><strong>Axes</strong> = One individual plot inside the figure. A figure can have one or many axes (subplots).</li>
+      </ul>
+
+      <table>
+        <tr><th>Term</th><th>What It Is</th><th>Real-life Analogy</th></tr>
+        <tr><td>Figure</td><td>The whole image/window</td><td>A blank page</td></tr>
+        <tr><td>Axes</td><td>One plot area with x/y axis</td><td>A graph drawn on that page</td></tr>
+        <tr><td>Axis</td><td>The x-axis or y-axis line</td><td>The ruler lines on the graph</td></tr>
+        <tr><td>Artist</td><td>Everything drawn (lines, text, etc.)</td><td>Ink on the page</td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program: Your First Plot</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Basic Line Plot</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Import the pyplot module from matplotlib</span>
+<span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+
+<span class="syn-comment"># Create values for the X-axis</span>
+x = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>]
+
+<span class="syn-comment"># Create values for the Y-axis</span>
+y = [<span class="syn-number">2</span>, <span class="syn-number">4</span>, <span class="syn-number">6</span>, <span class="syn-number">8</span>, <span class="syn-number">10</span>]
+
+<span class="syn-comment"># Plot a line using X and Y values</span>
+plt.plot(x, y)
+
+<span class="syn-comment"># Display the graph</span>
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig1.png" alt="Basic Line Plot">
+          <p class="image-caption">Figure 1: A simple line plot connecting 5 data points</p>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>💡 KEY IDEA:</strong> <code>figsize=(6, 3.5)</code> sets the width and height of the figure in inches. Larger values = bigger plot.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- PART 02: LINE PLOTS -->
+    <!-- ============================================================ -->
+    <section id="sec-line-plots" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Part 02 &bull; Line Plots</div>
+        <h2 class="ch-title">2. Line Plots — Basic to Advanced</h2>
+      </div>
+
+      <h3>2.1 Your First Line Plot</h3>
+      <p>A line plot connects data points with a straight line. It is perfect for showing how something changes over time.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 1: Basic Line Plot</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 1</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+
+<span class="syn-comment"># Simple data</span>
+x = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>]
+y = [<span class="syn-number">10</span>, <span class="syn-number">25</span>, <span class="syn-number">18</span>, <span class="syn-number">35</span>, <span class="syn-number">30</span>]
+
+<span class="syn-comment"># Create figure and axes</span>
+fig, ax = plt.subplots(figsize=(<span class="syn-number">6</span>, <span class="syn-number">3.5</span>))
+
+<span class="syn-comment"># Plot the line</span>
+ax.plot(x, y)
+
+<span class="syn-comment"># Add labels and title</span>
+ax.set_title(<span class="syn-string">"Basic Line Plot"</span>)
+ax.set_xlabel(<span class="syn-string">"X-axis"</span>)
+ax.set_ylabel(<span class="syn-string">"Y-axis"</span>)
+
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig2.png" alt="Basic Line Plot">
+          <p class="image-caption">Figure 2: A basic line plot with title and labels</p>
+        </div>
+      </div>
+
+      <h3>2.2 Styling the Line (Color, Width, Style, Markers)</h3>
+      <p>You can customize every part of the line:</p>
+      <table>
+        <tr><th>Parameter</th><th>What It Controls</th><th>Example Values</th></tr>
+        <tr><td><code>color</code></td><td>Line color</td><td><code>'red'</code>, <code>'#E63946'</code>, <code>'blue'</code></td></tr>
+        <tr><td><code>linewidth</code> (lw)</td><td>Thickness of line</td><td>1, 2, 3.5</td></tr>
+        <tr><td><code>linestyle</code> (ls)</td><td>Pattern of line</td><td><code>'-'</code>, <code>'--'</code>, <code>'-.'</code>, <code>':'</code></td></tr>
+        <tr><td><code>marker</code></td><td>Symbol at each point</td><td><code>'o'</code>, <code>'s'</code>, <code>'^'</code>, <code>'D'</code>, <code>'*'</code></td></tr>
+        <tr><td><code>markersize</code> (ms)</td><td>Size of markers</td><td>5, 8, 12</td></tr>
+        <tr><td><code>markerfacecolor</code></td><td>Fill color of marker</td><td><code>'yellow'</code>, <code>'#1D3557'</code></td></tr>
+        <tr><td><code>markeredgecolor</code></td><td>Border color of marker</td><td><code>'black'</code>, <code>'#333'</code></td></tr>
+        <tr><td><code>alpha</code></td><td>Transparency (0 to 1)</td><td>0.5, 0.8, 1.0</td></tr>
+        <tr><td><code>label</code></td><td>Name for legend</td><td><code>'Sales'</code>, <code>'Temperature'</code></td></tr>
+      </table>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 2: Styled Line Plot</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 2</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+
+x = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>]
+y = [<span class="syn-number">2</span>, <span class="syn-number">4</span>, <span class="syn-number">1</span>, <span class="syn-number">5</span>, <span class="syn-number">3</span>, <span class="syn-number">7</span>, <span class="syn-number">6</span>]
+
+fig, ax = plt.subplots(figsize=(<span class="syn-number">6</span>, <span class="syn-number">3.5</span>))
+
+ax.plot(x, y,
+        color=<span class="syn-string">'#E63946'</span>,          <span class="syn-comment"># Red color</span>
+        linewidth=<span class="syn-number">2.5</span>,             <span class="syn-comment"># Thick line</span>
+        linestyle=<span class="syn-string">'--'</span>,            <span class="syn-comment"># Dashed line</span>
+        marker=<span class="syn-string">'o'</span>,                <span class="syn-comment"># Circle markers</span>
+        markerfacecolor=<span class="syn-string">'#1D3557'</span>, <span class="syn-comment"># Dark navy fill</span>
+        markersize=<span class="syn-number">8</span>)               <span class="syn-comment"># Marker size</span>
+
+ax.set_title(<span class="syn-string">"Styled Line Plot"</span>, fontweight=<span class="syn-string">'bold'</span>)
+ax.set_xlabel(<span class="syn-string">"Day"</span>)
+ax.set_ylabel(<span class="syn-string">"Sales (units)"</span>)
+ax.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)  <span class="syn-comment"># Light grid</span>
+
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig3.png" alt="Styled Line Plot">
+          <p class="image-caption">Figure 3: A styled line plot with custom colors, markers, and grid</p>
+        </div>
+      </div>
+
+      <h3>2.3 Line Styles Reference</h3>
+      <p>Here are all the line styles and marker styles you can use:</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 3: Line Styles Showcase</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 3</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+
+<span class="syn-comment"># X-axis values</span>
+x = [<span class="syn-number">0</span>, <span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>]
+
+<span class="syn-comment"># Y-axis values for each line</span>
+y1 = [<span class="syn-number">0</span>, <span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>]
+y2 = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>, <span class="syn-number">11</span>]
+y3 = [<span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>, <span class="syn-number">11</span>, <span class="syn-number">12</span>]
+y4 = [<span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>, <span class="syn-number">11</span>, <span class="syn-number">12</span>, <span class="syn-number">13</span>]
+y5 = [<span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>, <span class="syn-number">11</span>, <span class="syn-number">12</span>, <span class="syn-number">13</span>, <span class="syn-number">14</span>]
+
+<span class="syn-comment"># Draw a solid line</span>
+plt.plot(x, y1, linestyle=<span class="syn-string">'-'</span>, label=<span class="syn-string">'Solid (-)'</span>)
+
+<span class="syn-comment"># Draw a dashed line</span>
+plt.plot(x, y2, linestyle=<span class="syn-string">'--'</span>, label=<span class="syn-string">'Dashed (--)'</span>)
+
+<span class="syn-comment"># Draw a dash-dot line</span>
+plt.plot(x, y3, linestyle=<span class="syn-string">'-.'</span>, label=<span class="syn-string">'Dash-dot (-.)'</span>)
+
+<span class="syn-comment"># Draw a dotted line</span>
+plt.plot(x, y4, linestyle=<span class="syn-string">':'</span>, label=<span class="syn-string">'Dotted (:)'</span>)
+
+<span class="syn-comment"># Draw another custom-style line</span>
+plt.plot(x, y5, linestyle=(<span class="syn-number">0</span>, (<span class="syn-number">5</span>, <span class="syn-number">1</span>)), label=<span class="syn-string">'Custom'</span>)
+
+<span class="syn-comment"># Add title</span>
+plt.title(<span class="syn-string">"Line Styles Reference"</span>)
+
+<span class="syn-comment"># Show the labels of the lines</span>
+plt.legend()
+
+<span class="syn-comment"># Show grid</span>
+plt.grid(<span class="syn-keyword">True</span>)
+
+<span class="syn-comment"># Display the graph</span>
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig4.png" alt="Line Styles Reference">
+          <p class="image-caption">Figure 4: All major line styles in Matplotlib</p>
+        </div>
+      </div>
+
+      <h3>2.4 Drawing the Sine Wave</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program: Sine Wave</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> math
+
+<span class="syn-comment"># Create many X values</span>
+x = [i * <span class="syn-number">0.1</span> <span class="syn-keyword">for</span> i <span class="syn-keyword">in</span> <span class="syn-function">range</span>(<span class="syn-number">101</span>)]
+
+<span class="syn-comment"># Calculate sine values</span>
+y = [math.sin(value) <span class="syn-keyword">for</span> value <span class="syn-keyword">in</span> x]
+
+plt.plot(x, y, label=<span class="syn-string">'Dashed (--)'</span>, linestyle=<span class="syn-string">'--'</span>, color=<span class="syn-string">'green'</span>)
+plt.title(<span class="syn-string">"Sine Wave"</span>)
+plt.xlabel(<span class="syn-string">"X"</span>)
+plt.ylabel(<span class="syn-string">"sin(X)"</span>)
+plt.grid(<span class="syn-keyword">True</span>)
+plt.legend()
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig5.png" alt="Sine Wave">
+          <p class="image-caption">Figure 5: A sine wave plotted using Matplotlib</p>
+        </div>
+      </div>
+
+      <h3>2.5 Marker Styles Reference</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program: Marker Styles</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+
+<span class="syn-comment"># X-axis values</span>
+x = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>]
+
+<span class="syn-comment"># Different Y-axis values</span>
+y1 = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>]
+y2 = [<span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>]
+y3 = [<span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>]
+y4 = [<span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>, <span class="syn-number">11</span>]
+y5 = [<span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>, <span class="syn-number">11</span>, <span class="syn-number">12</span>]
+y6 = [<span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>, <span class="syn-number">10</span>, <span class="syn-number">11</span>, <span class="syn-number">12</span>, <span class="syn-number">13</span>]
+
+<span class="syn-comment"># Circle marker</span>
+plt.plot(x, y1, c=<span class="syn-string">'blue'</span>, marker=<span class="syn-string">'o'</span>, markersize=<span class="syn-number">8</span>, label=<span class="syn-string">'Circle (o)'</span>)
+<span class="syn-comment"># Square marker</span>
+plt.plot(x, y2, marker=<span class="syn-string">'s'</span>, markersize=<span class="syn-number">8</span>, label=<span class="syn-string">'Square (s)'</span>)
+<span class="syn-comment"># Triangle marker</span>
+plt.plot(x, y3, marker=<span class="syn-string">'^'</span>, markersize=<span class="syn-number">8</span>, label=<span class="syn-string">'Triangle (^)'</span>)
+<span class="syn-comment"># Diamond marker</span>
+plt.plot(x, y4, marker=<span class="syn-string">'D'</span>, markersize=<span class="syn-number">8</span>, label=<span class="syn-string">'Diamond (D)'</span>)
+<span class="syn-comment"># Down triangle marker</span>
+plt.plot(x, y5, marker=<span class="syn-string">'v'</span>, markersize=<span class="syn-number">8</span>, label=<span class="syn-string">'Down Triangle (v)'</span>)
+<span class="syn-comment"># Star marker</span>
+plt.plot(x, y6, marker=<span class="syn-string">'*'</span>, markersize=<span class="syn-number">8</span>, label=<span class="syn-string">'Star (*)'</span>)
+
+plt.title(<span class="syn-string">"Marker Styles"</span>)
+plt.legend()
+plt.grid(<span class="syn-keyword">True</span>)
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig6.png" alt="Marker Styles">
+          <p class="image-caption">Figure 6: Common marker styles available in Matplotlib</p>
+        </div>
+      </div>
+
+      <h3>2.6 Multiple Lines on One Plot</h3>
+      <p>You can draw multiple lines on the same axes by calling <code>plot()</code> multiple times:</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 5: Multiple Lines on One Plot</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 5</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+
+months = [<span class="syn-string">'Jan'</span>, <span class="syn-string">'Feb'</span>, <span class="syn-string">'Mar'</span>, <span class="syn-string">'Apr'</span>, <span class="syn-string">'May'</span>, <span class="syn-string">'Jun'</span>]
+python_pop = [<span class="syn-number">35</span>, <span class="syn-number">38</span>, <span class="syn-number">40</span>, <span class="syn-number">45</span>, <span class="syn-number">50</span>, <span class="syn-number">55</span>]
+java_pop = [<span class="syn-number">50</span>, <span class="syn-number">48</span>, <span class="syn-number">45</span>, <span class="syn-number">42</span>, <span class="syn-number">40</span>, <span class="syn-number">38</span>]
+js_pop = [<span class="syn-number">40</span>, <span class="syn-number">42</span>, <span class="syn-number">45</span>, <span class="syn-number">48</span>, <span class="syn-number">52</span>, <span class="syn-number">58</span>]
+
+fig, ax = plt.subplots(figsize=(<span class="syn-number">6</span>, <span class="syn-number">3.5</span>))
+
+<span class="syn-comment"># Plot three lines</span>
+ax.plot(months, python_pop, <span class="syn-string">'o-'</span>, color=<span class="syn-string">'#3776AB'</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">'Python'</span>)
+ax.plot(months, java_pop, <span class="syn-string">'s-'</span>, color=<span class="syn-string">'#E76F00'</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">'Java'</span>)
+ax.plot(months, js_pop, <span class="syn-string">'^-'</span>, color=<span class="syn-string">'#F7DF1E'</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">'JavaScript'</span>, markerfacecolor=<span class="syn-string">'#333'</span>, markeredgecolor=<span class="syn-string">'#F7DF1E'</span>)
+
+ax.set_title(<span class="syn-string">"Programming Language Popularity"</span>, fontweight=<span class="syn-string">'bold'</span>)
+ax.set_xlabel(<span class="syn-string">"Month"</span>)
+ax.set_ylabel(<span class="syn-string">"Popularity (%)"</span>)
+ax.legend()  <span class="syn-comment"># Show legend with labels</span>
+ax.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig7.png" alt="Multiple Lines on One Plot">
+          <p class="image-caption">Figure 7: Three languages compared on the same plot</p>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>💡 TIP:</strong> The format string <code>'o-'</code> is a shortcut. <code>'o'</code> = circle marker, <code>'-'</code> = solid line. So <code>'s--'</code> = square markers + dashed line, <code>'^-.'</code> = triangle + dash-dot line.
+      </div>
+
+      <h3>2.7 Adding Annotations</h3>
+      <p>You can add text labels and arrows pointing to specific data points:</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 6: Annotated Line Plot</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 6</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+
+<span class="syn-comment"># X-axis values</span>
+x = [<span class="syn-number">0</span>, <span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>, <span class="syn-number">9</span>]
+
+<span class="syn-comment"># Calculate Y = X²</span>
+y = [<span class="syn-number">0</span>, <span class="syn-number">1</span>, <span class="syn-number">4</span>, <span class="syn-number">9</span>, <span class="syn-number">16</span>, <span class="syn-number">25</span>, <span class="syn-number">36</span>, <span class="syn-number">49</span>, <span class="syn-number">64</span>, <span class="syn-number">81</span>]
+
+<span class="syn-comment"># Draw the line with circle markers</span>
+plt.plot(x, y, <span class="syn-string">'o-'</span>, linewidth=<span class="syn-number">2</span>, markersize=<span class="syn-number">6</span>)
+
+<span class="syn-comment"># Add text and arrow pointing to the maximum value</span>
+plt.annotate(<span class="syn-string">"Maximum = 81"</span>,
+             xy=(<span class="syn-number">9</span>, <span class="syn-number">81</span>),    <span class="syn-comment"># Point where arrow points</span>
+             xytext=(<span class="syn-number">5</span>, <span class="syn-number">65</span>),  <span class="syn-comment"># Position of the text</span>
+             arrowprops=<span class="syn-function">dict</span>(arrowstyle=<span class="syn-string">"-&gt;"</span>))
+
+<span class="syn-comment"># Add title</span>
+plt.title(<span class="syn-string">"Line Plot with Annotation"</span>)
+
+<span class="syn-comment"># Add axis labels</span>
+plt.xlabel(<span class="syn-string">"X"</span>)
+plt.ylabel(<span class="syn-string">"Y = X^2"</span>)
+
+<span class="syn-comment"># Add grid</span>
+plt.grid(<span class="syn-keyword">True</span>)
+
+<span class="syn-comment"># Display the graph</span>
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig8.png" alt="Annotated Line Plot">
+          <p class="image-caption">Figure 8: Annotation with arrow pointing to the maximum value</p>
+        </div>
+      </div>
+
+      <h3>2.8 Sine and Cosine Curves</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 7: Trigonometric Curves</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 7</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+x = np.linspace(<span class="syn-number">0</span>, <span class="syn-number">2</span> * np.pi, <span class="syn-number">200</span>)  <span class="syn-comment"># 200 points from 0 to 2*pi</span>
+
+fig, ax = plt.subplots(figsize=(<span class="syn-number">6</span>, <span class="syn-number">3.5</span>))
+
+ax.plot(x, np.sin(x), color=<span class="syn-string">'#E63946'</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">'sin(x)'</span>)
+ax.plot(x, np.cos(x), color=<span class="syn-string">'#457B9D'</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">'cos(x)'</span>)
+
+<span class="syn-comment"># Reference lines</span>
+ax.axhline(y=<span class="syn-number">0</span>, color=<span class="syn-string">'gray'</span>, linewidth=<span class="syn-number">1</span>)  <span class="syn-comment"># horizontal at y=0</span>
+
+ax.set_title(<span class="syn-string">"Sine and Cosine Curves"</span>, fontweight=<span class="syn-string">'bold'</span>)
+ax.set_xlabel(<span class="syn-string">"Angle (radians)"</span>)
+ax.set_ylabel(<span class="syn-string">"Value"</span>)
+ax.legend()
+ax.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig9.png" alt="Sine and Cosine Curves">
+          <p class="image-caption">Figure 9: Sine and cosine functions plotted together</p>
+        </div>
+      </div>
+
+      <h3>2.9 fill_between() — Shading Area Between Lines</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 8: Fill Between Two Lines</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 8</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+x = np.linspace(<span class="syn-number">0</span>, <span class="syn-number">10</span>, <span class="syn-number">100</span>)
+y1 = np.sin(x)
+y2 = np.sin(x) + <span class="syn-number">0.5</span>
+
+fig, ax = plt.subplots(figsize=(<span class="syn-number">6</span>, <span class="syn-number">3.5</span>))
+
+ax.plot(x, y1, color=<span class="syn-string">'#1D3557'</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">'Lower Bound'</span>)
+ax.plot(x, y2, color=<span class="syn-string">'#E63946'</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">'Upper Bound'</span>)
+ax.fill_between(x, y1, y2, alpha=<span class="syn-number">0.3</span>, color=<span class="syn-string">'#A8DADC'</span>)  <span class="syn-comment"># Shade the gap</span>
+
+ax.set_title(<span class="syn-string">"Line Plot with fill_between()"</span>, fontweight=<span class="syn-string">'bold'</span>)
+ax.set_xlabel(<span class="syn-string">"X"</span>)
+ax.set_ylabel(<span class="syn-string">"Y"</span>)
+ax.legend()
+ax.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig10.png" alt="Fill Between Two Lines">
+          <p class="image-caption">Figure 10: Shaded area between two curves using fill_between()</p>
+        </div>
+      </div>
+
+      <h3>2.10 Important Line Plot Functions — Quick Reference</h3>
+      <table>
+        <tr><th>Function</th><th>What It Does</th><th>Example</th></tr>
+        <tr><td><code>ax.plot(x, y)</code></td><td>Draw a line plot</td><td><code>ax.plot([1,2], [3,4])</code></td></tr>
+        <tr><td><code>ax.set_title()</code></td><td>Set plot title</td><td><code>ax.set_title('My Plot')</code></td></tr>
+        <tr><td><code>ax.set_xlabel()</code></td><td>Label for x-axis</td><td><code>ax.set_xlabel('Time')</code></td></tr>
+        <tr><td><code>ax.set_ylabel()</code></td><td>Label for y-axis</td><td><code>ax.set_ylabel('Value')</code></td></tr>
+        <tr><td><code>ax.legend()</code></td><td>Show legend box</td><td><code>ax.legend(loc='upper left')</code></td></tr>
+        <tr><td><code>ax.grid()</code></td><td>Show/hide grid lines</td><td><code>ax.grid(True, alpha=0.3)</code></td></tr>
+        <tr><td><code>ax.set_xlim()</code></td><td>Set x-axis range</td><td><code>ax.set_xlim(0, 10)</code></td></tr>
+        <tr><td><code>ax.set_ylim()</code></td><td>Set y-axis range</td><td><code>ax.set_ylim(-1, 1)</code></td></tr>
+        <tr><td><code>ax.axhline()</code></td><td>Horizontal reference line</td><td><code>ax.axhline(y=0)</code></td></tr>
+        <tr><td><code>ax.axvline()</code></td><td>Vertical reference line</td><td><code>ax.axvline(x=5)</code></td></tr>
+        <tr><td><code>ax.annotate()</code></td><td>Add text with arrow</td><td><code>ax.annotate('Max', ...)</code></td></tr>
+      </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- PART 03: SUBPLOTS -->
+    <!-- ============================================================ -->
+    <section id="sec-subplots" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Part 03 &bull; Subplots</div>
+        <h2 class="ch-title">3. Subplots</h2>
+      </div>
+
+      <h3>3.1 What are Subplots?</h3>
+      <p>Sometimes you want to show multiple plots side by side in a single figure. Each individual plot is called a <strong>subplot</strong>. Matplotlib makes this very easy.</p>
+      <p>Think of it like this: A figure is a page, and subplots are the graphs arranged on that page in a grid pattern (rows x columns).</p>
+
+      <h3>3.2 plt.subplots() — Creating Subplots</h3>
+      <div class="syntax-box">
+        <strong>SYNTAX:</strong> fig, axes = plt.subplots(nrows, ncols, figsize=(w, h))<br><br>
+        <strong>nrows</strong> = number of rows of plots<br>
+        <strong>ncols</strong> = number of columns of plots<br>
+        <strong>figsize</strong> = (width, height) in inches
+      </div>
+
+      <h3>3.3 Two Subplots Side by Side</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 9: Two Subplots (1 row, 2 columns)</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 9</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+x = np.linspace(<span class="syn-number">0</span>, <span class="syn-number">10</span>, <span class="syn-number">50</span>)
+
+<span class="syn-comment"># Create 1 row, 2 columns of subplots</span>
+fig, (ax1, ax2) = plt.subplots(<span class="syn-number">1</span>, <span class="syn-number">2</span>, figsize=(<span class="syn-number">8</span>, <span class="syn-number">3.5</span>))
+
+<span class="syn-comment"># First subplot</span>
+ax1.plot(x, np.sin(x), color=<span class="syn-string">'#E63946'</span>, linewidth=<span class="syn-number">2</span>)
+ax1.set_title(<span class="syn-string">"sin(x)"</span>, fontweight=<span class="syn-string">'bold'</span>)
+ax1.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+<span class="syn-comment"># Second subplot</span>
+ax2.plot(x, np.cos(x), color=<span class="syn-string">'#457B9D'</span>, linewidth=<span class="syn-number">2</span>)
+ax2.set_title(<span class="syn-string">"cos(x)"</span>, fontweight=<span class="syn-string">'bold'</span>)
+ax2.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+fig.suptitle(<span class="syn-string">"Two Subplots Side by Side"</span>, fontweight=<span class="syn-string">'bold'</span>, fontsize=<span class="syn-number">13</span>)
+fig.tight_layout()  <span class="syn-comment"># Prevents overlapping</span>
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig11.png" alt="Two Subplots Side by Side">
+          <p class="image-caption">Figure 11: Two subplots side by side</p>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>💡 TIP:</strong> Always call <code>fig.tight_layout()</code> before <code>plt.show()</code>. It automatically adjusts spacing so that titles and labels don't overlap.
+      </div>
+
+      <h3>3.4 2x2 Grid of Subplots</h3>
+      <p>When you create a grid of subplots, the <code>axes</code> variable becomes a 2D array. You access each subplot using <code>axes[row, col]</code>.</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 10: 2x2 Grid Layout</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 10</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+x = np.linspace(<span class="syn-number">0</span>, <span class="syn-number">2</span>*np.pi, <span class="syn-number">100</span>)
+
+<span class="syn-comment"># Create 2 rows, 2 columns</span>
+fig, axes = plt.subplots(<span class="syn-number">2</span>, <span class="syn-number">2</span>, figsize=(<span class="syn-number">8</span>, <span class="syn-number">6</span>))
+
+<span class="syn-comment"># Top-left: axes[0, 0]</span>
+axes[<span class="syn-number">0</span>, <span class="syn-number">0</span>].plot(x, np.sin(x), color=<span class="syn-string">'#E63946'</span>, linewidth=<span class="syn-number">0.5</span>, linestyle=<span class="syn-string">'--'</span>, marker=<span class="syn-string">'s'</span>, markersize=<span class="syn-number">2</span>)
+axes[<span class="syn-number">0</span>, <span class="syn-number">0</span>].set_title(<span class="syn-string">"sin(x)"</span>)
+axes[<span class="syn-number">0</span>, <span class="syn-number">0</span>].grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+<span class="syn-comment"># Top-right: axes[0, 1]</span>
+axes[<span class="syn-number">0</span>, <span class="syn-number">1</span>].plot(x, np.cos(x), color=<span class="syn-string">'#457B9D'</span>, linewidth=<span class="syn-number">2</span>)
+axes[<span class="syn-number">0</span>, <span class="syn-number">1</span>].set_title(<span class="syn-string">"cos(x)"</span>)
+axes[<span class="syn-number">0</span>, <span class="syn-number">1</span>].grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+<span class="syn-comment"># Bottom-left: axes[1, 0]</span>
+axes[<span class="syn-number">1</span>, <span class="syn-number">0</span>].plot(x, x**<span class="syn-number">3</span>, color=<span class="syn-string">'#2A9D8F'</span>, linewidth=<span class="syn-number">2</span>)
+axes[<span class="syn-number">1</span>, <span class="syn-number">0</span>].set_title(<span class="syn-string">"x^3"</span>)
+axes[<span class="syn-number">1</span>, <span class="syn-number">0</span>].set_ylim(<span class="syn-number">0</span>, <span class="syn-number">100</span>)
+axes[<span class="syn-number">1</span>, <span class="syn-number">0</span>].grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+<span class="syn-comment"># Bottom-right: axes[1, 1]</span>
+axes[<span class="syn-number">1</span>, <span class="syn-number">1</span>].plot(x, np.sin(x)**<span class="syn-number">2</span>, color=<span class="syn-string">'#E9C46A'</span>, linewidth=<span class="syn-number">2</span>)
+axes[<span class="syn-number">1</span>, <span class="syn-number">1</span>].set_title(<span class="syn-string">"sin squared(x)"</span>)
+axes[<span class="syn-number">1</span>, <span class="syn-number">1</span>].grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+fig.suptitle(<span class="syn-string">"2x2 Grid of Subplots"</span>, fontweight=<span class="syn-string">'bold'</span>)
+fig.tight_layout()
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig12.png" alt="2x2 Grid of Subplots">
+          <p class="image-caption">Figure 12: Four plots arranged in a 2x2 grid</p>
+        </div>
+      </div>
+
+      <div class="highlight-box remember">
+        <strong>Remember: <code>axes[row, col]</code> indexing:</strong><br>
+        <code>axes[0, 0]</code> = top-left<br>
+        <code>axes[0, 1]</code> = top-right<br>
+        <code>axes[1, 0]</code> = bottom-left<br>
+        <code>axes[1, 1]</code> = bottom-right
+      </div>
+
+      <h3>3.5 Subplots with Shared Axes</h3>
+      <p>When comparing related data, it helps to share the same x-axis or y-axis across subplots:</p>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 11: Stacked Subplots with sharex=True</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 11</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+x = np.linspace(<span class="syn-number">0</span>, <span class="syn-number">4</span>*np.pi, <span class="syn-number">200</span>)
+
+<span class="syn-comment"># sharex=True means all subplots share the same x-axis</span>
+fig, (ax1, ax2, ax3) = plt.subplots(<span class="syn-number">3</span>, <span class="syn-number">1</span>, figsize=(<span class="syn-number">6</span>, <span class="syn-number">6</span>), sharex=<span class="syn-keyword">True</span>)
+
+ax1.plot(x, np.sin(x), color=<span class="syn-string">'#E63946'</span>, linewidth=<span class="syn-number">2</span>)
+ax1.set_ylabel(<span class="syn-string">"sin(x)"</span>)
+ax1.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+ax2.plot(x, np.sin(<span class="syn-number">2</span>*x), color=<span class="syn-string">'#457B9D'</span>, linewidth=<span class="syn-number">2</span>)
+ax2.set_ylabel(<span class="syn-string">"sin(2x)"</span>)
+ax2.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+ax3.plot(x, np.sin(<span class="syn-number">3</span>*x), color=<span class="syn-string">'#2A9D8F'</span>, linewidth=<span class="syn-number">2</span>)
+ax3.set_ylabel(<span class="syn-string">"sin(3x)"</span>)
+ax3.set_xlabel(<span class="syn-string">"x (radians)"</span>)
+ax3.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+fig.suptitle(<span class="syn-string">"Subplots with Shared X-Axis"</span>, fontweight=<span class="syn-string">'bold'</span>, fontsize=<span class="syn-number">14</span>)
+fig.tight_layout()
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig13.png" alt="Stacked Subplots with Shared X-Axis">
+          <p class="image-caption">Figure 13: Three vertically stacked plots sharing the same x-axis</p>
+        </div>
+      </div>
+
+      <h3>3.7 Subplot Methods Reference</h3>
+      <table>
+        <tr><th>Function / Parameter</th><th>What It Does</th><th>Example</th></tr>
+        <tr><td><code>plt.subplots(r, c)</code></td><td>Create r rows x c cols grid</td><td><code>fig, axes = plt.subplots(2, 3)</code></td></tr>
+        <tr><td><code>figsize=(w, h)</code></td><td>Set figure size in inches</td><td><code>plt.subplots(figsize=(10, 6))</code></td></tr>
+        <tr><td><code>sharex=True</code></td><td>Share x-axis across subplots</td><td><code>plt.subplots(3, 1, sharex=True)</code></td></tr>
+        <tr><td><code>sharey=True</code></td><td>Share y-axis across subplots</td><td><code>plt.subplots(1, 3, sharey=True)</code></td></tr>
+        <tr><td><code>fig.suptitle()</code></td><td>Title for entire figure</td><td><code>fig.suptitle('Main Title')</code></td></tr>
+        <tr><td><code>fig.tight_layout()</code></td><td>Auto-fix spacing</td><td><code>fig.tight_layout()</code></td></tr>
+        <tr><td><code>GridSpec(r, c)</code></td><td>Custom grid layout</td><td><code>gs = GridSpec(2, 2)</code></td></tr>
+        <tr><td><code>height_ratios</code></td><td>Relative heights of rows</td><td><code>GridSpec(2,1, height_ratios=[2,1])</code></td></tr>
+        <tr><td><code>width_ratios</code></td><td>Relative widths of cols</td><td><code>GridSpec(1,2, width_ratios=[3,1])</code></td></tr>
+        <tr><td><code>fig.add_subplot(gs)</code></td><td>Add subplot from GridSpec</td><td><code>ax = fig.add_subplot(gs[0,:])</code></td></tr>
+        <tr><td><code>plt.savefig()</code></td><td>Save entire figure</td><td><code>plt.savefig('subplots.png')</code></td></tr>
+      </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- PART 04: SEABORN LINE PLOTS -->
+    <!-- ============================================================ -->
+    <section id="sec-seaborn" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Part 04 &bull; Seaborn</div>
+        <h2 class="ch-title">4. Seaborn Line Plots</h2>
+      </div>
+
+      <h3>4.1 Seaborn Basics</h3>
+      <p>Seaborn's <code>lineplot()</code> function is more powerful than Matplotlib's <code>plot</code>.</p>
+
+      <div class="syntax-box">
+        <strong>SYNTAX:</strong> sns.lineplot(data=df, x='col_x', y='col_y', hue='category_col')<br><br>
+        <strong>data</strong> = a Pandas DataFrame<br>
+        <strong>hue</strong> = column name to color-code different groups<br>
+        <strong>style</strong> = column name to vary line style<br>
+        <strong>markers</strong> = True to show markers
+      </div>
+
+      <h3>4.2 Seaborn Themes</h3>
+      <p>Seaborn comes with built-in themes that instantly make your plots look professional:</p>
+
+      <table>
+        <tr><th>Theme</th><th>Description</th><th>Code</th></tr>
+        <tr><td>whitegrid</td><td>White background + grid lines</td><td><code>sns.set_theme(style="whitegrid")</code></td></tr>
+        <tr><td>darkgrid</td><td>Gray background + grid (default)</td><td><code>sns.set_theme(style="darkgrid")</code></td></tr>
+        <tr><td>white</td><td>Clean white background</td><td><code>sns.set_theme(style="white")</code></td></tr>
+        <tr><td>dark</td><td>Gray background, no grid</td><td><code>sns.set_theme(style="dark")</code></td></tr>
+        <tr><td>ticks</td><td>White background + tick marks</td><td><code>sns.set_theme(style="ticks")</code></td></tr>
+      </table>
+
+      <h3>4.3 Seaborn Line Plot with Grouped Data</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 13: Seaborn Line Plot with Grouped Data</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 13</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> seaborn <span class="syn-keyword">as</span> sns
+
+sns.set_theme(style=<span class="syn-string">"whitegrid"</span>)
+
+<span class="syn-comment"># Create data manually</span>
+months = [<span class="syn-string">'Jan'</span>, <span class="syn-string">'Feb'</span>, <span class="syn-string">'Mar'</span>, <span class="syn-string">'Apr'</span>, <span class="syn-string">'May'</span>, <span class="syn-string">'Jun'</span>]
+sales = [<span class="syn-number">20</span>, <span class="syn-number">35</span>, <span class="syn-number">30</span>, <span class="syn-number">45</span>, <span class="syn-number">50</span>, <span class="syn-number">65</span>]
+
+<span class="syn-comment"># Create the graph</span>
+sns.lineplot(x=months, y=sales,
+             marker=<span class="syn-string">'o'</span>,       <span class="syn-comment"># Circle marker</span>
+             markersize=<span class="syn-number">20</span>,    <span class="syn-comment"># for marker size</span>
+             linewidth=<span class="syn-number">1.5</span>,     <span class="syn-comment"># for line width</span>
+             color=<span class="syn-string">'blue'</span>,      <span class="syn-comment"># for line color</span>
+             markerfacecolor=<span class="syn-string">'red'</span>)  <span class="syn-comment"># for marker face color</span>
+
+plt.title(<span class="syn-string">"Sales by Month"</span>, fontweight=<span class="syn-string">'bold'</span>)
+plt.xlabel(<span class="syn-string">"Month"</span>)
+plt.ylabel(<span class="syn-string">"Sales"</span>)
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig14.png" alt="Seaborn Line Plot">
+          <p class="image-caption">Figure 14: Sales trends color-coded using Seaborn</p>
+        </div>
+      </div>
+
+      <h3>4.4 Seaborn Color Palette</h3>
+      <p>A color palette in Seaborn is a collection of colors used to automatically give different colors to different elements of a graph, such as lines, bars, or points.</p>
+      <p><strong>What is its use?</strong></p>
+      <ul>
+        <li>Give different colors to multiple data series.</li>
+        <li>Make graphs more attractive and readable.</li>
+        <li>Make it easier to distinguish between different categories.</li>
+      </ul>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program: Seaborn Color Palettes</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> seaborn <span class="syn-keyword">as</span> sns
+
+<span class="syn-comment"># Set graph theme</span>
+sns.set_theme(style=<span class="syn-string">"whitegrid"</span>)
+
+<span class="syn-comment"># Seaborn Color Palettes</span>
+sns.set_palette(<span class="syn-string">"deep"</span>)        <span class="syn-comment"># Deep colors</span>
+<span class="syn-comment"># sns.set_palette("muted")       # Soft/muted colors</span>
+<span class="syn-comment"># sns.set_palette("bright")      # Bright colors</span>
+<span class="syn-comment"># sns.set_palette("pastel")      # Light/pastel colors</span>
+<span class="syn-comment"># sns.set_palette("dark")        # Dark colors</span>
+<span class="syn-comment"># sns.set_palette("colorblind")  # Colorblind-friendly colors</span>
+
+<span class="syn-comment"># Create data manually</span>
+months = [<span class="syn-string">'Jan'</span>, <span class="syn-string">'Feb'</span>, <span class="syn-string">'Mar'</span>, <span class="syn-string">'Apr'</span>, <span class="syn-string">'May'</span>, <span class="syn-string">'Jun'</span>]
+sales1 = [<span class="syn-number">20</span>, <span class="syn-number">35</span>, <span class="syn-number">30</span>, <span class="syn-number">45</span>, <span class="syn-number">50</span>, <span class="syn-number">65</span>]
+sales2 = [<span class="syn-number">15</span>, <span class="syn-number">25</span>, <span class="syn-number">35</span>, <span class="syn-number">40</span>, <span class="syn-number">55</span>, <span class="syn-number">60</span>]
+
+<span class="syn-comment"># Create the graph</span>
+sns.lineplot(x=months, y=sales1, marker=<span class="syn-string">'o'</span>, markersize=<span class="syn-number">8</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">"North"</span>)
+sns.lineplot(x=months, y=sales2, marker=<span class="syn-string">'s'</span>, markersize=<span class="syn-number">8</span>, linewidth=<span class="syn-number">2</span>, label=<span class="syn-string">"South"</span>)
+
+<span class="syn-comment"># Labels and title</span>
+plt.title(<span class="syn-string">"Sales by Region"</span>, fontweight=<span class="syn-string">'bold'</span>)
+plt.xlabel(<span class="syn-string">"Month"</span>)
+plt.ylabel(<span class="syn-string">"Sales"</span>)
+plt.legend(title=<span class="syn-string">"Region"</span>)
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig15.png" alt="Seaborn Line Plot with Two Lines">
+          <p class="image-caption">Figure 15: Sales by Region using Seaborn color palettes</p>
+        </div>
+      </div>
+
+      <h3>4.5 Advanced: Seaborn + Subplots Combined</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program 14: Advanced — Seaborn with Multiple Subplots</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program 14</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> seaborn <span class="syn-keyword">as</span> sns
+
+sns.set_theme(style=<span class="syn-string">"darkgrid"</span>)
+
+fig, axes = plt.subplots(<span class="syn-number">1</span>, <span class="syn-number">3</span>, figsize=(<span class="syn-number">12</span>, <span class="syn-number">4</span>))
+
+<span class="syn-comment"># --- Subplot 1: Stock Trend ---</span>
+days = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>]
+price = [<span class="syn-number">20</span>, <span class="syn-number">22</span>, <span class="syn-number">21</span>, <span class="syn-number">25</span>, <span class="syn-number">27</span>, <span class="syn-number">30</span>]
+axes[<span class="syn-number">0</span>].plot(days, price, <span class="syn-string">'o-'</span>, color=<span class="syn-string">'red'</span>)
+axes[<span class="syn-number">0</span>].fill_between(days, price, alpha=<span class="syn-number">0.2</span>)
+axes[<span class="syn-number">0</span>].set_title(<span class="syn-string">"Stock Trend"</span>)
+axes[<span class="syn-number">0</span>].set_xlabel(<span class="syn-string">"Day"</span>)
+axes[<span class="syn-number">0</span>].set_ylabel(<span class="syn-string">"Price"</span>)
+
+<span class="syn-comment"># --- Subplot 2: Model Comparison ---</span>
+epochs = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>]
+model_A = [<span class="syn-number">50</span>, <span class="syn-number">60</span>, <span class="syn-number">65</span>, <span class="syn-number">72</span>, <span class="syn-number">78</span>]
+model_B = [<span class="syn-number">45</span>, <span class="syn-number">55</span>, <span class="syn-number">63</span>, <span class="syn-number">70</span>, <span class="syn-number">75</span>]
+model_C = [<span class="syn-number">40</span>, <span class="syn-number">52</span>, <span class="syn-number">60</span>, <span class="syn-number">68</span>, <span class="syn-number">73</span>]
+axes[<span class="syn-number">1</span>].plot(epochs, model_A, marker=<span class="syn-string">'o'</span>, label=<span class="syn-string">"Model A"</span>)
+axes[<span class="syn-number">1</span>].plot(epochs, model_B, marker=<span class="syn-string">'s'</span>, label=<span class="syn-string">"Model B"</span>)
+axes[<span class="syn-number">1</span>].plot(epochs, model_C, marker=<span class="syn-string">'^'</span>, label=<span class="syn-string">"Model C"</span>)
+axes[<span class="syn-number">1</span>].set_title(<span class="syn-string">"Model Comparison"</span>)
+axes[<span class="syn-number">1</span>].set_xlabel(<span class="syn-string">"Epoch"</span>)
+axes[<span class="syn-number">1</span>].set_ylabel(<span class="syn-string">"Accuracy"</span>)
+axes[<span class="syn-number">1</span>].legend()
+
+<span class="syn-comment"># --- Subplot 3: Signal ---</span>
+time = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>]
+signal_A = [<span class="syn-number">10</span>, <span class="syn-number">15</span>, <span class="syn-number">13</span>, <span class="syn-number">20</span>, <span class="syn-number">18</span>, <span class="syn-number">25</span>]
+signal_B = [<span class="syn-number">8</span>, <span class="syn-number">12</span>, <span class="syn-number">16</span>, <span class="syn-number">14</span>, <span class="syn-number">22</span>, <span class="syn-number">24</span>]
+
+sns.lineplot(x=time, y=signal_A, marker=<span class="syn-string">'o'</span>, label=<span class="syn-string">"Event A"</span>, ax=axes[<span class="syn-number">2</span>])
+sns.lineplot(x=time, y=signal_B, marker=<span class="syn-string">'s'</span>, label=<span class="syn-string">"Event B"</span>, ax=axes[<span class="syn-number">2</span>])
+axes[<span class="syn-number">2</span>].set_title(<span class="syn-string">"Signal Comparison"</span>)
+axes[<span class="syn-number">2</span>].set_xlabel(<span class="syn-string">"Time"</span>)
+axes[<span class="syn-number">2</span>].set_ylabel(<span class="syn-string">"Signal"</span>)
+axes[<span class="syn-number">2</span>].legend()
+
+<span class="syn-comment"># Main title</span>
+fig.suptitle(<span class="syn-string">"Multiple Subplots with Seaborn"</span>, fontweight=<span class="syn-string">'bold'</span>)
+fig.tight_layout()
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig16.png" alt="Multiple Subplots with Seaborn">
+          <p class="image-caption">Figure 16: Three different visualizations combined in one figure</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- PART 05: PRACTICE PROGRAMS -->
+    <!-- ============================================================ -->
+    <section id="sec-practice" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">💻 Part 05 &bull; Practice</div>
+        <h2 class="ch-title">5. Practice Programs</h2>
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program A: Temperature Tracker</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program A</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+
+<span class="syn-comment"># Weekly temperature data</span>
+days = [<span class="syn-string">'Mon'</span>, <span class="syn-string">'Tue'</span>, <span class="syn-string">'Wed'</span>, <span class="syn-string">'Thu'</span>, <span class="syn-string">'Fri'</span>, <span class="syn-string">'Sat'</span>, <span class="syn-string">'Sun'</span>]
+max_temp = [<span class="syn-number">32</span>, <span class="syn-number">35</span>, <span class="syn-number">33</span>, <span class="syn-number">36</span>, <span class="syn-number">38</span>, <span class="syn-number">37</span>, <span class="syn-number">34</span>]
+min_temp = [<span class="syn-number">22</span>, <span class="syn-number">24</span>, <span class="syn-number">23</span>, <span class="syn-number">25</span>, <span class="syn-number">27</span>, <span class="syn-number">26</span>, <span class="syn-number">24</span>]
+
+fig, ax = plt.subplots(figsize=(<span class="syn-number">7</span>, <span class="syn-number">4</span>))
+
+ax.plot(days, max_temp, <span class="syn-string">'o-'</span>, color=<span class="syn-string">'#E63946'</span>, linewidth=<span class="syn-number">2</span>, markersize=<span class="syn-number">8</span>, label=<span class="syn-string">'Max Temp'</span>)
+ax.plot(days, min_temp, <span class="syn-string">'s-'</span>, color=<span class="syn-string">'#457B9D'</span>, linewidth=<span class="syn-number">2</span>, markersize=<span class="syn-number">8</span>, label=<span class="syn-string">'Min Temp'</span>)
+ax.fill_between(days, min_temp, max_temp, alpha=<span class="syn-number">0.15</span>, color=<span class="syn-string">'#A8DADC'</span>)
+
+ax.set_title(<span class="syn-string">"Weekly Temperature Report"</span>, fontweight=<span class="syn-string">'bold'</span>, fontsize=<span class="syn-number">14</span>)
+ax.set_xlabel(<span class="syn-string">"Day of Week"</span>)
+ax.set_ylabel(<span class="syn-string">"Temperature (Celsius)"</span>)
+ax.legend()
+ax.grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+fig.tight_layout()
+plt.savefig(<span class="syn-string">"temperature_report.png"</span>, dpi=<span class="syn-number">150</span>)
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig17.png" alt="Weekly Temperature Report">
+          <p class="image-caption">Figure 17: Temperature report with shaded area between min and max</p>
+        </div>
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program B: Student Marks Dashboard</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Program B</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> matplotlib.pyplot <span class="syn-keyword">as</span> plt
+<span class="syn-keyword">import</span> numpy <span class="syn-keyword">as</span> np
+
+subjects = [<span class="syn-string">'Math'</span>, <span class="syn-string">'Science'</span>, <span class="syn-string">'English'</span>, <span class="syn-string">'Hindi'</span>, <span class="syn-string">'Computer'</span>]
+student1 = [<span class="syn-number">85</span>, <span class="syn-number">92</span>, <span class="syn-number">78</span>, <span class="syn-number">88</span>, <span class="syn-number">95</span>]
+student2 = [<span class="syn-number">90</span>, <span class="syn-number">75</span>, <span class="syn-number">85</span>, <span class="syn-number">82</span>, <span class="syn-number">88</span>]
+student3 = [<span class="syn-number">78</span>, <span class="syn-number">88</span>, <span class="syn-number">92</span>, <span class="syn-number">76</span>, <span class="syn-number">90</span>]
+
+fig, axes = plt.subplots(<span class="syn-number">1</span>, <span class="syn-number">3</span>, figsize=(<span class="syn-number">14</span>, <span class="syn-number">4</span>), sharey=<span class="syn-keyword">True</span>)
+
+<span class="syn-comment"># Student 1</span>
+axes[<span class="syn-number">0</span>].plot(subjects, student1, <span class="syn-string">'o-'</span>, color=<span class="syn-string">'#E63946'</span>, linewidth=<span class="syn-number">2</span>, markersize=<span class="syn-number">8</span>)
+axes[<span class="syn-number">0</span>].fill_between(subjects, student1, alpha=<span class="syn-number">0.1</span>, color=<span class="syn-string">'#E63946'</span>)
+axes[<span class="syn-number">0</span>].set_title(<span class="syn-string">"Rahul's Marks"</span>, fontweight=<span class="syn-string">'bold'</span>)
+axes[<span class="syn-number">0</span>].set_ylim(<span class="syn-number">60</span>, <span class="syn-number">100</span>)
+axes[<span class="syn-number">0</span>].grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+<span class="syn-comment"># Student 2</span>
+axes[<span class="syn-number">1</span>].plot(subjects, student2, <span class="syn-string">'s-'</span>, color=<span class="syn-string">'#457B9D'</span>, linewidth=<span class="syn-number">2</span>, markersize=<span class="syn-number">8</span>)
+axes[<span class="syn-number">1</span>].fill_between(subjects, student2, alpha=<span class="syn-number">0.1</span>, color=<span class="syn-string">'#457B9D'</span>)
+axes[<span class="syn-number">1</span>].set_title(<span class="syn-string">"Priya's Marks"</span>, fontweight=<span class="syn-string">'bold'</span>)
+axes[<span class="syn-number">1</span>].grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+<span class="syn-comment"># Student 3</span>
+axes[<span class="syn-number">2</span>].plot(subjects, student3, <span class="syn-string">'^-'</span>, color=<span class="syn-string">'#2A9D8F'</span>, linewidth=<span class="syn-number">2</span>, markersize=<span class="syn-number">8</span>)
+axes[<span class="syn-number">2</span>].fill_between(subjects, student3, alpha=<span class="syn-number">0.1</span>, color=<span class="syn-string">'#2A9D8F'</span>)
+axes[<span class="syn-number">2</span>].set_title(<span class="syn-string">"Amit's Marks"</span>, fontweight=<span class="syn-string">'bold'</span>)
+axes[<span class="syn-number">2</span>].grid(<span class="syn-keyword">True</span>, alpha=<span class="syn-number">0.3</span>)
+
+fig.suptitle(<span class="syn-string">"Student Marks Dashboard"</span>, fontweight=<span class="syn-string">'bold'</span>, fontsize=<span class="syn-number">15</span>)
+fig.tight_layout()
+plt.show()</code></pre>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/lec22_fig18.png" alt="Student Marks Dashboard">
+          <p class="image-caption">Figure 18: Three students' marks compared across subjects</p>
+        </div>
+      </div>
+
+      <h3>Line Plot Parameters Reference</h3>
+      <table>
+        <tr><th>Parameter</th><th>Values</th><th>Example</th></tr>
+        <tr><td><code>color / c</code></td><td><code>'red'</code>, <code>'#E63946'</code>, <code>(0.5,0,0)</code></td><td><code>color='#E63946'</code></td></tr>
+        <tr><td><code>linewidth / lw</code></td><td>1, 2, 3.5</td><td><code>linewidth=2.5</code></td></tr>
+        <tr><td><code>linestyle / ls</code></td><td><code>'-'</code>, <code>'--'</code>, <code>'-.'</code>, <code>':'</code></td><td><code>linestyle='--'</code></td></tr>
+        <tr><td><code>marker</code></td><td><code>'o'</code>, <code>'s'</code>, <code>'^'</code>, <code>'D'</code>, <code>'*'</code>, <code>'v'</code>, <code>'p'</code>, <code>'X'</code></td><td><code>marker='o'</code></td></tr>
+        <tr><td><code>markersize / ms</code></td><td>5, 8, 12</td><td><code>markersize=8</code></td></tr>
+        <tr><td><code>markerfacecolor</code></td><td>Any color</td><td><code>markerfacecolor='yellow'</code></td></tr>
+        <tr><td><code>alpha</code></td><td>0.0 to 1.0</td><td><code>alpha=0.7</code></td></tr>
+        <tr><td><code>label</code></td><td>Any string</td><td><code>label='Sales'</code></td></tr>
+      </table>
+
+      <h3>Creating Subplots</h3>
+      <table>
+        <tr><th>Code Pattern</th><th>Result</th></tr>
+        <tr><td><code>fig, ax = plt.subplots()</code></td><td>1 figure, 1 plot</td></tr>
+        <tr><td><code>fig, (ax1, ax2) = plt.subplots(1, 2)</code></td><td>1 row, 2 columns</td></tr>
+        <tr><td><code>fig, axes = plt.subplots(2, 2)</code></td><td>2x2 grid (use <code>axes[r,c]</code>)</td></tr>
+        <tr><td><code>fig, axes = plt.subplots(3, 1, sharex=True)</code></td><td>3 rows sharing x-axis</td></tr>
+      </table>
+
+      <h3>Saving Plots</h3>
+      <table>
+        <tr><th>Code</th><th>What It Does</th></tr>
+        <tr><td><code>plt.savefig('plot.png')</code></td><td>Save as PNG</td></tr>
+        <tr><td><code>plt.savefig('plot.png', dpi=300)</code></td><td>High resolution PNG</td></tr>
+        <tr><td><code>plt.savefig('plot.pdf')</code></td><td>Save as PDF (vector)</td></tr>
+        <tr><td><code>plt.savefig('plot.svg')</code></td><td>Save as SVG (vector)</td></tr>
+        <tr><td><code>plt.savefig('plot.jpg', quality=95)</code></td><td>Save as JPEG</td></tr>
+        <tr><td><code>plt.savefig('p.png', bbox_inches='tight')</code></td><td>Remove whitespace borders</td></tr>
+      </table>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text);">Prepared by Umer Farooq</h4>
+          <p style="font-size: 0.85rem; color: var(--text-dim);">Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <a href="index.html" class="btn-nav">
+          <span>🏠</span> Course Portal
+        </a>
+        <a href="Lec_21_OOP.html" class="btn-nav">
+          <span>🏛️</span> OOP
+        </a>
+        <a href="Lec_20_NumPy.html" class="btn-nav">
+          <span>🔢</span> NumPy
+        </a>
+        <button class="btn-nav" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <span>⬆️</span> Back to Top
+        </button>
+        <button class="btn-nav" onclick="window.print()">
+          <span>🖨️</span> Print Notes
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="toggleTheme()" title="Toggle Theme">
+      <span id="theme-icon-float">☀️</span>
+    </button>
+    <button class="btn-float" onclick="window.print()" title="Print Page">
+      <span>🖨️</span>
+    </button>
+    <button class="btn-float" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to Top">
+      <span>▲</span>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcons(next);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    function copyCode(btn) {
+      const container = btn.closest('.code-container');
+      if (!container) return;
+      const codeBlock = container.querySelector('pre code') || container.querySelector('pre');
+      if (codeBlock) {
+        const textToCopy = codeBlock.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          btn.style.color = 'var(--green)';
+          btn.style.borderColor = 'var(--green)';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 2000);
+        }).catch(() => {
+          const range = document.createRange();
+          range.selectNode(codeBlock);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2000);
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+    });
+  </script>
+</body>
+
+</html>

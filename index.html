@@ -1,0 +1,4528 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Programming Course Portal | SSM College of Engineering — Prepared by Umer Farooq</title>
+  <meta name="description"
+    content="Comprehensive single-page course portal for B.Tech 5th Semester Python Programming at SSM College of Engineering. Prepared by Umer Farooq. Features integrated Lectures 1 to 10, Practice Sets 1 to 4 (320+ programs), real-time search, interactive reader, and progress tracking.">
+  <meta name="author" content="Umer Farooq">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Pyodide Python 3 WebAssembly Engine -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" defer></script>
+
+  <!-- CodeMirror 5 (Syntax Highlighting & IntelliSense Auto-Completion) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-hover: #e0741b;
+      --accent-soft: rgba(243, 135, 46, .12);
+      --teal: #5fe4c8;
+      --teal-soft: rgba(95, 228, 200, .12);
+      --purple: #c9a6f5;
+      --purple-soft: rgba(201, 166, 245, .12);
+      --blue: #60a5fa;
+      --blue-soft: rgba(96, 165, 250, .12);
+      --green: #4ade80;
+      --green-soft: rgba(74, 222, 128, .12);
+      --red: #ef7a6a;
+      --shadow: rgba(0, 0, 0, .5);
+      --shadow-lg: 0 16px 40px rgba(0, 0, 0, .45);
+      --glass-bg: rgba(24, 27, 34, 0.88);
+      --font-main: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Outfit', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+    }
+
+    html[data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #edf2f7;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #d9660f;
+      --accent-hover: #b85006;
+      --accent-soft: rgba(217, 102, 15, .1);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, .1);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, .1);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, .1);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, .1);
+      --red: #dc2626;
+      --shadow: rgba(100, 116, 139, .15);
+      --shadow-lg: 0 16px 40px rgba(100, 116, 139, .18);
+      --glass-bg: rgba(255, 255, 255, 0.90);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .3s ease, color .3s ease;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .mono { font-family: var(--font-mono); }
+    .display { font-family: var(--font-display); }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Scroll progress */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      z-index: 9999;
+      transition: width .1s ease-out;
+    }
+
+    /* ═══════════════════ NAVBAR ═══════════════════ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: all .3s ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    .college-crest {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f3872e, #c9a6f5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #12141a;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      box-shadow: 0 4px 14px var(--accent-soft);
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-college {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════ PILL CAPSULE NAVBAR ═══════════════════ */
+    .nav-capsule-wrapper {
+      max-width: 620px;
+      overflow-x: auto;
+      padding: 4px 0;
+      scrollbar-width: none;
+    }
+    .nav-capsule-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-pill-capsule {
+      display: inline-flex;
+      align-items: center;
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 4px;
+      gap: 3px;
+      box-shadow: 0 2px 10px var(--shadow);
+      white-space: nowrap;
+    }
+
+    html[data-theme="light"] .nav-pill-capsule {
+      background: #eef2f6;
+      border-color: #e2e8f0;
+    }
+
+    .nav-pill-item {
+      padding: 6px 13px;
+      border-radius: var(--radius-full);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-dim);
+      transition: all .2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      white-space: nowrap;
+      border: none;
+      background: transparent;
+      user-select: none;
+    }
+
+    .nav-pill-item:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-pill-item.active {
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(243, 135, 46, 0.35);
+    }
+
+    .nav-pill-item.active svg {
+      stroke: #ffffff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s ease;
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .btn-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ═══════════════════ HERO SECTION ═══════════════════ */
+    .hero {
+      position: relative;
+      padding: 50px 0 40px;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 750px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(243, 135, 46, 0.15) 0%, rgba(95, 228, 200, 0.08) 40%, rgba(0, 0, 0, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(243, 135, 46, 0.3);
+    }
+
+    .badge-pill.teal {
+      background: var(--teal-soft);
+      color: var(--teal);
+      border-color: rgba(95, 228, 200, 0.3);
+    }
+
+    .badge-pill.purple {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border-color: rgba(201, 166, 245, 0.3);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.2vw, 50px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, var(--accent) 0%, #ffaa60 40%, var(--teal) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 24px;
+      max-width: 680px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #12141a;
+      font-weight: 700;
+      font-size: 14.5px;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all .2s ease;
+      box-shadow: 0 4px 18px rgba(243, 135, 46, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(243, 135, 46, 0.45);
+    }
+
+    .btn-outline {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 14.5px;
+      padding: 12px 22px;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all .2s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+      background: var(--cell-bg);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-num {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1.1;
+    }
+
+    .metric-label {
+      font-size: 11.5px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+
+    /* ═══════════════════ AUTHOR CARD HERO ═══════════════════ */
+    .author-spotlight-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+      transition: all .3s ease;
+    }
+
+    .author-spotlight-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .author-spotlight-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 75px;
+      background: linear-gradient(135deg, rgba(243, 135, 46, 0.2), rgba(95, 228, 200, 0.15));
+      z-index: 0;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      z-index: 1;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      background: var(--cell-bg);
+    }
+
+    .verified-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: #12141a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--card);
+    }
+
+    .author-info {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .author-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .author-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .author-dept {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    .author-stats-row {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      padding: 10px 0;
+      margin-top: 6px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .author-stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .author-stat-val {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .author-stat-lbl {
+      font-size: 10px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+
+    .author-card-footer {
+      margin-top: 12px;
+      font-size: 11.5px;
+      color: var(--teal);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ═══════════════════ PROGRESS TRACKER BAR ═══════════════════ */
+    .progress-banner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 24px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .progress-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .progress-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .progress-text-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .progress-text-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      max-width: 380px;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 10px;
+      background: var(--cell-bg);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--teal), var(--accent));
+      border-radius: var(--radius-full);
+      transition: width .4s ease;
+    }
+
+    .progress-pct {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal);
+      min-width: 44px;
+      text-align: right;
+    }
+
+    /* ═══════════════════ SEARCH & FILTER ═══════════════════ */
+    .search-filter-section {
+      margin-bottom: 32px;
+    }
+
+    .search-bar-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px 16px 52px;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: all .2s ease;
+      font-family: var(--font-main);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-faint);
+    }
+
+    .search-icon-svg {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: var(--text-faint);
+      pointer-events: none;
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-faint);
+      padding: 4px;
+      font-size: 18px;
+      display: none;
+    }
+
+    .search-clear-btn:hover {
+      color: var(--accent);
+    }
+
+    .filter-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12.5px;
+      font-weight: 600;
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      transition: all .2s ease;
+      cursor: pointer;
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .filter-pill.practice-pill.active {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+
+    /* ═══════════════════ LECTURE CARDS GRID ═══════════════════ */
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .section-title-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .lectures-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+
+    .lecture-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all .25s ease;
+      box-shadow: 0 4px 16px var(--shadow);
+    }
+
+    .lecture-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .lecture-card.completed {
+      border-color: rgba(74, 222, 128, 0.4);
+    }
+
+    .lec-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .lec-num-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    .lec-num-badge.practice-badge {
+      color: var(--teal);
+      background: var(--teal-soft);
+      border: 1px solid rgba(95, 228, 200, 0.3);
+    }
+
+    .lec-meta-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lec-time-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .lec-complete-toggle {
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      color: var(--text-faint);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .lec-complete-toggle.checked {
+      background: var(--green);
+      border-color: var(--green);
+      color: #12141a;
+      font-weight: 800;
+    }
+
+    .lec-title {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .lec-desc {
+      font-size: 13.5px;
+      color: var(--text-dim);
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .lec-topics-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+
+    .topic-chip {
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      padding: 3px 9px;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+    }
+
+    .topic-chip.highlight {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .lec-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-read-portal {
+      flex: 1;
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: #12141a;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all .2s ease;
+    }
+
+    .btn-read-portal:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(243, 135, 46, 0.3);
+    }
+
+    .btn-open-ext {
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s ease;
+    }
+
+    .btn-open-ext:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* ═══════════════════ INTEGRATED READER VIEW ═══════════════════ */
+    #reader-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--bg);
+      z-index: 2000;
+      flex-direction: column;
+    }
+
+    #reader-overlay.active {
+      display: flex;
+    }
+
+    .reader-topbar {
+      height: 60px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      gap: 12px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .reader-left-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .btn-back-hub {
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-back-hub:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .reader-lec-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .reader-active-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--accent);
+      color: #12141a;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .reader-active-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      max-width: 280px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .reader-nav-switcher-wrap {
+      max-width: 440px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .reader-nav-switcher-wrap::-webkit-scrollbar {
+      display: none;
+    }
+
+    .reader-nav-switcher {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: var(--cell-bg);
+      padding: 3px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .reader-tab-btn {
+      padding: 4px 9px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-dim);
+      border-radius: 4px;
+      transition: all .15s ease;
+    }
+
+    .reader-tab-btn:hover {
+      color: var(--text);
+    }
+
+    .reader-tab-btn.active {
+      background: var(--card);
+      color: var(--accent);
+      box-shadow: 0 2px 6px var(--shadow);
+      font-weight: 700;
+    }
+
+    .reader-right-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .reader-iframe-wrap {
+      flex: 1;
+      width: 100%;
+      height: calc(100vh - 60px);
+      position: relative;
+      background: var(--bg);
+    }
+
+    #lecture-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--bg);
+    }
+
+    .reader-loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--cell-border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ═══════════════════ ABOUT / SYLLABUS SECTION ═══════════════════ */
+    .about-syllabus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 60px;
+    }
+
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+    }
+
+    .info-card-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-card-title svg {
+      color: var(--accent);
+    }
+
+    .info-card p {
+      font-size: 14.5px;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .curriculum-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .curriculum-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--text);
+    }
+
+    .curriculum-bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════ FOOTER ═══════════════════ */
+    .footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 60px 0 30px;
+      margin-top: 60px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr;
+      gap: 36px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-brand-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .footer-brand-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      max-width: 320px;
+    }
+
+    .footer-col-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-dim);
+      transition: color .2s ease;
+      cursor: pointer;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    .footer-author-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-author-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--text-faint);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ═══════════════════ PLAYGROUND / DRAWER ═══════════════════ */
+    .floating-py-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: linear-gradient(135deg, var(--accent), #e0741b);
+      color: #12141a;
+      font-family: var(--font-main);
+      font-weight: 800;
+      font-size: 13.5px;
+      padding: 12px 20px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 8px 28px rgba(243, 135, 46, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      z-index: 900;
+      transition: all .25s ease;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .floating-py-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 36px rgba(243, 135, 46, 0.6);
+    }
+
+    .py-icon { font-size: 18px; }
+    .py-badge {
+      background: #12141a;
+      color: var(--accent);
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+    }
+
+    #py-interpreter-drawer {
+      position: fixed;
+      top: 0;
+      right: -100vw;
+      height: 100vh;
+      background: #10121b;
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      transition: right .35s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 1px solid #282b3d;
+    }
+
+    #py-interpreter-drawer.open {
+      right: 0;
+    }
+
+    #py-interpreter-drawer.py-drawer-half {
+      width: 50vw;
+      min-width: 540px;
+    }
+
+    #py-interpreter-drawer.py-drawer-full {
+      width: 100vw;
+    }
+
+    .py-drawer-header {
+      height: 60px;
+      background: #191c2b;
+      border-bottom: 1px solid #282b3d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .py-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .py-brand-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .py-header-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.15;
+    }
+
+    .py-engine-status {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: #798099;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #50fa7b;
+      box-shadow: 0 0 6px #50fa7b;
+    }
+
+    .status-dot.amber {
+      background: #f1fa8c;
+      box-shadow: 0 0 6px #f1fa8c;
+    }
+
+    .py-header-center {
+      flex: 1;
+      max-width: 320px;
+    }
+
+    .py-example-dropdown {
+      width: 100%;
+      background: #11131c;
+      border: 1px solid #282b3d;
+      color: #c4cadb;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      outline: none;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+
+    .py-example-dropdown:focus,
+    .py-example-dropdown:hover {
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .py-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .py-btn-run {
+      background: linear-gradient(135deg, var(--accent), #e0741b);
+      color: #12141a;
+      font-family: var(--font-main);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border: none;
+      transition: all .2s ease;
+      box-shadow: 0 2px 10px rgba(243, 135, 46, 0.4);
+    }
+
+    .py-btn-run:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(243, 135, 46, 0.5);
+    }
+
+    .py-btn-run:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .py-tool-btn {
+      background: #10121b;
+      border: 1px solid #282b3d;
+      color: #9da5ba;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all .2s;
+    }
+
+    .py-tool-btn:hover {
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .py-tool-btn.close-btn:hover {
+      border-color: #ff6b6b;
+      color: #ff6b6b;
+    }
+
+    .py-workspace-body {
+      flex: 1;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      height: calc(100vh - 60px);
+      background: #141620;
+      overflow: hidden;
+    }
+
+    .py-editor-pane,
+    .py-terminal-pane {
+      display: flex;
+      flex-direction: column;
+      background: #10121b;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .py-editor-pane {
+      border-bottom: 2px solid #232638;
+    }
+
+    .py-pane-topbar {
+      height: 32px;
+      background: #171926;
+      border-bottom: 1px solid #232638;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #798099;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .py-pane-label {
+      font-weight: 600;
+      color: #c4cadb;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .py-pane-hint kbd {
+      background: #232638;
+      color: #d1d5db;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 10px;
+    }
+
+    .py-exec-time {
+      color: #50fa7b;
+      font-size: 10.5px;
+    }
+
+    .py-editor-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: #10121b;
+      overflow: hidden;
+    }
+
+    .CodeMirror {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 13.5px !important;
+      line-height: 1.65 !important;
+      height: 100% !important;
+      background: #10121b !important;
+      color: #f8f8f2 !important;
+    }
+
+    .CodeMirror-gutters {
+      background: #0d0e17 !important;
+      border-right: 1px solid #202334 !important;
+    }
+
+    .CodeMirror-linenumber {
+      color: #515773 !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 12.5px !important;
+      padding-right: 10px !important;
+    }
+
+    .CodeMirror-cursor {
+      border-left: 2px solid var(--accent) !important;
+    }
+
+    .CodeMirror-selected {
+      background: rgba(243, 135, 46, 0.25) !important;
+    }
+
+    .cm-s-dracula .cm-keyword { color: #c9a6f5 !important; font-weight: 700; }
+    .cm-s-dracula .cm-def { color: #5fe4c8 !important; font-weight: 700; }
+    .cm-s-dracula .cm-variable { color: #e9ecf2 !important; }
+    .cm-s-dracula .cm-variable-2 { color: #80cbc4 !important; }
+    .cm-s-dracula .cm-property { color: #60a5fa !important; }
+    .cm-s-dracula .cm-operator { color: #f3872e !important; }
+    .cm-s-dracula .cm-string { color: #f1fa8c !important; }
+    .cm-s-dracula .cm-string-2 { color: #ffb86c !important; }
+    .cm-s-dracula .cm-number { color: #bd93f9 !important; }
+    .cm-s-dracula .cm-comment { color: #6272a4 !important; font-style: italic; }
+    .cm-s-dracula .cm-builtin { color: #8be9fd !important; font-weight: 600; }
+    .cm-s-dracula .cm-atom { color: #ff79c6 !important; font-weight: 600; }
+    .cm-s-dracula .cm-matchingbracket { border-bottom: 2px solid #50fa7b !important; color: #50fa7b !important; }
+
+    .CodeMirror-hints {
+      position: absolute;
+      z-index: 3500;
+      overflow: hidden;
+      list-style: none;
+      margin: 0;
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid #2d3248;
+      background: #171926;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      max-height: 220px;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .CodeMirror-hint {
+      margin: 0;
+      padding: 5px 10px;
+      border-radius: 4px;
+      white-space: pre;
+      color: #e2e8f0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .CodeMirror-hint-active {
+      background: var(--accent) !important;
+      color: #12141a !important;
+      font-weight: 700;
+    }
+
+    .hint-kind-badge {
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .py-terminal-output {
+      flex: 1;
+      padding: 14px 16px;
+      background: #0b0d14;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.55;
+      overflow-y: auto;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .term-line { margin-bottom: 4px; }
+    .term-welcome {
+      color: #798099;
+      border-bottom: 1px dashed #282b3d;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    .term-stdout { color: #e6e9f2; }
+    .term-stderr {
+      color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.08);
+      padding: 6px 10px;
+      border-left: 3px solid #ff6b6b;
+      border-radius: 4px;
+      margin: 6px 0;
+    }
+    .term-prompt { color: #5fe4c8; font-weight: 700; }
+    .term-success { color: #50fa7b; margin-top: 6px; font-size: 11.5px; }
+
+    @media (max-width: 900px) {
+      #py-interpreter-drawer.py-drawer-half {
+        width: 100vw;
+        min-width: 100%;
+      }
+      .hero-content {
+        grid-template-columns: 1fr;
+      }
+      .about-syllabus-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Progress Bar -->
+  <div id="progress-bar"></div>
+
+  <!-- ═══════════════════ NAVBAR ═══════════════════ -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <div class="brand-group" onclick="closeReader(); window.scrollTo({top: 0, behavior: 'smooth'});">
+        <div class="college-crest">SSM</div>
+        <div class="brand-text">
+          <span class="brand-college">SSM College of Engineering</span>
+          <span class="brand-sub">Dept. of Computer Science &amp; Eng.</span>
+        </div>
+      </div>
+
+      <!-- Capsule Navigation with Lec 1..10 and Practice 1..4 -->
+      <div class="nav-capsule-wrapper">
+        <nav class="nav-pill-capsule" id="header-nav-capsule" aria-label="Course Navigation">
+          
+        <button class="nav-pill-item active" id="nav-btn-overview" onclick="goToOverview()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Overview</span>
+        </button>
+    
+        <button class="nav-pill-item" id="nav-btn-lec-1" onclick="openReader(1)">
+          Lec 1
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-2" onclick="openReader(2)">
+          Lec 2
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-3" onclick="openReader(3)">
+          Lec 3
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-4" onclick="openReader(4)">
+          Lec 4
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-5" onclick="openReader(5)">
+          Lec 5
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-6" onclick="openReader(6)">
+          Lec 6
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-7" onclick="openReader(7)">
+          Lec 7
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-8" onclick="openReader(8)">
+          Lec 8
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-9" onclick="openReader(9)">
+          Lec 9
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-10" onclick="openReader(10)">
+          Lec 10
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-11" onclick="openReader(11)">
+          Practice 1
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-12" onclick="openReader(12)">
+          Practice 2
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-13" onclick="openReader(13)">
+          Practice 3
+        </button>
+        
+        <button class="nav-pill-item" id="nav-btn-lec-14" onclick="openReader(14)">
+          Practice 4
+        </button>
+
+
+
+
+
+
+        <button class="nav-pill-item" id="nav-btn-lec-11" onclick="openReader(15)">
+          Lec 11
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-12" onclick="openReader(16)">
+          Lec 12
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-13" onclick="openReader(17)">
+          Lec 13
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-14" onclick="openReader(18)">
+          Lec 14
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-15" onclick="openReader(19)">
+          Lec 15
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-16" onclick="openReader(20)">
+          Lec 16
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-17" onclick="openReader(21)">
+          Lec 17
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-18" onclick="openReader(22)">
+          Lec 18
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-19" onclick="openReader(23)">
+          Lec 19
+        </button>
+        <button class="nav-pill-item" id="nav-btn-lec-20" onclick="openReader(24)">
+          Lec 20
+        </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </nav>
+      </div>
+
+      <div class="nav-actions">
+        <button class="nav-pill-item" onclick="togglePlayground()" title="Open Interactive Python Playground"
+          style="background: rgba(243, 135, 46, 0.14); color: var(--accent); border: 1px solid rgba(243, 135, 46, 0.35); padding: 7px 14px;">
+          <span>🐍 Run Python</span>
+        </button>
+        <button class="btn-icon" id="theme-toggle-btn" onclick="togglePortalTheme()" title="Toggle Dark / Light Theme"
+          aria-label="Toggle Theme">
+          <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════ MAIN PORTAL CONTENT ═══════════════════ -->
+  <main id="main-content">
+    <div class="container">
+
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+          <div class="hero-left">
+            <div class="hero-badge-wrap">
+              <span class="badge-pill">B.Tech 5th Semester</span>
+              <span class="badge-pill teal">10 Core Lectures</span>
+              <span class="badge-pill purple">4 Master Practice Sets</span>
+            </div>
+
+            <h1 class="hero-title">
+              Python <span class="gradient-text">Programming</span>
+            </h1>
+
+            <p class="hero-desc">
+              Comprehensive, structured, and exam-oriented curriculum crafted for B.Tech engineering students at
+              <strong>SSM College of Engineering</strong>. Access all 10 in-depth theoretical lectures and 4 comprehensive programming practice suites (320+ verified programs) seamlessly in one portal.
+            </p>
+
+            <div class="hero-cta-group">
+              <button class="btn-primary" onclick="openReader(1)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Start with Lec 1
+              </button>
+              <a href="#lectures" class="btn-outline">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Browse All Notes &amp; Practice
+              </a>
+            </div>
+
+            <div class="hero-metrics">
+              <div class="metric-item">
+                <span class="metric-num">10</span>
+                <span class="metric-label">Full Lectures</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-num">04</span>
+                <span class="metric-label">Practice Sets</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-num">320+</span>
+                <span class="metric-label">Code Programs</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-num">100%</span>
+                <span class="metric-label">Python 3.12+</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Author Spotlight -->
+          <div class="author-spotlight-card" id="author-section">
+            <div class="avatar-wrapper">
+              <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="avatar-img"
+                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23f3872e\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'36\' font-family=\'sans-serif\' font-weight=\'bold\'>UF</text></svg>'">
+              <div class="verified-badge" title="Verified Course Instructor">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="author-info">
+              <div class="author-tag">Course Instructor</div>
+              <h2 class="author-name">Umer Farooq</h2>
+              <p class="author-dept">SSM College of Engineering<br>Dept. of Computer Science &amp; Engineering</p>
+
+              <div class="author-stats-row">
+                <div class="author-stat-item">
+                  <span class="author-stat-val">14</span>
+                  <span class="author-stat-lbl">Modules</span>
+                </div>
+                <div class="author-stat-item">
+                  <span class="author-stat-val">5th</span>
+                  <span class="author-stat-lbl">Semester</span>
+                </div>
+                <div class="author-stat-item">
+                  <span class="author-stat-val">Python</span>
+                  <span class="author-stat-lbl">Subject</span>
+                </div>
+              </div>
+
+              <div class="author-card-footer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Curated Academic Notes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Student Progress Banner -->
+      <div class="progress-banner">
+        <div class="progress-info">
+          <div class="progress-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="progress-text-title">Your Study Progress Tracker</div>
+            <div class="progress-text-sub" id="progress-summary-text">0 of 14 modules completed</div>
+          </div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-track">
+            <div class="progress-fill" id="student-progress-fill"></div>
+          </div>
+          <div class="progress-pct" id="student-progress-pct">0%</div>
+        </div>
+      </div>
+
+      <!-- Search & Real-time Filter -->
+      <section class="search-filter-section" id="search-section">
+        <div class="search-bar-wrap">
+          <svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="topic-search-input" class="search-input"
+            placeholder="Search any lecture, topic, or concept (e.g., Recursion, Tail Calls, IEEE-754, Math Functions, Scope, while loop)..."
+            oninput="handleSearch()">
+          <button class="search-clear-btn" id="search-clear-btn" onclick="clearSearch()" title="Clear Search">✕</button>
+        </div>
+
+        <div class="filter-pills-row">
+          <span class="filter-pill active" onclick="filterCategory('all', this)">All Modules</span>
+          <span class="filter-pill" onclick="filterType('lecture', this)">📖 Lectures Only</span>
+          <span class="filter-pill practice-pill" onclick="filterType('practice', this)">💻 Practice Sets</span>
+          <span class="filter-pill" onclick="filterCategory('foundations', this)">Foundations &amp; Errors</span>
+          <span class="filter-pill" onclick="filterCategory('variables', this)">Variables &amp; Memory</span>
+          <span class="filter-pill" onclick="filterCategory('operators', this)">Operators &amp; Precedence</span>
+          <span class="filter-pill" onclick="filterCategory('random', this)">Randomness &amp; Precision</span>
+          <span class="filter-pill" onclick="filterCategory('conditionals', this)">Conditionals &amp; Match-Case</span>
+          <span class="filter-pill" onclick="filterCategory('loops', this)">Loops &amp; Iteration</span>
+          <span class="filter-pill" onclick="filterCategory('functions', this)">Functions &amp; Scope</span>
+          <span class="filter-pill" onclick="filterCategory('recursion', this)">Recursion &amp; Tail Calls</span>
+          <span class="filter-pill" onclick="filterCategory('math', this)">Math Functions</span>
+        </div>
+      </section>
+
+      <!-- All Lectures & Practice Section -->
+      <section id="lectures" style="scroll-margin-top: 90px;">
+        <div class="section-header">
+          <div class="section-title-group">
+            <span class="section-eyebrow">Academic Roadmap</span>
+            <h2 class="section-title">Integrated Lecture Notes &amp; Practice Sets</h2>
+          </div>
+          <div style="font-size: 13px; color: var(--text-dim);">
+            Click <strong>"Read in Portal"</strong> to study any lecture or practice set inside this single-page app
+          </div>
+        </div>
+
+        <div class="lectures-grid" id="lectures-grid">
+          
+          <!-- Lec 1 Card -->
+          <div class="lecture-card" data-lec="1" data-category="foundations" data-type="lecture"
+            data-keywords="python introduction history features bytecode virtual machine syntax errors runtime logical exceptions debugging compiled interpreted lec 1 lecture 1">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 01</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~25 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(1, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Introduction to Python, Programming Languages &amp; Errors</h3>
+              <p class="lec-desc">Language abstraction hierarchy from machine code to high-level, compiled vs interpreted architectures, Python bytecode &amp; virtual machine, and comprehensive error taxonomy (Syntax, Runtime, Logical).</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Language Generations</span><span class="topic-chip">Compiled vs Interpreted</span><span class="topic-chip">Python Bytecode</span><span class="topic-chip">Syntax &amp; Runtime Errors</span><span class="topic-chip">Logical Bugs &amp; Debugging</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(1)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_1.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 2 Card -->
+          <div class="lecture-card" data-lec="2" data-category="variables" data-type="lecture"
+            data-keywords="identifiers variables dynamic typing memory model id type ieee-754 float mantissa exponent int complex bool str data types immutability lec 2 lecture 2">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 02</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~30 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(2, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Identifiers, Variables, Memory Model &amp; Data Types</h3>
+              <p class="lec-desc">Python naming rules, variable reference models in memory, dynamic typing, id() and type() introspection, IEEE-754 single &amp; double precision floats, and primitive data types.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Identifier Rules</span><span class="topic-chip">Dynamic Typing</span><span class="topic-chip">Memory &amp; id()</span><span class="topic-chip">IEEE-754 Floats</span><span class="topic-chip">Primitive Data Types</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(2)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_2.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 3 Card -->
+          <div class="lecture-card" data-lec="3" data-category="operators" data-type="lecture"
+            data-keywords="operators arithmetic relational comparison logical bitwise assignment identity is is not membership in not in precedence associativity type conversion casting round secrets lec 3 lecture 3">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 03</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~30 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(3, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Operators, Precedence, Type Casting, Rounding &amp; Secrets</h3>
+              <p class="lec-desc">All 7 operator families, complete precedence &amp; associativity hierarchy, explicit/implicit type casting, Banker&#x27;s Rounding, and cryptographic random secrets generation.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Arithmetic &amp; Bitwise</span><span class="topic-chip">Identity vs Equality</span><span class="topic-chip">Precedence Table</span><span class="topic-chip">Type Casting</span><span class="topic-chip">Banker&#x27;s Rounding</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(3)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_3.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 4 Card -->
+          <div class="lecture-card" data-lec="4" data-category="random" data-type="lecture"
+            data-keywords="conditional expressions ternary operator random module secrets module pseudorandom prng csprng range object float precision epsilon math isclose lec 4 lecture 4">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 04</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~35 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(4, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Conditional Expressions, Random Numbers &amp; Float Precision</h3>
+              <p class="lec-desc">One-liner ternary expressions, PRNG (random) vs CSPRNG (secrets), lazy range() sequencing, float epsilon representation error, and safe floating-point comparison with math.isclose().</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Ternary Expressions</span><span class="topic-chip">random vs secrets</span><span class="topic-chip">range() Mechanics</span><span class="topic-chip">Float Epsilon</span><span class="topic-chip">math.isclose()</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(4)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_4.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 5 Card -->
+          <div class="lecture-card" data-lec="5" data-category="conditionals" data-type="lecture"
+            data-keywords="decision making conditional statements if if-else if-elif-else nested conditionals match case pattern matching python 3.10 short circuit evaluation lec 5 lecture 5">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 05</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~35 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(5, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Decision Making &amp; Conditional Statements in Python</h3>
+              <p class="lec-desc">Control flow architectures, if/elif/else ladders, nested decision logic, modern Python 3.10+ match-case structural pattern matching, and short-circuit boolean evaluation.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">if-elif-else Chains</span><span class="topic-chip">Nested Logic</span><span class="topic-chip">Match-Case (Python 3.10)</span><span class="topic-chip">Short-Circuiting</span><span class="topic-chip">Clean Code Tips</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(5)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_5.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 6 Card -->
+          <div class="lecture-card" data-lec="6" data-category="loops" data-type="lecture"
+            data-keywords="loops iteration while for range break continue pass else clause nested loops infinite loop termination accumulator sentinel lec 6 lecture 6">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 06</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~40 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(6, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Loops &amp; Iteration Structures in Python</h3>
+              <p class="lec-desc">Definite (for) and indefinite (while) loop architectures, range() sequencing, nested loop grids, loop control jump statements (break, continue, pass), and while-else / for-else completion blocks.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">while Loops</span><span class="topic-chip">for Loops &amp; range()</span><span class="topic-chip">break &amp; continue</span><span class="topic-chip">for-else / while-else</span><span class="topic-chip">Nested Loop Patterns</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(6)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_6.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 7 Card -->
+          <div class="lecture-card" data-lec="7" data-category="functions" data-type="lecture"
+            data-keywords="functions def call return parameters arguments scope local global activation frame modular docstring pass lec 7 lecture 7">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 07</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~40 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(7, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Python Functions: Definition, Invocation, Scope &amp; Architecture</h3>
+              <p class="lec-desc">Function definition mechanics, call stack frames, parameter-argument binding, return value semantics, local vs global scope resolution, and modular procedural programming.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">def Statement</span><span class="topic-chip">Call Stack Frames</span><span class="topic-chip">Parameters vs Arguments</span><span class="topic-chip">Return Semantics</span><span class="topic-chip">Local &amp; Global Scope</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(7)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_7.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 8 Card -->
+          <div class="lecture-card" data-lec="8" data-category="functions" data-type="lecture"
+            data-keywords="positional keyword arguments pass by reference value legb scope global nonlocal default arguments mutable default trap tuple return unpacking lec 8 lecture 8">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 08</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~45 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(8, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Python Functions in Depth: Arguments, Scope, Defaults &amp; Returns</h3>
+              <p class="lec-desc">Positional and keyword arguments, pass-by-object-reference mechanics, LEGB scope resolution rule, global &amp; nonlocal statements, default arguments, mutable default traps, and returning multiple values.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Positional &amp; Keyword</span><span class="topic-chip">Pass-by-Object-Ref</span><span class="topic-chip">LEGB Scope &amp; nonlocal</span><span class="topic-chip">Default Argument Trap</span><span class="topic-chip">Multiple Return Values</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(8)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_8.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 9 Card -->
+          <div class="lecture-card" data-lec="9" data-category="recursion" data-type="lecture"
+            data-keywords="recursion recursive base case recursive step call stack winding unwinding recursion vs iteration tail recursion accumulator trampolining factorial fibonacci tower of hanoi lec 9 lecture 9">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 09</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~40 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(9, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Recursion, Recursion vs. Iteration &amp; Tail Recursion</h3>
+              <p class="lec-desc">Mathematical basis of recursion, base case and recursive step, call stack winding &amp; unwinding, recursion vs iteration algorithmic complexity (O(2^N) vs O(N)), tail call elimination, and accumulator patterns.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Base Case &amp; Stack</span><span class="topic-chip">Winding &amp; Unwinding</span><span class="topic-chip">Recursion vs Iteration</span><span class="topic-chip">Tail Recursion &amp; TCO</span><span class="topic-chip">Accumulator Pattern</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(9)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_9.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Lec 10 Card -->
+          <div class="lecture-card" data-lec="10" data-category="math" data-type="lecture"
+            data-keywords="math module sqrt isqrt pow floor ceil trunc modf fsum isclose gcd lcm comb perm factorial sin cos tan radians degrees hypot dist log exp lec 10 lecture 10">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 10</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~45 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(10, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Mathematical Functions &amp; Numerical Computing in Python</h3>
+              <p class="lec-desc">The Python math module standard C-extensions: floating-point roots, precision floor/ceil/trunc rounding, math.fsum exact summation, safe float equality with math.isclose, number theory (gcd, lcm, comb, perm), and trigonometry.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">math Module Import</span><span class="topic-chip">sqrt, isqrt, pow</span><span class="topic-chip">floor, ceil, trunc</span><span class="topic-chip">fsum Precision</span><span class="topic-chip">gcd, lcm, comb, perm</span><span class="topic-chip">Trigonometry &amp; Radians</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(10)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_10.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Practice 1 Card -->
+          <div class="lecture-card" data-lec="11" data-category="practice" data-type="practice"
+            data-keywords="practice suite 1 practice 1 programs code exercises solutions outputs comments exam preparation lectures 1 to 5">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge practice-badge">PRACTICE 01</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">100+ Programs</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(11, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Master Practice Suite 1: Lectures 1 to 5 Foundations</h3>
+              <p class="lec-desc">Extensive problem-solving laboratory featuring 100+ verified programs covering syntax errors, memory models, IEEE-754 floats, operator precedence, ternary expressions, and match-case statements.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Syntax &amp; Debugging</span><span class="topic-chip">Data Types &amp; Memory</span><span class="topic-chip">Operator Exercises</span><span class="topic-chip">Ternary &amp; Random</span><span class="topic-chip">Decision Tree Programs</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(11)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_practice_1.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Practice 2 Card -->
+          <div class="lecture-card" data-lec="12" data-category="practice" data-type="practice"
+            data-keywords="practice suite 2 practice 2 lecture 4 random secrets range float epsilon isclose ternary expressions programs">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge practice-badge">PRACTICE 02</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">60+ Programs</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(12, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Master Practice Suite 2: Lecture 4 Deep Dive</h3>
+              <p class="lec-desc">Intensive laboratory covering 60+ targeted programs on conditional ternary expressions, PRNG vs CSPRNG cryptographic tokens, range slicing, float epsilon drift, and tolerance checking.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Ternary Decision Logic</span><span class="topic-chip">PRNG Random Generation</span><span class="topic-chip">CSPRNG Cryptography</span><span class="topic-chip">Float Epsilon Checking</span><span class="topic-chip">math.isclose Tolerance</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(12)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_practice_2.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Practice 3 Card -->
+          <div class="lecture-card" data-lec="13" data-category="practice" data-type="practice"
+            data-keywords="practice set 3 practice 3 loops iteration while for break continue control jump statements 40 programs">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge practice-badge">PRACTICE 03</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">40 Programs</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(13, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Master Practice Suite 3: Loops, Iteration &amp; Control Jumps</h3>
+              <p class="lec-desc">Structured practice laboratory containing 40 comprehensive programs across while loops, for loops, break statements, and continue statements with 1-line definitions, step tracing, and terminal outputs.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">while Loop Programs</span><span class="topic-chip">for Loop &amp; range()</span><span class="topic-chip">break Termination</span><span class="topic-chip">continue Skipping</span><span class="topic-chip">for-else Search Patterns</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(13)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_Practice_3.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        
+          <!-- Practice 4 Card -->
+          <div class="lecture-card" data-lec="14" data-category="practice" data-type="practice"
+            data-keywords="practice set 4 practice 4 functions scope arguments default return multiple values recursion tail recursion math functions 120 programs">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge practice-badge">PRACTICE 04</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">120 Programs</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(14, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Master Practice Suite 4: Advanced Functions, Recursion &amp; Math</h3>
+              <p class="lec-desc">Monumental master practice sheet featuring 120 production-grade programs across 12 topics: Function Definitions, Calls, Returns, Positional/Keyword Args, Pass-by-Reference, Scope, Defaults, Multiple Returns, Recursion, Tail Recursion &amp; Math.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Function Definitions</span><span class="topic-chip">Positional &amp; Keyword</span><span class="topic-chip">LEGB Scope &amp; Defaults</span><span class="topic-chip">Multi-Value Returns</span><span class="topic-chip">Recursion &amp; Tail Calls</span><span class="topic-chip">Math Functions</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(14)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_practice_4.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <!-- Lec 11 Card -->
+          <div class="lecture-card" data-lec="15" data-category="lists" data-type="lecture"
+            data-keywords="lists list array mutable methods append extend insert remove pop sort reverse lec 11 lecture 11">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 11</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~45 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(15, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Lists in Python</h3>
+              <p class="lec-desc">Comprehensive guide to Python lists, covering creation, indexing, slicing, methods, and operations.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">List Creation</span><span class="topic-chip">Indexing</span><span class="topic-chip">Slicing</span><span class="topic-chip">List Methods</span><span class="topic-chip">Nested Lists</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(15)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_11_list.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 12 Card -->
+          <div class="lecture-card" data-lec="16" data-category="tuples" data-type="lecture"
+            data-keywords="tuples tuple immutable packing unpacking count index lec 12 lecture 12">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 12</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~35 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(16, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Tuples in Python</h3>
+              <p class="lec-desc">Deep dive into immutable tuples, packing, unpacking, and tuple methods.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Tuple Creation</span><span class="topic-chip">Immutability</span><span class="topic-chip">Packing &amp; Unpacking</span><span class="topic-chip">Methods</span><span class="topic-chip">Tuple vs List</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(16)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_12_Tuples.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 13 Card -->
+          <div class="lecture-card" data-lec="17" data-category="sets" data-type="lecture"
+            data-keywords="sets set unordered unique union intersection difference symmetric frozenset lec 13 lecture 13">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 13</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~35 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(17, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Sets in Python</h3>
+              <p class="lec-desc">Master unordered collections, set operations (union, intersection), and uniqueness.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Set Creation</span><span class="topic-chip">Set Operations</span><span class="topic-chip">Methods</span><span class="topic-chip">Frozen Sets</span><span class="topic-chip">Venn Diagrams</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(17)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_13_Sets.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 14 Card -->
+          <div class="lecture-card" data-lec="18" data-category="dictionaries" data-type="lecture"
+            data-keywords="dictionaries dict key value pairs methods get update pop keys values items lec 14 lecture 14">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 14</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~40 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(18, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Dictionaries in Python</h3>
+              <p class="lec-desc">Complete guide to key-value pairs, dictionary operations, and practical applications.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Dictionary Creation</span><span class="topic-chip">Accessing Values</span><span class="topic-chip">Methods</span><span class="topic-chip">Comprehensions</span><span class="topic-chip">Nested Dicts</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(18)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_14_Dictionary.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 15 Card -->
+          <div class="lecture-card" data-lec="19" data-category="files" data-type="lecture"
+            data-keywords="file handling open read write append close with statement paths os module lec 15 lecture 15">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 15</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~40 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(19, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">File Handling in Python</h3>
+              <p class="lec-desc">Reading from and writing to files, file modes, and working with paths.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">File Modes</span><span class="topic-chip">Reading Files</span><span class="topic-chip">Writing Files</span><span class="topic-chip">with Statement</span><span class="topic-chip">CSV/Text Files</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(19)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_15_File.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 16 Card -->
+          <div class="lecture-card" data-lec="20" data-category="exceptions" data-type="lecture"
+            data-keywords="exception handling errors try except else finally raise custom error lec 16 lecture 16">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 16</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~35 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(20, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Exception Handling in Python</h3>
+              <p class="lec-desc">Master error handling using try, except, else, finally blocks and custom exceptions.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">try-except</span><span class="topic-chip">else &amp; finally</span><span class="topic-chip">Raising Exceptions</span><span class="topic-chip">Custom Exceptions</span><span class="topic-chip">Built-in Errors</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(20)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_16_Exc.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 17 Card -->
+          <div class="lecture-card" data-lec="21" data-category="pandas" data-type="lecture"
+            data-keywords="pandas dataframe series data analysis csv excel lec 17 lecture 17">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 17</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~60 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(21, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Pandas in Python</h3>
+              <p class="lec-desc">Data analysis using Pandas Series, DataFrames, indexing, and data cleaning.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Series &amp; DataFrames</span><span class="topic-chip">Data I/O</span><span class="topic-chip">Missing Data</span><span class="topic-chip">Grouping</span><span class="topic-chip">Merging</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(21)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_17_Pandas.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 18 Card -->
+          <div class="lecture-card" data-lec="22" data-category="numpy" data-type="lecture"
+            data-keywords="numpy arrays ndarray broadcasting vectorization math matrix lec 18 lecture 18">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 18</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~55 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(22, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">NumPy in Python</h3>
+              <p class="lec-desc">Numerical computing with NumPy arrays, broadcasting, and vectorized operations.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Array Creation</span><span class="topic-chip">Array Operations</span><span class="topic-chip">Broadcasting</span><span class="topic-chip">Linear Algebra</span><span class="topic-chip">Universal Functions</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(22)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_18_Numpy.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 19 Card -->
+          <div class="lecture-card" data-lec="23" data-category="oop" data-type="lecture"
+            data-keywords="oop object oriented classes objects inheritance polymorphism encapsulation lec 19 lecture 19">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 19</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~60 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(23, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Object Oriented Programming (OOP)</h3>
+              <p class="lec-desc">Classes, objects, inheritance, polymorphism, encapsulation, and abstraction in Python.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Classes &amp; Objects</span><span class="topic-chip">Inheritance</span><span class="topic-chip">Polymorphism</span><span class="topic-chip">Encapsulation</span><span class="topic-chip">Magic Methods</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(23)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_19_OOPS.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lec 20 Card -->
+          <div class="lecture-card" data-lec="24" data-category="matplotlib" data-type="lecture"
+            data-keywords="matplotlib plotting visualization graphs charts lines bars lec 20 lecture 20">
+            <div>
+              <div class="lec-card-top">
+                <span class="lec-num-badge">LECTURE 20</span>
+                <div class="lec-meta-tags">
+                  <span class="lec-time-badge">~45 min read</span>
+                  <button class="lec-complete-toggle" onclick="toggleLectureDone(24, event)" title="Mark as Completed">
+                    ✓
+                  </button>
+                </div>
+              </div>
+              <h3 class="lec-title">Data Visualization with Matplotlib</h3>
+              <p class="lec-desc">Creating charts, plots, and visualizing data using the Matplotlib library.</p>
+              <div class="lec-topics-list">
+                <span class="topic-chip">Line Plots</span><span class="topic-chip">Bar Charts</span><span class="topic-chip">Scatter Plots</span><span class="topic-chip">Histograms</span><span class="topic-chip">Subplots</span>
+              </div>
+            </div>
+            <div class="lec-card-actions">
+              <button class="btn-read-portal" onclick="openReader(24)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Read in Portal
+              </button>
+              <a href="Lec_20_Met.html" target="_blank" class="btn-open-ext" title="Open Standalone in New Tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+      </section>
+
+      <!-- Syllabus & Guidelines -->
+      <section id="syllabus" class="about-syllabus-grid" style="scroll-margin-top: 90px;">
+        <div class="info-card">
+          <h3 class="info-card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Academic Course Curriculum
+          </h3>
+          <p>
+            Designed specifically for B.Tech students in the <strong>Computer Science &amp; Engineering</strong>
+            department at <strong>SSM College of Engineering</strong>. Delivers an uncompromising foundation in computational thinking, software engineering design, and algorithmic problem solving in Python.
+          </p>
+          <ul class="curriculum-list">
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Lectures 1–5:</strong> Python virtual machine, data types, operator precedence, float precision &amp; match-case</li>
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Lecture 6:</strong> Definite (for) and indefinite (while) loop structures, control jumps &amp; else clauses</li>
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Lectures 7–8:</strong> Function architecture, call stack frames, LEGB scope, default args &amp; multi-value returns</li>
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Lectures 9–10:</strong> Recursion, tree recursion, tail call optimization, and standard math C-extensions</li>
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Practice 1–4:</strong> Over 320+ verified programs with line-by-line comments, outputs &amp; takeaways</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3 class="info-card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            Portal Features &amp; Workflow
+          </h3>
+          <p>
+            All lecture notes and practice sets are completely unified in this single-page application.
+          </p>
+          <ul class="curriculum-list">
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Integrated In-App Reader:</strong> Read full notes without leaving your portal page</li>
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Interactive Python Playground:</strong> Real WebAssembly Python 3.12 runtime with IntelliSense</li>
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Instant Full-Text Search:</strong> Filter across 50+ keywords, algorithms, and topics instantly</li>
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Persistent Study Tracker:</strong> Track completion status across all 14 modules</li>
+            <li class="curriculum-item"><span class="curriculum-bullet"></span> <strong>Theme Sync:</strong> Dark and Light modes synchronized seamlessly across all nested pages</li>
+          </ul>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════════ INTEGRATED IN-APP LECTURE READER ═══════════════════ -->
+  <div id="reader-overlay">
+    <div class="reader-topbar">
+      <div class="reader-left-controls">
+        <button class="btn-back-hub" onclick="closeReader()" title="Back to Portal Dashboard">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          <span>Dashboard</span>
+        </button>
+
+        <div class="reader-lec-title-group">
+          <span class="reader-active-pill" id="reader-pill">Lec 1</span>
+          <span class="reader-active-name" id="reader-title-display">Introduction to Python</span>
+        </div>
+      </div>
+
+      <!-- Quick Switcher Tabs inside reader -->
+      <div class="reader-nav-switcher-wrap">
+        <div class="reader-nav-switcher">
+          
+        <button class="reader-tab-btn active" id="rtab-1" onclick="switchReaderLecture(1)">Lec 1</button>
+        
+        <button class="reader-tab-btn " id="rtab-2" onclick="switchReaderLecture(2)">Lec 2</button>
+        
+        <button class="reader-tab-btn " id="rtab-3" onclick="switchReaderLecture(3)">Lec 3</button>
+        
+        <button class="reader-tab-btn " id="rtab-4" onclick="switchReaderLecture(4)">Lec 4</button>
+        
+        <button class="reader-tab-btn " id="rtab-5" onclick="switchReaderLecture(5)">Lec 5</button>
+        
+        <button class="reader-tab-btn " id="rtab-6" onclick="switchReaderLecture(6)">Lec 6</button>
+        
+        <button class="reader-tab-btn " id="rtab-7" onclick="switchReaderLecture(7)">Lec 7</button>
+        
+        <button class="reader-tab-btn " id="rtab-8" onclick="switchReaderLecture(8)">Lec 8</button>
+        
+        <button class="reader-tab-btn " id="rtab-9" onclick="switchReaderLecture(9)">Lec 9</button>
+        
+        <button class="reader-tab-btn " id="rtab-10" onclick="switchReaderLecture(10)">Lec 10</button>
+        
+        <button class="reader-tab-btn " id="rtab-11" onclick="switchReaderLecture(11)">Practice 1</button>
+        
+        <button class="reader-tab-btn " id="rtab-12" onclick="switchReaderLecture(12)">Practice 2</button>
+        
+        <button class="reader-tab-btn " id="rtab-13" onclick="switchReaderLecture(13)">Practice 3</button>
+        
+        <button class="reader-tab-btn " id="rtab-14" onclick="switchReaderLecture(14)">Practice 4</button>
+        
+
+
+
+
+
+
+
+        <button class="reader-tab-btn " id="rtab-11" onclick="switchReaderLecture(15)">Lec 11</button>
+        <button class="reader-tab-btn " id="rtab-12" onclick="switchReaderLecture(16)">Lec 12</button>
+        <button class="reader-tab-btn " id="rtab-13" onclick="switchReaderLecture(17)">Lec 13</button>
+        <button class="reader-tab-btn " id="rtab-14" onclick="switchReaderLecture(18)">Lec 14</button>
+        <button class="reader-tab-btn " id="rtab-15" onclick="switchReaderLecture(19)">Lec 15</button>
+        <button class="reader-tab-btn " id="rtab-16" onclick="switchReaderLecture(20)">Lec 16</button>
+        <button class="reader-tab-btn " id="rtab-17" onclick="switchReaderLecture(21)">Lec 17</button>
+        <button class="reader-tab-btn " id="rtab-18" onclick="switchReaderLecture(22)">Lec 18</button>
+        <button class="reader-tab-btn " id="rtab-19" onclick="switchReaderLecture(23)">Lec 19</button>
+        <button class="reader-tab-btn " id="rtab-20" onclick="switchReaderLecture(24)">Lec 20</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+
+      <div class="reader-right-controls">
+        <button class="btn-icon" onclick="prevLecture()" title="Previous Module" id="btn-prev-lec">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="btn-icon" onclick="nextLecture()" title="Next Module" id="btn-next-lec">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+        <button class="btn-icon" onclick="togglePortalTheme()" title="Toggle Theme inside Reader">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+        <button class="btn-icon" onclick="printActiveLecture()" title="Print Lecture Notes">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+        </button>
+        <button class="btn-icon" onclick="togglePlayground()" title="Open Python Interpreter (Run Code)"
+          style="color: var(--accent); border-color: rgba(243,135,46,0.4);">
+          <span style="font-size: 15px;">🐍</span>
+        </button>
+        <button class="btn-icon" onclick="openStandaloneActive()" title="Open Standalone File">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Iframe Container -->
+    <div class="reader-iframe-wrap">
+      <div class="reader-loading-spinner" id="reader-spinner">
+        <div class="spinner"></div>
+        <span>Loading Course Notes...</span>
+      </div>
+      <iframe id="lecture-iframe" src="about:blank" title="Course Viewer"></iframe>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ FLOATING PYTHON PLAYGROUND TRIGGER ═══════════════════ -->
+  <button id="floating-py-btn" class="floating-py-btn" onclick="togglePlayground()"
+    title="Open Interactive Python Playground">
+    <span class="py-icon">🐍</span>
+    <span class="py-label">Python Playground</span>
+    <span class="py-badge">Run Code</span>
+  </button>
+
+  <!-- ═══════════════════ PYTHON INTERPRETER DRAWER ═══════════════════ -->
+  <div id="py-interpreter-drawer" class="py-drawer-half" role="dialog" aria-label="Python 3 Interactive Playground">
+    <div class="py-drawer-header">
+      <div class="py-header-left">
+        <span class="py-brand-icon">🐍</span>
+        <div>
+          <div class="py-header-title">Python 3 Interpreter</div>
+          <div class="py-engine-status" id="py-engine-status">
+            <span class="status-dot green"></span> Ready to execute
+          </div>
+        </div>
+      </div>
+
+      <div class="py-header-center">
+        <select id="py-example-select" class="py-example-dropdown" onchange="loadSelectedExample()">
+          <option value="custom">⚡ Select a Course Example...</option>
+          <option value="lec1">Lec 1: Intro, Syntax &amp; Tracebacks</option>
+          <option value="lec2">Lec 2: Memory IDs &amp; IEEE-754 Floats</option>
+          <option value="lec3">Lec 3: Precedence, Rounding &amp; Secrets</option>
+          <option value="lec4">Lec 4: Ternary &amp; Random Numbers</option>
+          <option value="lec5">Lec 5: Match-Case Pattern Matching</option>
+          <option value="lec6">Lec 6: Loops, break &amp; continue</option>
+          <option value="lec7">Lec 7: Basic Function &amp; Local Scope</option>
+          <option value="lec8">Lec 8: Default Args &amp; Multi-Returns</option>
+          <option value="lec9">Lec 9: Recursion &amp; Tail Factorial</option>
+          <option value="lec10">Lec 10: Math Functions &amp; Trigonometry</option>
+          <option value="p4">Practice 4: Cartesian to Polar Transform</option>
+        </select>
+      </div>
+
+      <div class="py-header-actions">
+        <button class="py-btn-run" onclick="executePythonCode()" id="btn-run-code" title="Run Python Code (Ctrl+Enter)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span>Run</span>
+        </button>
+        <button class="py-tool-btn" onclick="clearConsoleOutput()" title="Clear Terminal Output">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+        <button class="py-tool-btn" id="py-size-toggle-btn" onclick="togglePlaygroundSize()"
+          title="Toggle Fullscreen / Half-screen (50% Split)">
+          <svg id="py-size-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+          </svg>
+        </button>
+        <button class="py-tool-btn close-btn" onclick="closePlayground()" title="Close Playground (Esc)">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Playground Workspace: Editor + Terminal -->
+    <div class="py-workspace-body">
+      <!-- Left / Top: Code Editor -->
+      <div class="py-editor-pane">
+        <div class="py-pane-topbar">
+          <span class="py-pane-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            main.py
+          </span>
+          <span class="py-pane-hint">Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run</span>
+        </div>
+        <div class="py-editor-wrapper" id="py-editor-wrapper">
+          <textarea id="py-code-input"></textarea>
+        </div>
+      </div>
+
+      <!-- Right / Bottom: Terminal Output -->
+      <div class="py-terminal-pane">
+        <div class="py-pane-topbar">
+          <span class="py-pane-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+            Terminal Output
+          </span>
+          <span class="py-exec-time" id="py-exec-time"></span>
+        </div>
+        <div class="py-terminal-output" id="py-terminal-output">
+          <div class="term-line term-welcome">
+            🐍 <strong>SSM College of Engineering — Python 3 Interactive Runtime</strong>
+            Type code in the editor above and click <strong>"Run"</strong> or press <strong>Ctrl + Enter</strong>.
+            Created by Umer Farooq.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-group" style="margin-bottom: 6px;">
+            <div class="college-crest">SSM</div>
+            <div class="brand-text">
+              <span class="brand-college">SSM College of Engineering</span>
+              <span class="brand-sub">Diver, Parihaspora, Pattan</span>
+            </div>
+          </div>
+          <p class="footer-brand-desc">
+            Department of Computer Science &amp; Engineering. Official course repository for B.Tech 5th Semester Python
+            Programming.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Theory Lectures</div>
+          <ul class="footer-links">
+            <li class="footer-link" onclick="openReader(1)">Lec 1 — Introduction to Python, Programming Languages &amp; Errors</li><li class="footer-link" onclick="openReader(2)">Lec 2 — Identifiers, Variables, Memory Model &amp; Data Types</li><li class="footer-link" onclick="openReader(3)">Lec 3 — Operators, Precedence, Type Casting, Rounding &amp; Secrets</li><li class="footer-link" onclick="openReader(4)">Lec 4 — Conditional Expressions, Random Numbers &amp; Float Precision</li><li class="footer-link" onclick="openReader(5)">Lec 5 — Decision Making &amp; Conditional Statements in Python</li><li class="footer-link" onclick="openReader(6)">Lec 6 — Loops &amp; Iteration Structures in Python</li><li class="footer-link" onclick="openReader(7)">Lec 7 — Python Functions</li><li class="footer-link" onclick="openReader(8)">Lec 8 — Python Functions in Depth</li><li class="footer-link" onclick="openReader(9)">Lec 9 — Recursion, Recursion vs. Iteration &amp; Tail Recursion</li><li class="footer-link" onclick="openReader(10)">Lec 10 — Mathematical Functions &amp; Numerical Computing in Python</li>
+          
+
+
+
+
+
+
+
+
+                        <li class="footer-link" onclick="openReader(15)">Lec 11 — Lists in Python</li>
+            <li class="footer-link" onclick="openReader(16)">Lec 12 — Tuples in Python</li>
+            <li class="footer-link" onclick="openReader(17)">Lec 13 — Sets in Python</li>
+            <li class="footer-link" onclick="openReader(18)">Lec 14 — Dictionaries in Python</li>
+            <li class="footer-link" onclick="openReader(19)">Lec 15 — File Handling in Python</li>
+            <li class="footer-link" onclick="openReader(20)">Lec 16 — Exception Handling in Python</li>
+            <li class="footer-link" onclick="openReader(21)">Lec 17 — Pandas in Python</li>
+            <li class="footer-link" onclick="openReader(22)">Lec 18 — NumPy in Python</li>
+            <li class="footer-link" onclick="openReader(23)">Lec 19 — Object Oriented Programming (OOP)</li>
+            <li class="footer-link" onclick="openReader(24)">Lec 20 — Data Visualization with Matplotlib</li>
+
+
+
+
+
+
+
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Practice Suites</div>
+          <ul class="footer-links">
+            <li class="footer-link" onclick="openReader(11)">Practice 1 — Master Practice Suite 1: Lectures 1 to 5 Foundations</li><li class="footer-link" onclick="openReader(12)">Practice 2 — Master Practice Suite 2: Lecture 4 Deep Dive</li><li class="footer-link" onclick="openReader(13)">Practice 3 — Master Practice Suite 3: Loops, Iteration &amp; Control Jumps</li><li class="footer-link" onclick="openReader(14)">Practice 4 — Master Practice Suite 4: Advanced Functions, Recursion &amp; Math</li>
+            <li class="footer-link" onclick="resetProgress()" style="color: var(--accent); margin-top: 6px;">↺ Reset Study Tracker</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Course Prepared By</div>
+          <div class="footer-author-box">
+            <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-author-img"
+              onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'48\' height=\'48\'><rect width=\'48\' height=\'48\' fill=\'%23f3872e\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'18\' font-family=\'sans-serif\' font-weight=\'bold\'>UF</text></svg>'">
+            <div>
+              <div style="font-weight: 800; font-size: 14px; color: var(--text);">Umer Farooq</div>
+              <div style="font-size: 12px; color: var(--text-dim);">SSM College of Engineering</div>
+              <div style="font-size: 11px; color: var(--accent); font-family: var(--font-mono); margin-top: 2px;">Dept.
+                of CSE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; <span id="current-year">2026</span> SSM College of Engineering. Prepared by <strong>Umer
+            Farooq</strong>. All rights reserved.
+        </div>
+        <div>
+          B.Tech Computer Science &amp; Engineering &bull; Python Programming Portal
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════ SCRIPT LOGIC ═══════════════════ -->
+  <script>
+    // Full Course Module Metadata (10 Lectures + 4 Practice Sets)
+    const courseItems = [
+  {
+    "id": 1,
+    "key": "lec-1",
+    "type": "lecture",
+    "file": "Lec_1.html",
+    "shortLabel": "Lec 1",
+    "badge": "LECTURE 01",
+    "category": "foundations",
+    "title": "Introduction to Python, Programming Languages & Errors",
+    "desc": "Language abstraction hierarchy from machine code to high-level, compiled vs interpreted architectures, Python bytecode & virtual machine, and comprehensive error taxonomy (Syntax, Runtime, Logical).",
+    "time": "~25 min read",
+    "topics": [
+      "Language Generations",
+      "Compiled vs Interpreted",
+      "Python Bytecode",
+      "Syntax & Runtime Errors",
+      "Logical Bugs & Debugging"
+    ],
+    "keywords": "python introduction history features bytecode virtual machine syntax errors runtime logical exceptions debugging compiled interpreted lec 1 lecture 1"
+  },
+  {
+    "id": 2,
+    "key": "lec-2",
+    "type": "lecture",
+    "file": "Lec_2.html",
+    "shortLabel": "Lec 2",
+    "badge": "LECTURE 02",
+    "category": "variables",
+    "title": "Identifiers, Variables, Memory Model & Data Types",
+    "desc": "Python naming rules, variable reference models in memory, dynamic typing, id() and type() introspection, IEEE-754 single & double precision floats, and primitive data types.",
+    "time": "~30 min read",
+    "topics": [
+      "Identifier Rules",
+      "Dynamic Typing",
+      "Memory & id()",
+      "IEEE-754 Floats",
+      "Primitive Data Types"
+    ],
+    "keywords": "identifiers variables dynamic typing memory model id type ieee-754 float mantissa exponent int complex bool str data types immutability lec 2 lecture 2"
+  },
+  {
+    "id": 3,
+    "key": "lec-3",
+    "type": "lecture",
+    "file": "Lec_3.html",
+    "shortLabel": "Lec 3",
+    "badge": "LECTURE 03",
+    "category": "operators",
+    "title": "Operators, Precedence, Type Casting, Rounding & Secrets",
+    "desc": "All 7 operator families, complete precedence & associativity hierarchy, explicit/implicit type casting, Banker's Rounding, and cryptographic random secrets generation.",
+    "time": "~30 min read",
+    "topics": [
+      "Arithmetic & Bitwise",
+      "Identity vs Equality",
+      "Precedence Table",
+      "Type Casting",
+      "Banker's Rounding"
+    ],
+    "keywords": "operators arithmetic relational comparison logical bitwise assignment identity is is not membership in not in precedence associativity type conversion casting round secrets lec 3 lecture 3"
+  },
+  {
+    "id": 4,
+    "key": "lec-4",
+    "type": "lecture",
+    "file": "Lec_4.html",
+    "shortLabel": "Lec 4",
+    "badge": "LECTURE 04",
+    "category": "random",
+    "title": "Conditional Expressions, Random Numbers & Float Precision",
+    "desc": "One-liner ternary expressions, PRNG (random) vs CSPRNG (secrets), lazy range() sequencing, float epsilon representation error, and safe floating-point comparison with math.isclose().",
+    "time": "~35 min read",
+    "topics": [
+      "Ternary Expressions",
+      "random vs secrets",
+      "range() Mechanics",
+      "Float Epsilon",
+      "math.isclose()"
+    ],
+    "keywords": "conditional expressions ternary operator random module secrets module pseudorandom prng csprng range object float precision epsilon math isclose lec 4 lecture 4"
+  },
+  {
+    "id": 5,
+    "key": "lec-5",
+    "type": "lecture",
+    "file": "Lec_5.html",
+    "shortLabel": "Lec 5",
+    "badge": "LECTURE 05",
+    "category": "conditionals",
+    "title": "Decision Making & Conditional Statements in Python",
+    "desc": "Control flow architectures, if/elif/else ladders, nested decision logic, modern Python 3.10+ match-case structural pattern matching, and short-circuit boolean evaluation.",
+    "time": "~35 min read",
+    "topics": [
+      "if-elif-else Chains",
+      "Nested Logic",
+      "Match-Case (Python 3.10)",
+      "Short-Circuiting",
+      "Clean Code Tips"
+    ],
+    "keywords": "decision making conditional statements if if-else if-elif-else nested conditionals match case pattern matching python 3.10 short circuit evaluation lec 5 lecture 5"
+  },
+  {
+    "id": 6,
+    "key": "lec-6",
+    "type": "lecture",
+    "file": "Lec_6.html",
+    "shortLabel": "Lec 6",
+    "badge": "LECTURE 06",
+    "category": "loops",
+    "title": "Loops & Iteration Structures in Python",
+    "desc": "Definite (for) and indefinite (while) loop architectures, range() sequencing, nested loop grids, loop control jump statements (break, continue, pass), and while-else / for-else completion blocks.",
+    "time": "~40 min read",
+    "topics": [
+      "while Loops",
+      "for Loops & range()",
+      "break & continue",
+      "for-else / while-else",
+      "Nested Loop Patterns"
+    ],
+    "keywords": "loops iteration while for range break continue pass else clause nested loops infinite loop termination accumulator sentinel lec 6 lecture 6"
+  },
+  {
+    "id": 7,
+    "key": "lec-7",
+    "type": "lecture",
+    "file": "Lec_7.html",
+    "shortLabel": "Lec 7",
+    "badge": "LECTURE 07",
+    "category": "functions",
+    "title": "Python Functions: Definition, Invocation, Scope & Architecture",
+    "desc": "Function definition mechanics, call stack frames, parameter-argument binding, return value semantics, local vs global scope resolution, and modular procedural programming.",
+    "time": "~40 min read",
+    "topics": [
+      "def Statement",
+      "Call Stack Frames",
+      "Parameters vs Arguments",
+      "Return Semantics",
+      "Local & Global Scope"
+    ],
+    "keywords": "functions def call return parameters arguments scope local global activation frame modular docstring pass lec 7 lecture 7"
+  },
+  {
+    "id": 8,
+    "key": "lec-8",
+    "type": "lecture",
+    "file": "Lec_8.html",
+    "shortLabel": "Lec 8",
+    "badge": "LECTURE 08",
+    "category": "functions",
+    "title": "Python Functions in Depth: Arguments, Scope, Defaults & Returns",
+    "desc": "Positional and keyword arguments, pass-by-object-reference mechanics, LEGB scope resolution rule, global & nonlocal statements, default arguments, mutable default traps, and returning multiple values.",
+    "time": "~45 min read",
+    "topics": [
+      "Positional & Keyword",
+      "Pass-by-Object-Ref",
+      "LEGB Scope & nonlocal",
+      "Default Argument Trap",
+      "Multiple Return Values"
+    ],
+    "keywords": "positional keyword arguments pass by reference value legb scope global nonlocal default arguments mutable default trap tuple return unpacking lec 8 lecture 8"
+  },
+  {
+    "id": 9,
+    "key": "lec-9",
+    "type": "lecture",
+    "file": "Lec_9.html",
+    "shortLabel": "Lec 9",
+    "badge": "LECTURE 09",
+    "category": "recursion",
+    "title": "Recursion, Recursion vs. Iteration & Tail Recursion",
+    "desc": "Mathematical basis of recursion, base case and recursive step, call stack winding & unwinding, recursion vs iteration algorithmic complexity (O(2^N) vs O(N)), tail call elimination, and accumulator patterns.",
+    "time": "~40 min read",
+    "topics": [
+      "Base Case & Stack",
+      "Winding & Unwinding",
+      "Recursion vs Iteration",
+      "Tail Recursion & TCO",
+      "Accumulator Pattern"
+    ],
+    "keywords": "recursion recursive base case recursive step call stack winding unwinding recursion vs iteration tail recursion accumulator trampolining factorial fibonacci tower of hanoi lec 9 lecture 9"
+  },
+  {
+    "id": 10,
+    "key": "lec-10",
+    "type": "lecture",
+    "file": "Lec_10.html",
+    "shortLabel": "Lec 10",
+    "badge": "LECTURE 10",
+    "category": "math",
+    "title": "Mathematical Functions & Numerical Computing in Python",
+    "desc": "The Python math module standard C-extensions: floating-point roots, precision floor/ceil/trunc rounding, math.fsum exact summation, safe float equality with math.isclose, number theory (gcd, lcm, comb, perm), and trigonometry.",
+    "time": "~45 min read",
+    "topics": [
+      "math Module Import",
+      "sqrt, isqrt, pow",
+      "floor, ceil, trunc",
+      "fsum Precision",
+      "gcd, lcm, comb, perm",
+      "Trigonometry & Radians"
+    ],
+    "keywords": "math module sqrt isqrt pow floor ceil trunc modf fsum isclose gcd lcm comb perm factorial sin cos tan radians degrees hypot dist log exp lec 10 lecture 10"
+  },
+  {
+    "id": 11,
+    "key": "practice-1",
+    "type": "practice",
+    "file": "Lec_practice_1.html",
+    "shortLabel": "Practice 1",
+    "badge": "PRACTICE 01",
+    "category": "practice",
+    "title": "Master Practice Suite 1: Lectures 1 to 5 Foundations",
+    "desc": "Extensive problem-solving laboratory featuring 100+ verified programs covering syntax errors, memory models, IEEE-754 floats, operator precedence, ternary expressions, and match-case statements.",
+    "time": "100+ Programs",
+    "topics": [
+      "Syntax & Debugging",
+      "Data Types & Memory",
+      "Operator Exercises",
+      "Ternary & Random",
+      "Decision Tree Programs"
+    ],
+    "keywords": "practice suite 1 practice 1 programs code exercises solutions outputs comments exam preparation lectures 1 to 5"
+  },
+  {
+    "id": 12,
+    "key": "practice-2",
+    "type": "practice",
+    "file": "Lec_practice_2.html",
+    "shortLabel": "Practice 2",
+    "badge": "PRACTICE 02",
+    "category": "practice",
+    "title": "Master Practice Suite 2: Lecture 4 Deep Dive",
+    "desc": "Intensive laboratory covering 60+ targeted programs on conditional ternary expressions, PRNG vs CSPRNG cryptographic tokens, range slicing, float epsilon drift, and tolerance checking.",
+    "time": "60+ Programs",
+    "topics": [
+      "Ternary Decision Logic",
+      "PRNG Random Generation",
+      "CSPRNG Cryptography",
+      "Float Epsilon Checking",
+      "math.isclose Tolerance"
+    ],
+    "keywords": "practice suite 2 practice 2 lecture 4 random secrets range float epsilon isclose ternary expressions programs"
+  },
+  {
+    "id": 13,
+    "key": "practice-3",
+    "type": "practice",
+    "file": "Lec_Practice_3.html",
+    "shortLabel": "Practice 3",
+    "badge": "PRACTICE 03",
+    "category": "practice",
+    "title": "Master Practice Suite 3: Loops, Iteration & Control Jumps",
+    "desc": "Structured practice laboratory containing 40 comprehensive programs across while loops, for loops, break statements, and continue statements with 1-line definitions, step tracing, and terminal outputs.",
+    "time": "40 Programs",
+    "topics": [
+      "while Loop Programs",
+      "for Loop & range()",
+      "break Termination",
+      "continue Skipping",
+      "for-else Search Patterns"
+    ],
+    "keywords": "practice set 3 practice 3 loops iteration while for break continue control jump statements 40 programs"
+  },
+  {
+    "id": 14,
+    "key": "practice-4",
+    "type": "practice",
+    "file": "Lec_practice_4.html",
+    "shortLabel": "Practice 4",
+    "badge": "PRACTICE 04",
+    "category": "practice",
+    "title": "Master Practice Suite 4: Advanced Functions, Recursion & Math",
+    "desc": "Monumental master practice sheet featuring 120 production-grade programs across 12 topics: Function Definitions, Calls, Returns, Positional/Keyword Args, Pass-by-Reference, Scope, Defaults, Multiple Returns, Recursion, Tail Recursion & Math.",
+    "time": "120 Programs",
+    "topics": [
+      "Function Definitions",
+      "Positional & Keyword",
+      "LEGB Scope & Defaults",
+      "Multi-Value Returns",
+      "Recursion & Tail Calls",
+      "Math Functions"
+    ],
+    "keywords": "practice set 4 practice 4 functions scope arguments default return multiple values recursion tail recursion math functions 120 programs"
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ,{
+    "id": 15,
+    "key": "lec-11",
+    "type": "lecture",
+    "file": "Lec_11_list.html",
+    "shortLabel": "Lec 11",
+    "badge": "LECTURE 11",
+    "category": "lists",
+    "title": "Lists in Python",
+    "desc": "Comprehensive guide to Python lists, covering creation, indexing, slicing, methods, and operations.",
+    "time": "~45 min read",
+    "topics": ["List Creation", "Indexing", "Slicing", "List Methods", "Nested Lists"],
+    "keywords": "lists list array mutable methods append extend insert remove pop sort reverse lec 11 lecture 11"
+  },
+  {
+    "id": 16,
+    "key": "lec-12",
+    "type": "lecture",
+    "file": "Lec_12_Tuples.html",
+    "shortLabel": "Lec 12",
+    "badge": "LECTURE 12",
+    "category": "tuples",
+    "title": "Tuples in Python",
+    "desc": "Deep dive into immutable tuples, packing, unpacking, and tuple methods.",
+    "time": "~35 min read",
+    "topics": ["Tuple Creation", "Immutability", "Packing & Unpacking", "Methods", "Tuple vs List"],
+    "keywords": "tuples tuple immutable packing unpacking count index lec 12 lecture 12"
+  },
+  {
+    "id": 17,
+    "key": "lec-13",
+    "type": "lecture",
+    "file": "Lec_13_Sets.html",
+    "shortLabel": "Lec 13",
+    "badge": "LECTURE 13",
+    "category": "sets",
+    "title": "Sets in Python",
+    "desc": "Master unordered collections, set operations (union, intersection), and uniqueness.",
+    "time": "~35 min read",
+    "topics": ["Set Creation", "Set Operations", "Methods", "Frozen Sets", "Venn Diagrams"],
+    "keywords": "sets set unordered unique union intersection difference symmetric frozenset lec 13 lecture 13"
+  },
+  {
+    "id": 18,
+    "key": "lec-14",
+    "type": "lecture",
+    "file": "Lec_14_Dictionary.html",
+    "shortLabel": "Lec 14",
+    "badge": "LECTURE 14",
+    "category": "dictionaries",
+    "title": "Dictionaries in Python",
+    "desc": "Complete guide to key-value pairs, dictionary operations, and practical applications.",
+    "time": "~40 min read",
+    "topics": ["Dictionary Creation", "Accessing Values", "Methods", "Comprehensions", "Nested Dicts"],
+    "keywords": "dictionaries dict key value pairs methods get update pop keys values items lec 14 lecture 14"
+  },
+  {
+    "id": 19,
+    "key": "lec-15",
+    "type": "lecture",
+    "file": "Lec_15_File.html",
+    "shortLabel": "Lec 15",
+    "badge": "LECTURE 15",
+    "category": "files",
+    "title": "File Handling in Python",
+    "desc": "Reading from and writing to files, file modes, and working with paths.",
+    "time": "~40 min read",
+    "topics": ["File Modes", "Reading Files", "Writing Files", "with Statement", "CSV/Text Files"],
+    "keywords": "file handling open read write append close with statement paths os module lec 15 lecture 15"
+  },
+  {
+    "id": 20,
+    "key": "lec-16",
+    "type": "lecture",
+    "file": "Lec_16_Exc.html",
+    "shortLabel": "Lec 16",
+    "badge": "LECTURE 16",
+    "category": "exceptions",
+    "title": "Exception Handling in Python",
+    "desc": "Master error handling using try, except, else, finally blocks and custom exceptions.",
+    "time": "~35 min read",
+    "topics": ["try-except", "else & finally", "Raising Exceptions", "Custom Exceptions", "Built-in Errors"],
+    "keywords": "exception handling errors try except else finally raise custom error lec 16 lecture 16"
+  },
+  {
+    "id": 21,
+    "key": "lec-17",
+    "type": "lecture",
+    "file": "Lec_17_Pandas.html",
+    "shortLabel": "Lec 17",
+    "badge": "LECTURE 17",
+    "category": "pandas",
+    "title": "Pandas in Python",
+    "desc": "Data analysis using Pandas Series, DataFrames, indexing, and data cleaning.",
+    "time": "~60 min read",
+    "topics": ["Series & DataFrames", "Data I/O", "Missing Data", "Grouping", "Merging"],
+    "keywords": "pandas dataframe series data analysis csv excel lec 17 lecture 17"
+  },
+  {
+    "id": 22,
+    "key": "lec-18",
+    "type": "lecture",
+    "file": "Lec_18_Numpy.html",
+    "shortLabel": "Lec 18",
+    "badge": "LECTURE 18",
+    "category": "numpy",
+    "title": "NumPy in Python",
+    "desc": "Numerical computing with NumPy arrays, broadcasting, and vectorized operations.",
+    "time": "~55 min read",
+    "topics": ["Array Creation", "Array Operations", "Broadcasting", "Linear Algebra", "Universal Functions"],
+    "keywords": "numpy arrays ndarray broadcasting vectorization math matrix lec 18 lecture 18"
+  },
+  {
+    "id": 23,
+    "key": "lec-19",
+    "type": "lecture",
+    "file": "Lec_19_OOPS.html",
+    "shortLabel": "Lec 19",
+    "badge": "LECTURE 19",
+    "category": "oop",
+    "title": "Object Oriented Programming (OOP)",
+    "desc": "Classes, objects, inheritance, polymorphism, encapsulation, and abstraction in Python.",
+    "time": "~60 min read",
+    "topics": ["Classes & Objects", "Inheritance", "Polymorphism", "Encapsulation", "Magic Methods"],
+    "keywords": "oop object oriented classes objects inheritance polymorphism encapsulation lec 19 lecture 19"
+  },
+  {
+    "id": 24,
+    "key": "lec-20",
+    "type": "lecture",
+    "file": "Lec_20_Met.html",
+    "shortLabel": "Lec 20",
+    "badge": "LECTURE 20",
+    "category": "matplotlib",
+    "title": "Data Visualization with Matplotlib",
+    "desc": "Creating charts, plots, and visualizing data using the Matplotlib library.",
+    "time": "~45 min read",
+    "topics": ["Line Plots", "Bar Charts", "Scatter Plots", "Histograms", "Subplots"],
+    "keywords": "matplotlib plotting visualization graphs charts lines bars lec 20 lecture 20"
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+];
+
+    let currentModuleId = 1;
+
+    // Python course snippet examples for playground
+    const pythonCourseExamples = {
+      lec1: `# Lec 1: Python Introduction & Error Handling\ndef divide_numbers(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError as err:\n        return f"Caught error: {err}"\n\nprint("Welcome to SSM Python Portal!")\nprint("Division result:", divide_numbers(10, 2))\nprint("Zero test:", divide_numbers(10, 0))`,
+      
+      lec2: `# Lec 2: Memory Model, IDs & IEEE-754 Floats\nx = 1000\ny = 1000\nprint(f"x id: {id(x)}, y id: {id(y)}")\nprint(f"x is y: {x is y}")\n\n# Float precision\na = 0.1 + 0.2\nprint(f"0.1 + 0.2 = {a:.20f}")\nprint(f"a == 0.3: {a == 0.3}")`,
+      
+      lec3: `# Lec 3: Operators, Rounding & Cryptographic Secrets\nimport secrets\n\n# Banker's Rounding (Round to even)\nprint("round(2.5) =", round(2.5))\nprint("round(3.5) =", round(3.5))\n\n# CSPRNG Token\nsecure_token = secrets.token_hex(16)\nprint("Secure Session Token:", secure_token)`,
+      
+      lec4: `# Lec 4: Ternary Conditional & Safe Float Comparison\nimport math\n\nscore = 85\nstatus = "Distinction" if score >= 75 else "Pass"\nprint(f"Student Status: {status}")\n\n# Safe float comparison with math.isclose\nx, y = 0.1 + 0.2, 0.3\nprint("math.isclose(0.1+0.2, 0.3):", math.isclose(x, y))`,
+      
+      lec5: `# Lec 5: Python 3.10+ Match-Case Pattern Matching\ndef evaluate_http_status(code):\n    match code:\n        case 200:\n            return "OK: Request Succeeded"\n        case 404:\n            return "Not Found: Resource Missing"\n        case 500:\n            return "Internal Server Error"\n        case _:\n            return "Unknown HTTP Status"\n\nprint(evaluate_http_status(200))\nprint(evaluate_http_status(404))`,
+      
+      lec6: `# Lec 6: Loops, Iteration & Else Clauses\nnumbers = [2, 4, 6, 8, 10]\nfor num in numbers:\n    if num % 2 != 0:\n        print("Found odd number:", num)\n        break\nelse:\n    print("All numbers in collection are strictly even!")`,
+      
+      lec7: `# Lec 7: Python Functions & Call Stack\ndef calculate_cuboid_volume(length, width, height):\n    """Computes volume of a 3D cuboid."""\n    return length * width * height\n\nvol = calculate_cuboid_volume(10, 5, 2)\nprint(f"Cuboid Volume = {vol} cubic units")`,
+      
+      lec8: `# Lec 8: Default Arguments & Multi-Value Returns\ndef get_user_summary(name, role="Student", *skills):\n    return name, role, list(skills)\n\nuser, position, tech_stack = get_user_summary("Umer", "Instructor", "Python", "Algorithms", "AI")\nprint(f"User: {user} ({position})")\nprint(f"Tech Stack: {tech_stack}")`,
+      
+      lec9: `# Lec 9: Tail-Recursive Factorial with Accumulator\ndef factorial_tail(n, accumulator=1):\n    if n <= 1:\n        return accumulator\n    return factorial_tail(n - 1, n * accumulator)\n\nfor i in [1, 5, 7, 10]:\n    print(f"{i}! = {factorial_tail(i):,d}")`,
+      
+      lec10: `# Lec 10: Math Functions & Trigonometry\nimport math\n\nradius = 5.0\narea = math.pi * math.pow(radius, 2)\nprint(f"Circle Area (r={radius}): {area:.4f}")\nprint(f"math.hypot(3, 4): {math.hypot(3, 4)}")\nprint(f"math.gcd(100, 35): {math.gcd(100, 35)}")`,
+      
+      p4: `# Practice 4: Geometric Polar Coordinate Transformation\nimport math\n\ndef to_polar(x, y):\n    r = math.hypot(x, y)\n    theta_rad = math.atan2(y, x)\n    theta_deg = math.degrees(theta_rad)\n    return r, theta_deg\n\nradius, angle = to_polar(3.0, 4.0)\nprint(f"Cartesian (3.0, 4.0) -> Polar Radius={radius:.2f}, Angle={angle:.2f}°")`
+    };
+
+    // Theme Management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('ssm_python_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+
+    function togglePortalTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('ssm_python_theme', next);
+      updateThemeIcon(next);
+      syncThemeToIframe(next);
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById('theme-icon');
+      if (!icon) return;
+      if (theme === 'light') {
+        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      } else {
+        icon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>';
+      }
+    }
+
+    function syncThemeToIframe(theme) {
+      const iframe = document.getElementById('lecture-iframe');
+      if (iframe && iframe.contentDocument) {
+        try {
+          iframe.contentDocument.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          // Cross-origin fallback if needed
+        }
+      }
+    }
+
+    // Navigation Capsule Updates
+    function updateNavActive(state) {
+      const overviewBtn = document.getElementById('nav-btn-overview');
+      if (overviewBtn) {
+        overviewBtn.classList.toggle('active', state === 'overview');
+      }
+
+      courseItems.forEach(item => {
+        const btn = document.getElementById(`nav-btn-lec-${item.id}`);
+        if (btn) {
+          btn.classList.toggle('active', state === item.id);
+        }
+      });
+    }
+
+    function goToOverview() {
+      closeReader();
+      updateNavActive('overview');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openReader(moduleId) {
+      currentModuleId = moduleId;
+      const mod = courseItems.find(l => l.id === moduleId) || courseItems[0];
+
+      const overlay = document.getElementById('reader-overlay');
+      const iframe = document.getElementById('lecture-iframe');
+      const spinner = document.getElementById('reader-spinner');
+      const pill = document.getElementById('reader-pill');
+      const titleDisplay = document.getElementById('reader-title-display');
+
+      pill.textContent = mod.shortLabel;
+      titleDisplay.textContent = mod.title;
+
+      // Update header nav capsule
+      updateNavActive(moduleId);
+
+      // Update reader switcher active tab
+      courseItems.forEach(item => {
+        const tab = document.getElementById(`rtab-${item.id}`);
+        if (tab) tab.classList.toggle('active', item.id === mod.id);
+      });
+
+      // Show spinner
+      spinner.style.display = 'flex';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      // Load URL
+      iframe.src = mod.file;
+      iframe.onload = () => {
+        spinner.style.display = 'none';
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        syncThemeToIframe(currentTheme);
+      };
+
+      // Update URL hash without reload
+      history.pushState(null, '', `#${mod.key}`);
+    }
+
+    function switchReaderLecture(moduleId) {
+      openReader(moduleId);
+    }
+
+    function closeReader() {
+      const overlay = document.getElementById('reader-overlay');
+      overlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+      updateNavActive('overview');
+      history.pushState(null, '', window.location.pathname);
+    }
+
+    function prevLecture() {
+      const currentIndex = courseItems.findIndex(m => m.id === currentModuleId);
+      if (currentIndex > 0) {
+        openReader(courseItems[currentIndex - 1].id);
+      } else {
+        openReader(courseItems[courseItems.length - 1].id);
+      }
+    }
+
+    function nextLecture() {
+      const currentIndex = courseItems.findIndex(m => m.id === currentModuleId);
+      if (currentIndex < courseItems.length - 1) {
+        openReader(courseItems[currentIndex + 1].id);
+      } else {
+        openReader(courseItems[0].id);
+      }
+    }
+
+    function printActiveLecture() {
+      const iframe = document.getElementById('lecture-iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.print();
+      }
+    }
+
+    function openStandaloneActive() {
+      const mod = courseItems.find(l => l.id === currentModuleId) || courseItems[0];
+      window.open(mod.file, '_blank');
+    }
+
+    // Study Progress Tracking
+    function getCompletedLectures() {
+      try {
+        return JSON.parse(localStorage.getItem('ssm_completed_lectures')) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveCompletedLectures(list) {
+      localStorage.setItem('ssm_completed_lectures', JSON.stringify(list));
+      renderProgress();
+    }
+
+    function toggleLectureDone(moduleId, e) {
+      if (e) e.stopPropagation();
+      let completed = getCompletedLectures();
+      if (completed.includes(moduleId)) {
+        completed = completed.filter(id => id !== moduleId);
+      } else {
+        completed.push(moduleId);
+      }
+      saveCompletedLectures(completed);
+    }
+
+    function resetProgress() {
+      if (confirm('Do you want to reset your study progress?')) {
+        saveCompletedLectures([]);
+      }
+    }
+
+    function renderProgress() {
+      const completed = getCompletedLectures();
+      const total = courseItems.length;
+      const pct = Math.round((completed.length / total) * 100);
+
+      const fill = document.getElementById('student-progress-fill');
+      const pctText = document.getElementById('student-progress-pct');
+      const summary = document.getElementById('progress-summary-text');
+
+      if (fill) fill.style.width = `${pct}%`;
+      if (pctText) pctText.textContent = `${pct}%`;
+      if (summary) summary.textContent = `${completed.length} of ${total} modules completed`;
+
+      // Update card toggles and cards styling
+      document.querySelectorAll('.lecture-card').forEach(card => {
+        const id = parseInt(card.getAttribute('data-lec'));
+        const isDone = completed.includes(id);
+        card.classList.toggle('completed', isDone);
+        const toggle = card.querySelector('.lec-complete-toggle');
+        if (toggle) {
+          toggle.classList.toggle('checked', isDone);
+          toggle.innerHTML = isDone ? '✓' : '';
+        }
+      });
+    }
+
+    // Search and Filtering
+    function handleSearch() {
+      const input = document.getElementById('topic-search-input');
+      const clearBtn = document.getElementById('search-clear-btn');
+      const q = input.value.trim().toLowerCase();
+
+      clearBtn.style.display = q.length > 0 ? 'block' : 'none';
+
+      const cards = document.querySelectorAll('.lecture-card');
+      cards.forEach(card => {
+        const keywords = (card.getAttribute('data-keywords') || '').toLowerCase();
+        const title = (card.querySelector('.lec-title')?.textContent || '').toLowerCase();
+        const desc = (card.querySelector('.lec-desc')?.textContent || '').toLowerCase();
+        const topics = Array.from(card.querySelectorAll('.topic-chip')).map(c => c.textContent.toLowerCase()).join(' ');
+
+        const match = q === '' || keywords.includes(q) || title.includes(q) || desc.includes(q) || topics.includes(q);
+        card.style.display = match ? 'flex' : 'none';
+
+        card.querySelectorAll('.topic-chip').forEach(chip => {
+          if (q.length > 1 && chip.textContent.toLowerCase().includes(q)) {
+            chip.classList.add('highlight');
+          } else {
+            chip.classList.remove('highlight');
+          }
+        });
+      });
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('topic-search-input');
+      input.value = '';
+      handleSearch();
+      input.focus();
+    }
+
+    function filterCategory(cat, btn) {
+      if (btn) {
+        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      const cards = document.querySelectorAll('.lecture-card');
+      cards.forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        if (cat === 'all' || cardCat === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function filterType(type, btn) {
+      if (btn) {
+        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      const cards = document.querySelectorAll('.lecture-card');
+      cards.forEach(card => {
+        const cardType = card.getAttribute('data-type');
+        if (cardType === type) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Window scroll progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Hash navigation routing
+    function checkHashRoute() {
+      const hash = window.location.hash.toLowerCase();
+      if (!hash) {
+        updateNavActive('overview');
+        return;
+      }
+      
+      const found = courseItems.find(item => hash === `#${item.key}` || hash === `#lec-${item.id}` || hash === `#chapter-${item.id}` || hash === `#lecture-${item.id}` || hash === `#practice-${item.id - 10}`);
+      if (found) {
+        openReader(found.id);
+      } else {
+        updateNavActive('overview');
+      }
+    }
+
+    // ═══════════════════ PYTHON PLAYGROUND ═══════════════════
+    let pyodideInstance = null;
+    let isPyodideLoading = false;
+    let pyEditor = null;
+
+    const pythonKeywordsList = [
+      { text: "print()", displayText: "print(object) — Built-in print function", kind: "func" },
+      { text: "def ", displayText: "def function_name(args): — Define function", kind: "keyword" },
+      { text: "class ", displayText: "class ClassName: — Define class", kind: "keyword" },
+      { text: "import math", displayText: "import math — Math C-extension module", kind: "snippet" },
+      { text: "import secrets", displayText: "import secrets — CSPRNG cryptographic module", kind: "snippet" },
+      { text: "import random", displayText: "import random — PRNG pseudorandom module", kind: "snippet" },
+      { text: "return ", displayText: "return value — Return from function", kind: "keyword" },
+      { text: "if ", displayText: "if condition: — Conditional branch", kind: "keyword" },
+      { text: "elif ", displayText: "elif condition: — Else if branch", kind: "keyword" },
+      { text: "else:\n    ", displayText: "else: — Default branch", kind: "keyword" },
+      { text: "for ", displayText: "for item in iterable: — Loop", kind: "keyword" },
+      { text: "while ", displayText: "while condition: — Loop", kind: "keyword" },
+      { text: "match ", displayText: "match variable: — Pattern matching", kind: "keyword" },
+      { text: "case ", displayText: "case pattern: — Pattern case", kind: "keyword" },
+      { text: "math.sqrt()", displayText: "math.sqrt(x) — Square root", kind: "func" },
+      { text: "math.isqrt()", displayText: "math.isqrt(n) — Exact integer square root", kind: "func" },
+      { text: "math.pow()", displayText: "math.pow(x, y) — Float power function", kind: "func" },
+      { text: "math.fsum()", displayText: "math.fsum(iterable) — Exact float summation", kind: "func" },
+      { text: "math.isclose()", displayText: "math.isclose(a, b) — Safe float equality", kind: "func" },
+      { text: "math.gcd()", displayText: "math.gcd(a, b) — Greatest common divisor", kind: "func" },
+      { text: "math.lcm()", displayText: "math.lcm(a, b) — Least common multiple", kind: "func" },
+      { text: "math.comb()", displayText: "math.comb(n, k) — Combinations", kind: "func" },
+      { text: "math.perm()", displayText: "math.perm(n, k) — Permutations", kind: "func" },
+      { text: "math.sin()", displayText: "math.sin(rad) — Sine trigonometric ratio", kind: "func" },
+      { text: "math.cos()", displayText: "math.cos(rad) — Cosine trigonometric ratio", kind: "func" },
+      { text: "math.radians()", displayText: "math.radians(deg) — Convert deg to rad", kind: "func" },
+      { text: "math.degrees()", displayText: "math.degrees(rad) — Convert rad to deg", kind: "func" },
+      { text: "math.hypot()", displayText: "math.hypot(*coords) — Euclidean norm", kind: "func" },
+      { text: "math.dist()", displayText: "math.dist(p, q) — Euclidean distance", kind: "func" },
+      { text: "math.pi", displayText: "math.pi — Constant Pi (3.14159...)", kind: "property" },
+      { text: "math.e", displayText: "math.e — Euler's constant e (2.71828...)", kind: "property" },
+      { text: "len()", displayText: "len(s) — Return sequence length", kind: "func" },
+      { text: "range()", displayText: "range(stop) / range(start, stop, step)", kind: "func" },
+      { text: "round()", displayText: "round(number, ndigits) — Banker's rounding", kind: "func" },
+      { text: "sum()", displayText: "sum(iterable) — Sum of elements", kind: "func" },
+      { text: "min()", displayText: "min(iterable) — Minimum item", kind: "func" },
+      { text: "max()", displayText: "max(iterable) — Maximum item", kind: "func" }
+    ];
+
+    function pythonCustomHint(cm) {
+      const cur = cm.getCursor();
+      const token = cm.getTokenAt(cur);
+      const start = token.start;
+      const end = cur.ch;
+      const word = token.string.toLowerCase().replace(/^[^\w]+/, '');
+
+      let list = [];
+      if (word.length > 0) {
+        list = pythonKeywordsList.filter(item =>
+          item.text.toLowerCase().startsWith(word) ||
+          item.displayText.toLowerCase().includes(word)
+        );
+      } else {
+        list = pythonKeywordsList.slice(0, 15);
+      }
+
+      return {
+        list: list.map(item => ({
+          text: item.text,
+          displayText: item.displayText,
+          render: (el, self, data) => {
+            el.innerHTML = `<span style="flex:1;">${data.displayText}</span><span class="hint-kind-badge">${item.kind}</span>`;
+          }
+        })),
+        from: CodeMirror.Pos(cur.line, start),
+        to: CodeMirror.Pos(cur.line, end)
+      };
+    }
+
+    function initCodeMirror() {
+      if (pyEditor) return pyEditor;
+
+      const textarea = document.getElementById('py-code-input');
+      if (!textarea) return null;
+
+      pyEditor = CodeMirror.fromTextArea(textarea, {
+        mode: { name: "python", version: 3, singleLineStringErrors: false },
+        theme: "dracula",
+        lineNumbers: true,
+        indentUnit: 4,
+        tabSize: 4,
+        indentWithTabs: false,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        lineWrapping: false,
+        extraKeys: {
+          "Ctrl-Space": "autocomplete",
+          "Tab": function (cm) {
+            if (cm.somethingSelected()) {
+              cm.indentSelection("add");
+            } else {
+              cm.replaceSelection("    ", "end");
+            }
+          },
+          "Ctrl-Enter": function () { executePythonCode(); },
+          "Cmd-Enter": function () { executePythonCode(); },
+          "Esc": function () { closePlayground(); }
+        }
+      });
+
+      pyEditor.on("inputRead", function (cm, change) {
+        if (change.origin !== "+input") return;
+        const text = change.text[0];
+        if (/[a-zA-Z_\.]/.test(text)) {
+          cm.showHint({
+            hint: pythonCustomHint,
+            completeSingle: false,
+            alignWithWord: true,
+            closeOnUnfocus: true
+          });
+        }
+      });
+
+      pyEditor.setValue(pythonCourseExamples.lec1);
+      return pyEditor;
+    }
+
+    function togglePlayground() {
+      const drawer = document.getElementById('py-interpreter-drawer');
+      if (drawer.classList.contains('open')) {
+        closePlayground();
+      } else {
+        openPlayground();
+      }
+    }
+
+    function openPlayground() {
+      const drawer = document.getElementById('py-interpreter-drawer');
+      drawer.classList.add('open');
+
+      if (!pyEditor) {
+        initCodeMirror();
+      }
+
+      setTimeout(() => {
+        if (pyEditor) {
+          pyEditor.refresh();
+          pyEditor.focus();
+        }
+      }, 150);
+
+      initPyodide();
+    }
+
+    function closePlayground() {
+      const drawer = document.getElementById('py-interpreter-drawer');
+      drawer.classList.remove('open');
+    }
+
+    function togglePlaygroundSize() {
+      const drawer = document.getElementById('py-interpreter-drawer');
+      const isHalf = drawer.classList.contains('py-drawer-half');
+      const icon = document.getElementById('py-size-icon');
+
+      if (isHalf) {
+        drawer.classList.remove('py-drawer-half');
+        drawer.classList.add('py-drawer-full');
+        if (icon) {
+          icon.innerHTML = '<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"></path>';
+        }
+      } else {
+        drawer.classList.remove('py-drawer-full');
+        drawer.classList.add('py-drawer-half');
+        if (icon) {
+          icon.innerHTML = '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>';
+        }
+      }
+
+      setTimeout(() => {
+        if (pyEditor) pyEditor.refresh();
+      }, 250);
+    }
+
+    function loadSelectedExample() {
+      const select = document.getElementById('py-example-select');
+      const key = select.value;
+      if (pythonCourseExamples[key]) {
+        if (!pyEditor) initCodeMirror();
+        if (pyEditor) {
+          pyEditor.setValue(pythonCourseExamples[key]);
+          pyEditor.refresh();
+          pyEditor.focus();
+        }
+        clearConsoleOutput();
+        appendTerminalLine('Loaded ' + select.options[select.selectedIndex].text, 'term-welcome');
+      }
+    }
+
+    async function initPyodide() {
+      if (pyodideInstance) return pyodideInstance;
+      if (isPyodideLoading) {
+        while (isPyodideLoading) {
+          await new Promise(r => setTimeout(r, 100));
+        }
+        return pyodideInstance;
+      }
+
+      isPyodideLoading = true;
+      const statusElem = document.getElementById('py-engine-status');
+      if (statusElem) {
+        statusElem.innerHTML = '<span class="status-dot amber"></span> Initializing Python 3 engine...';
+      }
+
+      try {
+        if (typeof loadPyodide === 'function') {
+          pyodideInstance = await loadPyodide({
+            indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/"
+          });
+          if (statusElem) {
+            statusElem.innerHTML = '<span class="status-dot green"></span> Ready (Python 3.12 WebAssembly)';
+          }
+        } else {
+          throw new Error("Pyodide script not yet available");
+        }
+      } catch (err) {
+        console.warn("Pyodide loading notice:", err);
+        if (statusElem) {
+          statusElem.innerHTML = '<span class="status-dot green"></span> Ready (Built-in Runner)';
+        }
+      } finally {
+        isPyodideLoading = false;
+      }
+      return pyodideInstance;
+    }
+
+    async function executePythonCode() {
+      if (!pyEditor) initCodeMirror();
+      const code = pyEditor ? pyEditor.getValue().trim() : '';
+      const runBtn = document.getElementById('btn-run-code');
+      const timeElem = document.getElementById('py-exec-time');
+      const statusElem = document.getElementById('py-engine-status');
+
+      if (!code) {
+        appendTerminalLine(">>> Warning: No Python code provided to execute.", "term-stderr");
+        return;
+      }
+
+      runBtn.disabled = true;
+      runBtn.innerHTML = '⏳ Running...';
+      if (statusElem) {
+        statusElem.innerHTML = '<span class="status-dot amber"></span> Running code...';
+      }
+
+      const startTime = performance.now();
+
+      try {
+        const pyodide = await initPyodide();
+
+        if (pyodide) {
+          pyodide.runPython(`
+import sys
+import io
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+`);
+
+          await pyodide.runPythonAsync(code);
+
+          const stdout = pyodide.runPython("sys.stdout.getvalue()");
+          const stderr = pyodide.runPython("sys.stderr.getvalue()");
+
+          const elapsed = (performance.now() - startTime).toFixed(1);
+          if (timeElem) timeElem.textContent = `Executed in ${elapsed}ms`;
+
+          if (stdout) {
+            appendTerminalLine(stdout, "term-stdout");
+          }
+
+          if (stderr) {
+            appendTerminalLine(stderr, "term-stderr");
+          }
+
+          if (!stdout && !stderr) {
+            appendTerminalLine(">>> Code executed successfully with no output.", "term-success");
+          } else {
+            appendTerminalLine(`>>> [Program finished in ${elapsed}ms]`, "term-success");
+          }
+        } else {
+          appendTerminalLine(">>> Python WebAssembly engine is initializing. Please try running again in a moment.", "term-stderr");
+        }
+      } catch (err) {
+        const elapsed = (performance.now() - startTime).toFixed(1);
+        if (timeElem) timeElem.textContent = `Error in ${elapsed}ms`;
+
+        let errMsg = err.message || String(err);
+        appendTerminalLine(`Traceback (most recent call last):\n${errMsg}`, "term-stderr");
+      } finally {
+        runBtn.disabled = false;
+        runBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><span>Run</span>';
+        if (statusElem) {
+          statusElem.innerHTML = '<span class="status-dot green"></span> Ready to execute';
+        }
+      }
+    }
+
+    function appendTerminalLine(text, className) {
+      const term = document.getElementById('py-terminal-output');
+      if (!term) return;
+
+      const div = document.createElement('div');
+      div.className = `term-line ${className || 'term-stdout'}`;
+      div.textContent = text;
+      term.appendChild(div);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function clearConsoleOutput() {
+      const term = document.getElementById('py-terminal-output');
+      const timeElem = document.getElementById('py-exec-time');
+      if (term) {
+        term.innerHTML = '<div class="term-line term-welcome">🐍 <strong>Console Cleared</strong>. Type or load code and click <strong>"Run"</strong>.</div>';
+      }
+      if (timeElem) timeElem.textContent = '';
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      const drawer = document.getElementById('py-interpreter-drawer');
+      const overlay = document.getElementById('reader-overlay');
+
+      if (drawer && drawer.classList.contains('open')) {
+        if (e.key === 'Escape') {
+          closePlayground();
+          return;
+        }
+      }
+
+      if (overlay && overlay.classList.contains('active')) {
+        if (e.key === 'Escape') {
+          closeReader();
+        } else if (e.key === '[' || e.key === 'ArrowLeft') {
+          prevLecture();
+        } else if (e.key === ']' || e.key === 'ArrowRight') {
+          nextLecture();
+        }
+      }
+    });
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      renderProgress();
+      checkHashRoute();
+      initCodeMirror();
+      const yr = document.getElementById('current-year');
+      if (yr) yr.textContent = new Date().getFullYear();
+    });
+
+    window.addEventListener('popstate', () => {
+      checkHashRoute();
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,2602 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecture 1 — Introduction to Python, Programming Languages & Errors | SSM College of Eng.</title>
+  <meta name="description"
+    content="Comprehensive lecture notes on Introduction to Python, Programming Languages, and Programming Errors. Prepared by Umer Farooq for BTech 5th Semester.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #14161b;
+      --bg-alt: #191c22;
+      --card: #1c1f27;
+      --cell-bg: #1f232b;
+      --cell-border: #2c313c;
+      --border: #262a33;
+      --text: #e9e7e2;
+      --text-dim: #9198a6;
+      --text-faint: #5f6673;
+      --accent: #f3872e;
+      --accent-soft: rgba(243, 135, 46, .13);
+      --teal: #5fe4c8;
+      --teal-soft: rgba(95, 228, 200, .1);
+      --purple: #c9a6f5;
+      --purple-soft: rgba(201, 166, 245, .1);
+      --red: #ef7a6a;
+      --red-soft: rgba(239, 122, 106, .1);
+      --shadow: rgba(0, 0, 0, .55);
+    }
+
+    html[data-theme="light"] {
+      --bg: #faf8f5;
+      --bg-alt: #f1eee7;
+      --card: #ffffff;
+      --cell-bg: #f6f3ee;
+      --cell-border: #e3ddd0;
+      --border: #e9e3d7;
+      --text: #201e1a;
+      --text-dim: #5c584f;
+      --text-faint: #8a8477;
+      --accent: #d9660f;
+      --accent-soft: rgba(217, 102, 15, .1);
+      --teal: #0a8f79;
+      --teal-soft: rgba(10, 143, 121, .08);
+      --purple: #7c53c9;
+      --purple-soft: rgba(124, 83, 201, .08);
+      --red: #c1483d;
+      --red-soft: rgba(193, 72, 61, .08);
+      --shadow: rgba(120, 110, 90, .15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .35s ease, color .35s ease;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    ::selection {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal));
+      z-index: 200;
+      transition: width .1s ease-out;
+    }
+
+    #theme-toggle {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 150;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px var(--shadow);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    #theme-toggle:hover {
+      border-color: var(--accent);
+      transform: scale(1.06);
+    }
+
+    #theme-toggle svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    #back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 150;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      color: #14161b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .2s ease;
+    }
+
+    #back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #back-to-top:hover {
+      transform: translateY(-3px);
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 100px 0;
+    }
+
+    #hero {
+      padding-top: 130px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--accent);
+      opacity: .5;
+    }
+
+    h1.hero-title {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+      margin-bottom: 22px;
+    }
+
+    .hero-title .hl {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .hero-stat .lbl {
+      font-size: 12.5px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    #toc .hero-sub {
+      margin-bottom: 46px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 20px 18px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color .2s ease, transform .2s ease;
+      position: relative;
+    }
+
+    .toc-card.ready:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .toc-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .toc-title {
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+
+    .toc-desc {
+      font-size: 12.5px;
+      color: var(--text-dim);
+    }
+
+    .toc-pill {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .04em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .toc-pill.ready {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .chapter {
+      border-top: 1px solid var(--border);
+      scroll-margin-top: 30px;
+    }
+
+    .ch-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .ch-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .ch-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-faint);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    h2.ch-title {
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 800;
+      letter-spacing: -.01em;
+      margin-bottom: 18px;
+    }
+
+    .step-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin: 40px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-label::before {
+      content: "";
+      width: 14px;
+      height: 1px;
+      background: var(--text-faint);
+    }
+
+    p.body-text {
+      color: var(--text-dim);
+      font-size: 16px;
+      max-width: 660px;
+      margin-bottom: 16px;
+    }
+
+    strong.emph {
+      color: var(--text);
+    }
+
+    .info-card {
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin: 18px 0;
+      border-left: 3px solid;
+      font-size: 14.5px;
+    }
+
+    .info-card .info-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 700;
+    }
+
+    .info-card p {
+      color: var(--text-dim);
+    }
+
+    .info-card.remember {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .info-card.remember .info-label {
+      color: var(--teal);
+    }
+
+    .info-card.mistake {
+      background: var(--red-soft);
+      border-color: var(--red);
+    }
+
+    .info-card.mistake .info-label {
+      color: var(--red);
+    }
+
+    .info-card.insight {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .info-card.insight .info-label {
+      color: var(--accent);
+    }
+
+    .info-card.tip {
+      background: var(--purple-soft);
+      border-color: var(--purple);
+    }
+
+    .info-card.tip .info-label {
+      color: var(--purple);
+    }
+
+    .info-card.usecase {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .info-card.usecase .info-label {
+      color: var(--teal);
+    }
+
+    .code-block {
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 18px 0;
+    }
+
+    .code-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--cell-border);
+    }
+
+    .code-head .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .code-lang {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .code-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 5px 11px;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+
+    .code-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    pre.code-body {
+      padding: 18px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .kw {
+      color: var(--purple);
+    }
+
+    .str {
+      color: var(--teal);
+    }
+
+    .fn {
+      color: #7fb4ff;
+    }
+
+    .cmt {
+      color: var(--text-faint);
+    }
+
+    .num {
+      color: var(--teal);
+    }
+
+    html[data-theme="light"] .fn {
+      color: #2563b0;
+    }
+
+    .code-output {
+      display: none;
+      border-top: 1px solid var(--cell-border);
+    }
+
+    .code-output.show {
+      display: block;
+      animation: fadeIn .3s ease;
+    }
+
+    .code-output .out-label {
+      padding: 8px 20px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .code-output pre {
+      padding: 8px 20px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: var(--text-dim);
+      white-space: pre;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .df-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--cell-border);
+      margin: 16px 0;
+    }
+
+    .df-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+    }
+
+    .df-table thead th {
+      background: var(--bg-alt);
+      color: var(--text-dim);
+      padding: 10px 16px;
+      border-bottom: 2px solid var(--cell-border);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .df-table td {
+      padding: 9px 16px;
+      border-bottom: 1px solid var(--cell-border);
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .df-table td.df-index {
+      color: var(--text-faint);
+      font-weight: 600;
+      background: var(--bg-alt);
+    }
+
+    .df-table tbody tr:hover td {
+      background: var(--accent-soft);
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 14px 0;
+    }
+
+    .task-list li {
+      padding: 9px 0 9px 26px;
+      position: relative;
+      color: var(--text-dim);
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .task-list li:last-child {
+      border-bottom: none;
+    }
+
+    .task-list li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .dim-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13.5px;
+    }
+
+    .dim-table th,
+    .dim-table td {
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dim-table th {
+      color: var(--text-faint);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 600;
+    }
+
+    .dim-table td.dim-name {
+      color: var(--teal);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .diagram-shell {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 44px 30px;
+      margin: 24px 0;
+      overflow: hidden;
+    }
+
+    .pull-quote {
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--text);
+      border-left: 3px solid var(--accent);
+      padding-left: 22px;
+      margin: 30px 0;
+    }
+
+    .quiz-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 26px 24px;
+      margin: 30px 0;
+    }
+
+    .quiz-q {
+      font-weight: 700;
+      font-size: 15.5px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-opts {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .quiz-opt {
+      text-align: left;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 9px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Manrope', sans-serif;
+      transition: all .15s ease;
+    }
+
+    .quiz-opt:hover {
+      border-color: var(--accent);
+    }
+
+    .quiz-opt.correct {
+      border-color: var(--teal);
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .quiz-opt.wrong {
+      border-color: var(--red);
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .quiz-feedback {
+      margin-top: 14px;
+      font-size: 13.5px;
+      color: var(--text-dim);
+      display: none;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+      animation: fadeIn .3s ease;
+    }
+
+    .quiz-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 3px 10px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    /* AST tree diagram */
+    .ast-tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--teal);
+      line-height: 1.4;
+      padding: 16px 20px;
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      border-radius: 12px;
+      margin: 16px 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* flow diagram */
+    .flow-diagram {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      padding: 20px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin: 20px 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .flow-diagram .stage-num {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .flow-diagram .stage-desc {
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 50px 24px 70px;
+      color: var(--text-faint);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 760px) {
+      .toc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 64px 0;
+      }
+
+      #hero {
+        padding-top: 100px;
+      }
+    }
+
+    /* === Enhanced Typography & Bigger Font Hierarchy === */
+    body {
+      font-size: 16.5px;
+      line-height: 1.75;
+    }
+
+    p.body-text,
+    .body-text {
+      font-size: 16.5px !important;
+      line-height: 1.75 !important;
+    }
+
+    .info-card {
+      font-size: 15.5px !important;
+      line-height: 1.7 !important;
+    }
+
+    .info-card .info-label {
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
+    }
+
+    pre.code-body {
+      font-size: 14.5px !important;
+      line-height: 1.6 !important;
+    }
+
+    .code-output pre {
+      font-size: 14px !important;
+    }
+
+    .df-table {
+      font-size: 14.5px !important;
+    }
+
+    .dim-table {
+      font-size: 15px !important;
+    }
+
+    .dim-table th {
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
+    }
+
+    .task-list li {
+      font-size: 15.5px !important;
+      line-height: 1.7 !important;
+    }
+
+    .toc-title {
+      font-size: 16.5px !important;
+    }
+
+    .toc-desc {
+      font-size: 13.5px !important;
+    }
+
+    .quiz-q {
+      font-size: 17px !important;
+    }
+
+    .quiz-opt {
+      font-size: 15px !important;
+    }
+
+    .quiz-feedback {
+      font-size: 14.5px !important;
+    }
+
+    .ast-tree {
+      font-size: 15px !important;
+    }
+
+    .flow-diagram {
+      font-size: 14px !important;
+    }
+
+    .flow-diagram .stage-desc {
+      font-size: 12.5px !important;
+    }
+
+    /* === Floating Tools & Print Button === */
+    .floating-tools {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 200;
+      display: flex;
+      gap: 10px;
+    }
+
+    .tool-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 18px var(--shadow);
+      color: var(--text);
+      transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--accent);
+      transform: scale(1.06);
+      background: var(--card-hover, var(--cell-bg));
+    }
+
+    .tool-btn svg {
+      width: 19px;
+      height: 19px;
+      fill: currentColor;
+    }
+
+    #theme-toggle {
+      position: static !important;
+      box-shadow: none !important;
+    }
+
+    /* === Author Profile Card in Hero === */
+    .author-card-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 8px 20px 8px 10px;
+      border-radius: 999px;
+      margin: 18px 0 28px;
+      box-shadow: 0 6px 20px var(--shadow);
+      transition: border-color .2s ease, transform .2s ease;
+    }
+
+    .author-card-hero:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .author-img-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid var(--accent);
+      box-shadow: 0 0 14px var(--accent-soft);
+      display: block;
+    }
+
+    .author-details {
+      text-align: left;
+      line-height: 1.35;
+    }
+
+    .author-role {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-faint);
+    }
+
+    .author-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* === Hero Action Buttons (Print & Navigation) === */
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 24px 0 36px;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .2s ease;
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    .hero-btn.primary-btn {
+      background: var(--accent);
+      color: #12141a;
+      border: none;
+    }
+
+    .hero-btn.primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px var(--accent-soft);
+    }
+
+    .hero-btn.outline-btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .hero-btn.outline-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background: var(--card-hover, var(--cell-bg));
+    }
+
+    .hero-btn svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    /* === Footer Author Badge === */
+    footer {
+      font-size: 14px !important;
+      padding: 50px 0 30px !important;
+    }
+
+    .footer-author-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      background: var(--card);
+      padding: 6px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .footer-author-img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--accent);
+    }
+
+    /* ========================================================= */
+    /* Comprehensive Print / PDF Stylesheet                      */
+    /* ========================================================= */
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 12pt !important;
+        line-height: 1.6 !important;
+      }
+
+      /* Hide web-only UI elements */
+      #progress-bar,
+      .floating-tools,
+      #theme-toggle,
+      #back-to-top,
+      #lightbox,
+      .copy-btn,
+      .code-btn,
+      .zoom-hint,
+      .hero-actions,
+      .quiz-options,
+      .quiz-feedback,
+      button {
+        display: none !important;
+      }
+
+      .wrap {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      #hero {
+        padding: 20px 0 25px !important;
+      }
+
+      .eyebrow {
+        border-color: #d97706 !important;
+        color: #b45309 !important;
+      }
+
+      .author-card-hero {
+        border-color: #cbd5e1 !important;
+        background: #f8fafc !important;
+        box-shadow: none !important;
+      }
+
+      .hero-title {
+        color: #0f172a !important;
+      }
+
+      .hero-title .hl {
+        color: #d97706 !important;
+        -webkit-text-fill-color: #d97706 !important;
+      }
+
+      .hero-sub {
+        color: #475569 !important;
+      }
+
+      .chapter,
+      section {
+        padding: 25px 0 !important;
+        page-break-before: always;
+      }
+
+      #hero,
+      section:first-of-type,
+      .chapter:first-of-type {
+        page-break-before: auto !important;
+      }
+
+      /* Avoid awkward splits */
+      .card,
+      .table-container,
+      table,
+      pre,
+      .code-block,
+      .info-card,
+      .callout,
+      tr,
+      .toc-card,
+      .quiz-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        color: #0f172a !important;
+      }
+
+      table,
+      .df-table,
+      .dim-table {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+      }
+
+      th {
+        background: #f1f5f9 !important;
+        color: #b45309 !important;
+        border-bottom: 2px solid #94a3b8 !important;
+      }
+
+      td {
+        border-bottom: 1px solid #e2e8f0 !important;
+        color: #1e293b !important;
+      }
+
+      tr:nth-child(even) td {
+        background: #f8fafc !important;
+      }
+
+      pre.code-body,
+      .code-block pre,
+      .code-box pre {
+        background: #0f172a !important;
+        color: #7dd3fc !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+
+      .info-card {
+        background: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+      }
+
+      .info-card.tip {
+        border-color: #10b981 !important;
+        background: #ecfdf5 !important;
+      }
+
+      .info-card.warn {
+        border-color: #ef4444 !important;
+        background: #fef2f2 !important;
+      }
+
+      .info-card.analogy {
+        border-color: #f59e0b !important;
+        background: #fffbeb !important;
+      }
+
+      .info-card.note {
+        border-color: #3b82f6 !important;
+        background: #eff6ff !important;
+      }
+
+      @page {
+        margin: 15mm 12mm 15mm 12mm;
+        size: A4 portrait;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="progress-bar"></div>
+  <!-- Floating Tools -->
+  <div class="floating-tools">
+    <button class="tool-btn" id="print-btn" title="Print Notes / Save as PDF" onclick="window.print()"
+      aria-label="Print or Save as PDF">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+      </svg>
+    </button>
+    <button id="theme-toggle" class="tool-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round"></svg>
+    </button>
+  </div>
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round">
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </svg>
+  </button>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section id="hero">
+    <div class="wrap">
+      <div class="eyebrow">SSM College of Eng.</div>
+      <h1 class="hero-title">BTech 5th Sem — <span class="hl">Python Programming</span></h1>
+      <p class="hero-sub" style="font-size:15px; color:var(--text-faint); margin-bottom:8px;">Lecture 1</p>
+      <p class="hero-sub">Introduction to Python, Programming Languages<br>and Programming Errors</p>
+      <!-- Prepared by Umer Farooq with Circular Profile Picture -->
+      <div>
+        <div class="author-card-hero">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img-circle">
+          <div class="author-details">
+            <div class="author-role">Prepared by</div>
+            <div class="author-name">Umer Farooq</div>
+          </div>
+        </div>
+      </div>
+      <!-- Print / PDF & Browse Action Buttons -->
+      <div class="hero-actions">
+        <button class="hero-btn primary-btn" onclick="window.print()">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+          </svg>
+          Print / Save as PDF
+        </button>
+        <a href="#toc" class="hero-btn outline-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+          </svg>
+          Browse Topics
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">3</div>
+          <div class="lbl">Core Topics</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">16</div>
+          <div class="lbl">Tables &amp; Diagrams</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" style="color:var(--teal)">10+</div>
+          <div class="lbl">Code Examples</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ TABLE OF CONTENTS ═══════════════════ -->
+  <section id="toc">
+    <div class="wrap">
+      <div class="eyebrow">Lecture Map</div>
+      <h2 class="ch-title" style="text-align:center;">3 topics, one complete foundation</h2>
+      <p class="hero-sub" style="text-align:center;">From why we need programming languages, through Python's internal
+        execution, to understanding and handling errors.</p>
+      <div class="toc-grid">
+        <a href="#s1" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">01</span><span class="toc-title">Introduction to Python</span><span class="toc-desc">Why
+            Python, history, key features, and how code actually runs.</span></a>
+        <a href="#s2" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">02</span><span class="toc-title">Programming Languages</span><span
+            class="toc-desc">Generations, paradigms, compiled vs interpreted, and choosing the right
+            language.</span></a>
+        <a href="#s3" class="toc-card ready"><span class="toc-pill ready">Ready</span><span
+            class="toc-num">03</span><span class="toc-title">Programming Errors &amp; Debugging</span><span
+            class="toc-desc">Syntax, runtime, logical errors, exception handling, and debugging techniques.</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 1: INTRODUCTION TO PYTHON ═══════════════════ -->
+  <section class="chapter" id="s1">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 01</span><span class="ch-badge">Foundations</span></div>
+      <h2 class="ch-title">Introduction to Python</h2>
+
+      <!-- Why Programming Languages -->
+      <div class="step-label">Why Do We Need Programming Languages at All?</div>
+      <p class="body-text">Computers don't directly understand programming languages like Python, Java, C, or C++ —
+        these languages are easy and human-understandable, but the machine only understands 0 or 1. A computer, at its
+        core, is an electronic machine that only understands two states — <strong class="emph">ON</strong> and <strong
+          class="emph">OFF</strong>, represented as 1 and 0. This is called <strong class="emph">binary</strong> or
+        <strong class="emph">machine language</strong>.
+      </p>
+      <p class="body-text">Every single operation a computer ever performs — playing a video, opening WhatsApp, running
+        an AI model — is, at the deepest level, millions of 1s and 0s moving through transistors on a chip.</p>
+      <p class="body-text">Humans think in terms of goals and logic ("if the user is eligible, give a discount"), not
+        voltages. Writing raw binary (called machine code) is:</p>
+      <ul class="task-list">
+        <li>Extremely error-prone (one wrong bit changes everything)</li>
+        <li>Impossible to read/maintain at scale</li>
+        <li>Not portable across different hardware</li>
+      </ul>
+
+      <p class="body-text">So, computer scientists built layers of abstraction:</p>
+      <ul class="task-list">
+        <li><strong class="emph">Machine Language (1st Generation)</strong> — raw binary instructions specific to a CPU
+          architecture (e.g., <span class="mono">10110000 01100001</span>). Fast for the machine, unusable for humans.
+        </li>
+        <li><strong class="emph">Assembly Language (2nd Generation)</strong> — replaces binary opcodes with mnemonics
+          like MOV, ADD, JMP. Still tied to hardware, but human-readable. A program called an <strong
+            class="emph">Assembler</strong> converts it to machine code.</li>
+        <li><strong class="emph">High-Level Languages (3rd Generation onward)</strong> — C, Java, Python, etc. Written
+          in English-like syntax. A <strong class="emph">Compiler</strong> or <strong class="emph">Interpreter</strong>
+          converts this into machine code.</li>
+      </ul>
+
+      <div class="info-card insight">
+        <span class="info-label">Machine Code Example</span>
+        <p>Opcodes: <span class="mono">0001 → LOAD, 0010 → STORE, 0011 → SUB, 0100 → MOV, 0101 → ADD</span><br>
+          For <span class="mono">ADD R1, R2</span>: ADD = <span class="mono">0101</span>, R1 = <span
+            class="mono">001</span> (3-bit), R2 = <span class="mono">010</span> (3-bit)<br>
+          Machine code: <span class="mono">0101 001 010</span> (OPCODE + R1 + R2)</p>
+      </div>
+
+      <div class="info-card tip">
+        <span class="info-label">Why Python Specifically</span>
+        <p>Guido van Rossum designed Python (first released 1991) to prioritize <strong class="emph">readability and
+            developer productivity</strong> over raw execution speed. The philosophy is captured in "The Zen of Python"
+          — code should be simple, explicit, and readable almost like English pseudocode.</p>
+      </div>
+
+      <!-- 1.1 What is Python -->
+      <div class="step-label">1.1 — What is Python?</div>
+      <p class="body-text">Python is a <strong class="emph">high-level, general-purpose, interpreted</strong>
+        programming language created by <strong class="emph">Guido van Rossum</strong>, with its first release in 1991
+        (Python 0.9.0) through the Netherlands-based research institute CWI. The language was named after the British
+        comedy show "Monty Python's Flying Circus" — not the snake — reflecting the language's design philosophy of
+        being fun and easy to use.</p>
+      <p class="body-text">Python emphasizes code readability with its notable use of <strong class="emph">significant
+          indentation</strong> instead of curly braces, which forces programmers to write clean, structured code that
+        looks almost like pseudocode.</p>
+      <p class="body-text">Python is classified as a <strong class="emph">multi-paradigm language</strong> because it
+        supports procedural programming, object-oriented programming (OOP), and functional programming styles, all
+        within the same language.</p>
+
+      <!-- 1.2 History -->
+      <div class="step-label">1.2 — History and Evolution of Python</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Year</th>
+              <th>Key Highlights</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Python 0.9.0</td>
+              <td>1991</td>
+              <td>First public release; had classes with inheritance, exception handling, functions, and modules</td>
+            </tr>
+            <tr>
+              <td>Python 1.0</td>
+              <td>1994</td>
+              <td>Added functional programming tools: lambda, map, filter, reduce</td>
+            </tr>
+            <tr>
+              <td>Python 2.0</td>
+              <td>2000</td>
+              <td>Introduced list comprehensions, garbage collection, Unicode support</td>
+            </tr>
+            <tr>
+              <td>Python 3.0</td>
+              <td>2008</td>
+              <td>Major redesign, not backward compatible; print became a function, integer division changed</td>
+            </tr>
+            <tr>
+              <td>Python 3.6 – 3.9</td>
+              <td>2016-2020</td>
+              <td>f-strings, type hints, walrus operator (:=)</td>
+            </tr>
+            <tr>
+              <td>Python 3.10 – 3.13</td>
+              <td>2021-2024</td>
+              <td>Structural pattern matching (match-case), performance improvements</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 1.3 Key Features -->
+      <div class="step-label">1.3 — Key Features of Python</div>
+      <ul class="task-list">
+        <li><strong class="emph">Simple and Readable Syntax</strong> — Python code reads almost like English, reducing
+          the learning curve for beginners.</li>
+        <li><strong class="emph">Interpreted Language</strong> — Code is executed line-by-line by the Python interpreter
+          (CPython by default); no separate compilation step is needed.</li>
+        <li><strong class="emph">Dynamically Typed</strong> — Variable types are determined at runtime; you don't need
+          to declare <span class="mono">int x = 5</span>, you simply write <span class="mono">x = 5</span>.</li>
+        <li><strong class="emph">Interpreted AND Compiled (Hybrid)</strong> — Python source (.py) is first compiled into
+          intermediate bytecode (.pyc) which is then executed by the PVM.</li>
+        <li><strong class="emph">Object-Oriented</strong> — Everything in Python is an object, including functions,
+          classes, and modules.</li>
+        <li><strong class="emph">Extensive Standard Library</strong> — Often called a "batteries included" language.
+        </li>
+        <li><strong class="emph">Cross-Platform (Portable)</strong> — The same Python code runs on Windows, Linux, and
+          macOS without modification.</li>
+        <li><strong class="emph">Huge Ecosystem</strong> — Available via PyPI and installed using pip (e.g., NumPy,
+          Pandas, Django, TensorFlow).</li>
+        <li><strong class="emph">Free and Open Source</strong> — Distributed under the PSF license.</li>
+      </ul>
+
+      <!-- Compiled vs Interpreted -->
+      <div class="step-label">Compiled vs Interpreted — And Where Python Fits</div>
+      <p class="body-text">This is one of the most commonly misunderstood concepts, so let's build it from first
+        principles.</p>
+      <p class="body-text"><strong class="emph">Compiled languages</strong> (e.g., C): The entire source code is
+        translated into machine code (an .exe or binary) <em>before</em> execution, by a program called a compiler. Fast
+        at run-time but requires a separate compilation step, and the binary is tied to the specific OS/CPU
+        architecture.</p>
+      <p class="body-text"><strong class="emph">Interpreted languages</strong> (e.g., pure Python conceptually): Source
+        code is read and executed line-by-line, at run-time, by another program called an interpreter. No separate .exe
+        is produced. More flexible but traditionally slower.</p>
+
+      <div class="info-card remember">
+        <span class="info-label">Critical Point — Python's Hybrid Model</span>
+        <p>Python is <strong>NOT</strong> purely interpreted. The standard Python implementation, CPython, first
+          <strong>compiles</strong> your source code into an intermediate, lower-level, platform-independent format
+          called <strong>bytecode (.pyc files)</strong>, and then an interpreter called the <strong>Python Virtual
+            Machine (PVM)</strong> executes that bytecode line by line. This is why Python is often called a
+          "byte-compiled interpreted language."
+        </p>
+      </div>
+
+      <!-- 1.4 Real-World Applications -->
+      <div class="step-label">1.4 — Real-World Applications of Python</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Domain</th>
+              <th>Real-World Example</th>
+              <th>Common Libraries/Frameworks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Web Development</td>
+              <td>Instagram and Spotify's backend services</td>
+              <td>Django, Flask, FastAPI</td>
+            </tr>
+            <tr>
+              <td>Data Science &amp; Analytics</td>
+              <td>Netflix uses Python to analyze viewing patterns</td>
+              <td>Pandas, NumPy, Matplotlib</td>
+            </tr>
+            <tr>
+              <td>Artificial Intelligence / ML</td>
+              <td>Tesla's Autopilot and OpenAI's ChatGPT models</td>
+              <td>TensorFlow, PyTorch</td>
+            </tr>
+            <tr>
+              <td>Automation / Scripting</td>
+              <td>System administrators use Python scripts for automation</td>
+              <td>os, subprocess, shutil</td>
+            </tr>
+            <tr>
+              <td>Game Development</td>
+              <td>Battlefield 2 and Civilization IV used Python</td>
+              <td>Pygame, Panda3D</td>
+            </tr>
+            <tr>
+              <td>Scientific Computing</td>
+              <td>NASA uses Python for analyzing telescope data</td>
+              <td>SciPy, AstroPy</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 1.5 Execution Flow -->
+      <div class="step-label">1.5 — Python Program Execution Flow</div>
+      <p class="body-text">Understanding how a Python program actually runs explains many behaviors — like why syntax
+        errors are caught before the program starts, but runtime errors appear only during execution.</p>
+      <ul class="task-list">
+        <li>The programmer writes source code in a <span class="mono">.py</span> file (e.g., app.py).</li>
+        <li>The Python interpreter compiles it into <strong class="emph">bytecode</strong> (stored in .pyc files,
+          usually inside <span class="mono">__pycache__</span>).</li>
+        <li>The <strong class="emph">Python Virtual Machine (PVM)</strong> executes this bytecode line by line.</li>
+        <li>If any error occurs during reading (syntax) or execution (runtime), the interpreter halts and displays a
+          <strong class="emph">Traceback</strong>.
+        </li>
+      </ul>
+
+      <div class="info-card insight">
+        <span class="info-label">Real-World Analogy</span>
+        <p>Think of Python's execution like a live translator at a conference. A live translator (interpreter) converts
+          the speaker's sentences one at a time as they speak, whereas a language like C uses a translator who
+          translates the entire speech into a booklet (compiled executable) beforehand.</p>
+      </div>
+
+      <!-- Execution Pipeline Diagram -->
+      <div class="step-label">Detailed Execution Pipeline</div>
+      <div class="flow-diagram"><span class="stage-num">[1]</span> LEXICAL ANALYSIS (Tokenizer / Lexer)
+        <span class="stage-desc">Breaks raw text into "tokens": keywords, identifiers, operators, literals</span>
+        │
+        ▼
+        <span class="stage-num">[2]</span> PARSING (Parser)
+        <span class="stage-desc">Arranges tokens according to Python grammar rules into a Parse Tree</span>
+        <span class="stage-desc">Example: x = 10 ✓ correct, x == 10 ✗ incorrect (assignment vs comparison)</span>
+        │
+        ▼
+        <span class="stage-num">[3]</span> AST GENERATION (Abstract Syntax Tree)
+        <span class="stage-desc">Simplified tree representing the logical structure of the program</span>
+        │
+        ▼
+        <span class="stage-num">[4]</span> COMPILATION TO BYTECODE
+        <span class="stage-desc">AST → low-level, platform-independent instructions (LOAD_FAST, BINARY_ADD...)</span>
+        <span class="stage-desc">Saved/cached as .pyc files inside __pycache__</span>
+        │
+        ▼
+        <span class="stage-num">[5]</span> PYTHON VIRTUAL MACHINE (PVM)
+        <span class="stage-desc">A big loop (in CPython, written in C) that executes each bytecode instruction</span>
+        │
+        ▼
+        <span class="stage-num">[6]</span> OPERATING SYSTEM → <span class="stage-num">[7]</span> CPU → <span
+          class="stage-num">[8]</span> MEMORY → <span class="stage-num">[9]</span> OUTPUT
+      </div>
+
+      <!-- Stage walkthroughs -->
+      <div class="step-label">Stage 1 — Lexer (Tokenizer)</div>
+      <p class="body-text">The lexer reads your code letter by letter and groups them into small pieces called <strong
+          class="emph">tokens</strong>.</p>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">tokenizer_example.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Example: x = 5 + y becomes:</span>
+NAME(x)   OP(=)   NUMBER(<span class="str">5</span>)   OP(+)   NAME(y)   NEWLINE</pre>
+      </div>
+      <p class="body-text">A computer can't understand raw text. It first needs to spot the basic pieces — just like you
+        recognize words before understanding a full sentence.</p>
+      <p class="body-text">If you write <span class="mono">prin()</span> instead of <span class="mono">print()</span>,
+        the lexer doesn't complain. It just sees <span class="mono">prin</span> as a normal-looking identifier. The
+        mistake gets caught later.</p>
+
+      <div class="step-label">Stage 2 — Parser</div>
+      <p class="body-text">The parser takes the tokens and checks if they follow Python's grammar rules. It builds a
+        tree structure showing how the tokens fit together — like checking if an English sentence follows
+        Subject-Verb-Object order.</p>
+      <p class="body-text">If something breaks the grammar rules (like <span class="mono">x = = 5</span>), Python throws
+        a <strong class="emph">SyntaxError</strong> right here — before your program even starts running.</p>
+
+      <div class="step-label">Stage 3 — AST (Abstract Syntax Tree)</div>
+      <p class="body-text">The tree from Stage 2 gets simplified into an AST — a cleaner tree that shows <strong
+          class="emph">meaning</strong>, not just grammar.</p>
+      <div class="ast-tree"> =
+        / \
+        x +
+        / \
+        5 y</div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">see_ast.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> ast
+<span class="fn">print</span>(ast.dump(ast.parse(<span class="str">"x = 5 + y"</span>)))</pre>
+      </div>
+
+      <div class="step-label">Stage 4 — Compiling to Bytecode</div>
+      <p class="body-text">Python's compiler turns the AST into <strong class="emph">bytecode</strong> — simple
+        instructions made for the Python Virtual Machine (not your actual CPU).</p>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">see_bytecode.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> dis
+dis.dis(<span class="str">"x = 5 + y"</span>)</pre>
+      </div>
+      <p class="body-text">This bytecode gets saved in <span class="mono">.pyc</span> files inside a <span
+          class="mono">__pycache__</span> folder. Next time you run the same unchanged file, Python skips lexing,
+        parsing, and compiling — it just loads the saved bytecode directly. That's why the second run is faster.</p>
+
+      <div class="step-label">Stage 5 — The Python Virtual Machine (PVM)</div>
+      <p class="body-text">This is the real "interpreter" — a loop written in C (the function <span
+          class="mono">_PyEval_EvalFrameDefault</span> inside CPython) that reads bytecode one instruction at a time and
+        does the matching low-level work: pushing/popping values, calling C functions for math, managing function calls,
+        etc. This is why Python is called a "stack machine."</p>
+
+      <div class="step-label">Stages 6–8 — OS, CPU, Memory</div>
+      <p class="body-text">The PVM makes system calls to the OS for memory allocation, file I/O, screen output, etc. The
+        OS passes these to the CPU which performs fetch-decode-execute cycles using registers and the ALU. Actual data
+        manipulation happens in RAM and CPU registers, and the result flows to output (screen, file, network).</p>
+
+      <!-- Walkthrough: print vs prin -->
+      <div class="step-label">Walkthrough — What Happens with prin("Hello")?</div>
+      <div class="info-card mistake">
+        <span class="info-label">✗ Wrong — Program 2</span>
+        <p><span class="mono">prin("Hello")</span> — looks valid to the lexer and parser, but fails at
+          <strong>runtime</strong>.
+        </p>
+      </div>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Text</th>
+              <th>Token</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>prin</td>
+              <td>IDENTIFIER</td>
+            </tr>
+            <tr>
+              <td>(</td>
+              <td>LEFT_PAREN</td>
+            </tr>
+            <tr>
+              <td>"Hello"</td>
+              <td>STRING literal</td>
+            </tr>
+            <tr>
+              <td>)</td>
+              <td>RIGHT_PAREN</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="body-text">The lexer, parser, and compiler all succeed — <span class="mono">prin</span> is a valid
+        identifier. Only at runtime, when the PVM executes <span class="mono">LOAD_NAME prin</span>, does it search
+        every namespace in LEGB order (local &rarr; enclosing &rarr; global &rarr; built-in) and fail:</p>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Scope (in search order)</th>
+              <th>Result for 'prin'</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1. Local variables</td>
+              <td style="color:var(--red)">Not found</td>
+            </tr>
+            <tr>
+              <td>2. Enclosing scopes</td>
+              <td style="color:var(--red)">Not found</td>
+            </tr>
+            <tr>
+              <td>3. Global namespace</td>
+              <td style="color:var(--red)">Not found</td>
+            </tr>
+            <tr>
+              <td>4. Built-in namespace</td>
+              <td style="color:var(--red)">Not found &rarr; NameError raised</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">error
+              output</span>
+          </div>
+        </div>
+        <pre
+          class="code-body"><span class="str">NameError</span>: name <span class="str">'prin'</span> is not defined</pre>
+      </div>
+
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>prin("Hello") result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Lexing</td>
+              <td>Succeeds — prin is a valid identifier token</td>
+            </tr>
+            <tr>
+              <td>Parsing</td>
+              <td>Succeeds — matches valid call-expression grammar</td>
+            </tr>
+            <tr>
+              <td>Compilation</td>
+              <td>Succeeds — bytecode is emitted without checking name existence</td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">Runtime (PVM)</td>
+              <td style="color:var(--red)">Fails — NameError: name 'prin' is not defined</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-card remember">
+        <span class="info-label">Key Insight</span>
+        <p><span class="mono">prin()</span> fails with a NameError at <strong>runtime</strong>, not at compile time —
+          because Python only checks whether a name actually exists when it tries to use it, not when it first sees it.
+        </p>
+      </div>
+
+      <!-- 1.6 Basic Structure -->
+      <div class="step-label">1.6 — Basic Structure of a Python Program</div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">my_first_program.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># A simple program demonstrating Python's basic structure</span>
+
+<span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="str">"""Return a greeting message for the given name."""</span>
+    <span class="kw">return</span> <span class="str">f"Hello, {name}! Welcome to Python programming."</span>
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    user_name = <span class="fn">input</span>(<span class="str">"Enter your name: "</span>)
+    message = greet(user_name)
+    <span class="fn">print</span>(message)</pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">without_main_guard.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="kw">return</span> <span class="str">f"Hello, {name}!"</span>
+
+user_name = <span class="fn">input</span>(<span class="str">"Enter your name: "</span>)
+message = greet(user_name)
+<span class="fn">print</span>(message)</pre>
+      </div>
+
+      <p class="body-text">Key observations:</p>
+      <ul class="task-list">
+        <li>No semicolons are required at the end of statements (unlike C, C++, Java).</li>
+        <li>Indentation (typically 4 spaces) defines code blocks instead of curly braces <span class="mono">{ }</span>.
+        </li>
+        <li>Comments start with <span class="mono">#</span> for single line, or triple quotes <span class="mono">"""
+            """</span> for multi-line docstrings.</li>
+        <li><span class="mono">if __name__ == "__main__":</span> ensures the code runs only when the file is executed
+          directly, not when imported as a module.</li>
+      </ul>
+
+      <!-- 1.7 Python vs Others -->
+      <div class="step-label">1.7 — Python vs Other Popular Languages</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Python</th>
+              <th>Java</th>
+              <th>C/C++</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Typing</td>
+              <td>Dynamic</td>
+              <td>Static</td>
+              <td>Static</td>
+            </tr>
+            <tr>
+              <td>Execution</td>
+              <td>Interpreted (bytecode + PVM)</td>
+              <td>Compiled to bytecode + JVM</td>
+              <td>Compiled directly to machine code</td>
+            </tr>
+            <tr>
+              <td>Syntax verbosity</td>
+              <td>Very concise</td>
+              <td>Verbose (boilerplate needed)</td>
+              <td>Verbose, manual memory handling</td>
+            </tr>
+            <tr>
+              <td>Memory Management</td>
+              <td>Automatic (GC)</td>
+              <td>Automatic (GC)</td>
+              <td>Manual (malloc/free, new/delete)</td>
+            </tr>
+            <tr>
+              <td>Speed</td>
+              <td>Slower (interpreted overhead)</td>
+              <td>Moderate to fast</td>
+              <td>Very fast</td>
+            </tr>
+            <tr>
+              <td>Best suited for</td>
+              <td>AI/ML, scripting, web backends</td>
+              <td>Enterprise apps, Android dev</td>
+              <td>System programming, OS, embedded</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quiz -->
+      <div class="step-label">Practice Challenge</div>
+      <div class="quiz-block">
+        <div class="quiz-q">Quick check: Python is which type of language?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'q1')">Purely compiled — like C</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'q1')">Hybrid — source is compiled to bytecode, then
+            interpreted by the PVM</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'q1')">Purely interpreted — reads raw source code
+            character by character</button>
+        </div>
+        <div class="quiz-feedback" id="q1-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 2: PROGRAMMING LANGUAGES ═══════════════════ -->
+  <section class="chapter" id="s2">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 02</span><span class="ch-badge">Landscape</span></div>
+      <h2 class="ch-title">Programming Languages</h2>
+
+      <div class="step-label">2.1 — What is a Programming Language?</div>
+      <p class="body-text">A programming language is a <strong class="emph">formal set of instructions, syntax rules,
+          and semantics</strong> that allows a human to communicate a sequence of computational steps (an algorithm) to
+        a computer. Just as human languages have grammar rules, programming languages have strict syntax rules — a
+        single misplaced symbol can prevent the entire program from running.</p>
+
+      <div class="step-label">2.2 — Generations of Programming Languages</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Generation</th>
+              <th>Description</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1GL — Machine Language</td>
+              <td>Raw binary instructions (0s and 1s) directly executed by CPU</td>
+              <td><span class="mono">10110000 01100001</span></td>
+            </tr>
+            <tr>
+              <td>2GL — Assembly Language</td>
+              <td>Uses mnemonic codes (ADD, MOV, SUB) instead of binary</td>
+              <td><span class="mono">MOV AX, 5</span></td>
+            </tr>
+            <tr>
+              <td>3GL — High-Level Languages</td>
+              <td>Human-readable, English-like syntax</td>
+              <td>C, C++, Java, Python</td>
+            </tr>
+            <tr>
+              <td>4GL — Domain-Specific</td>
+              <td>Designed for a specific purpose (databases, math)</td>
+              <td>SQL, MATLAB</td>
+            </tr>
+            <tr>
+              <td>5GL — AI-Oriented</td>
+              <td>Programmer specifies constraints and goals, not steps</td>
+              <td>Prolog, OPS5</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-card insight">
+        <span class="info-label">Real-World Analogy</span>
+        <p>Think of the generations like modes of communicating with a foreign chef. 1GL is drawing exact hand gestures
+          for every micro-movement. 3GL (like Python) is speaking simple, structured sentences: "chop the onions, then
+          boil the water." 4GL/5GL is simply saying "make me a pasta dish" and letting the chef figure out the steps.
+        </p>
+      </div>
+
+      <div class="step-label">2.3 — Low-Level vs High-Level Languages</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Aspect</th>
+              <th>Low-Level Language</th>
+              <th>High-Level Language</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hardware Dependence</td>
+              <td>Highly hardware-dependent (specific to CPU)</td>
+              <td>Hardware-independent (portable)</td>
+            </tr>
+            <tr>
+              <td>Readability</td>
+              <td>Difficult for humans to read</td>
+              <td>Easy to read, close to English</td>
+            </tr>
+            <tr>
+              <td>Execution Speed</td>
+              <td>Very fast, direct hardware control</td>
+              <td>Comparatively slower (translation overhead)</td>
+            </tr>
+            <tr>
+              <td>Examples</td>
+              <td>Machine code, Assembly</td>
+              <td>Python, Java, C++, JavaScript</td>
+            </tr>
+            <tr>
+              <td>Typical Use Case</td>
+              <td>Device drivers, firmware, embedded systems</td>
+              <td>Web apps, mobile apps, data science</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">2.4 — Programming Paradigms</div>
+      <p class="body-text">A programming paradigm is a fundamental style or approach used to structure and write code.
+        Most modern languages, including Python, support multiple paradigms.</p>
+
+      <div class="step-label">2.4.1 Procedural Programming</div>
+      <p class="body-text">Code is organized as a sequence of instructions and reusable procedures/functions that
+        operate on data. The program is divided into procedures/functions that perform specific tasks, executed one
+        after another.</p>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">procedural_style.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Procedural style: calculating area of a rectangle</span>
+<span class="kw">def</span> <span class="fn">calculate_area</span>(length, width):
+    <span class="kw">return</span> length * width
+
+area = calculate_area(<span class="str">5</span>, <span class="str">3</span>)
+<span class="fn">print</span>(<span class="str">"Area:"</span>, area)</pre>
+      </div>
+
+      <div class="step-label">2.4.2 Object-Oriented Programming (OOP)</div>
+      <p class="body-text">Code is organized around 'objects' that bundle data (attributes) and behavior (methods)
+        together. Real-world example: modeling a Bank Account, where balance is data and deposit()/withdraw() are
+        behaviors.</p>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">oop_style.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="kw">class</span> <span class="fn">BankAccount</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, owner, balance=<span class="str">0</span>):
+        self.owner = owner
+        self.balance = balance
+
+    <span class="kw">def</span> <span class="fn">deposit</span>(self, amount):
+        self.balance += amount
+
+    <span class="kw">def</span> <span class="fn">withdraw</span>(self, amount):
+        <span class="kw">if</span> amount > self.balance:
+            <span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="str">"Insufficient funds"</span>)
+        self.balance -= amount
+
+account = BankAccount(<span class="str">"Ayesha"</span>, <span class="str">1000</span>)
+account.deposit(<span class="str">500</span>)
+<span class="fn">print</span>(account.balance)   <span class="cmt"># Output: 1500</span></pre>
+      </div>
+
+      <div class="step-label">2.4.3 Scripting Languages</div>
+      <p class="body-text">A sub-category often used for automating repetitive tasks, gluing together other programs,
+        and rapid development. Python, JavaScript, PHP, and Bash are commonly used as scripting languages — for example,
+        automating the daily backup of a company's database at midnight.</p>
+
+      <div class="step-label">2.5 — Compiled vs Interpreted vs Hybrid</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>How it Works</th>
+              <th>Examples</th>
+              <th>Trade-off</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Compiled</td>
+              <td>Entire source → machine code before execution</td>
+              <td>C, C++, Rust, Go</td>
+              <td>Fast execution, recompile for each platform</td>
+            </tr>
+            <tr>
+              <td>Interpreted</td>
+              <td>Source → executed line-by-line at runtime</td>
+              <td>Python*, Ruby, PHP</td>
+              <td>Easier to debug, but slower execution</td>
+            </tr>
+            <tr>
+              <td>Hybrid</td>
+              <td>Source → intermediate bytecode → VM interprets</td>
+              <td>Python (CPython), Java, C#</td>
+              <td>Balance of portability and performance</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="body-text" style="font-size:13px; color:var(--text-faint);">* Python is technically hybrid — CPython
+        compiles source to bytecode (.pyc) first, then the PVM interprets that bytecode.</p>
+
+      <div class="step-label">2.6 — Choosing the Right Language — A Decision Table</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Project Requirement</th>
+              <th>Recommended Language</th>
+              <th>Reasoning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Operating system kernel / device driver</td>
+              <td style="color:var(--teal)">C</td>
+              <td>Direct hardware access, minimal runtime overhead</td>
+            </tr>
+            <tr>
+              <td>Android mobile app</td>
+              <td style="color:var(--teal)">Kotlin / Java</td>
+              <td>Native Android SDK support</td>
+            </tr>
+            <tr>
+              <td>Data analysis / ML prototype</td>
+              <td style="color:var(--teal)">Python</td>
+              <td>Rich ecosystem: Pandas, scikit-learn, fast prototyping</td>
+            </tr>
+            <tr>
+              <td>High-frequency trading system</td>
+              <td style="color:var(--teal)">C++</td>
+              <td>Ultra-low latency, fine-grained memory control</td>
+            </tr>
+            <tr>
+              <td>Interactive website front-end</td>
+              <td style="color:var(--teal)">JavaScript</td>
+              <td>Only language natively executed by web browsers</td>
+            </tr>
+            <tr>
+              <td>Enterprise banking backend</td>
+              <td style="color:var(--teal)">Java</td>
+              <td>Mature, strongly typed, huge legacy support</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quiz -->
+      <div class="step-label">Practice Challenge</div>
+      <div class="quiz-block">
+        <div class="quiz-q">Quick check: What is the key difference between 3GL and 4GL languages?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'q2')">3GL is general-purpose (C, Python); 4GL is
+            domain-specific (SQL, MATLAB) — you specify what you want, not how step-by-step</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'q2')">4GL is just a faster version of 3GL with no
+            real conceptual difference</button>
+        </div>
+        <div class="quiz-feedback" id="q2-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SECTION 3: PROGRAMMING ERRORS ═══════════════════ -->
+  <section class="chapter" id="s3">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Part 03</span><span class="ch-badge">Debugging</span></div>
+      <h2 class="ch-title">Programming Errors &amp; Debugging</h2>
+
+      <div class="step-label">3.1 — Why Study Errors?</div>
+      <p class="body-text">Every programmer, no matter how experienced, writes code that fails on the first attempt.
+        Studying the categories of errors systematically helps a developer quickly identify where a problem lies —
+        whether it is a typo, a flaw in logic, or a condition that only appears during execution — and therefore fix it
+        faster.</p>
+
+      <div class="step-label">3.2 — Broad Categories of Errors</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Error Type</th>
+              <th>When Detected</th>
+              <th>Description</th>
+              <th>Real-World Analogy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--red)">Syntax Error</td>
+              <td>Before execution (parse time)</td>
+              <td>Violates the grammar rules of the language</td>
+              <td>A grammatically incorrect sentence</td>
+            </tr>
+            <tr>
+              <td style="color:var(--accent)">Runtime Error (Exception)</td>
+              <td>During execution</td>
+              <td>Code is syntactically valid but fails when a certain condition is hit</td>
+              <td>A recipe that fails because an ingredient is missing</td>
+            </tr>
+            <tr>
+              <td style="color:var(--purple)">Logical Error</td>
+              <td>After execution (wrong output)</td>
+              <td>Code runs without crashing but produces wrong results</td>
+              <td>Following a recipe perfectly, but the result tastes wrong</td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-dim)">Semantic Error</td>
+              <td>Varies</td>
+              <td>Statement is syntactically valid but means something different than intended</td>
+              <td>Saying "I could care less" when you mean "I couldn't care less"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">3.3 — Syntax Errors in Python</div>
+      <p class="body-text">Syntax errors occur when the Python parser cannot understand a statement because it violates
+        the language's grammar. Python detects these <strong class="emph">before running any part of the
+          program</strong>.</p>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">syntax_error_example</span>
+          </div>
+        </div>
+        <pre class="code-body">&gt;&gt;&gt; <span class="kw">if</span> x > <span class="str">5</span>
+  File <span class="str">"&lt;stdin&gt;"</span>, line <span class="str">1</span>
+    <span class="kw">if</span> x > <span class="str">5</span>
+           ^
+<span class="str">SyntaxError</span>: expected <span class="str">':'</span></pre>
+      </div>
+      <p class="body-text">Common causes of syntax errors:</p>
+      <ul class="task-list">
+        <li>Missing colon (<span class="mono">:</span>) after <span class="mono">if</span>, <span
+            class="mono">for</span>, <span class="mono">while</span>, <span class="mono">def</span>, <span
+            class="mono">class</span> statements.</li>
+        <li>Mismatched or missing parentheses, brackets, or quotes.</li>
+        <li>Incorrect indentation (Python is strict about consistent indentation).</li>
+        <li>Using a reserved keyword as a variable name, e.g., <span class="mono">class = "A"</span>.</li>
+      </ul>
+
+      <div class="step-label">3.4 — Runtime Errors (Exceptions)</div>
+      <p class="body-text">Runtime errors, called <strong class="emph">exceptions</strong> in Python, occur while the
+        program is executing, even though the code was syntactically correct. Python provides a robust built-in
+        hierarchy of exception classes.</p>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">runtime_error_example.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="cmt"># Simple average calculator for student marks</span>
+marks = [<span class="str">78</span>, <span class="str">85</span>, <span class="str">92</span>, <span class="str">0</span>, <span class="str">66</span>]
+total_students = <span class="str">5</span>
+
+average = <span class="fn">sum</span>(marks) / total_students
+<span class="fn">print</span>(<span class="str">"Class Average:"</span>, average)
+
+<span class="cmt"># If total_students is mistakenly set to 0:</span>
+<span class="cmt"># average = sum(marks) / 0</span>
+<span class="cmt"># --> ZeroDivisionError: division by zero</span></pre>
+      </div>
+
+      <p class="body-text">Common Python exceptions:</p>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Exception</th>
+              <th>Cause</th>
+              <th>Example Trigger</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--red)">ZeroDivisionError</td>
+              <td>Dividing a number by zero</td>
+              <td><span class="mono">10 / 0</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">TypeError</td>
+              <td>Operation on incompatible type</td>
+              <td><span class="mono">"5" + 5</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">ValueError</td>
+              <td>Right type, wrong value</td>
+              <td><span class="mono">int("hello")</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">NameError</td>
+              <td>Using an undefined name</td>
+              <td><span class="mono">print(undeclared_var)</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">IndexError</td>
+              <td>Index out of range</td>
+              <td><span class="mono">my_list[10]</span> on a 3-item list</td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">KeyError</td>
+              <td>Missing dictionary key</td>
+              <td><span class="mono">my_dict["missing_key"]</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">FileNotFoundError</td>
+              <td>File does not exist</td>
+              <td><span class="mono">open("missing.txt")</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">AttributeError</td>
+              <td>Method/attribute doesn't exist on object</td>
+              <td><span class="mono">"hello".push()</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">ImportError</td>
+              <td>Module not installed/found</td>
+              <td><span class="mono">import numpyy</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--red)">IndentationError</td>
+              <td>Inconsistent indentation</td>
+              <td>Mixing tabs and spaces</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">3.5 — Logical Errors</div>
+      <p class="body-text">Logical errors are the <strong class="emph">most dangerous</strong> because the program runs
+        successfully and produces output — but the output is <strong class="emph">wrong</strong>. There is no traceback
+        or error message to point the programmer to the problem.</p>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">logical_error.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre
+          class="code-body"><span class="cmt"># Goal: Calculate the average of three exam scores</span>
+score1 = <span class="str">80</span>
+score2 = <span class="str">90</span>
+score3 = <span class="str">70</span>
+
+<span class="cmt"># Logical error: forgot to divide by 3</span>
+average = score1 + score2 + score3
+<span class="fn">print</span>(<span class="str">"Average score:"</span>, average)   <span class="cmt"># Prints 240 instead of 80.0</span></pre>
+      </div>
+
+      <div class="info-card usecase">
+        <span class="info-label">Real-World Consequence</span>
+        <p>In 1999, NASA's Mars Climate Orbiter was lost because one team's software calculated thrust using
+          <strong>imperial units</strong> (pound-seconds) while another team's software expected <strong>metric
+            units</strong> (newton-seconds) — a classic logical/semantic error that cost the mission an estimated
+          <strong>$327 million</strong>.
+        </p>
+      </div>
+
+      <div class="step-label">3.6 — Exception Handling: try, except, else, finally</div>
+      <p class="body-text">Python provides structured exception handling so that a program can gracefully recover from
+        runtime errors instead of crashing abruptly.</p>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="left">
+            <div class="code-dots"><span></span><span></span><span></span></div><span
+              class="code-lang">exception_handling.py</span>
+          </div>
+          <div class="code-actions"><button class="code-btn" onclick="copyCode(this)">Copy</button></div>
+        </div>
+        <pre class="code-body"><span class="kw">def</span> <span class="fn">get_average_marks</span>(marks_list):
+    <span class="kw">try</span>:
+        total = <span class="fn">sum</span>(marks_list)
+        average = total / <span class="fn">len</span>(marks_list)
+    <span class="kw">except</span> <span class="fn">ZeroDivisionError</span>:
+        <span class="fn">print</span>(<span class="str">"Error: The marks list is empty. Cannot compute average."</span>)
+        <span class="kw">return</span> <span class="kw">None</span>
+    <span class="kw">except</span> <span class="fn">TypeError</span>:
+        <span class="fn">print</span>(<span class="str">"Error: The marks list contains a non-numeric value."</span>)
+        <span class="kw">return</span> <span class="kw">None</span>
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(<span class="str">"Average computed successfully."</span>)
+        <span class="kw">return</span> average
+    <span class="kw">finally</span>:
+        <span class="fn">print</span>(<span class="str">"Average calculation attempt finished."</span>)
+
+<span class="fn">print</span>(get_average_marks([<span class="str">80</span>, <span class="str">90</span>, <span class="str">70</span>]))
+<span class="fn">print</span>(get_average_marks([]))</pre>
+      </div>
+
+      <p class="body-text">Explanation of each block:</p>
+      <ul class="task-list">
+        <li><strong class="emph">try</strong>: the block of code that might raise an exception is placed here.</li>
+        <li><strong class="emph">except</strong>: catches and handles a specific exception type; multiple except blocks
+          can handle different errors.</li>
+        <li><strong class="emph">else</strong>: runs only if the try block completed with no exception raised.</li>
+        <li><strong class="emph">finally</strong>: always runs, whether an exception occurred or not — commonly used to
+          close files or release resources.</li>
+      </ul>
+
+      <div class="step-label">3.8 — Debugging Techniques Used in the Real World</div>
+      <ul class="task-list">
+        <li><strong class="emph">Reading the Traceback carefully</strong> — Python's error traceback shows the exact
+          file, line number, and call sequence. Always read it bottom-up starting from the final error message.</li>
+        <li><strong class="emph">Print/Logging Statements</strong> — Temporarily inserting <span
+            class="mono">print()</span> statements (or, better, using the <span class="mono">logging</span> module) to
+          inspect variable values.</li>
+        <li><strong class="emph">Using a Debugger</strong> (e.g., pdb, or IDE breakpoints in VS Code/PyCharm) — Allows
+          step-by-step execution and inspection without modifying code.</li>
+        <li><strong class="emph">Rubber Duck Debugging</strong> — Explaining the code line-by-line out loud often
+          reveals the logical flaw.</li>
+        <li><strong class="emph">Unit Testing</strong> — Writing small, automated tests (using <span
+            class="mono">unittest</span> or <span class="mono">pytest</span>) for individual functions.</li>
+        <li><strong class="emph">Assertions</strong> — Using <span class="mono">assert</span> statements to state
+          assumptions explicitly, e.g., <span class="mono">assert age >= 0, "Age cannot be negative"</span>.</li>
+      </ul>
+
+      <div class="step-label">3.9 — Compile-Time vs Run-Time Errors</div>
+      <div class="df-wrap">
+        <table class="df-table">
+          <thead>
+            <tr>
+              <th>Aspect</th>
+              <th>Compile-Time Errors</th>
+              <th>Run-Time Errors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Detected By</td>
+              <td>Parser/compiler, before program runs</td>
+              <td>Interpreter, while program is executing</td>
+            </tr>
+            <tr>
+              <td>Program Execution</td>
+              <td>Never starts</td>
+              <td>Starts but terminates abruptly (unless handled)</td>
+            </tr>
+            <tr>
+              <td>Typical Examples</td>
+              <td>Missing colon, unmatched brackets, bad indentation</td>
+              <td>Division by zero, invalid index, missing file</td>
+            </tr>
+            <tr>
+              <td>Prevention</td>
+              <td>Careful typing, IDE syntax highlighting</td>
+              <td>Input validation, try-except blocks, defensive coding</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-label">3.10 — Best Practices to Minimize Errors</div>
+      <ul class="task-list">
+        <li>Always validate user input before processing it (e.g., check if a string can be converted to a number before
+          calling <span class="mono">int()</span>).</li>
+        <li>Use meaningful variable and function names to reduce logical mistakes.</li>
+        <li>Break large problems into small functions — smaller units are easier to test and debug.</li>
+        <li>Use version control (<strong class="emph">Git</strong>) so a working version can always be restored.</li>
+        <li>Write test cases alongside your code, not after — this is called <strong class="emph">Test-Driven
+            Development (TDD)</strong>.</li>
+        <li>Never use a bare <span class="mono">except:</span> clause in production code — always catch specific
+          exception types.</li>
+      </ul>
+
+      <!-- Quiz -->
+      <div class="step-label">Practice Challenges</div>
+      <div class="quiz-block">
+        <span class="quiz-tag">Identify the Error Type</span>
+        <div class="quiz-q">A program runs without crashing but produces incorrect output. What type of error is this?
+        </div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'q3')">Syntax Error</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'q3')">Runtime Error</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'q3')">Logical Error — the most dangerous kind
+            because there's no traceback to help you find it</button>
+        </div>
+        <div class="quiz-feedback" id="q3-feedback"></div>
+      </div>
+
+      <div class="quiz-block">
+        <span class="quiz-tag">Exception Handling</span>
+        <div class="quiz-q">When does the <span class="mono">finally</span> block execute?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'q4')">Only when an exception is raised</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'q4')">Always — whether an exception occurred or
+            not</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'q4')">Only when the try block succeeds without
+            errors</button>
+        </div>
+        <div class="quiz-feedback" id="q4-feedback"></div>
+      </div>
+
+      <div class="quiz-block">
+        <span class="quiz-tag">Find the Error</span>
+        <div class="quiz-q">What will <span class="mono">prin("Hello")</span> produce?</div>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="answerQuiz(this, false, 'q5')">SyntaxError — Python catches the typo during
+            parsing</button>
+          <button class="quiz-opt" onclick="answerQuiz(this, true, 'q5')">NameError at runtime — prin is a valid
+            identifier, but no object with that name exists</button>
+        </div>
+        <div class="quiz-feedback" id="q5-feedback"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SUMMARY ═══════════════════ -->
+  <section class="chapter" id="summary">
+    <div class="wrap">
+      <div class="ch-meta"><span class="ch-eyebrow">Summary</span><span class="ch-badge">Complete</span></div>
+      <h2 class="ch-title">Lecture Summary</h2>
+      <p class="body-text">This session covered three inter-related foundations of computer programming:</p>
+      <ul class="task-list">
+        <li><strong class="emph">Python</strong> as a modern, readable, hybrid-executed high-level language with wide
+          real-world applicability.</li>
+        <li>The broader <strong class="emph">landscape of programming languages</strong>, including their generations,
+          paradigms, and the trade-offs between compiled, interpreted, and hybrid execution models.</li>
+        <li>The systematic <strong class="emph">classification of programming errors</strong> — syntax, runtime, and
+          logical — along with Python's exception-handling mechanism and industry-standard debugging practices.</li>
+      </ul>
+      <div class="pull-quote">A strong grasp of these fundamentals is essential before progressing to more advanced
+        topics such as data structures, algorithms, and software engineering practices.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-author-badge">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-author-img">
+        <span>Prepared by <strong>Umer Farooq</strong></span>
+      </div>
+      <p>SSM College of Engineering & Technology • B.Tech 5th Semester • Python Programming • Lecture 1</p>
+      <p style="font-size: 12px; color: var(--text-faint); margin-top: 6px;">No The Way, Go The Way and Then Show The
+        Way.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ========== Theme Toggle ==========
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', html.dataset.theme);
+      updateThemeIcon();
+    }
+    function updateThemeIcon() {
+      const icon = document.getElementById('theme-icon');
+      if (!icon) return;
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      icon.innerHTML = isDark
+        ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+      updateThemeIcon();
+    })();
+
+    // ========== Progress Bar ==========
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('progress-bar');
+      const btt = document.getElementById('back-to-top');
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (bar) bar.style.width = (scrollTop / scrollHeight * 100) + '%';
+      if (btt) btt.classList.toggle('show', scrollTop > 400);
+    });
+
+    // ========== Copy Code ==========
+    function copyCode(btn) {
+      const code = btn.closest('.code-block').querySelector('pre.code-body');
+      navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy', 1500);
+      });
+    }
+
+    // ========== Quiz ==========
+    const quizFeedback = {
+      q1: {
+        correct: 'Correct — Python source (.py) is compiled to bytecode (.pyc), then the PVM interprets that bytecode. It\'s a hybrid model.',
+        wrong: 'Not quite — Python isn\'t purely compiled or purely interpreted. CPython first compiles to bytecode, then the PVM interprets it.'
+      },
+      q2: {
+        correct: 'Correct — 3GL languages are general-purpose; 4GL languages are designed for a specific domain, letting you specify what you want rather than how to do it step-by-step.',
+        wrong: 'Not quite — the generations differ conceptually: 4GL is domain-specific (like SQL for databases), not just a faster version of 3GL.'
+      },
+      q3: {
+        correct: 'Correct — logical errors produce wrong results without any error message or traceback. They require careful testing and tracing to find.',
+        wrong: 'Not quite — syntax errors prevent execution, runtime errors crash the program. A program that runs but gives wrong output has a logical error.'
+      },
+      q4: {
+        correct: 'Correct — the finally block always executes, whether an exception was raised or not. It\'s commonly used for cleanup (closing files, releasing resources).',
+        wrong: 'Not quite — finally is special because it runs no matter what happens: exception, no exception, or even if a return statement is hit.'
+      },
+      q5: {
+        correct: 'Correct — prin is a valid identifier as far as the lexer and parser are concerned. It only fails at runtime when Python looks for an object named "prin" and can\'t find one.',
+        wrong: 'Not quite — Python doesn\'t check whether names actually exist until runtime. The lexer and parser see prin as a perfectly valid identifier.'
+      }
+    };
+
+    function answerQuiz(btn, isCorrect, groupId) {
+      const group = btn.closest('.quiz-opts');
+      group.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      const fb = document.getElementById(groupId + '-feedback');
+      if (fb) {
+        fb.classList.add('show');
+        const msg = quizFeedback[groupId];
+        fb.innerHTML = msg ? (isCorrect ? msg.correct : msg.wrong) : (isCorrect ? 'Correct!' : 'Not quite.');
+      }
+    }
+  </script>
+
+</body>
+
+</html>

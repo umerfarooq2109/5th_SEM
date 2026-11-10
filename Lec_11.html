@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lecture 11: Python Lists in Depth — List Basics, Copying Lists, Passing Lists to Functions. Comprehensive notes covering creation, indexing, slicing, mutation, shallow vs deep copy, and function parameter behavior. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Lecture 11: Python Lists — Basics, Copying &amp; Passing to Functions | SSM College of Engineering</title>
+
+  <!-- Google Fonts: Outfit & Manrope & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #64748b;
+      --syn-function: #0284c7;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0d9488;
+      --syn-punctuation: #475569;
+      --syn-variable: #0f172a;
+      --syn-format: #b45309;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      font-size: 16px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: transparent; z-index: 1000; }
+    #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple)); transition: width 0.1s ease; }
+
+    .top-nav { position: sticky; top: 0; width: 100%; background: var(--bg-alt); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); z-index: 900; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px var(--shadow); }
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); font-family: var(--font-heading); font-weight: 700; font-size: 1.15rem; }
+    .nav-brand .badge { background: var(--accent); color: #fff; font-size: 0.82rem; padding: 4px 12px; border-radius: 6px; font-weight: 800; letter-spacing: 0.8px; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .btn-nav { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; }
+    .btn-nav:hover { background: var(--card-hover); border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    .hero-banner { background: linear-gradient(135deg, var(--card) 0%, var(--bg-alt) 100%); border: 1px solid var(--border-accent); border-radius: var(--radius); padding: 44px 40px; margin-bottom: 40px; box-shadow: 0 12px 36px var(--shadow); position: relative; overflow: hidden; }
+    .hero-banner::before { content: ""; position: absolute; top: -100px; right: -100px; width: 320px; height: 320px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); pointer-events: none; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .tag { font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .tag-accent { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+    .tag-teal { background: var(--teal-soft); color: var(--teal); border: 1px solid var(--teal); }
+    .tag-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid var(--purple); }
+    .hero-title { font-family: var(--font-heading); font-size: 2.65rem; font-weight: 800; line-height: 1.25; color: var(--text); margin-bottom: 16px; letter-spacing: -0.5px; }
+    .hero-subtitle { color: var(--text-dim); font-size: 1.15rem; max-width: 880px; margin-bottom: 28px; line-height: 1.65; }
+
+    .hero-author-box { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .author-profile { display: flex; align-items: center; gap: 16px; }
+    .author-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 4px 12px var(--accent-glow); }
+    .author-details h4 { font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .author-details p { color: var(--text-dim); font-size: 0.88rem; margin-bottom: 0; }
+    .hero-buttons { display: flex; gap: 12px; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent) 0%, #d46b17 100%); color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px var(--accent-glow); transition: all 0.2s ease; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
+
+    .hero-meta-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-top: 28px; }
+    .meta-item { background: var(--cell-bg); border: 1px solid var(--cell-border); padding: 14px 18px; border-radius: 10px; text-align: center; }
+    .meta-item .val { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 2px; }
+    .meta-item .lbl { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); font-weight: 600; }
+
+    #toc-section { margin-bottom: 50px; }
+    .section-header-pill { display: inline-block; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--teal); background: var(--teal-soft); border: 1px solid var(--teal); padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; }
+    .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .toc-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; transition: all 0.25s ease; position: relative; }
+    .toc-card:hover { background: var(--card-hover); border-color: var(--teal); transform: translateY(-3px); box-shadow: 0 8px 24px var(--shadow); }
+    .toc-num { background: var(--cell-bg); color: var(--accent); font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: 800; display: inline-block; width: fit-content; margin-bottom: 8px; }
+    .toc-card-title { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .toc-card-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+
+    .chapter { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px 32px; margin-bottom: 48px; box-shadow: 0 8px 24px var(--shadow); scroll-margin-top: 80px; }
+    .ch-header { margin-bottom: 24px; border-bottom: 2px solid var(--border); padding-bottom: 16px; }
+    .ch-eyebrow { font-size: 0.8rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+    .ch-title { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--text); }
+    .sub-title { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text); margin: 32px 0 16px; display: flex; align-items: center; gap: 10px; }
+    .sub-sub-title { font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: var(--teal); margin: 20px 0 10px; }
+    .sec-badge { background: var(--teal-soft); color: var(--teal); font-size: 0.8rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--teal); }
+
+    .table-container { overflow-x: auto; margin: 20px 0 28px; border-radius: 8px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; text-align: left; }
+    thead { background: var(--bg-alt); }
+    th { padding: 12px 16px; font-weight: 700; color: var(--text); border-bottom: 2px solid var(--border); font-family: var(--font-heading); text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.6px; }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--cell-border); background: var(--cell-bg); color: var(--text-dim); line-height: 1.6; }
+    tbody tr:nth-child(even) td { background: var(--table-stripe); }
+    tbody tr:hover td { background: var(--card-hover); color: var(--text); }
+
+    .callout { border-radius: 10px; padding: 18px 22px; margin: 20px 0; border-left: 4px solid; }
+    .callout.tip { background: var(--teal-soft); border-color: var(--teal); }
+    .callout.important { background: var(--red-soft); border-color: var(--red); }
+    .callout.remember { background: var(--purple-soft); border-color: var(--purple); }
+    .callout-head { font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .callout.tip .callout-head { color: var(--teal); }
+    .callout.important .callout-head { color: var(--red); }
+    .callout.remember .callout-head { color: var(--purple); }
+    .callout-body { font-size: 0.92rem; color: var(--text); line-height: 1.6; }
+
+    .program-box { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 28px; scroll-margin-top: 80px; }
+    .prog-tag-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .prog-badge { font-size: 0.72rem; font-weight: 800; background: var(--accent-soft); color: var(--accent); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--accent-glow); }
+    .prog-category-badge { font-size: 0.72rem; font-weight: 800; background: var(--blue-soft); color: var(--blue); padding: 2px 8px; border-radius: 4px; }
+    .program-title { font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .program-desc { font-size: 0.92rem; color: var(--text-dim); margin-bottom: 16px; line-height: 1.6; }
+
+    .code-container { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 14px; overflow: hidden; }
+    .code-header { background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid var(--border); padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .code-title { display: flex; align-items: center; font-family: var(--font-code); font-size: 0.78rem; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+    .copy-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 3px 9px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s ease; }
+    .copy-btn:hover { background: var(--card-hover); color: var(--text); border-color: var(--accent); }
+    .code-body { padding: 16px; overflow-x: auto; }
+    .code-body pre { margin: 0; font-family: var(--font-code); font-size: 0.88rem; line-height: 1.55; }
+
+    .output-box { background: #090a0d; border: 1px solid #1a1e28; border-radius: 8px; margin-bottom: 14px; overflow: hidden; }
+    .output-header { background: #11131a; border-bottom: 1px solid #1a1e28; padding: 6px 14px; font-family: var(--font-code); font-size: 0.75rem; font-weight: 700; color: #7b8599; display: flex; justify-content: space-between; align-items: center; }
+    .output-body { padding: 12px 16px; overflow-x: auto; }
+    .output-body pre { margin: 0; font-family: var(--font-code); font-size: 0.84rem; line-height: 1.5; color: #9ece6a; }
+
+    .prog-takeaway { background: var(--cell-bg); border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 0.88rem; color: var(--text-dim); line-height: 1.5; }
+
+    .syn-keyword { color: var(--syn-keyword); font-weight: 600; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+
+    .site-footer { background: var(--bg-alt); border-top: 1px solid var(--border); padding: 40px 24px; margin-top: 60px; }
+    .footer-content { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .footer-author { display: flex; align-items: center; gap: 14px; }
+    .footer-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 2px 8px var(--accent-glow); }
+
+    .float-actions { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 800; }
+    .btn-float { background: var(--card); border: 1px solid var(--border); color: var(--text); border-radius: 50%; width: 44px; height: 44px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px var(--shadow); transition: all 0.2s ease; }
+    .btn-float:hover { background: var(--accent); color: white; transform: scale(1.08); border-color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 1.9rem; }
+      .container { padding: 20px 16px 60px; }
+      .hero-banner { padding: 28px 20px; }
+      .chapter { padding: 20px 16px; }
+      .program-box { padding: 18px 14px; }
+      .hero-author-box { flex-direction: column; align-items: flex-start; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="progress-container"><div id="progress-bar"></div></div>
+
+  <header class="top-nav">
+    <a href="#" class="nav-brand">
+      <span class="badge">LEC 11</span>
+      <span>Python Programming</span>
+    </a>
+    <div class="nav-actions">
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF"><span>🖨️</span> Print PDF</button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode"><span id="theme-icon-nav">☀️</span></button>
+      <a href="#toc-section" class="btn-nav" style="text-decoration: none;"><span>📑</span> Contents</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Hero Banner -->
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">B.Tech Computer Science &amp; Engineering</span>
+        <span class="tag tag-teal">Chapter 4.1: List Data Structures</span>
+        <span class="tag tag-purple">Complete Master Notes</span>
+      </div>
+      <h1 class="hero-title">Python Lists — Basics, Copying &amp; Passing to Functions</h1>
+      <p class="hero-subtitle">
+        A comprehensive, easy-to-understand exploration of Python's most powerful built-in data structure.
+        Explained in the style of a classroom lecture — so you can understand it yourself and teach it to others.
+        Covers list creation, the <code>list()</code> constructor, indexing, slicing, mutation, all list methods,
+        shallow vs. deep copying, aliasing, and the critical behavior of lists when passed to functions.
+      </p>
+
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()"><span>🖨️</span> Save as PDF / Print</button>
+        </div>
+      </div>
+
+      <div class="hero-meta-strip">
+        <div class="meta-item"><span class="val">4</span><span class="lbl">Major Parts</span></div>
+        <div class="meta-item"><span class="val">12</span><span class="lbl">IDE Code Programs</span></div>
+        <div class="meta-item"><span class="val">3</span><span class="lbl">Summary Tables</span></div>
+        <div class="meta-item"><span class="val">100%</span><span class="lbl">Complete Notes</span></div>
+      </div>
+    </header>
+
+    <!-- Table of Contents -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Table of Contents &amp; Quick Navigation</div>
+      <div class="toc-grid">
+        <a href="#part-1" class="toc-card">
+          <span class="toc-num">01</span>
+          <div class="toc-card-title">1. List Basics</div>
+          <div class="toc-card-desc">What is a list, key properties, creating lists with [] and the list() constructor, indexing &amp; slicing, and all commonly used list methods with examples.</div>
+          <div style="margin-top: 12px; font-size: 0.75rem; color: var(--teal); font-weight: 700;">5 Programs • Verified &rarr;</div>
+        </a>
+        <a href="#part-2" class="toc-card">
+          <span class="toc-num">02</span>
+          <div class="toc-card-title">2. Copying Lists</div>
+          <div class="toc-card-desc">Why = does NOT copy, aliasing, shallow copy methods ([:], .copy(), list(), copy.copy()), the nested list trap, and deep copy with copy.deepcopy().</div>
+          <div style="margin-top: 12px; font-size: 0.75rem; color: var(--teal); font-weight: 700;">4 Programs • Verified &rarr;</div>
+        </a>
+        <a href="#part-3" class="toc-card">
+          <span class="toc-num">03</span>
+          <div class="toc-card-title">3. Passing Lists to Functions</div>
+          <div class="toc-card-desc">Pass by object reference, mutating vs. reassigning inside functions, protecting the original by passing a copy, and why Python uses this design.</div>
+          <div style="margin-top: 12px; font-size: 0.75rem; color: var(--teal); font-weight: 700;">3 Programs • Verified &rarr;</div>
+        </a>
+        <a href="#part-4" class="toc-card">
+          <span class="toc-num">04</span>
+          <div class="toc-card-title">4. Recap — How to Teach This</div>
+          <div class="toc-card-desc">Complete recap with the 6 golden points to explain lists to students, plus summary tables for quick revision before exams.</div>
+          <div style="margin-top: 12px; font-size: 0.75rem; color: var(--teal); font-weight: 700;">Quick Reference &rarr;</div>
+        </a>
+      </div>
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- PART 01 • LIST BASICS -->
+    <!-- ========================================== -->
+    <section id="part-1" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 01 • Foundations</span>
+        <h2 class="ch-title">1. List Basics</h2>
+      </div>
+
+      <h3 class="sub-title" id="sec-01-what"><span class="sec-badge">1.1</span> What is a List?</h3>
+      <div style="margin-bottom: 24px; color: var(--text); line-height: 1.7;">
+        <p>A list in Python is a <strong>container that can hold many values together, in one single variable</strong>. Think of it like a <strong>train</strong> — the train is the list, and each coach (bogie) is one item. The whole train travels together, but each coach can carry something different: a person, luggage, or even another small train inside it!</p>
+        <p style="margin-top: 12px;">In simple words: a list is an <strong>ordered collection of items</strong>, written between square brackets <code>[ ]</code>, with items separated by commas.</p>
+      </div>
+
+      <h3 class="sub-title" id="sec-01-properties"><span class="sec-badge">1.2</span> Key Properties of a List</h3>
+<div style="background: var(--cell-bg); border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0;">
+  <strong style="color: var(--accent); font-size: 1.1rem;">🏛️ 6 Important Properties:</strong>
+  <ul style="margin: 8px 0 0 20px; font-size: 0.96rem; color: var(--text); line-height: 1.8;">
+    <li><strong style="color: var(--teal);">1. Ordered:</strong> Items keep the position (index) in which they were inserted. <code>'apple'</code> will always come before <code>'banana'</code> unless you change it yourself.</li>
+    <li><strong style="color: var(--purple);">2. Mutable:</strong> A list CAN be changed after creation. You can add, remove, or update items. This is the single most important property of a list, and it is the reason copying and passing lists behaves the way it does (explained in Sections 2 and 3).</li>
+    <li><strong style="color: var(--blue);">3. Allows Duplicates:</strong> The same value can appear more than once, e.g. <code>[1, 1, 2, 2]</code>.</li>
+    <li><strong style="color: var(--red);">4. Heterogeneous:</strong> A single list can store different data types together (numbers, strings, booleans, even other lists).</li>
+    <li><strong style="color: var(--green);">5. Dynamic in Size:</strong> A list can grow or shrink at runtime; you do not fix its size in advance like in some other languages.</li>
+    <li><strong style="color: var(--amber);">6. Indexed:</strong> Every item has a position number. Indexing starts from 0 (not 1). Negative indexing is also allowed: <code>-1</code> means the last item, <code>-2</code> the second-last, and so on.</li>
+  </ul>
+</div>
+
+<div class="callout important">
+  <div class="callout-head"><span>⚠️</span> Note — Students Often Miss This</div>
+  <div class="callout-body">
+    A list does not directly store the values inside itself. It stores <strong>references (memory addresses)</strong> that POINT to the actual objects. This single fact is the real reason why copying a list and passing a list to a function behave the way they do — so keep this in mind, it is explained fully in Sections 2 and 3.
+  </div>
+</div>
+
+      <h3 class="sub-title" id="sec-01-creating"><span class="sec-badge">1.3</span> Creating Lists &amp; The list() Constructor</h3>
+      <div style="margin-bottom: 12px; color: var(--text); line-height: 1.7;">
+        <p>There are two main ways to create a list in Python:</p>
+      </div>
+
+<div style="background: var(--cell-bg); border-left: 4px solid var(--teal); padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0;">
+  <strong style="color: var(--teal); font-size: 1.05rem;">🔧 What is a Constructor?</strong>
+  <p style="margin: 8px 0 0 0; font-size: 0.95rem; color: var(--text); line-height: 1.7;">
+    A <strong>constructor</strong> is a special built-in function that <strong>creates (constructs) a new object</strong>. Think of it like a <strong>factory machine</strong> — you feed it raw material (any iterable like a tuple, string, range, etc.) and it builds a brand-new list out of it.
+  </p>
+  <p style="margin: 8px 0 0 0; font-size: 0.95rem; color: var(--text); line-height: 1.7;">
+    In Python, <code>list()</code> is the <strong>list constructor</strong>. It takes any iterable (something you can loop through) and converts it into a list. If you call <code>list()</code> with no arguments, it creates an empty list <code>[]</code>.
+  </p>
+  <p style="margin: 8px 0 0 0; font-size: 0.95rem; color: var(--text); line-height: 1.7;">
+    Similarly, <code>int()</code> is the integer constructor, <code>str()</code> is the string constructor, <code>tuple()</code> is the tuple constructor — every data type has its own constructor.
+  </p>
+</div>
+
+    <!-- Program 1.1 -->
+    <div class="program-box" id="p1_1_creating_lists">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 1.1: Creating Lists — Square Brackets &amp; the list() Constructor</h4>
+      <p class="program-desc">Shows both ways to create lists: using square brackets <code>[]</code> directly, and using the <code>list()</code> constructor to convert other iterables into lists.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Creating lists using square brackets []</span>
+<span class="syn-variable">fruits</span> = [<span class="syn-string">'apple'</span>, <span class="syn-string">'banana'</span>, <span class="syn-string">'cherry'</span>]
+<span class="syn-variable">marks</span> = [<span class="syn-number">45</span>, <span class="syn-number">89</span>, <span class="syn-number">67</span>, <span class="syn-number">90</span>]
+<span class="syn-variable">mixed</span> = [<span class="syn-number">10</span>, <span class="syn-string">'hello'</span>, <span class="syn-number">3.14</span>, <span class="syn-preprocessor">True</span>]
+<span class="syn-variable">empty</span> = []                           <span class="syn-comment"># empty list</span>
+<span class="syn-variable">nested</span> = [<span class="syn-number">1</span>, [<span class="syn-number">2</span>, <span class="syn-number">3</span>], [<span class="syn-number">4</span>, [<span class="syn-number">5</span>, <span class="syn-number">6</span>]]]   <span class="syn-comment"># list inside a list</span>
+
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"fruits:"</span>, <span class="syn-variable">fruits</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"marks:"</span>, <span class="syn-variable">marks</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"mixed:"</span>, <span class="syn-variable">mixed</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"empty:"</span>, <span class="syn-variable">empty</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"nested:"</span>, <span class="syn-variable">nested</span>)
+
+<span class="syn-comment"># Creating lists using the list() CONSTRUCTOR</span>
+<span class="syn-comment"># list() is a factory that converts any iterable into a list</span>
+<span class="syn-variable">nums</span> = <span class="syn-type" style="color: var(--teal);">list</span>((<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>))           <span class="syn-comment"># from a tuple</span>
+<span class="syn-variable">chars</span> = <span class="syn-type" style="color: var(--teal);">list</span>(<span class="syn-string">'abc'</span>)              <span class="syn-comment"># from a string → splits into characters</span>
+<span class="syn-variable">range_list</span> = <span class="syn-type" style="color: var(--teal);">list</span>(<span class="syn-type" style="color: var(--teal);">range</span>(<span class="syn-number">5</span>))     <span class="syn-comment"># from range(5) → [0, 1, 2, 3, 4]</span>
+<span class="syn-variable">empty2</span> = <span class="syn-type" style="color: var(--teal);">list</span>()                  <span class="syn-comment"># empty list using constructor</span>
+
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\n--- Using list() Constructor ---"</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list((1,2,3)):"</span>, <span class="syn-variable">nums</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list('abc'):"</span>, <span class="syn-variable">chars</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list(range(5)):"</span>, <span class="syn-variable">range_list</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list():"</span>, <span class="syn-variable">empty2</span>)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>fruits: ['apple', 'banana', 'cherry']
+marks: [45, 89, 67, 90]
+mixed: [10, 'hello', 3.14, True]
+empty: []
+nested: [1, [2, 3], [4, [5, 6]]]
+
+--- Using list() Constructor ---
+list((1,2,3)): [1, 2, 3]
+list('abc'): ['a', 'b', 'c']
+list(range(5)): [0, 1, 2, 3, 4]
+list(): []</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> Use <code>[]</code> for creating lists directly. Use <code>list()</code> constructor to convert other iterables (tuples, strings, ranges) into lists. The constructor is like a factory — feed it raw material, it builds a list.
+      </div>
+    </div>
+
+
+      <h3 class="sub-title" id="sec-01-indexing"><span class="sec-badge">1.4</span> Indexing and Slicing</h3>
+      <div style="margin-bottom: 12px; color: var(--text); line-height: 1.7;">
+        <p><strong>Indexing</strong> gives you ONE item. <strong>Slicing</strong> gives you a NEW list containing a range of items.</p>
+      </div>
+
+    <!-- Program 1.2 -->
+    <div class="program-box" id="p1_2_indexing_slicing">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 1.2: Indexing &amp; Slicing — Accessing Items from a List</h4>
+      <p class="program-desc">Demonstrates positive indexing, negative indexing, and slicing with <code>[start:stop:step]</code>.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-variable">a</span> = [<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>, <span class="syn-number">40</span>, <span class="syn-number">50</span>]
+
+<span class="syn-comment"># Indexing — gives you ONE item</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"a[0]  ="</span>, <span class="syn-variable">a</span>[<span class="syn-number">0</span>])       <span class="syn-comment"># 10  → first item</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"a[-1] ="</span>, <span class="syn-variable">a</span>[-<span class="syn-number">1</span>])      <span class="syn-comment"># 50  → last item</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"a[2]  ="</span>, <span class="syn-variable">a</span>[<span class="syn-number">2</span>])       <span class="syn-comment"># 30  → third item</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"a[-2] ="</span>, <span class="syn-variable">a</span>[-<span class="syn-number">2</span>])      <span class="syn-comment"># 40  → second-last item</span>
+
+<span class="syn-comment"># Slicing — gives you a NEW list</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\na[1:4] ="</span>, <span class="syn-variable">a</span>[<span class="syn-number">1</span>:<span class="syn-number">4</span>])   <span class="syn-comment"># [20, 30, 40] → from index 1 up to (not including) 4</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"a[:3]  ="</span>, <span class="syn-variable">a</span>[:<span class="syn-number">3</span>])      <span class="syn-comment"># [10, 20, 30] → from start to index 3</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"a[2:]  ="</span>, <span class="syn-variable">a</span>[<span class="syn-number">2</span>:])      <span class="syn-comment"># [30, 40, 50] → from index 2 to end</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"a[::-1]="</span>, <span class="syn-variable">a</span>[::-<span class="syn-number">1</span>])    <span class="syn-comment"># [50, 40, 30, 20, 10] → reverses the list</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"a[:]   ="</span>, <span class="syn-variable">a</span>[:])       <span class="syn-comment"># [10, 20, 30, 40, 50] → full copy of the list!</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>a[0]  = 10
+a[-1] = 50
+a[2]  = 30
+a[-2] = 40
+
+a[1:4] = [20, 30, 40]
+a[:3]  = [10, 20, 30]
+a[2:]  = [30, 40, 50]
+a[::-1]= [50, 40, 30, 20, 10]
+a[:]   = [10, 20, 30, 40, 50]</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> Slicing ALWAYS creates a brand-new list object, even if you slice the whole list like <code>a[:]</code>. This is actually the easiest way to copy a list, and we use this fact in Section 2.
+      </div>
+    </div>
+
+
+      <h3 class="sub-title" id="sec-01-methods"><span class="sec-badge">1.5</span> Commonly Used List Methods</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 22%;">Method</th>
+            <th style="width: 78%;">What It Does (Simple Explanation)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-weight: 700; color: var(--accent);">append(x)</td><td>Adds a single item <code>x</code> to the <strong>end</strong> of the list.</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">insert(i, x)</td><td>Inserts item <code>x</code> at position <code>i</code>, shifting the rest to the right.</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">extend(iterable)</td><td>Adds all items of another iterable to the end. <strong>Different from append:</strong> <code>extend([1,2])</code> adds 1 and 2 separately, <code>append([1,2])</code> adds the whole <code>[1,2]</code> as ONE item.</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">remove(x)</td><td>Removes the <strong>first matching value</strong> <code>x</code>. Raises an error if not found.</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">pop(i)</td><td>Removes and <strong>returns</strong> the item at index <code>i</code> (last item if <code>i</code> is not given).</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">index(x)</td><td>Returns the <strong>position</strong> of the first occurrence of <code>x</code>.</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">count(x)</td><td>Counts how many times <code>x</code> appears in the list.</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">sort()</td><td>Sorts the list <strong>in place</strong> (changes the original list, returns <code>None</code>).</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">sorted(list)</td><td>A <strong>built-in function</strong> (not a method) that returns a NEW sorted list, leaving the original untouched.</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">reverse()</td><td>Reverses the list <strong>in place</strong>.</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">clear()</td><td>Removes all items, leaving an empty list <code>[]</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+<div class="callout important">
+  <div class="callout-head"><span>⚠️</span> Note — Common Mistake with sort()</div>
+  <div class="callout-body">
+    <code>sort()</code> changes the list itself and returns <code>None</code>. So writing <code>a = a.sort()</code> is a <strong>very common mistake</strong> — it throws away your list and stores <code>None</code> in <code>a</code> instead! Use <code>sorted(a)</code> if you want a new sorted list without touching the original.
+  </div>
+</div>
+
+    <!-- Program 1.3 -->
+    <div class="program-box" id="p1_3_list_methods">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 1.3: List Methods in Action — append, insert, extend, remove, pop</h4>
+      <p class="program-desc">Demonstrates all the commonly used list methods with clear before/after outputs.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-variable">colors</span> = [<span class="syn-string">'red'</span>, <span class="syn-string">'green'</span>, <span class="syn-string">'blue'</span>]
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Original:"</span>, <span class="syn-variable">colors</span>)
+
+<span class="syn-comment"># append — adds ONE item to the end</span>
+<span class="syn-variable">colors</span>.<span class="syn-function">append</span>(<span class="syn-string">'yellow'</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"After append('yellow'):"</span>, <span class="syn-variable">colors</span>)
+
+<span class="syn-comment"># insert — adds at a specific position</span>
+<span class="syn-variable">colors</span>.<span class="syn-function">insert</span>(<span class="syn-number">1</span>, <span class="syn-string">'purple'</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"After insert(1, 'purple'):"</span>, <span class="syn-variable">colors</span>)
+
+<span class="syn-comment"># extend — adds all items from another list (flattened)</span>
+<span class="syn-variable">colors</span>.<span class="syn-function">extend</span>([<span class="syn-string">'cyan'</span>, <span class="syn-string">'magenta'</span>])
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"After extend(['cyan','magenta']):"</span>, <span class="syn-variable">colors</span>)
+
+<span class="syn-comment"># remove — removes first occurrence of a value</span>
+<span class="syn-variable">colors</span>.<span class="syn-function">remove</span>(<span class="syn-string">'green'</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"After remove('green'):"</span>, <span class="syn-variable">colors</span>)
+
+<span class="syn-comment"># pop — removes and returns item at index (default: last)</span>
+<span class="syn-variable">popped</span> = <span class="syn-variable">colors</span>.<span class="syn-function">pop</span>()
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">f"After pop() → removed '{popped}':"</span>, <span class="syn-variable">colors</span>)
+
+<span class="syn-variable">popped2</span> = <span class="syn-variable">colors</span>.<span class="syn-function">pop</span>(<span class="syn-number">0</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">f"After pop(0) → removed '{popped2}':"</span>, <span class="syn-variable">colors</span>)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>Original: ['red', 'green', 'blue']
+After append('yellow'): ['red', 'green', 'blue', 'yellow']
+After insert(1, 'purple'): ['red', 'purple', 'green', 'blue', 'yellow']
+After extend(['cyan','magenta']): ['red', 'purple', 'green', 'blue', 'yellow', 'cyan', 'magenta']
+After remove('green'): ['red', 'purple', 'blue', 'yellow', 'cyan', 'magenta']
+After pop() → removed 'magenta': ['red', 'purple', 'blue', 'yellow', 'cyan']
+After pop(0) → removed 'red': ['purple', 'blue', 'yellow', 'cyan']</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> <code>append()</code> adds one item, <code>extend()</code> adds multiple items separately. <code>remove()</code> deletes by value, <code>pop()</code> deletes by index and returns what it removed.
+      </div>
+    </div>
+
+    <!-- Program 1.4 -->
+    <div class="program-box" id="p1_4_sort_reverse_count">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 1.4: sort() vs sorted(), reverse(), count(), index()</h4>
+      <p class="program-desc">Shows the difference between sort() (in-place) and sorted() (returns new list), plus reverse, count, and index.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># sort() vs sorted()</span>
+<span class="syn-variable">nums</span> = [<span class="syn-number">50</span>, <span class="syn-number">10</span>, <span class="syn-number">40</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>]
+
+<span class="syn-comment"># sorted() → returns a NEW list, original unchanged</span>
+<span class="syn-variable">new_sorted</span> = <span class="syn-type" style="color: var(--teal);">sorted</span>(<span class="syn-variable">nums</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"sorted(nums):"</span>, <span class="syn-variable">new_sorted</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Original nums:"</span>, <span class="syn-variable">nums</span>)    <span class="syn-comment"># unchanged!</span>
+
+<span class="syn-comment"># sort() → changes the list IN PLACE, returns None</span>
+<span class="syn-variable">result</span> = <span class="syn-variable">nums</span>.<span class="syn-function">sort</span>()
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\nAfter nums.sort():"</span>, <span class="syn-variable">nums</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Return value of sort():"</span>, <span class="syn-variable">result</span>)   <span class="syn-comment"># None!</span>
+
+<span class="syn-comment"># ⚠️ Common mistake: a = a.sort() → a becomes None!</span>
+
+<span class="syn-comment"># reverse()</span>
+<span class="syn-variable">letters</span> = [<span class="syn-string">'a'</span>, <span class="syn-string">'b'</span>, <span class="syn-string">'c'</span>, <span class="syn-string">'d'</span>]
+<span class="syn-variable">letters</span>.<span class="syn-function">reverse</span>()
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\nReversed letters:"</span>, <span class="syn-variable">letters</span>)
+
+<span class="syn-comment"># count() and index()</span>
+<span class="syn-variable">grades</span> = [<span class="syn-string">'A'</span>, <span class="syn-string">'B'</span>, <span class="syn-string">'A'</span>, <span class="syn-string">'C'</span>, <span class="syn-string">'A'</span>, <span class="syn-string">'B'</span>]
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\nGrades:"</span>, <span class="syn-variable">grades</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Count of 'A':"</span>, <span class="syn-variable">grades</span>.<span class="syn-function">count</span>(<span class="syn-string">'A'</span>))
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Index of 'C':"</span>, <span class="syn-variable">grades</span>.<span class="syn-function">index</span>(<span class="syn-string">'C'</span>))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>sorted(nums): [10, 20, 30, 40, 50]
+Original nums: [50, 10, 40, 20, 30]
+
+After nums.sort(): [10, 20, 30, 40, 50]
+Return value of sort(): None
+
+Reversed letters: ['d', 'c', 'b', 'a']
+
+Grades: ['A', 'B', 'A', 'C', 'A', 'B']
+Count of 'A': 3
+Index of 'C': 3</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> <code>sort()</code> modifies the original list and returns <code>None</code>. <code>sorted()</code> returns a NEW sorted list and leaves the original unchanged. Never write <code>a = a.sort()</code> — it will destroy your list!
+      </div>
+    </div>
+
+    <!-- Program 1.5 -->
+    <div class="program-box" id="p1_5_append_vs_extend">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 1.5: append() vs extend() — The Important Difference</h4>
+      <p class="program-desc">This is one of the most asked questions in exams. Shows exactly how append and extend behave differently.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># append() adds the ENTIRE argument as ONE item</span>
+<span class="syn-variable">list_a</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>]
+<span class="syn-variable">list_a</span>.<span class="syn-function">append</span>([<span class="syn-number">4</span>, <span class="syn-number">5</span>])
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"After append([4,5]):"</span>, <span class="syn-variable">list_a</span>)
+<span class="syn-comment"># → [1, 2, 3, [4, 5]]  ← [4,5] is nested inside!</span>
+
+<span class="syn-comment"># extend() adds each item SEPARATELY</span>
+<span class="syn-variable">list_b</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>]
+<span class="syn-variable">list_b</span>.<span class="syn-function">extend</span>([<span class="syn-number">4</span>, <span class="syn-number">5</span>])
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"After extend([4,5]):"</span>, <span class="syn-variable">list_b</span>)
+<span class="syn-comment"># → [1, 2, 3, 4, 5]    ← 4 and 5 added individually!</span>
+
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\nLength after append:"</span>, <span class="syn-type" style="color: var(--teal);">len</span>(<span class="syn-variable">list_a</span>))   <span class="syn-comment"># 4 (the [4,5] counts as 1 item)</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Length after extend:"</span>, <span class="syn-type" style="color: var(--teal);">len</span>(<span class="syn-variable">list_b</span>))   <span class="syn-comment"># 5 (4 and 5 are separate items)</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>After append([4,5]): [1, 2, 3, [4, 5]]
+After extend([4,5]): [1, 2, 3, 4, 5]
+
+Length after append: 4
+Length after extend: 5</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> <code>append([4,5])</code> adds the whole <code>[4,5]</code> as ONE nested item. <code>extend([4,5])</code> adds <code>4</code> and <code>5</code> as separate individual items. Use <code>append</code> for one item, <code>extend</code> for merging lists.
+      </div>
+    </div>
+
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- PART 02 • COPYING LISTS -->
+    <!-- ========================================== -->
+    <section id="part-2" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 02 • Memory &amp; References</span>
+        <h2 class="ch-title">2. Copying Lists</h2>
+      </div>
+
+      <h3 class="sub-title" id="sec-02-problem"><span class="sec-badge">2.1</span> The Problem: Why '=' Does NOT Copy a List</h3>
+      <div style="margin-bottom: 24px; color: var(--text); line-height: 1.7;">
+        <p>This is the most confusing part for beginners, so let us go slowly. When you write <code>list2 = list1</code>, you are <strong>NOT</strong> creating a new list. You are simply giving a second name (label) to the <strong>SAME list</strong>. Both names point to the same box in memory.</p>
+        <p style="margin-top: 12px;">This behaviour is called <strong>aliasing</strong>. Two variable names, one single real list. Change it through either name, and you will see the change through the other name as well.</p>
+      </div>
+
+    <!-- Program 2.1 -->
+    <div class="program-box" id="p2_1_aliasing">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 2.1: The Aliasing Trap — Why = Does NOT Copy</h4>
+      <p class="program-desc">Demonstrates that <code>list2 = list1</code> creates an alias (second name), not a copy. Both point to the same object.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-variable">list1</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>]
+<span class="syn-variable">list2</span> = <span class="syn-variable">list1</span>        <span class="syn-comment"># list2 is just another name for list1</span>
+
+<span class="syn-variable">list2</span>.<span class="syn-function">append</span>(<span class="syn-number">4</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list1:"</span>, <span class="syn-variable">list1</span>)         <span class="syn-comment"># [1, 2, 3, 4]  ← list1 changed too!</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list2:"</span>, <span class="syn-variable">list2</span>)         <span class="syn-comment"># [1, 2, 3, 4]</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list1 is list2:"</span>, <span class="syn-variable">list1</span> <span class="syn-keyword">is</span> <span class="syn-variable">list2</span>)   <span class="syn-comment"># True → same object in memory</span>
+
+<span class="syn-comment"># Prove it with id() — shows memory address</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"id(list1):"</span>, <span class="syn-type" style="color: var(--teal);">id</span>(<span class="syn-variable">list1</span>))
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"id(list2):"</span>, <span class="syn-type" style="color: var(--teal);">id</span>(<span class="syn-variable">list2</span>))
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Same address?"</span>, <span class="syn-type" style="color: var(--teal);">id</span>(<span class="syn-variable">list1</span>) == <span class="syn-type" style="color: var(--teal);">id</span>(<span class="syn-variable">list2</span>))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>list1: [1, 2, 3, 4]
+list2: [1, 2, 3, 4]
+list1 is list2: True
+id(list1): 140234567890112
+id(list2): 140234567890112
+Same address? True</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> <code>list2 = list1</code> does NOT copy. Both variables share the same memory address (<code>id()</code> is identical). If you ever get unexpected changes to a list you didn't touch directly, check with <code>id()</code> — you probably have two names pointing to one list.
+      </div>
+    </div>
+
+      <h3 class="sub-title" id="sec-02-shallow"><span class="sec-badge">2.2</span> Shallow Copy — Making a Real, Independent Copy</h3>
+      <div style="margin-bottom: 12px; color: var(--text); line-height: 1.7;">
+        <p>A shallow copy creates a genuinely new list object. Changing the new list will NOT affect the original (for simple, non-nested lists). There are several ways to make a shallow copy:</p>
+      </div>
+
+    <!-- Program 2.2 -->
+    <div class="program-box" id="p2_2_shallow_copy">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 2.2: Four Ways to Make a Shallow Copy</h4>
+      <p class="program-desc">Shows all four methods: full slice <code>[:]</code>, <code>.copy()</code>, <code>list()</code> constructor, and <code>copy.copy()</code>.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">import</span> <span class="syn-preprocessor">copy</span>
+
+<span class="syn-variable">list1</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>]
+
+<span class="syn-variable">copy1</span> = <span class="syn-variable">list1</span>[:]            <span class="syn-comment"># Method 1: full slice</span>
+<span class="syn-variable">copy2</span> = <span class="syn-variable">list1</span>.<span class="syn-function">copy</span>()        <span class="syn-comment"># Method 2: built-in copy() method</span>
+<span class="syn-variable">copy3</span> = <span class="syn-type" style="color: var(--teal);">list</span>(<span class="syn-variable">list1</span>)          <span class="syn-comment"># Method 3: list() constructor</span>
+<span class="syn-variable">copy4</span> = <span class="syn-preprocessor">copy</span>.<span class="syn-function">copy</span>(<span class="syn-variable">list1</span>)   <span class="syn-comment"># Method 4: copy module</span>
+
+<span class="syn-comment"># Modify the copy — original should NOT change</span>
+<span class="syn-variable">copy1</span>.<span class="syn-function">append</span>(<span class="syn-number">99</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list1 (original):"</span>, <span class="syn-variable">list1</span>)   <span class="syn-comment"># [1, 2, 3] → untouched!</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"copy1:"</span>, <span class="syn-variable">copy1</span>)              <span class="syn-comment"># [1, 2, 3, 99]</span>
+
+<span class="syn-comment"># Verify they are different objects</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\nlist1 is copy1:"</span>, <span class="syn-variable">list1</span> <span class="syn-keyword">is</span> <span class="syn-variable">copy1</span>)   <span class="syn-comment"># False ✅</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list1 is copy2:"</span>, <span class="syn-variable">list1</span> <span class="syn-keyword">is</span> <span class="syn-variable">copy2</span>)   <span class="syn-comment"># False ✅</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list1 is copy3:"</span>, <span class="syn-variable">list1</span> <span class="syn-keyword">is</span> <span class="syn-variable">copy3</span>)   <span class="syn-comment"># False ✅</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"list1 is copy4:"</span>, <span class="syn-variable">list1</span> <span class="syn-keyword">is</span> <span class="syn-variable">copy4</span>)   <span class="syn-comment"># False ✅</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>list1 (original): [1, 2, 3]
+copy1: [1, 2, 3, 99]
+
+list1 is copy1: False
+list1 is copy2: False
+list1 is copy3: False
+list1 is copy4: False</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> All four methods create a truly independent copy for flat (non-nested) lists. The original stays safe no matter what you do to the copy.
+      </div>
+    </div>
+
+      <h3 class="sub-title" id="sec-02-trap"><span class="sec-badge">2.3</span> The Hidden Trap: Shallow Copy with Nested Lists</h3>
+      <div style="margin-bottom: 12px; color: var(--text); line-height: 1.7;">
+        <p>This is the detail almost every student misses, so pay close attention. A shallow copy only copies the <strong>OUTER</strong> list. If the list contains other lists inside it (nested lists), the <strong>INNER</strong> lists are still shared between the original and the copy!</p>
+      </div>
+
+    <!-- Program 2.3 -->
+    <div class="program-box" id="p2_3_shallow_trap">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 2.3: Shallow Copy FAILS with Nested Lists</h4>
+      <p class="program-desc">Shows that shallow copy only copies the outer list — inner lists are still shared!</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-variable">original</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, [<span class="syn-number">3</span>, <span class="syn-number">4</span>]]
+<span class="syn-variable">shallow</span> = <span class="syn-variable">original</span>.<span class="syn-function">copy</span>()      <span class="syn-comment"># or original[:]</span>
+
+<span class="syn-comment"># Changing the OUTER list → safe (independent)</span>
+<span class="syn-variable">shallow</span>[<span class="syn-number">0</span>] = <span class="syn-number">100</span>
+
+<span class="syn-comment"># Changing the INNER list → DANGEROUS (shared!)</span>
+<span class="syn-variable">shallow</span>[<span class="syn-number">2</span>].<span class="syn-function">append</span>(<span class="syn-number">5</span>)
+
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"original:"</span>, <span class="syn-variable">original</span>)   <span class="syn-comment"># [1, 2, [3, 4, 5]]  ← inner list changed!</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"shallow:"</span>, <span class="syn-variable">shallow</span>)     <span class="syn-comment"># [100, 2, [3, 4, 5]]</span>
+
+<span class="syn-comment"># Why? Because the outer list stores a REFERENCE to the inner list.</span>
+<span class="syn-comment"># Copying the outer list copies the reference, not the inner list itself.</span>
+<span class="syn-comment"># So both outer lists point to the SAME inner list.</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\nInner list same object?"</span>, <span class="syn-variable">original</span>[<span class="syn-number">2</span>] <span class="syn-keyword">is</span> <span class="syn-variable">shallow</span>[<span class="syn-number">2</span>])  <span class="syn-comment"># True ⚠️</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>original: [1, 2, [3, 4, 5]]
+shallow: [100, 2, [3, 4, 5]]
+
+Inner list same object? True</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> Shallow copy only copies the outer list. The inner lists are still shared because only the reference (address) is copied, not the actual inner data. For nested lists, you MUST use deep copy.
+      </div>
+    </div>
+
+      <h3 class="sub-title" id="sec-02-deep"><span class="sec-badge">2.4</span> Deep Copy — Copying Everything, Including Nested Lists</h3>
+      <div style="margin-bottom: 12px; color: var(--text); line-height: 1.7;">
+        <p>When your list contains other lists (or dictionaries, objects, etc.) and you want a <strong>FULLY independent copy</strong> — with no shared inner objects at all — you need a <strong>deep copy</strong>.</p>
+      </div>
+
+    <!-- Program 2.4 -->
+    <div class="program-box" id="p2_4_deep_copy">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 2.4: Deep Copy — Fully Independent Copy</h4>
+      <p class="program-desc">Shows that <code>copy.deepcopy()</code> copies everything recursively — no shared references at any level.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">import</span> <span class="syn-preprocessor">copy</span>
+
+<span class="syn-variable">original</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, [<span class="syn-number">3</span>, <span class="syn-number">4</span>]]
+<span class="syn-variable">deep</span> = <span class="syn-preprocessor">copy</span>.<span class="syn-function">deepcopy</span>(<span class="syn-variable">original</span>)
+
+<span class="syn-variable">deep</span>[<span class="syn-number">2</span>].<span class="syn-function">append</span>(<span class="syn-number">5</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"original:"</span>, <span class="syn-variable">original</span>)   <span class="syn-comment"># [1, 2, [3, 4]]   → untouched!</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"deep:"</span>, <span class="syn-variable">deep</span>)           <span class="syn-comment"># [1, 2, [3, 4, 5]]</span>
+
+<span class="syn-comment"># deepcopy() goes inside every nested list and makes a fresh copy</span>
+<span class="syn-comment"># Nothing is shared anymore between original and deep</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"\nInner list same object?"</span>, <span class="syn-variable">original</span>[<span class="syn-number">2</span>] <span class="syn-keyword">is</span> <span class="syn-variable">deep</span>[<span class="syn-number">2</span>])  <span class="syn-comment"># False ✅</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>original: [1, 2, [3, 4]]
+deep: [1, 2, [3, 4, 5]]
+
+Inner list same object? False</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> <code>deepcopy()</code> goes inside every nested list/object and makes a fresh copy of each one, so nothing is shared anymore between the original and the copy.
+      </div>
+    </div>
+
+      <h3 class="sub-title"><span class="sec-badge">2.5</span> Quick Summary Table — Copying</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 35%;">Method</th>
+            <th style="width: 30%;">What It Copies</th>
+            <th style="width: 35%;">Nested Lists Affected?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-weight: 700; color: var(--accent);">list2 = list1</td><td>Nothing — same object, two names</td><td><strong style="color: var(--red);">Yes</strong> (it's literally the same list)</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">list1[:] / list1.copy() / list(list1)</td><td>Outer list only (shallow copy)</td><td><strong style="color: var(--red);">Yes</strong> — inner lists are shared</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">copy.deepcopy(list1)</td><td>Outer list AND every nested item</td><td><strong style="color: var(--green);">No</strong> — fully independent</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- PART 03 • PASSING LISTS TO FUNCTIONS -->
+    <!-- ========================================== -->
+    <section id="part-3" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 03 • Functions &amp; Mutability</span>
+        <h2 class="ch-title">3. Passing Lists to Functions</h2>
+      </div>
+
+      <h3 class="sub-title" id="sec-03-how"><span class="sec-badge">3.1</span> How Python Actually Passes Arguments</h3>
+      <div style="margin-bottom: 24px; color: var(--text); line-height: 1.7;">
+        <p>Python does not use "pass by value" or "pass by reference" in the traditional sense taught for other languages. The correct term is <strong>"pass by object reference"</strong> (also called "pass by assignment").</p>
+        <p style="margin-top: 12px;">In simple words: when you pass a list to a function, the function's parameter becomes <strong>another NAME for the same list object</strong> — exactly like <code>list2 = list1</code> that we saw in Section 2.</p>
+      </div>
+
+      <h3 class="sub-title" id="sec-03-mutate"><span class="sec-badge">3.2</span> Mutating a List Inside a Function AFFECTS the Original</h3>
+      <div style="margin-bottom: 12px; color: var(--text); line-height: 1.7;">
+        <p>Because the parameter and the argument point to the same list, any change made using a <strong>mutating method</strong> (append, remove, insert, sort, pop, extend, clear) will be visible outside the function too, even without a return statement.</p>
+      </div>
+
+    <!-- Program 3.1 -->
+    <div class="program-box" id="p3_1_mutate_in_function">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 3.1: Mutating a List Inside a Function — Original Gets Changed</h4>
+      <p class="program-desc">Shows that mutating methods (append, sort, etc.) inside a function change the caller's original list.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">def</span> <span class="syn-function">add_item</span>(<span class="syn-variable">lst</span>):
+    <span class="syn-variable">lst</span>.<span class="syn-function">append</span>(<span class="syn-number">100</span>)      <span class="syn-comment"># mutates the SAME list object</span>
+
+<span class="syn-variable">numbers</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>]
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Before:"</span>, <span class="syn-variable">numbers</span>)
+
+<span class="syn-function">add_item</span>(<span class="syn-variable">numbers</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"After:"</span>, <span class="syn-variable">numbers</span>)   <span class="syn-comment"># [1, 2, 3, 100] ← changed, even without 'return'!</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>Before: [1, 2, 3]
+After: [1, 2, 3, 100]</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> The function parameter <code>lst</code> is just another name for the same list object. Using <code>append()</code> inside the function modifies the original — even without a <code>return</code> statement.
+      </div>
+    </div>
+
+      <h3 class="sub-title" id="sec-03-reassign"><span class="sec-badge">3.3</span> Re-assigning the Parameter Does NOT Affect the Original</h3>
+      <div style="margin-bottom: 12px; color: var(--text); line-height: 1.7;">
+        <p>This is the trap that confuses almost every student. If, inside the function, you assign a brand-new list to the parameter (using <code>=</code>), you are only changing what that <strong>LOCAL name</strong> points to. You are <strong>not touching the original list</strong> at all.</p>
+      </div>
+
+    <!-- Program 3.2 -->
+    <div class="program-box" id="p3_2_reassign_in_function">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 3.2: Re-assigning Inside a Function — Original is NOT Changed</h4>
+      <p class="program-desc">Shows that using <code>=</code> to assign a new list inside a function only changes the local variable, not the original.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">def</span> <span class="syn-function">replace_list</span>(<span class="syn-variable">lst</span>):
+    <span class="syn-variable">lst</span> = [<span class="syn-number">9</span>, <span class="syn-number">9</span>, <span class="syn-number">9</span>]      <span class="syn-comment"># this REBINDS the local name 'lst' to a new list</span>
+                         <span class="syn-comment"># it does NOT touch the caller's list</span>
+
+<span class="syn-variable">numbers</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>]
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"Before:"</span>, <span class="syn-variable">numbers</span>)
+
+<span class="syn-function">replace_list</span>(<span class="syn-variable">numbers</span>)
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"After:"</span>, <span class="syn-variable">numbers</span>)   <span class="syn-comment"># [1, 2, 3] ← unchanged!</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>Before: [1, 2, 3]
+After: [1, 2, 3]</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Golden Rule:</strong> <strong>Mutating</strong> (append, sort, remove, etc.) changes the original list. <strong>Re-assigning</strong> (<code>lst = something_new</code>) only changes the local variable inside the function, never the original. This one rule explains almost every confusing list-and-function question you will ever see.
+      </div>
+    </div>
+
+      <h3 class="sub-title" id="sec-03-copy"><span class="sec-badge">3.4</span> Passing a Copy — When You Don't Want the Original Changed</h3>
+      <div style="margin-bottom: 12px; color: var(--text); line-height: 1.7;">
+        <p>If you want a function to work on a list WITHOUT affecting the caller's original list, <strong>pass a copy</strong> instead of the original.</p>
+      </div>
+
+    <!-- Program 3.3 -->
+    <div class="program-box" id="p3_3_pass_copy">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Program 3.3: Passing a Copy to Protect the Original</h4>
+      <p class="program-desc">Shows how to use <code>numbers[:]</code> to send a copy to the function, keeping the original safe.</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span></div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard"><span>📋</span> Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">def</span> <span class="syn-function">add_item_safe</span>(<span class="syn-variable">lst</span>):
+    <span class="syn-variable">lst</span>.<span class="syn-function">append</span>(<span class="syn-number">100</span>)
+    <span class="syn-keyword">return</span> <span class="syn-variable">lst</span>
+
+<span class="syn-variable">numbers</span> = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>]
+
+<span class="syn-comment"># numbers[:] sends a shallow COPY, not the original</span>
+<span class="syn-variable">result</span> = <span class="syn-function">add_item_safe</span>(<span class="syn-variable">numbers</span>[:])
+
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"numbers (original):"</span>, <span class="syn-variable">numbers</span>)   <span class="syn-comment"># [1, 2, 3]      → untouched!</span>
+<span class="syn-type" style="color: var(--teal);">print</span>(<span class="syn-string">"result (new list):"</span>, <span class="syn-variable">result</span>)    <span class="syn-comment"># [1, 2, 3, 100] → new list with the change</span>
+
+<span class="syn-comment"># Remember: if the list contains nested lists, use copy.deepcopy()</span>
+<span class="syn-comment"># instead of [:] before passing it.</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header"><span>🖥️ Terminal / Standard Output Stream</span><span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span></div>
+        <div class="output-body">
+          <pre>numbers (original): [1, 2, 3]
+result (new list): [1, 2, 3, 100]</pre>
+        </div>
+      </div>
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Takeaway:</strong> Pass <code>my_list[:]</code> or <code>my_list.copy()</code> to send a copy to the function. The function works on the copy while your original data stays safe.
+      </div>
+    </div>
+
+<div class="callout tip">
+  <div class="callout-head"><span>💡</span> Why This Design Exists (For Curious Students)</div>
+  <div class="callout-body">
+    Passing objects by reference is <strong>efficient</strong> — Python does not need to duplicate a huge list every time it is sent to a function, which would waste memory and time. The trade-off is that programmers must be careful and deliberate about mutation versus reassignment.
+  </div>
+</div>
+
+      <h3 class="sub-title"><span class="sec-badge">3.5</span> Quick Summary Table — Functions &amp; Lists</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 35%;">Action Inside Function</th>
+            <th style="width: 25%;">Effect on Original</th>
+            <th style="width: 40%;">Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-weight: 700; color: var(--accent);">Mutate the list</td><td><strong style="color: var(--red);">Original IS changed</strong></td><td>append, insert, remove, pop, sort, extend, clear</td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">Re-assign the parameter</td><td><strong style="color: var(--green);">Original is NOT changed</strong></td><td><code>lst = [new values]</code></td></tr>
+          <tr><td style="font-weight: 700; color: var(--accent);">Pass a copy</td><td><strong style="color: var(--green);">Original is NOT changed</strong></td><td><code>func(my_list[:])</code> or <code>func(copy.deepcopy(my_list))</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- PART 04 • RECAP -->
+    <!-- ========================================== -->
+    <section id="part-4" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 04 • Quick Revision</span>
+        <h2 class="ch-title">4. Recap — How to Explain This to Your Students</h2>
+      </div>
+
+<div style="background: var(--cell-bg); border-left: 4px solid var(--accent); padding: 20px 24px; border-radius: 0 8px 8px 0; margin: 20px 0;">
+  <strong style="color: var(--accent); font-size: 1.1rem;">📋 The 6 Golden Points:</strong>
+  <ol style="margin: 12px 0 0 20px; font-size: 0.96rem; color: var(--text); line-height: 2;">
+    <li>A list is an <strong>ordered, mutable, dynamic container</strong> — introduce it as a "train of coaches".</li>
+    <li>A list stores <strong>references to values</strong>, not the values themselves — this single fact drives everything else.</li>
+    <li><code>=</code> <strong>never copies</strong> a list, it just adds a second name (aliasing) — prove it live using <code>id()</code>.</li>
+    <li>Use <code>[:]</code>, <code>.copy()</code>, or <code>list()</code> for a <strong>shallow copy</strong>; use <code>copy.deepcopy()</code> when the list has nested lists inside.</li>
+    <li>Passing a list to a function <strong>shares the same object</strong> — <strong>mutating changes the original</strong>, but <strong>reassigning (<code>lst = ...</code>) does not</strong>.</li>
+    <li>To protect the original list inside a function, <strong>pass a copy</strong>: <code>func(my_list[:])</code> or <code>func(copy.deepcopy(my_list))</code>.</li>
+  </ol>
+</div>
+
+<div class="callout remember">
+  <div class="callout-head"><span>🔮</span> Final Advice</div>
+  <div class="callout-body">
+    Practice each code example yourself in a Python shell (or IDLE) to see the outputs with your own eyes. This is the best way to make the concept permanent. Run each program, modify it, break it on purpose — that is how you truly learn.
+  </div>
+</div>
+
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <div style="font-weight: 700; color: var(--text);">Lecture 11 • Python Lists — Basics, Copying &amp; Passing to Functions</div>
+          <div style="font-size: 0.85rem; color: var(--text-dim);">Prepared by Umer Farooq | SSM College of Engineering</div>
+        </div>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-dim);">B.Tech 5th Semester • Department of Computer Science &amp; Engineering</div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" title="Back to Top"><span>↑</span></button>
+    <button class="btn-float" id="theme-toggle-float" onclick="toggleTheme()" title="Toggle Theme"><span id="theme-icon-float">☀️</span></button>
+  </div>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      document.getElementById('progress-bar').style.width = scrolled + '%';
+    });
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcons(newTheme);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    (function() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.addEventListener('DOMContentLoaded', () => { updateThemeIcons(savedTheme); });
+    })();
+
+    function copyCode(btn) {
+      const codeBlock = btn.closest('.code-container').querySelector('code');
+      const textToCopy = codeBlock.innerText;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const origText = btn.innerHTML;
+        btn.innerHTML = '<span>✅</span> Copied!';
+        btn.style.borderColor = 'var(--teal)';
+        btn.style.color = 'var(--teal)';
+        setTimeout(() => { btn.innerHTML = origText; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+      }).catch(err => { console.error('Failed to copy code: ', err); });
+    }
+  </script>
+</body>
+</html>

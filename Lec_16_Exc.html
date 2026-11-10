@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Master Files and Exceptions in Python: Complete guide covering file I/O, file modes, text reading/writing, pickling, and comprehensive exception handling with try-except-else-finally. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Lecture 16: Files and Exceptions in Python | SSM College of Engineering</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      /* IDE syntax highlighting tokens (Dark) */
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+      --syn-header: #f07178;
+      --syn-include: #f07178;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      /* IDE syntax highlighting tokens (Light) */
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #6b7280;
+      --syn-function: #2563eb;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0891b2;
+      --syn-punctuation: #0891b2;
+      --syn-variable: #0f172a;
+      --syn-format: #d97706;
+      --syn-header: #dc2626;
+      --syn-include: #dc2626;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16.5px;
+      line-height: 1.75;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      transition: width 0.1s ease;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(18, 20, 26, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 900;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="light"] .top-nav {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-brand .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(28, 32, 42, 0.95), rgba(24, 27, 34, 0.98));
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 30px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-theme="light"] .hero-banner {
+      background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tag-accent {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .tag-teal {
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    .tag-purple {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.12rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .hero-author-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .author-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 10px var(--accent-glow);
+    }
+
+    .author-details h4 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .author-details p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #e06c15);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px var(--accent-glow);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .meta-item .val {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .meta-item .lbl {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-header-pill {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #toc-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .toc-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+
+    .toc-card .ch-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .toc-card .ch-name {
+      font-family: var(--font-heading);
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .toc-card .ch-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+
+    .toc-pill-badge {
+      align-self: flex-start;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+    }
+
+    .chapter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .ch-header {
+      margin-bottom: 28px;
+    }
+
+    .ch-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    h2.ch-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    h3 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 24px 0 10px;
+    }
+
+    h4 {
+      font-family: var(--font-heading);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 18px 0 8px;
+    }
+
+    .program-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 28px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 16.5px;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    code {
+      font-family: var(--font-code);
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border);
+    }
+
+    .key {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    ul, ol {
+      margin: 6px 0 14px 24px;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 6px;
+      line-height: 1.65;
+    }
+
+    .highlight-box {
+      background: var(--blue-soft);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .highlight-box.tip {
+      background: var(--green-soft);
+      border-left-color: var(--green);
+    }
+
+    .highlight-box.warning {
+      background: var(--amber-soft);
+      border-left-color: var(--amber);
+    }
+
+    .highlight-box.important {
+      background: var(--red-soft);
+      border-left-color: var(--red);
+    }
+
+    .highlight-box.remember {
+      background: var(--purple-soft);
+      border-left-color: var(--purple);
+    }
+
+    .highlight-box strong {
+      color: var(--text);
+    }
+
+    .syntax-box {
+      background: var(--bg-alt);
+      border: 1px dashed var(--border-accent);
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin: 12px 0 16px;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      color: var(--teal);
+      overflow-x: auto;
+    }
+
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 16px 0;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .code-header {
+      background: #151821;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    [data-theme="light"] .code-header {
+      background: #e2e8f0;
+    }
+
+    .code-title {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .code-title {
+      color: #334155;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .copy-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .code-body pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text);
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .code-body pre {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .syn-keyword { color: var(--syn-keyword); font-weight: 700; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); font-weight: 700; }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+    .syn-format { color: var(--syn-format); font-weight: 700; }
+    .syn-header { color: var(--syn-header); }
+    .syn-include { color: var(--syn-include); }
+
+    .output-box {
+      background: #090a0d;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      margin: 12px 0 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] .output-box {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .output-header {
+      background: #11141c;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .output-header {
+      background: #0f172a;
+      color: #2dd4bf;
+      border-bottom-color: #334155;
+    }
+
+    .output-body pre {
+      padding: 12px 16px;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: #a9b7c6;
+      line-height: 1.5;
+      overflow-x: auto;
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .output-body pre {
+      color: #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--accent);
+      font-family: var(--font-heading);
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    tr:nth-child(even) td {
+      background: var(--table-stripe);
+    }
+
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    .float-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 800;
+    }
+
+    .btn-float {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-float:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .top-nav, #progress-container, .float-actions, .copy-btn, .btn-primary, .btn-nav, .hero-buttons { display: none !important; }
+      .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .hero-banner, .chapter, .toc-card, #toc-section, .code-container, .output-box {
+        background: #ffffff !important; color: #000000 !important; border: 1px solid #cccccc !important; box-shadow: none !important; page-break-inside: avoid;
+      }
+      .code-body pre, .output-body pre { color: #000000 !important; background: #f8fafc !important; }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 20px 16px 60px; }
+      .hero-banner { padding: 24px 20px; }
+      .hero-title { font-size: 1.75rem; }
+      .chapter { padding: 20px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <header class="top-nav">
+    <a href="index.html" class="nav-brand">
+      <span class="badge">LEC 16</span>
+      <span>Files &amp; Exceptions in Python</span>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn-nav" title="Course Portal">
+        <span>🏠</span> Portal
+      </a>
+      <a href="Lec_14_Dictionary.html" class="btn-nav" title="Dictionaries (Python)">
+        <span>📖</span> Dictionaries
+      </a>
+      <a href="Lec_12_Tuples.html" class="btn-nav" title="Tuples (Python)">
+        <span>📦</span> Tuples
+      </a>
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF">
+        <span>🖨️</span> Print PDF
+      </button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon-nav">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">Python Programming</span>
+        <span class="tag tag-teal">Files &amp; Exceptions</span>
+        <span class="tag tag-purple">Complete Guide</span>
+      </div>
+      <h1 class="hero-title">Files and Exceptions in Python</h1>
+      <p class="hero-subtitle">
+        The ultimate comprehensive guide to Python file I/O and error handling. Covers <strong>file operations</strong>, <strong>file modes</strong>, <strong>text reading/writing</strong>, <strong>Pickling (serialization)</strong>, <strong>exception handling</strong> with <code>try-except-else-finally</code>, and <strong>custom exceptions</strong>.
+      </p>
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()">
+            <span>🖨️</span> Save as PDF / Print
+          </button>
+        </div>
+      </div>
+      <div class="hero-meta-strip">
+        <div class="meta-item">
+          <span class="val">20+</span>
+          <span class="lbl">Code Examples</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">4</span>
+          <span class="lbl">Core Sections</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">100%</span>
+          <span class="lbl">Exam Coverage</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">15+</span>
+          <span class="lbl">Built-in Exceptions</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TABLE OF CONTENTS -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Quick Chapter Navigation</div>
+      <div class="toc-grid">
+        <a href="#sec-intro" class="toc-card">
+          <span class="ch-num">SECTION 01</span>
+          <span class="ch-name">1. Introduction to Files</span>
+          <span class="ch-desc">What is a file, types of files, operations, open/close, modes.</span>
+          <span class="toc-pill-badge">Fundamentals</span>
+        </a>
+        <a href="#sec-text-io" class="toc-card">
+          <span class="ch-num">SECTION 02</span>
+          <span class="ch-name">2. Text Input and Output</span>
+          <span class="ch-desc">Reading, writing, appending, <code>with</code> statement, paths, methods.</span>
+          <span class="toc-pill-badge">Text I/O</span>
+        </a>
+        <a href="#sec-pickling" class="toc-card">
+          <span class="ch-num">SECTION 03</span>
+          <span class="ch-name">3. Pickling (Serialization)</span>
+          <span class="ch-desc">What is pickling, <code>dump</code>, <code>load</code>, multiple data types, Pickle vs JSON.</span>
+          <span class="toc-pill-badge">Serialization</span>
+        </a>
+        <a href="#sec-exceptions" class="toc-card">
+          <span class="ch-num">SECTION 04</span>
+          <span class="ch-name">4. Exception Handling</span>
+          <span class="ch-desc">What is an exception, common errors, <code>try-except</code>, <code>else</code>, <code>finally</code>, raise, custom exceptions.</span>
+          <span class="toc-pill-badge">Exceptions</span>
+        </a>
+        <a href="#sec-practice" class="toc-card">
+          <span class="ch-num">SECTION 05</span>
+          <span class="ch-name">5. Practice Programs</span>
+          <span class="ch-desc">Student record manager, Pickle contact book, robust calculator.</span>
+          <span class="toc-pill-badge">Programs</span>
+        </a>
+        <a href="#sec-cheatsheet" class="toc-card">
+          <span class="ch-num">SECTION 06</span>
+          <span class="ch-name">6. Quick Reference Cheat Sheet</span>
+          <span class="ch-desc">File operations, Pickle operations, Exception handling flow.</span>
+          <span class="toc-pill-badge">Summary</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 01: INTRODUCTION TO FILES -->
+    <!-- ============================================================ -->
+    <section id="sec-intro" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 01 &bull; Fundamentals</div>
+        <h2 class="ch-title">1. Introduction to Files in Python</h2>
+      </div>
+
+      <h3>1.1 What is a File?</h3>
+      <p>A file is a named location on your computer's storage (hard disk or SSD) that stores data permanently. When your program ends, the data in variables is lost — but data saved in files stays forever until you delete it.</p>
+      <div class="highlight-box">
+        <strong>In simple words:</strong> A file is like a notebook where you write information and keep it safe. You can open it later, read it, add more information, or erase things. Python gives us built-in functions to work with files — no extra library needed!
+      </div>
+
+      <h3>1.2 Types of Files</h3>
+      <table>
+        <tr><th>Type</th><th>Extension Examples</th><th>Content</th><th>How Python Reads It</th></tr>
+        <tr><td>Text Files</td><td>.txt, .csv, .html, .py, .json</td><td>Human-readable characters</td><td>Line by line as strings</td></tr>
+        <tr><td>Binary Files</td><td>.jpg, .png, .mp3, .exe, .pkl, .pdf</td><td>Raw bytes (0s and 1s)</td><td>As bytes objects</td></tr>
+      </table>
+      <p><strong>Text files</strong> store data as characters (letters, numbers, symbols). You can open them in Notepad and read them.</p>
+      <p><strong>Binary files</strong> store data in raw binary format. If you open an image in Notepad, you will see garbage characters — that's because it's binary data.</p>
+
+      <h3>1.3 File Operations Overview</h3>
+      <p>When working with files, you always follow these steps:</p>
+      <ol>
+        <li><strong>Open</strong> the file</li>
+        <li><strong>Read / Write / Append</strong></li>
+        <li><strong>Close</strong> the file</li>
+      </ol>
+      <div class="highlight-box warning">
+        <strong>⚠️ Warning:</strong> Always close a file after you are done with it! If you forget, data may not be saved properly and your file could get corrupted.
+      </div>
+
+      <h3>1.4 Opening and Closing Files</h3>
+      <div class="syntax-box">
+        <strong>📐 Syntax:</strong><br>
+        <code>open(filename, mode)</code> — Opens a file and returns a file object.<br>
+        <code>file_object.close()</code> — Closes the file and frees system resources.
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program: Opening and Closing Files</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Opening and closing a file</span>
+f = <span class="syn-function">open</span>(<span class="syn-string">"example.txt"</span>, <span class="syn-string">"r"</span>)   <span class="syn-comment"># Open for reading</span>
+content = f.read()                   <span class="syn-comment"># Read all content</span>
+<span class="syn-function">print</span>(content)
+f.close()                            <span class="syn-comment"># Always close the file!</span>
+
+<span class="syn-comment"># Better way: using 'with' (auto-closes the file)</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"example.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    content = f.read()
+    <span class="syn-function">print</span>(content)
+<span class="syn-comment"># File is automatically closed here — no need to call close()</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>💡 Tip:</strong> The <code>'with'</code> statement is the recommended way to work with files in Python. It automatically closes the file for you, even if an error occurs!
+      </div>
+
+      <h3>1.5 File Modes</h3>
+      <p>When you open a file, you must tell Python what you want to do with it. This is done using the <code>mode</code> parameter:</p>
+
+      <table>
+        <tr><th>Mode</th><th>Name</th><th>Description</th><th>Creates File?</th><th>Overwrites?</th></tr>
+        <tr><td><code>'r'</code></td><td>Read</td><td>Open for reading only (default mode)</td><td>No — Error if not found</td><td>No</td></tr>
+        <tr><td><code>'w'</code></td><td>Write</td><td>Open for writing. Creates new file or overwrites existing</td><td>Yes</td><td>Yes — Erases all!</td></tr>
+        <tr><td><code>'a'</code></td><td>Append</td><td>Open for appending. Adds data at the end</td><td>Yes</td><td>No — Adds to end</td></tr>
+        <tr><td><code>'x'</code></td><td>Exclusive Create</td><td>Creates new file. Error if file already exists</td><td>Yes</td><td>Error if exists</td></tr>
+        <tr><td><code>'r+'</code></td><td>Read + Write</td><td>Open for both reading and writing</td><td>No — Error if not found</td><td>No</td></tr>
+        <tr><td><code>'w+'</code></td><td>Write + Read</td><td>Open for writing and reading. Overwrites!</td><td>Yes</td><td>Yes — Erases all!</td></tr>
+        <tr><td><code>'a+'</code></td><td>Append + Read</td><td>Open for appending and reading</td><td>Yes</td><td>No — Adds to end</td></tr>
+        <tr><td><code>'b'</code></td><td>Binary Mode</td><td>Add to other modes for binary files (e.g., 'rb', 'wb')</td><td>—</td><td>—</td></tr>
+      </table>
+
+      <div class="highlight-box warning">
+        <strong>⚠️ Warning:</strong> Be very careful with <code>'w'</code> mode! It will delete everything in the file as soon as you open it. If you want to add data to an existing file, use <code>'a'</code> (append) mode instead.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 02: TEXT INPUT AND OUTPUT -->
+    <!-- ============================================================ -->
+    <section id="sec-text-io" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 02 &bull; Text I/O</div>
+        <h2 class="ch-title">2. Text Input and Output</h2>
+      </div>
+
+      <h3>2.1 Reading from a File</h3>
+      <p>Python provides three main methods to read data from a text file:</p>
+      <table>
+        <tr><th>Method</th><th>What It Does</th><th>Returns</th></tr>
+        <tr><td><code>read()</code></td><td>Reads the ENTIRE file at once</td><td>One big string</td></tr>
+        <tr><td><code>read(n)</code></td><td>Reads first <code>n</code> characters</td><td>String of <code>n</code> characters</td></tr>
+        <tr><td><code>readline()</code></td><td>Reads ONE line at a time</td><td>One string (with <code>\n</code>)</td></tr>
+        <tr><td><code>readlines()</code></td><td>Reads ALL lines at once</td><td>List of strings</td></tr>
+      </table>
+
+      <p>Let's say we have a file called <code>'students.txt'</code> with this content:</p>
+      <div class="output-box">
+        <div class="output-header">📄 students.txt (Sample File)</div>
+        <div class="output-body">
+          <pre>Rahul Sharma
+Priya Patel
+Amit Kumar
+Sneha Gupta
+Vikram Singh</pre>
+        </div>
+      </div>
+
+      <h4>read() — Read Entire File</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; read()</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># read() — reads everything as one big string</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"students.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    content = f.read()
+    <span class="syn-function">print</span>(content)
+    <span class="syn-function">print</span>(<span class="syn-function">type</span>(content))  <span class="syn-comment"># &lt;class 'str'&gt;</span>
+    <span class="syn-function">print</span>(<span class="syn-string">"Length:"</span>, <span class="syn-function">len</span>(content))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Rahul Sharma
+Priya Patel
+Amit Kumar
+Sneha Gupta
+Vikram Singh
+<class 'str'>
+Length: 55</pre>
+        </div>
+      </div>
+
+      <h4>read(n) — Read First n Characters</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; read(n)</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># read(n) — reads only first n characters</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"students.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    first_10 = f.read(<span class="syn-number">10</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">"First 10 chars:"</span>, <span class="syn-function">repr</span>(first_10))
+
+    <span class="syn-comment"># Continue reading from where we left off</span>
+    next_10 = f.read(<span class="syn-number">10</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">"Next 10 chars:"</span>, <span class="syn-function">repr</span>(next_10))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>First 10 chars: 'Rahul Shar'
+Next 10 chars: 'ma\nPriya P'</pre>
+        </div>
+      </div>
+
+      <h4>readline() — Read One Line</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; readline()</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># readline() — reads one line at a time</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"students.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    line1 = f.readline()
+    <span class="syn-function">print</span>(<span class="syn-string">"Line 1:"</span>, <span class="syn-function">repr</span>(line1))  <span class="syn-comment"># Includes \n at the end!</span>
+
+    line2 = f.readline()
+    <span class="syn-function">print</span>(<span class="syn-string">"Line 2:"</span>, <span class="syn-function">repr</span>(line2))
+
+    <span class="syn-comment"># Use strip() to remove the \n</span>
+    <span class="syn-function">print</span>(<span class="syn-string">"Clean:"</span>, line1.strip())</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Line 1: 'Rahul Sharma\n'
+Line 2: 'Priya Patel\n'
+Clean: Rahul Sharma</pre>
+        </div>
+      </div>
+
+      <h4>readlines() — Read All Lines as a List</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; readlines()</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># readlines() — returns a list of all lines</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"students.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    lines = f.readlines()
+    <span class="syn-function">print</span>(lines)
+    <span class="syn-function">print</span>(<span class="syn-function">type</span>(lines))  <span class="syn-comment"># &lt;class 'list'&gt;</span>
+    <span class="syn-function">print</span>(<span class="syn-string">"Total lines:"</span>, <span class="syn-function">len</span>(lines))
+
+    <span class="syn-comment"># Clean way: strip each line</span>
+    clean = [line.strip() <span class="syn-keyword">for</span> line <span class="syn-keyword">in</span> lines]
+    <span class="syn-function">print</span>(<span class="syn-string">"Cleaned:"</span>, clean)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>['Rahul Sharma\n', 'Priya Patel\n', 'Amit Kumar\n', 'Sneha Gupta\n', 'Vikram Singh']
+<class 'list'>
+Total lines: 5
+Cleaned: ['Rahul Sharma', 'Priya Patel', 'Amit Kumar', 'Sneha Gupta', 'Vikram Singh']</pre>
+        </div>
+      </div>
+
+      <h4>Reading Line by Line using a Loop (Best Practice)</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Loop</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Best way to read a file line by line — memory efficient!</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"students.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    <span class="syn-keyword">for</span> line_number, line <span class="syn-keyword">in</span> <span class="syn-function">enumerate</span>(f, <span class="syn-number">1</span>):
+        <span class="syn-function">print</span>(<span class="syn-string">f"Line {line_number}: {line.strip()}"</span>)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Line 1: Rahul Sharma
+Line 2: Priya Patel
+Line 3: Amit Kumar
+Line 4: Sneha Gupta
+Line 5: Vikram Singh</pre>
+        </div>
+      </div>
+
+      <div class="highlight-box important">
+        <strong>❗ Important:</strong> For very large files (millions of lines), always use the loop method. It reads one line at a time, so it doesn't load the entire file into memory. <code>read()</code> and <code>readlines()</code> load everything at once and can crash your program if the file is too big!
+      </div>
+
+      <h3>2.2 Writing to a File</h3>
+      <p>Use mode <strong>'w'</strong> to write. Remember: this <strong>erases all existing content!</strong></p>
+
+      <h4>write() — Write Strings to a File</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; write()</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Writing to a file — creates the file if it doesn't exist</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"output.txt"</span>, <span class="syn-string">"w"</span>) <span class="syn-keyword">as</span> f:
+    f.write(<span class="syn-string">"Hello, World!\n"</span>)
+    f.write(<span class="syn-string">"This is line 2.\n"</span>)
+    f.write(<span class="syn-string">"Python file handling is easy!\n"</span>)
+
+<span class="syn-comment"># Verify by reading it back</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"output.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    <span class="syn-function">print</span>(f.read())</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Hello, World!
+This is line 2.
+Python file handling is easy!</pre>
+        </div>
+      </div>
+
+      <h4>writelines() — Write Multiple Lines at Once</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; writelines()</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># writelines() — write a list of strings</span>
+lines = [<span class="syn-string">"Apple\n"</span>, <span class="syn-string">"Banana\n"</span>, <span class="syn-string">"Cherry\n"</span>, <span class="syn-string">"Date\n"</span>]
+
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"fruits.txt"</span>, <span class="syn-string">"w"</span>) <span class="syn-keyword">as</span> f:
+    f.writelines(lines)  <span class="syn-comment"># Does NOT add \n automatically!</span>
+
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"fruits.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    <span class="syn-function">print</span>(f.read())</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Apple
+Banana
+Cherry
+Date</pre>
+        </div>
+      </div>
+
+      <div class="highlight-box warning">
+        <strong>⚠️ Warning:</strong> <code>write()</code> does NOT add a newline (<code>\n</code>) automatically. You must add it yourself! Similarly, <code>writelines()</code> writes the strings exactly as they are — no automatic newlines.
+      </div>
+
+      <h3>2.3 Appending to a File</h3>
+      <p>Use mode <strong>'a'</strong> to append (add to the end). The existing content is preserved.</p>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Append</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># First, create a file with some content</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"log.txt"</span>, <span class="syn-string">"w"</span>) <span class="syn-keyword">as</span> f:
+    f.write(<span class="syn-string">"Log started.\n"</span>)
+
+<span class="syn-comment"># Now append more content — existing content is NOT erased</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"log.txt"</span>, <span class="syn-string">"a"</span>) <span class="syn-keyword">as</span> f:
+    f.write(<span class="syn-string">"Entry 1: User logged in.\n"</span>)
+    f.write(<span class="syn-string">"Entry 2: File uploaded.\n"</span>)
+    f.write(<span class="syn-string">"Entry 3: User logged out.\n"</span>)
+
+<span class="syn-comment"># Read and display</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"log.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    <span class="syn-function">print</span>(f.read())</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Log started.
+Entry 1: User logged in.
+Entry 2: File uploaded.
+Entry 3: User logged out.</pre>
+        </div>
+      </div>
+
+      <h3>2.4 The 'with' Statement (Context Manager)</h3>
+      <p>The <code>'with'</code> statement is the safest and cleanest way to work with files. Here's why:</p>
+      <table>
+        <tr><th>Without 'with'</th><th>With 'with'</th></tr>
+        <tr><td>You must call <code>f.close()</code> manually</td><td>File closes automatically</td></tr>
+        <tr><td>If error occurs, file may stay open</td><td>File closes even if error occurs</td></tr>
+        <tr><td>More code to write</td><td>Cleaner, shorter code</td></tr>
+        <tr><td>Risk of resource leak</td><td>No risk of resource leak</td></tr>
+      </table>
+
+      <h3>2.5 Working with File Paths</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; os.path</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">import</span> os
+
+<span class="syn-comment"># Check if file exists</span>
+<span class="syn-function">print</span>(os.path.exists(<span class="syn-string">"data.txt"</span>))  <span class="syn-comment"># True or False</span>
+
+<span class="syn-comment"># Get absolute path</span>
+<span class="syn-function">print</span>(os.path.abspath(<span class="syn-string">"data.txt"</span>))  <span class="syn-comment"># Full path</span>
+
+<span class="syn-comment"># Get file name and directory</span>
+<span class="syn-function">print</span>(os.path.basename(<span class="syn-string">"/home/user/data.txt"</span>))  <span class="syn-comment"># data.txt</span>
+<span class="syn-function">print</span>(os.path.dirname(<span class="syn-string">"/home/user/data.txt"</span>))   <span class="syn-comment"># /home/user</span>
+
+<span class="syn-comment"># Get file size</span>
+<span class="syn-function">print</span>(os.path.getsize(<span class="syn-string">"data.txt"</span>))  <span class="syn-comment"># Size in bytes</span>
+
+<span class="syn-comment"># List files in a directory</span>
+<span class="syn-function">print</span>(os.listdir(<span class="syn-string">"."</span>))  <span class="syn-comment"># Current directory</span>
+
+<span class="syn-comment"># Delete a file</span>
+<span class="syn-comment"># os.remove("old_file.txt")  # Be careful!</span>
+
+<span class="syn-comment"># Rename a file</span>
+<span class="syn-comment"># os.rename("old_name.txt", "new_name.txt")</span></code></pre>
+        </div>
+      </div>
+
+      <h3>2.6 Useful File Methods and Attributes</h3>
+      <table>
+        <tr><th>Method / Attribute</th><th>What It Does</th><th>Example</th></tr>
+        <tr><td><code>f.read()</code></td><td>Read entire file as string</td><td><code>content = f.read()</code></td></tr>
+        <tr><td><code>f.read(n)</code></td><td>Read n characters</td><td><code>chunk = f.read(100)</code></td></tr>
+        <tr><td><code>f.readline()</code></td><td>Read one line</td><td><code>line = f.readline()</code></td></tr>
+        <tr><td><code>f.readlines()</code></td><td>Read all lines as list</td><td><code>lines = f.readlines()</code></td></tr>
+        <tr><td><code>f.write(s)</code></td><td>Write string s to file</td><td><code>f.write('Hello')</code></td></tr>
+        <tr><td><code>f.writelines(lst)</code></td><td>Write list of strings</td><td><code>f.writelines(lines)</code></td></tr>
+        <tr><td><code>f.close()</code></td><td>Close the file</td><td><code>f.close()</code></td></tr>
+        <tr><td><code>f.tell()</code></td><td>Current position (in bytes)</td><td><code>pos = f.tell()</code></td></tr>
+        <tr><td><code>f.seek(n)</code></td><td>Move cursor to position n</td><td><code>f.seek(0)</code> → go to start</td></tr>
+        <tr><td><code>f.closed</code></td><td>True if file is closed</td><td><code>print(f.closed)</code></td></tr>
+        <tr><td><code>f.name</code></td><td>Name of the file</td><td><code>print(f.name)</code></td></tr>
+        <tr><td><code>f.mode</code></td><td>Mode the file was opened in</td><td><code>print(f.mode)</code></td></tr>
+        <tr><td><code>f.readable()</code></td><td>Can we read from it?</td><td><code>print(f.readable())</code></td></tr>
+        <tr><td><code>f.writable()</code></td><td>Can we write to it?</td><td><code>print(f.writable())</code></td></tr>
+      </table>
+
+      <h4>tell() and seek() — File Cursor</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; tell() &amp; seek()</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Demonstrating tell() and seek()</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"example.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+    <span class="syn-function">print</span>(<span class="syn-string">"Starting position:"</span>, f.tell())  <span class="syn-comment"># 0</span>
+    f.read(<span class="syn-number">5</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">"After reading 5 chars:"</span>, f.tell())  <span class="syn-comment"># 5</span>
+    f.seek(<span class="syn-number">0</span>)  <span class="syn-comment"># Go back to the beginning</span>
+    <span class="syn-function">print</span>(<span class="syn-string">"After seek(0):"</span>, f.tell())  <span class="syn-comment"># 0</span>
+
+    <span class="syn-function">print</span>(<span class="syn-string">"File name:"</span>, f.name)
+    <span class="syn-function">print</span>(<span class="syn-string">"Mode:"</span>, f.mode)
+    <span class="syn-function">print</span>(<span class="syn-string">"Readable:"</span>, f.readable())</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Starting position: 0
+After reading 5 chars: 5
+After seek(0): 0
+File name: example.txt
+Mode: r
+Readable: True</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 03: PICKLING (SERIALIZATION) -->
+    <!-- ============================================================ -->
+    <section id="sec-pickling" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 03 &bull; Serialization</div>
+        <h2 class="ch-title">3. Pickling (Serialization)</h2>
+      </div>
+
+      <h3>3.1 What is Pickling?</h3>
+      <p><strong>Pickling</strong> is the process of converting a Python object (like a list, dictionary, or class) into a <strong>byte stream</strong> so that it can be saved to a file or sent over a network. This process is also called <strong><em>serialization.</em></strong></p>
+      <p><strong>Unpickling</strong> is the reverse — converting the byte stream back into a Python object. This is called <strong><em>deserialization.</em></strong></p>
+
+      <table>
+        <tr><th>Term</th><th>Process</th><th>Direction</th><th>Function</th></tr>
+        <tr><td>Pickle (Serialize)</td><td>Object → Bytes → File</td><td>Saving</td><td><code>pickle.dump()</code></td></tr>
+        <tr><td>Unpickle (Deserialize)</td><td>File → Bytes → Object</td><td>Loading</td><td><code>pickle.load()</code></td></tr>
+      </table>
+
+      <div class="highlight-box remember">
+        <strong>Think of it like this:</strong><br>
+        Pickling = Packing your clothes into a suitcase (object → file)<br>
+        Unpickling = Unpacking the suitcase and getting your clothes back (file → object)
+      </div>
+
+      <div class="highlight-box tip">
+        <strong>📝 Note:</strong> Python's <code>pickle</code> module is used for pickling. Always import it first: <code>import pickle</code>
+      </div>
+
+      <h3>3.2 How to Pickle (Serialize) — Saving Objects to Files</h3>
+      <div class="syntax-box">
+        <strong>📐 Syntax:</strong><br>
+        <code>pickle.dump(object, file)</code> — Saves the object to the file.<br>
+        <code>pickle.dumps(object)</code> — Returns the pickled bytes (without saving to file).
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program: Pickling (Saving) Objects</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pickle
+
+<span class="syn-comment"># ─── Example 1: Pickle a list ───</span>
+fruits = [<span class="syn-string">"Apple"</span>, <span class="syn-string">"Banana"</span>, <span class="syn-string">"Cherry"</span>, <span class="syn-string">"Date"</span>, <span class="syn-string">"Elderberry"</span>]
+
+<span class="syn-comment"># Save the list to a binary file</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"fruits.pkl"</span>, <span class="syn-string">"wb"</span>) <span class="syn-keyword">as</span> f:  <span class="syn-comment"># 'wb' = write binary</span>
+    pickle.dump(fruits, f)
+<span class="syn-function">print</span>(<span class="syn-string">"List has been pickled (saved) to fruits.pkl!"</span>)
+
+<span class="syn-comment"># ─── Example 2: Pickle a dictionary ───</span>
+student = {
+    <span class="syn-string">"name"</span>: <span class="syn-string">"Rahul Sharma"</span>,
+    <span class="syn-string">"age"</span>: <span class="syn-number">20</span>,
+    <span class="syn-string">"marks"</span>: [<span class="syn-number">85</span>, <span class="syn-number">92</span>, <span class="syn-number">78</span>, <span class="syn-number">95</span>, <span class="syn-number">88</span>],
+    <span class="syn-string">"passed"</span>: <span class="syn-keyword">True</span>
+}
+
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"student.pkl"</span>, <span class="syn-string">"wb"</span>) <span class="syn-keyword">as</span> f:
+    pickle.dump(student, f)
+<span class="syn-function">print</span>(<span class="syn-string">"Dictionary has been pickled to student.pkl!"</span>)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>List has been pickled (saved) to fruits.pkl!
+Dictionary has been pickled to student.pkl!</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box important">
+        <strong>❗ Important:</strong> Always open pickle files in binary mode (<code>'wb'</code> for writing, <code>'rb'</code> for reading). Pickle data is NOT human-readable — it's raw bytes!
+      </div>
+
+      <h3>3.3 How to Unpickle (Deserialize) — Loading Objects from Files</h3>
+      <div class="syntax-box">
+        <strong>📐 Syntax:</strong><br>
+        <code>pickle.load(file)</code> — Reads and returns the object from the file.<br>
+        <code>pickle.loads(bytes)</code> — Converts pickled bytes back to an object.
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program: Unpickling (Loading) Objects</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pickle
+
+<span class="syn-comment"># ─── Load the list back ───</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"fruits.pkl"</span>, <span class="syn-string">"rb"</span>) <span class="syn-keyword">as</span> f:  <span class="syn-comment"># 'rb' = read binary</span>
+    loaded_fruits = pickle.load(f)
+<span class="syn-function">print</span>(<span class="syn-string">"Loaded fruits:"</span>, loaded_fruits)
+<span class="syn-function">print</span>(<span class="syn-string">"Type:"</span>, <span class="syn-function">type</span>(loaded_fruits))
+
+<span class="syn-comment"># ─── Load the dictionary back ───</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"student.pkl"</span>, <span class="syn-string">"rb"</span>) <span class="syn-keyword">as</span> f:
+    loaded_student = pickle.load(f)
+<span class="syn-function">print</span>(<span class="syn-string">"Loaded student:"</span>, loaded_student)
+<span class="syn-function">print</span>(<span class="syn-string">"Name:"</span>, loaded_student[<span class="syn-string">"name"</span>])
+<span class="syn-function">print</span>(<span class="syn-string">"Marks:"</span>, loaded_student[<span class="syn-string">"marks"</span>])</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Loaded fruits: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
+Type: <class 'list'>
+Loaded student: {'name': 'Rahul Sharma', 'age': 20, 'marks': [85, 92, 78, 95, 88], 'passed': True}
+Name: Rahul Sharma
+Marks: [85, 92, 78, 95, 88]</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>3.4 Pickling Different Data Types</h3>
+      <div class="program-block">
+        <div class="program-title">📌 Program: Pickling Multiple Data Types</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pickle
+
+<span class="syn-comment"># You can pickle almost ANY Python object!</span>
+data = {
+    <span class="syn-string">"integer"</span>: <span class="syn-number">42</span>,
+    <span class="syn-string">"float"</span>: <span class="syn-number">3.14159</span>,
+    <span class="syn-string">"string"</span>: <span class="syn-string">"Hello, Python!"</span>,
+    <span class="syn-string">"list"</span>: [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>],
+    <span class="syn-string">"tuple"</span>: (<span class="syn-number">10</span>, <span class="syn-number">20</span>, <span class="syn-number">30</span>),
+    <span class="syn-string">"set"</span>: {<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>},
+    <span class="syn-string">"dict"</span>: {<span class="syn-string">"a"</span>: <span class="syn-number">1</span>, <span class="syn-string">"b"</span>: <span class="syn-number">2</span>},
+    <span class="syn-string">"boolean"</span>: <span class="syn-keyword">True</span>,
+    <span class="syn-string">"none"</span>: <span class="syn-keyword">None</span>,
+}
+
+<span class="syn-comment"># Save all of this in one file</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"all_data.pkl"</span>, <span class="syn-string">"wb"</span>) <span class="syn-keyword">as</span> f:
+    pickle.dump(data, f)
+
+<span class="syn-comment"># Load it back</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"all_data.pkl"</span>, <span class="syn-string">"rb"</span>) <span class="syn-keyword">as</span> f:
+    loaded = pickle.load(f)
+
+<span class="syn-keyword">for</span> key, value <span class="syn-keyword">in</span> loaded.items():
+    <span class="syn-function">print</span>(<span class="syn-string">f"{key:10s} → {value} (type: {type(value).__name__})"</span>)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>integer    → 42 (type: int)
+float      → 3.14159 (type: float)
+string     → Hello, Python! (type: str)
+list       → [1, 2, 3, 4, 5] (type: list)
+tuple      → (10, 20, 30) (type: tuple)
+set        → {1, 2, 3} (type: set)
+dict       → {'a': 1, 'b': 2} (type: dict)
+boolean    → True (type: bool)
+none       → None (type: NoneType)</pre>
+          </div>
+        </div>
+      </div>
+
+      <h4>Pickling Multiple Objects in One File</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">import</span> pickle
+
+<span class="syn-comment"># Save multiple separate objects to ONE file</span>
+name = <span class="syn-string">"Priya"</span>
+age = <span class="syn-number">21</span>
+marks = [<span class="syn-number">88</span>, <span class="syn-number">92</span>, <span class="syn-number">75</span>, <span class="syn-number">96</span>]
+
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"multi.pkl"</span>, <span class="syn-string">"wb"</span>) <span class="syn-keyword">as</span> f:
+    pickle.dump(name, f)   <span class="syn-comment"># First object</span>
+    pickle.dump(age, f)    <span class="syn-comment"># Second object</span>
+    pickle.dump(marks, f)  <span class="syn-comment"># Third object</span>
+
+<span class="syn-comment"># Load them back IN THE SAME ORDER</span>
+<span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"multi.pkl"</span>, <span class="syn-string">"rb"</span>) <span class="syn-keyword">as</span> f:
+    loaded_name = pickle.load(f)   <span class="syn-comment"># First</span>
+    loaded_age = pickle.load(f)    <span class="syn-comment"># Second</span>
+    loaded_marks = pickle.load(f)  <span class="syn-comment"># Third</span>
+
+<span class="syn-function">print</span>(<span class="syn-string">f"Name: {loaded_name}, Age: {loaded_age}, Marks: {loaded_marks}"</span>)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Name: Priya, Age: 21, Marks: [88, 92, 75, 96]</pre>
+        </div>
+      </div>
+
+      <div class="highlight-box warning">
+        <strong>⚠️ Warning:</strong> When you dump multiple objects to one file, you must load them in the SAME ORDER. If you load in a different order, you'll get wrong data!
+      </div>
+
+      <h3>3.5 Pickle vs JSON — When to Use What?</h3>
+      <table>
+        <tr><th>Feature</th><th>Pickle</th><th>JSON</th></tr>
+        <tr><td>Format</td><td>Binary (not human-readable)</td><td>Text (human-readable)</td></tr>
+        <tr><td>Speed</td><td>Faster</td><td>Slower</td></tr>
+        <tr><td>Data Types</td><td>Almost all Python objects</td><td>Only basic types (str, int, list, dict)</td></tr>
+        <tr><td>Security</td><td>NOT safe — can execute code!</td><td>Safe</td></tr>
+        <tr><td>Cross-language</td><td>Python only</td><td>Works with all languages</td></tr>
+        <tr><td>File Extension</td><td>.pkl or .pickle</td><td>.json</td></tr>
+        <tr><td>Use Case</td><td>Saving Python objects for later</td><td>Sharing data between systems</td></tr>
+        <tr><td>Module</td><td><code>import pickle</code></td><td><code>import json</code></td></tr>
+      </table>
+
+      <div class="highlight-box important">
+        <strong>❗ Important:</strong> Never unpickle data from untrusted sources! A malicious pickle file can execute arbitrary code on your computer. For untrusted data, use JSON instead.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 04: EXCEPTION HANDLING -->
+    <!-- ============================================================ -->
+    <section id="sec-exceptions" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 04 &bull; Exceptions</div>
+        <h2 class="ch-title">4. Exception Handling</h2>
+      </div>
+
+      <h3>4.1 What is an Exception?</h3>
+      <p>An exception is an error that happens DURING the execution of your program. When Python encounters an error, it stops the program and shows an error message. This is called <strong>'raising an exception'</strong>.</p>
+
+      <table>
+        <tr><th>Type</th><th>When It Happens</th><th>Can We Fix It?</th><th>Example</th></tr>
+        <tr><td>Syntax Error</td><td>Before running (while parsing)</td><td>Fix the code</td><td><code>print('hello' → missing )</code></td></tr>
+        <tr><td>Exception</td><td>During running (at runtime)</td><td>Yes — with try/except</td><td><code>10 / 0</code> → ZeroDivisionError</td></tr>
+      </table>
+
+      <h3>4.2 Common Python Exceptions</h3>
+      <table>
+        <tr><th>Exception</th><th>When It Occurs</th><th>Example</th></tr>
+        <tr><td><code>ZeroDivisionError</code></td><td>Dividing by zero</td><td><code>10 / 0</code></td></tr>
+        <tr><td><code>TypeError</code></td><td>Wrong type used in operation</td><td><code>'hello' + 5</code></td></tr>
+        <tr><td><code>ValueError</code></td><td>Right type, wrong value</td><td><code>int('hello')</code></td></tr>
+        <tr><td><code>NameError</code></td><td>Variable not defined</td><td><code>print(x)</code> — x not defined</td></tr>
+        <tr><td><code>IndexError</code></td><td>List index out of range</td><td><code>[1,2,3][10]</code></td></tr>
+        <tr><td><code>KeyError</code></td><td>Dictionary key not found</td><td><code>{'a':1}['b']</code></td></tr>
+        <tr><td><code>FileNotFoundError</code></td><td>File doesn't exist</td><td><code>open('no.txt')</code></td></tr>
+        <tr><td><code>IOError</code></td><td>Input/Output operation failed</td><td>Reading a locked file</td></tr>
+        <tr><td><code>ImportError</code></td><td>Module not found</td><td><code>import nonexistent</code></td></tr>
+        <tr><td><code>AttributeError</code></td><td>Object has no such attribute</td><td><code>'hello'.push('x')</code></td></tr>
+        <tr><td><code>OverflowError</code></td><td>Number too large</td><td><code>10 ** 10000</code> (in some cases)</td></tr>
+        <tr><td><code>StopIteration</code></td><td>No more items in iterator</td><td><code>next()</code> on empty iterator</td></tr>
+        <tr><td><code>IndentationError</code></td><td>Wrong indentation</td><td>Misaligned code blocks</td></tr>
+        <tr><td><code>RuntimeError</code></td><td>Generic runtime error</td><td>Various situations</td></tr>
+      </table>
+
+      <h3>4.3 try-except Block</h3>
+      <div class="syntax-box">
+        <strong>📐 Syntax:</strong><br>
+        <code>try:</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code># Code that might cause an error</code><br>
+        <code>except ExceptionType:</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code># Code to handle the error</code>
+      </div>
+
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Basic try-except</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># ─── Example 1: Handling ZeroDivisionError ───</span>
+<span class="syn-keyword">try</span>:
+    result = <span class="syn-number">10</span> / <span class="syn-number">0</span>
+    <span class="syn-function">print</span>(<span class="syn-string">"Result:"</span>, result)  <span class="syn-comment"># This won't run</span>
+<span class="syn-keyword">except</span> <span class="syn-type">ZeroDivisionError</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"Error! You cannot divide by zero."</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">"Program continues running!"</span>)  <span class="syn-comment"># This WILL run</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Error! You cannot divide by zero.
+Program continues running!</pre>
+        </div>
+      </div>
+
+      <h3>4.4 Multiple except Blocks</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Multiple except</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Handling multiple exception types</span>
+<span class="syn-keyword">def</span> <span class="syn-function">divide</span>(a, b):
+    <span class="syn-keyword">try</span>:
+        result = a / b
+        <span class="syn-function">print</span>(<span class="syn-string">f"{a} / {b} = {result}"</span>)
+    <span class="syn-keyword">except</span> <span class="syn-type">ZeroDivisionError</span>:
+        <span class="syn-function">print</span>(<span class="syn-string">"Error: Cannot divide by zero!"</span>)
+    <span class="syn-keyword">except</span> <span class="syn-type">TypeError</span>:
+        <span class="syn-function">print</span>(<span class="syn-string">"Error: Please use numbers only!"</span>)
+    <span class="syn-keyword">except</span> <span class="syn-type">Exception</span> <span class="syn-keyword">as</span> e:
+        <span class="syn-function">print</span>(<span class="syn-string">f"Unexpected error: {e}"</span>)
+
+<span class="syn-comment"># Test with different inputs</span>
+divide(<span class="syn-number">10</span>, <span class="syn-number">2</span>)   <span class="syn-comment"># Normal case</span>
+divide(<span class="syn-number">10</span>, <span class="syn-number">0</span>)   <span class="syn-comment"># ZeroDivisionError</span>
+divide(<span class="syn-string">"10"</span>, <span class="syn-number">2</span>) <span class="syn-comment"># TypeError (in some operations)</span>
+divide(<span class="syn-number">10</span>, <span class="syn-string">"abc"</span>) <span class="syn-comment"># TypeError</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>10 / 2 = 5.0
+Error: Cannot divide by zero!
+10 / 2 = 5.0
+Error: Please use numbers only!</pre>
+        </div>
+      </div>
+
+      <div class="highlight-box important">
+        <strong>❗ Important:</strong> Always put specific exceptions before general ones. Python checks from top to bottom and uses the first matching <code>except</code> block. If you put <code>'except Exception'</code> first, it will catch everything and your specific handlers will never run!
+      </div>
+
+      <h3>4.5 try-except-else</h3>
+      <div class="syntax-box">
+        <strong>📐 Syntax:</strong><br>
+        <code>try:</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code># Code that might fail</code><br>
+        <code>except ExceptionType:</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code># Runs ONLY if an error occurred</code><br>
+        <code>else:</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code># Runs ONLY if NO error occurred</code>
+      </div>
+
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; try-except-else</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># The else block runs ONLY when there is NO exception</span>
+<span class="syn-keyword">try</span>:
+    num = <span class="syn-function">int</span>(<span class="syn-function">input</span>(<span class="syn-string">"Enter a number: "</span>))  <span class="syn-comment"># User enters 5</span>
+<span class="syn-keyword">except</span> <span class="syn-type">ValueError</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"Invalid input!"</span>)
+<span class="syn-keyword">else</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">f"Success! You entered {num}"</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">f"Double of {num} is {num * 2}"</span>)
+
+<span class="syn-function">print</span>(<span class="syn-string">"---"</span>)
+
+<span class="syn-comment"># Try again with bad input</span>
+<span class="syn-keyword">try</span>:
+    num = <span class="syn-function">int</span>(<span class="syn-string">"hello"</span>)
+<span class="syn-keyword">except</span> <span class="syn-type">ValueError</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"Invalid input!"</span>)
+<span class="syn-keyword">else</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"This won't run because there was an error"</span>)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Enter a number: 5
+Success! You entered 5
+Double of 5 is 10
+---
+Invalid input!</pre>
+        </div>
+      </div>
+
+      <h3>4.6 try-except-finally</h3>
+      <div class="syntax-box">
+        <strong>📐 Syntax:</strong><br>
+        <code>try:</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code># Code that might fail</code><br>
+        <code>except ExceptionType:</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code># Runs if error occurred</code><br>
+        <code>finally:</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code># ALWAYS runs — error or no error!</code>
+      </div>
+
+      <p><strong>The finally block</strong> ALWAYS executes, no matter what — even if an exception occurs, even if you use <strong><em>return</em></strong> inside try. It is perfect for cleanup operations like closing files or database connections.</p>
+
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; finally</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># finally ALWAYS runs</span>
+<span class="syn-function">print</span>(<span class="syn-string">"--- Case 1: No Error ---"</span>)
+<span class="syn-keyword">try</span>:
+    result = <span class="syn-number">10</span> / <span class="syn-number">2</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f"Result: {result}"</span>)
+<span class="syn-keyword">except</span> <span class="syn-type">ZeroDivisionError</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"Cannot divide by zero!"</span>)
+<span class="syn-keyword">finally</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"Finally block executed!"</span>)
+
+<span class="syn-function">print</span>()
+
+<span class="syn-function">print</span>(<span class="syn-string">"--- Case 2: With Error ---"</span>)
+<span class="syn-keyword">try</span>:
+    result = <span class="syn-number">10</span> / <span class="syn-number">0</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f"Result: {result}"</span>)  <span class="syn-comment"># Never runs</span>
+<span class="syn-keyword">except</span> <span class="syn-type">ZeroDivisionError</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"Cannot divide by zero!"</span>)
+<span class="syn-keyword">finally</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"Finally block executed!"</span>)  <span class="syn-comment"># Still runs!</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>--- Case 1: No Error ---
+Result: 5.0
+Finally block executed!
+
+--- Case 2: With Error ---
+Cannot divide by zero!
+Finally block executed!</pre>
+        </div>
+      </div>
+
+      <h3>4.7 Raising Exceptions (raise Statement)</h3>
+      <p>Sometimes you want to raise an exception yourself when certain conditions are met. Use the <code>raise</code> keyword:</p>
+
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; raise</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># ─── Raising an exception manually ───</span>
+<span class="syn-keyword">def</span> <span class="syn-function">set_age</span>(age):
+    <span class="syn-keyword">if</span> age &lt; <span class="syn-number">0</span>:
+        <span class="syn-keyword">raise</span> <span class="syn-type">ValueError</span>(<span class="syn-string">"Age cannot be negative!"</span>)
+    <span class="syn-keyword">if</span> age &gt; <span class="syn-number">150</span>:
+        <span class="syn-keyword">raise</span> <span class="syn-type">ValueError</span>(<span class="syn-string">"Age cannot be more than 150!"</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">f"Age set to {age}"</span>)
+
+<span class="syn-comment"># Test</span>
+<span class="syn-keyword">try</span>:
+    <span class="syn-function">set_age</span>(<span class="syn-number">25</span>)   <span class="syn-comment"># Works fine</span>
+    <span class="syn-function">set_age</span>(-<span class="syn-number">5</span>)   <span class="syn-comment"># Raises ValueError</span>
+<span class="syn-keyword">except</span> <span class="syn-type">ValueError</span> <span class="syn-keyword">as</span> e:
+    <span class="syn-function">print</span>(<span class="syn-string">f"Error: {e}"</span>)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Age set to 25
+Error: Age cannot be negative!</pre>
+        </div>
+      </div>
+
+      <h3>4.8 Custom Exceptions (User-Defined Exceptions)</h3>
+      <p>You can create your own exception types by making a class that inherits from the <code>Exception</code> class:</p>
+
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Custom Exceptions</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Creating custom exceptions</span>
+<span class="syn-keyword">class</span> <span class="syn-type">InvalidMarkError</span>(<span class="syn-type">Exception</span>):
+    <span class="syn-string">"""Raised when marks are not in valid range (0-100)"""</span>
+    <span class="syn-keyword">def</span> <span class="syn-function">__init__</span>(self, marks, message=<span class="syn-string">"Marks must be between 0 and 100"</span>):
+        self.marks = marks
+        self.message = message
+        <span class="syn-function">super</span>().<span class="syn-function">__init__</span>(self.message)
+
+    <span class="syn-keyword">def</span> <span class="syn-function">__str__</span>(self):
+        <span class="syn-keyword">return</span> <span class="syn-string">f"{self.message}. Got: {self.marks}"</span>
+
+<span class="syn-keyword">class</span> <span class="syn-type">NegativeAgeError</span>(<span class="syn-type">Exception</span>):
+    <span class="syn-string">"""Raised when age is negative"""</span>
+    <span class="syn-keyword">pass</span>
+
+<span class="syn-comment"># Using custom exceptions</span>
+<span class="syn-keyword">def</span> <span class="syn-function">add_marks</span>(subject, marks):
+    <span class="syn-keyword">if</span> marks &lt; <span class="syn-number">0</span> <span class="syn-keyword">or</span> marks &gt; <span class="syn-number">100</span>:
+        <span class="syn-keyword">raise</span> <span class="syn-type">InvalidMarkError</span>(marks)
+    <span class="syn-function">print</span>(<span class="syn-string">f"{subject}: {marks} marks"</span>)
+
+<span class="syn-keyword">def</span> <span class="syn-function">set_student_age</span>(age):
+    <span class="syn-keyword">if</span> age &lt; <span class="syn-number">0</span>:
+        <span class="syn-keyword">raise</span> <span class="syn-type">NegativeAgeError</span>(<span class="syn-string">f"Age cannot be negative! Got: {age}"</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">f"Age: {age}"</span>)
+
+<span class="syn-comment"># Test</span>
+<span class="syn-keyword">try</span>:
+    <span class="syn-function">add_marks</span>(<span class="syn-string">"Math"</span>, <span class="syn-number">95</span>)      <span class="syn-comment"># OK</span>
+    <span class="syn-function">add_marks</span>(<span class="syn-string">"Science"</span>, <span class="syn-number">150</span>)  <span class="syn-comment"># Error!</span>
+<span class="syn-keyword">except</span> <span class="syn-type">InvalidMarkError</span> <span class="syn-keyword">as</span> e:
+    <span class="syn-function">print</span>(<span class="syn-string">f"Custom Error: {e}"</span>)
+
+<span class="syn-keyword">try</span>:
+    <span class="syn-function">set_student_age</span>(-<span class="syn-number">5</span>)
+<span class="syn-keyword">except</span> <span class="syn-type">NegativeAgeError</span> <span class="syn-keyword">as</span> e:
+    <span class="syn-function">print</span>(<span class="syn-string">f"Custom Error: {e}"</span>)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Math: 95 marks
+Custom Error: Marks must be between 0 and 100. Got: 150
+Custom Error: Age cannot be negative! Got: -5</pre>
+        </div>
+      </div>
+
+      <h3>4.9 File Handling with Exception Handling (Combining Both!)</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Safe File Reading</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Safe file reading with proper exception handling</span>
+<span class="syn-keyword">def</span> <span class="syn-function">read_file_safely</span>(filename):
+    <span class="syn-keyword">try</span>:
+        <span class="syn-keyword">with</span> <span class="syn-function">open</span>(filename, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+            content = f.read()
+            <span class="syn-keyword">return</span> content
+    <span class="syn-keyword">except</span> <span class="syn-type">FileNotFoundError</span>:
+        <span class="syn-function">print</span>(<span class="syn-string">f"Error: File '{filename}' not found!"</span>)
+        <span class="syn-keyword">return</span> <span class="syn-keyword">None</span>
+    <span class="syn-keyword">except</span> <span class="syn-type">PermissionError</span>:
+        <span class="syn-function">print</span>(<span class="syn-string">f"Error: No permission to read '{filename}'!"</span>)
+        <span class="syn-keyword">return</span> <span class="syn-keyword">None</span>
+    <span class="syn-keyword">except</span> <span class="syn-type">IOError</span> <span class="syn-keyword">as</span> e:
+        <span class="syn-function">print</span>(<span class="syn-string">f"Error reading file: {e}"</span>)
+        <span class="syn-keyword">return</span> <span class="syn-keyword">None</span>
+
+<span class="syn-comment"># Test</span>
+content = <span class="syn-function">read_file_safely</span>(<span class="syn-string">"students.txt"</span>)
+<span class="syn-keyword">if</span> content:
+    <span class="syn-function">print</span>(<span class="syn-string">"File content loaded successfully!"</span>)
+    <span class="syn-function">print</span>(content)
+
+content = <span class="syn-function">read_file_safely</span>(<span class="syn-string">"nonexistent.txt"</span>)
+<span class="syn-keyword">if</span> content <span class="syn-keyword">is</span> <span class="syn-keyword">None</span>:
+    <span class="syn-function">print</span>(<span class="syn-string">"Could not load the file."</span>)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>File content loaded successfully!
+Rahul Sharma
+Priya Patel
+Amit Kumar
+Error: File 'nonexistent.txt' not found!
+Could not load the file.</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 05: PRACTICE PROGRAMS -->
+    <!-- ============================================================ -->
+    <section id="sec-practice" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">💻 Section 05 &bull; Programs</div>
+        <h2 class="ch-title">5. Practice Programs</h2>
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 1: Student Record Manager using Files</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Student Record Manager — Text File</span>
+<span class="syn-keyword">def</span> <span class="syn-function">add_student</span>():
+    name = <span class="syn-function">input</span>(<span class="syn-string">"Enter student name: "</span>)
+    roll = <span class="syn-function">input</span>(<span class="syn-string">"Enter roll number: "</span>)
+    marks = <span class="syn-function">input</span>(<span class="syn-string">"Enter marks: "</span>)
+    <span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"students_record.txt"</span>, <span class="syn-string">"a"</span>) <span class="syn-keyword">as</span> f:
+        f.write(<span class="syn-string">f"{roll},{name},{marks}\n"</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">f"Student '{name}' added successfully!"</span>)
+
+<span class="syn-keyword">def</span> <span class="syn-function">view_all_students</span>():
+    <span class="syn-keyword">try</span>:
+        <span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"students_record.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+            lines = f.readlines()
+            <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> lines:
+                <span class="syn-function">print</span>(<span class="syn-string">"No records found!"</span>)
+                <span class="syn-keyword">return</span>
+            <span class="syn-function">print</span>(<span class="syn-string">f"{'Roll':>6} | {'Name':<20} | {'Marks':>5}"</span>)
+            <span class="syn-function">print</span>(<span class="syn-string">"-"</span> * <span class="syn-number">38</span>)
+            <span class="syn-keyword">for</span> line <span class="syn-keyword">in</span> lines:
+                roll, name, marks = line.strip().split(<span class="syn-string">","</span>)
+                <span class="syn-function">print</span>(<span class="syn-string">f"{roll:>6} | {name:<20} | {marks:>5}"</span>)
+    <span class="syn-keyword">except</span> <span class="syn-type">FileNotFoundError</span>:
+        <span class="syn-function">print</span>(<span class="syn-string">"No records file found. Add a student first!"</span>)
+
+<span class="syn-keyword">def</span> <span class="syn-function">search_student</span>(roll_number):
+    <span class="syn-keyword">try</span>:
+        <span class="syn-keyword">with</span> <span class="syn-function">open</span>(<span class="syn-string">"students_record.txt"</span>, <span class="syn-string">"r"</span>) <span class="syn-keyword">as</span> f:
+            <span class="syn-keyword">for</span> line <span class="syn-keyword">in</span> f:
+                roll, name, marks = line.strip().split(<span class="syn-string">","</span>)
+                <span class="syn-keyword">if</span> roll == roll_number:
+                    <span class="syn-function">print</span>(<span class="syn-string">f"Found! Name: {name}, Marks: {marks}"</span>)
+                    <span class="syn-keyword">return</span>
+            <span class="syn-function">print</span>(<span class="syn-string">f"Student with roll {roll_number} not found."</span>)
+    <span class="syn-keyword">except</span> <span class="syn-type">FileNotFoundError</span>:
+        <span class="syn-function">print</span>(<span class="syn-string">"No records file found!"</span>)
+
+<span class="syn-comment"># Menu</span>
+<span class="syn-function">print</span>(<span class="syn-string">"1. Add Student"</span>)
+<span class="syn-function">print</span>(<span class="syn-string">"2. View All"</span>)
+<span class="syn-function">print</span>(<span class="syn-string">"3. Search"</span>)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 2: Pickle-based Contact Book</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">import</span> pickle
+<span class="syn-keyword">import</span> os
+
+FILENAME = <span class="syn-string">"contacts.pkl"</span>
+
+<span class="syn-keyword">def</span> <span class="syn-function">load_contacts</span>():
+    <span class="syn-keyword">if</span> os.path.exists(FILENAME):
+        <span class="syn-keyword">with</span> <span class="syn-function">open</span>(FILENAME, <span class="syn-string">"rb"</span>) <span class="syn-keyword">as</span> f:
+            <span class="syn-keyword">return</span> pickle.load(f)
+    <span class="syn-keyword">return</span> {}
+
+<span class="syn-keyword">def</span> <span class="syn-function">save_contacts</span>(contacts):
+    <span class="syn-keyword">with</span> <span class="syn-function">open</span>(FILENAME, <span class="syn-string">"wb"</span>) <span class="syn-keyword">as</span> f:
+        pickle.dump(contacts, f)
+
+<span class="syn-keyword">def</span> <span class="syn-function">add_contact</span>(contacts):
+    name = <span class="syn-function">input</span>(<span class="syn-string">"Enter name: "</span>)
+    phone = <span class="syn-function">input</span>(<span class="syn-string">"Enter phone: "</span>)
+    email = <span class="syn-function">input</span>(<span class="syn-string">"Enter email: "</span>)
+    contacts[name] = {<span class="syn-string">"phone"</span>: phone, <span class="syn-string">"email"</span>: email}
+    <span class="syn-function">save_contacts</span>(contacts)
+    <span class="syn-function">print</span>(<span class="syn-string">f"Contact '{name}' saved!"</span>)
+
+<span class="syn-keyword">def</span> <span class="syn-function">display_contacts</span>(contacts):
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> contacts:
+        <span class="syn-function">print</span>(<span class="syn-string">"No contacts found!"</span>)
+        <span class="syn-keyword">return</span>
+    <span class="syn-function">print</span>(<span class="syn-string">f"{'Name':<15} {'Phone':<15} {'Email':<25}"</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">"-"</span> * <span class="syn-number">55</span>)
+    <span class="syn-keyword">for</span> name, info <span class="syn-keyword">in</span> contacts.items():
+        <span class="syn-function">print</span>(<span class="syn-string">f"{name:<15} {info['phone']:<15} {info['email']:<25}"</span>)
+
+<span class="syn-comment"># Usage</span>
+contacts = <span class="syn-function">load_contacts</span>()
+<span class="syn-comment"># add_contact(contacts)</span>
+<span class="syn-comment"># display_contacts(contacts)</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block">
+        <div class="program-title">📌 Program 3: Robust Calculator with Full Exception Handling</div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-keyword">def</span> <span class="syn-function">calculator</span>():
+    <span class="syn-function">print</span>(<span class="syn-string">"="</span> * <span class="syn-number">35</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">" ROBUST CALCULATOR"</span>)
+    <span class="syn-function">print</span>(<span class="syn-string">"="</span> * <span class="syn-number">35</span>)
+
+    <span class="syn-keyword">while</span> <span class="syn-keyword">True</span>:
+        <span class="syn-keyword">try</span>:
+            expr = <span class="syn-function">input</span>(<span class="syn-string">"\nEnter expression (or 'quit'): "</span>)
+            <span class="syn-keyword">if</span> expr.lower() == <span class="syn-string">'quit'</span>:
+                <span class="syn-function">print</span>(<span class="syn-string">"Goodbye!"</span>)
+                <span class="syn-keyword">break</span>
+            <span class="syn-comment"># Try to evaluate the expression</span>
+            result = <span class="syn-function">eval</span>(expr)
+            <span class="syn-function">print</span>(<span class="syn-string">f" Result: {result}"</span>)
+        <span class="syn-keyword">except</span> <span class="syn-type">ZeroDivisionError</span>:
+            <span class="syn-function">print</span>(<span class="syn-string">" Error: Cannot divide by zero!"</span>)
+        <span class="syn-keyword">except</span> <span class="syn-type">SyntaxError</span>:
+            <span class="syn-function">print</span>(<span class="syn-string">" Error: Invalid expression! Check your syntax."</span>)
+        <span class="syn-keyword">except</span> <span class="syn-type">NameError</span> <span class="syn-keyword">as</span> e:
+            <span class="syn-function">print</span>(<span class="syn-string">f" Error: Unknown variable — {e}"</span>)
+        <span class="syn-keyword">except</span> <span class="syn-type">TypeError</span> <span class="syn-keyword">as</span> e:
+            <span class="syn-function">print</span>(<span class="syn-string">f" Error: Type mismatch — {e}"</span>)
+        <span class="syn-keyword">except</span> <span class="syn-type">Exception</span> <span class="syn-keyword">as</span> e:
+            <span class="syn-function">print</span>(<span class="syn-string">f" Unexpected error: {type(e).__name__}: {e}"</span>)
+        <span class="syn-keyword">finally</span>:
+            <span class="syn-function">print</span>(<span class="syn-string">" (Calculator is still running...)"</span>)
+
+<span class="syn-function">calculator</span>()</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>===================================
+ ROBUST CALCULATOR
+===================================
+
+Enter expression (or 'quit'): 10 + 5
+ Result: 15
+ (Calculator is still running...)
+
+Enter expression (or 'quit'): 100 / 0
+ Error: Cannot divide by zero!
+ (Calculator is still running...)
+
+Enter expression (or 'quit'): 2 ** 10
+ Result: 1024
+ (Calculator is still running...)
+
+Enter expression (or 'quit'): quit
+Goodbye!
+ (Calculator is still running...)</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 06: QUICK REFERENCE CHEAT SHEET -->
+    <!-- ============================================================ -->
+    <section id="sec-cheatsheet" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📋 Section 06 &bull; Summary</div>
+        <h2 class="ch-title">6. Quick Reference Cheat Sheet</h2>
+      </div>
+
+      <h3>File Operations</h3>
+      <table>
+        <tr><th>Operation</th><th>Code</th><th>Description</th></tr>
+        <tr><td>Open file</td><td><code>f = open('file.txt', 'r')</code></td><td>Opens for reading</td></tr>
+        <tr><td>Read all</td><td><code>f.read()</code></td><td>Returns entire file as string</td></tr>
+        <tr><td>Read line</td><td><code>f.readline()</code></td><td>Returns one line</td></tr>
+        <tr><td>Read all lines</td><td><code>f.readlines()</code></td><td>Returns list of lines</td></tr>
+        <tr><td>Write</td><td><code>f.write('text')</code></td><td>Writes string to file</td></tr>
+        <tr><td>Write lines</td><td><code>f.writelines(list)</code></td><td>Writes list of strings</td></tr>
+        <tr><td>Close</td><td><code>f.close()</code></td><td>Closes the file</td></tr>
+        <tr><td>With block</td><td><code>with open(...) as f:</code></td><td>Auto-closes file</td></tr>
+        <tr><td>Check exists</td><td><code>os.path.exists('file')</code></td><td>Returns True/False</td></tr>
+      </table>
+
+      <h3>Pickle Operations</h3>
+      <table>
+        <tr><th>Operation</th><th>Code</th></tr>
+        <tr><td>Import</td><td><code>import pickle</code></td></tr>
+        <tr><td>Save (dump)</td><td><code>pickle.dump(obj, file)</code></td></tr>
+        <tr><td>Load</td><td><code>obj = pickle.load(file)</code></td></tr>
+        <tr><td>To bytes</td><td><code>data = pickle.dumps(obj)</code></td></tr>
+        <tr><td>From bytes</td><td><code>obj = pickle.loads(data)</code></td></tr>
+        <tr><td>Open for pickle write</td><td><code>open('f.pkl', 'wb')</code></td></tr>
+        <tr><td>Open for pickle read</td><td><code>open('f.pkl', 'rb')</code></td></tr>
+      </table>
+
+      <h3>Exception Handling</h3>
+      <table>
+        <tr><th>Block</th><th>Purpose</th><th>When It Runs</th></tr>
+        <tr><td><code>try:</code></td><td>Code that might fail</td><td>Always runs first</td></tr>
+        <tr><td><code>except Type:</code></td><td>Handle specific error</td><td>Only if that error occurs</td></tr>
+        <tr><td><code>except:</code></td><td>Handle any error</td><td>Only if any error occurs</td></tr>
+        <tr><td><code>except Type as e:</code></td><td>Handle + capture message</td><td>Only if that error occurs</td></tr>
+        <tr><td><code>else:</code></td><td>Success code</td><td>Only if NO error occurred</td></tr>
+        <tr><td><code>finally:</code></td><td>Cleanup code</td><td>ALWAYS runs</td></tr>
+        <tr><td><code>raise</code></td><td>Throw an exception</td><td>When you call it</td></tr>
+        <tr><td><code>raise ExType(msg)</code></td><td>Throw specific exception</td><td>When you call it</td></tr>
+      </table>
+
+      <h3>Complete Exception Handling Template</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Code &bull; Template</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">try</span>:
+    <span class="syn-comment"># Step 1: Try risky code</span>
+    risky_operation()
+
+<span class="syn-keyword">except</span> <span class="syn-type">SpecificError</span>:
+    <span class="syn-comment"># Step 2a: Handle specific error</span>
+    handle_error()
+
+<span class="syn-keyword">except</span> (<span class="syn-type">Error1</span>, <span class="syn-type">Error2</span>) <span class="syn-keyword">as</span> e:
+    <span class="syn-comment"># Step 2b: Handle multiple errors</span>
+    handle_multiple(e)
+
+<span class="syn-keyword">except</span> <span class="syn-type">Exception</span> <span class="syn-keyword">as</span> e:
+    <span class="syn-comment"># Step 2c: Catch-all (last resort)</span>
+    handle_any(e)
+
+<span class="syn-keyword">else</span>:
+    <span class="syn-comment"># Step 3: Runs ONLY if no exception</span>
+    on_success()
+
+<span class="syn-keyword">finally</span>:
+    <span class="syn-comment"># Step 4: ALWAYS runs (cleanup)</span>
+    cleanup()</code></pre>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 30px; padding: 15px; color: var(--text-faint); font-size: 12px;">
+        ─── End of Files and Exceptions Notes ───<br>
+        <em>Practice each program by running it yourself. Experiment with different inputs!</em>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text);">Prepared by Umer Farooq</h4>
+          <p style="font-size: 0.85rem; color: var(--text-dim);">Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <a href="index.html" class="btn-nav">
+          <span>🏠</span> Course Portal
+        </a>
+        <a href="Lec_14_Dictionary.html" class="btn-nav">
+          <span>📖</span> Dictionaries
+        </a>
+        <a href="Lec_12_Tuples.html" class="btn-nav">
+          <span>📦</span> Tuples
+        </a>
+        <button class="btn-nav" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <span>⬆️</span> Back to Top
+        </button>
+        <button class="btn-nav" onclick="window.print()">
+          <span>🖨️</span> Print Notes
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="toggleTheme()" title="Toggle Theme">
+      <span id="theme-icon-float">☀️</span>
+    </button>
+    <button class="btn-float" onclick="window.print()" title="Print Page">
+      <span>🖨️</span>
+    </button>
+    <button class="btn-float" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to Top">
+      <span>▲</span>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcons(next);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    function copyCode(btn) {
+      const container = btn.closest('.code-container');
+      if (!container) return;
+      const codeBlock = container.querySelector('pre code') || container.querySelector('pre');
+      if (codeBlock) {
+        const textToCopy = codeBlock.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          btn.style.color = 'var(--green)';
+          btn.style.borderColor = 'var(--green)';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 2000);
+        }).catch(() => {
+          const range = document.createRange();
+          range.selectNode(codeBlock);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2000);
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+    });
+  </script>
+</body>
+
+</html>

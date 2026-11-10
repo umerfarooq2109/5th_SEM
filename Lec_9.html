@@ -1,0 +1,3175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lecture 9: Recursion, Recursion vs Iteration, and Tail Recursion in Python. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Lecture 9: Recursion, Recursion vs. Iteration &amp; Tail Recursion | SSM College of Engineering</title>
+
+  <!-- Google Fonts: Outfit & Manrope & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      /* IDE syntax highlighting tokens (Dark) */
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      /* IDE syntax highlighting tokens (Light) */
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #64748b;
+      --syn-function: #0284c7;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0d9488;
+      --syn-punctuation: #475569;
+      --syn-variable: #0f172a;
+      --syn-format: #b45309;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      font-size: 16px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Scroll Progress Bar */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      transition: width 0.1s ease;
+    }
+
+    /* Sticky Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      z-index: 900;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .nav-brand .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.82rem;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Container Layout */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--card) 0%, var(--bg-alt) 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius);
+      padding: 44px 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 36px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner::before {
+      content: "";
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .tag-accent { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+    .tag-teal { background: var(--teal-soft); color: var(--teal); border: 1px solid var(--teal); }
+    .tag-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid var(--purple); }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.65rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-dim);
+      font-size: 1.15rem;
+      max-width: 880px;
+      margin-bottom: 28px;
+      line-height: 1.65;
+    }
+
+    .hero-author-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .author-profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .author-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .author-details h4 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .author-details p {
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      margin-bottom: 0;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, #d46b17 100%);
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px var(--accent-glow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .meta-item {
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      padding: 14px 18px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .meta-item .val {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .meta-item .lbl {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* Table of Contents */
+    #toc-section {
+      margin-bottom: 50px;
+    }
+
+    .section-header-pill {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--teal);
+      background: var(--teal-soft);
+      border: 1px solid var(--teal);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .toc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .toc-card:hover {
+      background: var(--card-hover);
+      border-color: var(--teal);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+
+    .toc-num {
+      background: var(--cell-bg);
+      color: var(--accent);
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 800;
+      display: inline-block;
+      width: fit-content;
+      margin-bottom: 8px;
+    }
+
+    .toc-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .toc-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* Chapter / Topic Section */
+    .chapter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      margin-bottom: 48px;
+      box-shadow: 0 8px 24px var(--shadow);
+      scroll-margin-top: 80px;
+    }
+
+    .ch-header {
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .ch-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .ch-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .sub-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 32px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sub-sub-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 20px 0 10px;
+    }
+
+    .sec-badge {
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--teal);
+    }
+
+    /* Concept Table */
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0 28px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+
+    thead {
+      background: var(--bg-alt);
+    }
+
+    th {
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.6px;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--cell-border);
+      background: var(--cell-bg);
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: var(--table-stripe);
+    }
+
+    tbody tr:hover td {
+      background: var(--card-hover);
+      color: var(--text);
+    }
+
+    /* Callouts */
+    .callout {
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 20px 0;
+      border-left: 4px solid;
+    }
+
+    .callout.tip {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .callout.important {
+      background: var(--red-soft);
+      border-color: var(--red);
+    }
+
+    .callout.remember {
+      background: var(--purple-soft);
+      border-color: var(--purple);
+    }
+
+    .callout-head {
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .callout.tip .callout-head { color: var(--teal); }
+    .callout.important .callout-head { color: var(--red); }
+    .callout.remember .callout-head { color: var(--purple); }
+
+    .callout-body {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Program Box Grid */
+    .program-box {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 4px 16px var(--shadow);
+      margin-bottom: 28px;
+      scroll-margin-top: 80px;
+    }
+
+    .prog-tag-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .prog-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--accent-glow);
+    }
+
+    .prog-category-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: var(--blue-soft);
+      color: var(--blue);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .program-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .program-desc {
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    /* Code Container & macOS Header */
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .code-header {
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .code-title {
+      display: flex;
+      align-items: center;
+      font-family: var(--font-code);
+      font-size: 0.78rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--card-hover);
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .code-body {
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .code-body pre {
+      margin: 0;
+      font-family: var(--font-code);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+
+    /* Output Window */
+    .output-box {
+      background: #090a0d;
+      border: 1px solid #1a1e28;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .output-header {
+      background: #11131a;
+      border-bottom: 1px solid #1a1e28;
+      padding: 6px 14px;
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #7b8599;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .output-body {
+      padding: 12px 16px;
+      overflow-x: auto;
+    }
+
+    .output-body pre {
+      margin: 0;
+      font-family: var(--font-code);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: #9ece6a;
+    }
+
+    .prog-takeaway {
+      background: var(--cell-bg);
+      border-left: 3px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* Syntax Tokens */
+    .syn-keyword { color: var(--syn-keyword); font-weight: 600; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+
+    /* Site Footer */
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    /* Floating Action Buttons */
+    .float-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 800;
+    }
+
+    .btn-float {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-float:hover {
+      background: var(--accent);
+      color: white;
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 1.9rem; }
+      .container { padding: 20px 16px 60px; }
+      .hero-banner { padding: 28px 20px; }
+      .chapter { padding: 20px 16px; }
+      .program-box { padding: 18px 14px; }
+      .hero-author-box { flex-direction: column; align-items: flex-start; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- Sticky Navigation Bar -->
+  <header class="top-nav">
+    <a href="#" class="nav-brand">
+      <span class="badge">LEC 9</span>
+      <span>Python Programming</span>
+    </a>
+    <div class="nav-actions">
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF">
+        <span>🖨️</span> Print PDF
+      </button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon-nav">☀️</span>
+      </button>
+      <a href="#toc-section" class="btn-nav" style="text-decoration: none;">
+        <span>📑</span> Contents
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Banner -->
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">B.Tech Computer Science &amp; Engineering</span>
+        <span class="tag tag-teal">Chapter 3.3: Recursive Computation &amp; Stack Mechanics</span>
+        <span class="tag tag-purple">Complete Master Notes</span>
+      </div>
+      <h1 class="hero-title">Recursion, Iteration &amp; Tail Recursion in Depth</h1>
+      <p class="hero-subtitle">
+        A master-level, exhaustive examination of recursive computation in Python: activation records and call stack frame mechanics,
+        winding vs. unwinding phases, the algorithmic trade-offs between recursive and iterative paradigms,
+        the accumulator pattern for tail recursion, and CPython's runtime recursion limit.
+      </p>
+
+      <!-- Hero Author Box -->
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()">
+            <span>🖨️</span> Save as PDF / Print
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-meta-strip">
+        <div class="meta-item">
+          <span class="val">4</span>
+          <span class="lbl">Major Parts</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">21</span>
+          <span class="lbl">IDE Code Programs</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">6x3+3</span>
+          <span class="lbl">Program Matrix</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">100%</span>
+          <span class="lbl">Complete Notes</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Table of Contents -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Table of Contents &amp; Quick Navigation</div>
+      <div class="toc-grid">
+
+        <a href="#part-1" class="toc-card">
+          <span class="toc-num">01</span>
+          <div class="toc-card-title">1. Recursion Fundamentals & Call Stack Architecture</div>
+          <div class="toc-card-desc">Foundational theory of procedural recursion: the base case stopping condition, recursive reduction steps, call stack activation records (winding & unwinding), memory footprint, and maximum recursion depth limits.</div>
+          <div style="margin-top: 12px; font-size: 0.75rem; color: var(--teal); font-weight: 700;">6 Programs • Verified &rarr;</div>
+        </a>
+        
+
+        <a href="#part-2" class="toc-card">
+          <span class="toc-num">02</span>
+          <div class="toc-card-title">2. Recursion vs. Iteration: Architectural Comparison</div>
+          <div class="toc-card-desc">Exhaustive side-by-side evaluation of recursive self-invocation versus iterative looping: state management, memory overhead, execution speed, stack overflow risks, and algorithmic trade-offs.</div>
+          <div style="margin-top: 12px; font-size: 0.75rem; color: var(--teal); font-weight: 700;">6 Programs • Verified &rarr;</div>
+        </a>
+        
+
+        <a href="#part-3" class="toc-card">
+          <span class="toc-num">03</span>
+          <div class="toc-card-title">3. Tail Recursion & Tail Call Optimization (TCO)</div>
+          <div class="toc-card-desc">Deep architectural analysis of tail position calls, the accumulator pattern, call frame elimination, why Python does not implement TCO, sys stack limits, and trampolining.</div>
+          <div style="margin-top: 12px; font-size: 0.75rem; color: var(--teal); font-weight: 700;">6 Programs • Verified &rarr;</div>
+        </a>
+        
+
+        <a href="#part-4" class="toc-card">
+          <span class="toc-num">04</span>
+          <div class="toc-card-title">4. Capstone Recursive Algorithms & Master Architectural Matrix</div>
+          <div class="toc-card-desc">Industrial capstone algorithms (Tower of Hanoi, Recursive Binary Search, Deep JSON Tree Navigator), master 5-column comparison matrix, engineering decision framework, and top exam takeaways.</div>
+          <div style="margin-top: 12px; font-size: 0.75rem; color: var(--teal); font-weight: 700;">3 Programs • Verified &rarr;</div>
+        </a>
+        
+      </div>
+    </section>
+
+    <!-- Main Content Stream -->
+    
+    <!-- ========================================== -->
+    <!-- PART 01 • ALGORITHMIC SELF-INVOCATION: 1. RECURSION FUNDAMENTALS & CALL STACK ARCHITECTURE -->
+    <!-- ========================================== -->
+    <section id="part-1" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 01 • Algorithmic Self-Invocation</span>
+        <h2 class="ch-title">1. Recursion Fundamentals & Call Stack Architecture</h2>
+      </div>
+
+      <p class="hero-subtitle">Foundational theory of procedural recursion: the base case stopping condition, recursive reduction steps, call stack activation records (winding & unwinding), memory footprint, and maximum recursion depth limits.</p>
+
+      <h3 class="sub-title" id="sec-01-theory"><span class="sec-badge">01.1</span> Theoretical Foundation &amp; Architecture</h3>
+      <div style="margin-bottom: 24px; color: var(--text); line-height: 1.7;">
+        <strong>Recursion</strong> is a fundamental programming and mathematical paradigm where a function solves a complex computational problem by <strong>calling itself</strong> on smaller instances of the exact same problem.
+<p>Instead of relying on explicit iteration constructs (such as <code>for</code> or <code>while</code> loops), a recursive function breaks down a task into miniature subproblems until it reaches a trivial, directly solvable condition.</p>
+<div style="background: var(--cell-bg); border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0;">
+  <strong style="color: var(--accent); font-size: 1.1rem;">🏛️ The Two Golden Pillars of Every Recursive Function:</strong>
+  <ol style="margin: 8px 0 0 20px; font-size: 0.96rem; color: var(--text); line-height: 1.8;">
+    <li><strong style="color: var(--teal);">1. The Base Case (Stopping Condition):</strong> The non-recursive boundary condition that immediately returns a known value without making any further self-invocations. <em>Without a base case, the function will call itself infinitely until the program crashes!</em></li>
+    <li><strong style="color: var(--purple);">2. The Recursive Step (Inductive Reduction):</strong> The section of the function where it calls itself with a strictly smaller or simpler input argument, guaranteeing steady mathematical progression toward the base case.</li>
+  </ol>
+</div>
+
+    <div style="margin: 24px 0 28px;">
+      <div style="font-weight: 700; color: var(--teal); font-size: 0.96rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading);">
+        <span style="font-size: 1.1rem;">📝</span> Universal Structure of a Recursive Function
+      </div>
+      <div class="code-container" style="margin-bottom: 6px; border-left: 3px solid var(--teal);">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">recursion_blueprint.py</span>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--accent); font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase;">ALGORITHMIC BLUEPRINT</span>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Universal Recursive Blueprint</span>
+<span class="syn-keyword">def</span> <span class="syn-function">recursive_function</span>(<span class="syn-variable">problem_input</span>):
+    <span class="syn-comment"># 1. BASE CASE: Direct stopping condition (NO self-call)</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">is_base_condition</span>(<span class="syn-variable">problem_input</span>):
+        <span class="syn-keyword">return</span> <span class="syn-variable">base_result</span>
+        
+    <span class="syn-comment"># 2. RECURSIVE STEP: Reduce problem size and call self</span>
+    <span class="syn-variable">smaller_input</span> = <span class="syn-variable">reduce_problem</span>(<span class="syn-variable">problem_input</span>)
+    <span class="syn-variable">sub_result</span> = <span class="syn-variable">recursive_function</span>(<span class="syn-variable">smaller_input</span>)
+    
+    <span class="syn-comment"># 3. Combine subproblem result</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">combine</span>(<span class="syn-variable">problem_input</span>, <span class="syn-variable">sub_result</span>)</code></pre>
+        </div>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 0.88rem; color: var(--text-dim); line-height: 1.5;">Every recursive algorithm must strictly guarantee that input sizes diminish toward the base case on every invocation.</p>
+    </div>
+    
+<h4 class="sub-sub-title">The Call Stack Lifecycle: Winding vs. Unwinding</h4>
+<p>When Python executes a recursive function, the runtime uses the <strong>Call Stack</strong> to manage execution context:</p>
+<ul>
+  <li><strong>Winding Phase (Stack Growth):</strong> Each self-invocation pushes a new <em>activation record (stack frame)</em> containing local variables and return pointers onto the top of the call stack. The caller pauses, waiting for the child call to complete.</li>
+  <li><strong>Base Case Trigger:</strong> When the smallest input meets the base condition, stack expansion halts and the final leaf value is evaluated.</li>
+  <li><strong>Unwinding Phase (Stack Backtracking):</strong> The call stack pops frames one by one from top to bottom, passing computed return values back down the chain until the initial caller receives the final answer.</li>
+</ul>
+<div style="background: var(--cell-bg); border-left: 4px solid var(--red); padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 18px 0;">
+  <strong style="color: var(--red); font-size: 1.05rem;">⚠️ Critical Python Fact: Recursion Depth Limits &amp; Stack Overflow</strong>
+  <p style="margin: 6px 0 0 0; font-size: 0.92rem; color: var(--text);">
+    Unlike iteration (which consumes $O(1)$ constant memory), each recursive call consumes a physical stack frame in RAM ($O(N)$ auxiliary stack space). To protect your operating system from crashing due to stack overflow, Python enforces a default safety limit (typically <strong>1,000 recursive frames</strong>). Exceeding this triggers a runtime crash: <code>RecursionError: maximum recursion depth exceeded</code>.
+  </p>
+</div>
+      </div>
+
+      
+        <h3 class="sub-title" id="sec-01-concepts"><span class="sec-badge">01.2</span> One-Line Academic Definitions &amp; Mechanisms</h3>
+        <p style="color: var(--text-dim); margin-bottom: 12px;">Executive academic definitions, syntax archetypes, and runtime mechanics for this module:</p>
+        
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Concept / Term</th>
+            <th style="width: 32%;">Syntax / Signature Archetype</th>
+            <th style="width: 43%;">Academic Definition &amp; Mechanism</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Recursion</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-keyword">def</span> <span class="syn-function">f</span>(<span class="syn-variable">n</span>): ... <span class="syn-variable">f</span>(<span class="syn-variable">n</span>-<span class="syn-number">1</span>)</code></td>
+          <td>Algorithmic technique where a subroutine calls itself to solve smaller subproblems.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Base Case</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">1</span>: <span class="syn-keyword">return</span> <span class="syn-number">1</span></code></td>
+          <td>The terminal condition that halts recursive expansion and initiates stack unwinding.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Recursive Step</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-keyword">return</span> <span class="syn-variable">n</span> * <span class="syn-variable">f</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>)</code></td>
+          <td>The operational branch invoking the function with reduced input arguments.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Call Stack Frame</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Activation</span> <span class="syn-variable">Record</span></code></td>
+          <td>Block of memory allocated per function invocation containing parameters and return addresses.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Winding Phase</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Stack</span> <span class="syn-variable">Pushing</span> <span class="syn-variable">Phase</span></code></td>
+          <td>The sequential accumulation of stack frames as recursive calls descend deeper.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Unwinding Phase</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Stack</span> <span class="syn-variable">Popping</span> <span class="syn-variable">Phase</span></code></td>
+          <td>The return phase where computed values propagate back up the popped stack frames.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">RecursionError</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">RecursionError</span>: <span class="syn-type">max</span> <span class="syn-variable">depth</span></code></td>
+          <td>Built-in exception raised when recursive depth exceeds sys.getrecursionlimit().</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Auxiliary Stack Space</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">O</span>(<span class="syn-variable">N</span>) <span class="syn-variable">Memory</span> <span class="syn-variable">Overhead</span></code></td>
+          <td>The linear RAM memory allocated by the interpreter to maintain the chain of active stack frames.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Mathematical Induction</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">P</span>(<span class="syn-number">0</span>) <span class="syn-keyword">and</span> <span class="syn-variable">P</span>(<span class="syn-variable">k</span>) -&gt; <span class="syn-variable">P</span>(<span class="syn-variable">k</span>+<span class="syn-number">1</span>)</code></td>
+          <td>The foundational mathematical proof principle underpinning recursive program design.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Direct vs Indirect Recursion</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">A</span> -&gt; <span class="syn-variable">A</span> <span class="syn-variable">vs</span> <span class="syn-variable">A</span> -&gt; <span class="syn-variable">B</span> -&gt; <span class="syn-variable">A</span></code></td>
+          <td>Direct calls invoke self; indirect recursion involves cyclic mutual invocations between multiple functions.</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+    
+        
+
+      
+        <h3 class="sub-title" id="sec-01-programs"><span class="sec-badge">01.3</span> Executable Practical Programs &amp; Trace Analysis</h3>
+        <p style="color: var(--text-dim); margin-bottom: 18px;">Review the verified Python implementations below with syntax highlighting, live standard output streams, and architectural takeaways:</p>
+        
+    <div class="program-box" id="p1_1_countdown_and_countup">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 1.1: Natural Countdown &amp; Count-Up (Visualizing Winding &amp; Unwinding)</h4>
+      <p class="program-desc">Demonstrates the order of execution before recursive invocation (winding) and after recursive invocation (unwinding).</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Demonstrating execution order in recursion</span>
+<span class="syn-keyword">def</span> <span class="syn-function">countdown_and_up</span>(<span class="syn-variable">n</span>):
+    <span class="syn-comment"># 1. Base Case</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">0</span>:
+        <span class="syn-type">print</span>(<span class="syn-string">&quot;&gt;&gt; Base Case Reached (n = 0)! Initiating Unwinding...&quot;</span>)
+        <span class="syn-keyword">return</span>
+
+    <span class="syn-comment"># Executed during WINDING (Going Down)</span>
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;Winding (Push): n = {n}&quot;</span>)
+    
+    <span class="syn-comment"># 2. Recursive Step</span>
+    <span class="syn-variable">countdown_and_up</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>)
+    
+    <span class="syn-comment"># Executed during UNWINDING (Coming Back Up)</span>
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;Unwinding (Pop): n = {n}&quot;</span>)
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;=== STARTING RECURSION TRACE (n = 3) ===&quot;</span>)
+<span class="syn-variable">countdown_and_up</span>(<span class="syn-number">3</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;=== RECURSION COMPLETE ===&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>=== STARTING RECURSION TRACE (n = 3) ===
+Winding (Push): n = 3
+Winding (Push): n = 2
+Winding (Push): n = 1
+&gt;&gt; Base Case Reached (n = 0)! Initiating Unwinding...
+Unwinding (Pop): n = 1
+Unwinding (Pop): n = 2
+Unwinding (Pop): n = 3
+=== RECURSION COMPLETE ===</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Statements before the recursive call execute in forward order (3, 2, 1); statements after execute in reverse order (1, 2, 3) as stack frames pop.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p1_2_factorial_with_call_tracing">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 1.2: Factorial of a Number with Call Stack Tracing</h4>
+      <p class="program-desc">Computes n! = n * (n-1)! while printing step-by-step stack frame evaluations.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Factorial with trace logging</span>
+<span class="syn-keyword">def</span> <span class="syn-function">factorial</span>(<span class="syn-variable">n</span>, <span class="syn-variable">depth</span>=<span class="syn-number">0</span>):
+    <span class="syn-variable">indent</span> = <span class="syn-string">&quot;  &quot;</span> * <span class="syn-variable">depth</span>
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;{indent}--&gt; factorial({n}) called&quot;</span>)
+    
+    <span class="syn-comment"># Base Case: 0! = 1 and 1! = 1</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">1</span>:
+        <span class="syn-type">print</span>(<span class="syn-string">f&quot;{indent}&lt;-- Base Case met: factorial({n}) = 1&quot;</span>)
+        <span class="syn-keyword">return</span> <span class="syn-number">1</span>
+        
+    <span class="syn-comment"># Recursive Step: n * factorial(n - 1)</span>
+    <span class="syn-variable">sub_result</span> = <span class="syn-variable">factorial</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>, <span class="syn-variable">depth</span> + <span class="syn-number">1</span>)
+    <span class="syn-variable">total</span> = <span class="syn-variable">n</span> * <span class="syn-variable">sub_result</span>
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;{indent}&lt;-- Returning: {n} * factorial({n-1}) = {total}&quot;</span>)
+    <span class="syn-keyword">return</span> <span class="syn-variable">total</span>
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Calculating 5! (Factorial of 5):&quot;</span>)
+<span class="syn-variable">result</span> = <span class="syn-variable">factorial</span>(<span class="syn-number">5</span>)
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;\nFinal Result: 5! = {result}&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Calculating 5! (Factorial of 5):
+--&gt; factorial(5) called
+  --&gt; factorial(4) called
+    --&gt; factorial(3) called
+      --&gt; factorial(2) called
+        --&gt; factorial(1) called
+        &lt;-- Base Case met: factorial(1) = 1
+      &lt;-- Returning: 2 * factorial(1) = 2
+    &lt;-- Returning: 3 * factorial(2) = 6
+  &lt;-- Returning: 4 * factorial(3) = 24
+&lt;-- Returning: 5 * factorial(4) = 120
+
+Final Result: 5! = 120</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Each stack frame computes n * sub_result only after receiving the completed return value from the frame below it.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p1_3_sum_of_natural_numbers">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 1.3: Sum of First N Natural Numbers</h4>
+      <p class="program-desc">Computes S(n) = n + S(n-1) recursively for arithmetic progression aggregation.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Recursive sum of numbers from 1 to n</span>
+<span class="syn-keyword">def</span> <span class="syn-function">sum_natural</span>(<span class="syn-variable">n</span>):
+    <span class="syn-comment"># Base Case</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">n</span>
+    <span class="syn-comment"># Recursive Step</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">n</span> + <span class="syn-variable">sum_natural</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>)
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Sum of numbers 1 to 5  :&quot;</span>, <span class="syn-variable">sum_natural</span>(<span class="syn-number">5</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Sum of numbers 1 to 10 :&quot;</span>, <span class="syn-variable">sum_natural</span>(<span class="syn-number">10</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Sum of numbers 1 to 100:&quot;</span>, <span class="syn-variable">sum_natural</span>(<span class="syn-number">100</span>))</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Sum of numbers 1 to 5  : 15
+Sum of numbers 1 to 10 : 55
+Sum of numbers 1 to 100: 5050</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> sum_natural(n) reduces the problem by adding n to the sum of the preceding (n-1) numbers until reaching base case n=1.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p1_4_power_exponentiation_recursive">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 1.4: Recursive Exponentiation (Power Function: x^n)</h4>
+      <p class="program-desc">Computes mathematical power power(base, exp) = base * power(base, exp - 1).</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Recursive exponentiation</span>
+<span class="syn-keyword">def</span> <span class="syn-function">power</span>(<span class="syn-variable">base</span>, <span class="syn-variable">exp</span>):
+    <span class="syn-comment"># Base Case: any number to power 0 is 1</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">exp</span> == <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-number">1</span>
+    <span class="syn-comment"># Negative exponent handling</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">exp</span> &lt; <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-number">1</span> / <span class="syn-variable">power</span>(<span class="syn-variable">base</span>, -<span class="syn-variable">exp</span>)
+    <span class="syn-comment"># Recursive Step: base * base^(exp - 1)</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">base</span> * <span class="syn-variable">power</span>(<span class="syn-variable">base</span>, <span class="syn-variable">exp</span> - <span class="syn-number">1</span>)
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;2^5  =&quot;</span>, <span class="syn-variable">power</span>(<span class="syn-number">2</span>, <span class="syn-number">5</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;5^3  =&quot;</span>, <span class="syn-variable">power</span>(<span class="syn-number">5</span>, <span class="syn-number">3</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;10^4 =&quot;</span>, <span class="syn-variable">power</span>(<span class="syn-number">10</span>, <span class="syn-number">4</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;2^-3 =&quot;</span>, <span class="syn-variable">power</span>(<span class="syn-number">2</span>, -<span class="syn-number">3</span>))</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>2^5  = 32
+5^3  = 125
+10^4 = 10000
+2^-3 = 0.125</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> The base case exp=0 terminates recursion with 1, multiplying &#x27;base&#x27; cumulatively during stack unwinding.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p1_5_string_reversal_recursive">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 1.5: Reversing a String via Recursive Decomposition</h4>
+      <p class="program-desc">Splits text into first character and remaining substring: reverse(s) = reverse(s[1:]) + s[0].</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Recursive string reversal</span>
+<span class="syn-keyword">def</span> <span class="syn-function">reverse_string</span>(<span class="syn-variable">s</span>):
+    <span class="syn-comment"># Base Case: empty string or single character</span>
+    <span class="syn-keyword">if</span> <span class="syn-type">len</span>(<span class="syn-variable">s</span>) &lt;= <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">s</span>
+    <span class="syn-comment"># Recursive Step: reverse rest of string + attach first character to the end</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">reverse_string</span>(<span class="syn-variable">s</span>[<span class="syn-number">1</span>:]) + <span class="syn-variable">s</span>[<span class="syn-number">0</span>]
+
+<span class="syn-variable">text1</span> = <span class="syn-string">&quot;Python&quot;</span>
+<span class="syn-variable">text2</span> = <span class="syn-string">&quot;SSM College&quot;</span>
+<span class="syn-variable">text3</span> = <span class="syn-string">&quot;Recursion&quot;</span>
+
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Original: {text1:12s} | Reversed: {reverse_string(text1)}&quot;</span>)
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Original: {text2:12s} | Reversed: {reverse_string(text2)}&quot;</span>)
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Original: {text3:12s} | Reversed: {reverse_string(text3)}&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Original: Python       | Reversed: nohtyP
+Original: SSM College  | Reversed: egelloC MSS
+Original: Recursion    | Reversed: noisruceR</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Decomposes &#x27;Python&#x27; into &#x27;y&#x27; + &#x27;t&#x27; + &#x27;h&#x27; + &#x27;o&#x27; + &#x27;n&#x27; + &#x27;P&#x27;, assembling characters in reverse order on unwinding.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p1_6_palindrome_checker_recursive">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 1.6: Palindrome Verification via Boundary Recursion</h4>
+      <p class="program-desc">Compares leftmost and rightmost characters, then recursively validates the inner substring.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Recursive palindrome verification</span>
+<span class="syn-keyword">def</span> <span class="syn-function">is_palindrome</span>(<span class="syn-variable">s</span>):
+    <span class="syn-comment"># Clean string: lowercase and remove spaces</span>
+    <span class="syn-variable">s</span> = <span class="syn-variable">s</span>.<span class="syn-function">lower</span>().<span class="syn-function">replace</span>(<span class="syn-string">&quot; &quot;</span>, <span class="syn-string">&quot;&quot;</span>)
+    
+    <span class="syn-comment"># Base Case: 0 or 1 character is always a palindrome</span>
+    <span class="syn-keyword">if</span> <span class="syn-type">len</span>(<span class="syn-variable">s</span>) &lt;= <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-preprocessor">True</span>
+        
+    <span class="syn-comment"># Check boundary characters</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">s</span>[<span class="syn-number">0</span>] != <span class="syn-variable">s</span>[-<span class="syn-number">1</span>]:
+        <span class="syn-keyword">return</span> <span class="syn-preprocessor">False</span>
+        
+    <span class="syn-comment"># Recursive Step: check inner substring</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">is_palindrome</span>(<span class="syn-variable">s</span>[<span class="syn-number">1</span>:-<span class="syn-number">1</span>])
+
+<span class="syn-variable">test_words</span> = [<span class="syn-string">&quot;radar&quot;</span>, <span class="syn-string">&quot;level&quot;</span>, <span class="syn-string">&quot;Python&quot;</span>, <span class="syn-string">&quot;racecar&quot;</span>, <span class="syn-string">&quot;step on no pets&quot;</span>, <span class="syn-string">&quot;hello&quot;</span>]
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;=== PALINDROME RECURSIVE TEST ===&quot;</span>)
+<span class="syn-keyword">for</span> <span class="syn-variable">word</span> <span class="syn-keyword">in</span> <span class="syn-variable">test_words</span>:
+    <span class="syn-variable">result</span> = <span class="syn-variable">is_palindrome</span>(<span class="syn-variable">word</span>)
+    <span class="syn-variable">status</span> = <span class="syn-string">&quot;VALID PALINDROME&quot;</span> <span class="syn-keyword">if</span> <span class="syn-variable">result</span> <span class="syn-keyword">else</span> <span class="syn-string">&quot;NOT A PALINDROME&quot;</span>
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot; &#x27;{word:18s}&#x27; -&gt; {status}&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>=== PALINDROME RECURSIVE TEST ===
+ &#x27;radar             &#x27; -&gt; VALID PALINDROME
+ &#x27;level             &#x27; -&gt; VALID PALINDROME
+ &#x27;Python            &#x27; -&gt; NOT A PALINDROME
+ &#x27;racecar           &#x27; -&gt; VALID PALINDROME
+ &#x27;step on no pets   &#x27; -&gt; VALID PALINDROME
+ &#x27;hello             &#x27; -&gt; NOT A PALINDROME</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Checks first and last characters simultaneously (s[0] == s[-1]), peeling off boundary characters until base condition.
+      </div>
+    </div>
+    
+        
+    </section>
+    
+
+    <!-- ========================================== -->
+    <!-- PART 02 • COMPARATIVE ANALYSIS: 2. RECURSION VS. ITERATION: ARCHITECTURAL COMPARISON -->
+    <!-- ========================================== -->
+    <section id="part-2" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 02 • Comparative Analysis</span>
+        <h2 class="ch-title">2. Recursion vs. Iteration: Architectural Comparison</h2>
+      </div>
+
+      <p class="hero-subtitle">Exhaustive side-by-side evaluation of recursive self-invocation versus iterative looping: state management, memory overhead, execution speed, stack overflow risks, and algorithmic trade-offs.</p>
+
+      <h3 class="sub-title" id="sec-02-theory"><span class="sec-badge">02.1</span> Theoretical Foundation &amp; Architecture</h3>
+      <div style="margin-bottom: 24px; color: var(--text); line-height: 1.7;">
+        Both <strong>recursion</strong> and <strong>iteration</strong> are Turing-complete control flow mechanisms designed to perform repetitive computational tasks. Any problem that can be solved iteratively can also be formulated recursively, and vice versa.
+<p>However, their underlying runtime mechanics, memory footprints, and execution characteristics differ radically:</p>
+<div class="table-container" style="margin: 20px 0;">
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%;">Comparison Dimension</th>
+        <th style="width: 32%;">Recursive Approach</th>
+        <th style="width: 32%;">Iterative Approach</th>
+        <th style="width: 18%;">Architectural Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight: 700; color: var(--accent);">Control Mechanism</td>
+        <td>Function self-invocation with parameter reduction.</td>
+        <td>Explicit loops (<code>for</code>, <code>while</code>) with variable counters.</td>
+        <td>Stack frames vs. CPU registers</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--teal);">Termination Rule</td>
+        <td>Base case condition returns without recursive call.</td>
+        <td>Loop condition expression evaluates to <code>False</code> or <code>break</code>.</td>
+        <td>Stack unwinding vs. loop exit</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--purple);">Memory Overhead</td>
+        <td><strong>$O(N)$ Auxiliary Space:</strong> Each call allocates a stack frame in RAM.</td>
+        <td><strong>$O(1)$ Constant Space:</strong> Reuses existing memory registers.</td>
+        <td>Stack memory vs. zero extra RAM</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--red);">Failure Mode</td>
+        <td><code>RecursionError: maximum recursion depth exceeded</code>.</td>
+        <td>Infinite loop (high CPU utilization, no stack crash).</td>
+        <td>Crash vs. hanging process</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--blue);">Optimal Use Cases</td>
+        <td>Hierarchical trees, divide-and-conquer (MergeSort), graphs, nested JSON.</td>
+        <td>Linear arrays, counting, sequential streams, high-throughput loops.</td>
+        <td>Expressiveness vs. raw speed</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    <div style="margin: 24px 0 28px;">
+      <div style="font-weight: 700; color: var(--teal); font-size: 0.96rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading);">
+        <span style="font-size: 1.1rem;">📝</span> Recursion vs. Iteration Structural Blueprint
+      </div>
+      <div class="code-container" style="margin-bottom: 6px; border-left: 3px solid var(--teal);">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">recursion_blueprint.py</span>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--accent); font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase;">ALGORITHMIC BLUEPRINT</span>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># ==========================================</span>
+<span class="syn-comment"># 1. RECURSIVE ARCHITECTURE (Divide &amp; Conquer)</span>
+<span class="syn-comment"># ==========================================</span>
+<span class="syn-keyword">def</span> <span class="syn-function">recursive_count</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">0</span>:        <span class="syn-comment"># Base Case</span>
+        <span class="syn-keyword">return</span>
+    <span class="syn-type">print</span>(<span class="syn-variable">n</span>)
+    <span class="syn-variable">recursive_count</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>)  <span class="syn-comment"># O(N) Stack Frames created!</span>
+
+<span class="syn-comment"># ==========================================</span>
+<span class="syn-comment"># 2. ITERATIVE ARCHITECTURE (Loop Counter)</span>
+<span class="syn-comment"># ==========================================</span>
+<span class="syn-keyword">def</span> <span class="syn-function">iterative_count</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">while</span> <span class="syn-variable">n</span> &gt; <span class="syn-number">0</span>:      <span class="syn-comment"># Loop Condition</span>
+        <span class="syn-type">print</span>(<span class="syn-variable">n</span>)
+        <span class="syn-variable">n</span> -= <span class="syn-number">1</span>        <span class="syn-comment"># O(1) Constant Memory reused!</span></code></pre>
+        </div>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 0.88rem; color: var(--text-dim); line-height: 1.5;">Iteration reuses a single local variable inside one stack frame; recursion builds a chain of N activation frames.</p>
+    </div>
+    
+      </div>
+
+      
+        <h3 class="sub-title" id="sec-02-concepts"><span class="sec-badge">02.2</span> One-Line Academic Definitions &amp; Mechanisms</h3>
+        <p style="color: var(--text-dim); margin-bottom: 12px;">Executive academic definitions, syntax archetypes, and runtime mechanics for this module:</p>
+        
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Concept / Term</th>
+            <th style="width: 32%;">Syntax / Signature Archetype</th>
+            <th style="width: 43%;">Academic Definition &amp; Mechanism</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Iteration</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-keyword">for</span> / <span class="syn-keyword">while</span> <span class="syn-variable">loops</span></code></td>
+          <td>Executing a block of statements repeatedly using loop counters and condition evaluations.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Recursion vs Iteration</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Stack</span> <span class="syn-variable">Frames</span> <span class="syn-variable">vs</span> <span class="syn-variable">Loop</span> <span class="syn-variable">State</span></code></td>
+          <td>Fundamental architectural choice between call stack branching and register counter looping.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Space Complexity Gap</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">O</span>(<span class="syn-variable">N</span>) <span class="syn-variable">vs</span> <span class="syn-variable">O</span>(<span class="syn-number">1</span>) <span class="syn-variable">Memory</span></code></td>
+          <td>Recursion consumes linear stack frames; iteration operates in constant auxiliary space.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Call Overhead</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Frame</span> <span class="syn-variable">allocation</span> <span class="syn-variable">cost</span></code></td>
+          <td>The CPU cycle cost of pushing registers, copying parameters, and managing call stack pointers.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Divide and Conquer</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">MergeSort</span> / <span class="syn-variable">QuickSort</span></code></td>
+          <td>Algorithmic design paradigm breaking a problem into disjoint subproblems solved recursively.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Infinite Recursion</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Crash</span> <span class="syn-variable">via</span> <span class="syn-variable">Stack</span> <span class="syn-variable">Overflow</span></code></td>
+          <td>Runaway recursive execution exhausting call stack capacity and triggering RecursionError.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Infinite Loop</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Hanging</span> <span class="syn-variable">CPU</span> <span class="syn-variable">execution</span></code></td>
+          <td>Runaway iterative execution running indefinitely without allocating extra memory.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Tree Traversal Natural Fit</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Preorder</span> / <span class="syn-variable">Inorder</span> / <span class="syn-variable">Postorder</span></code></td>
+          <td>Hierarchical data structures with branching paths that map elegantly to recursive calls.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">State Encapsulation</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Parameters</span> <span class="syn-variable">vs</span> <span class="syn-variable">Counter</span> <span class="syn-variable">Variables</span></code></td>
+          <td>Recursion stores intermediate state on stack frames; iteration mutates local variables.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Performance Profile</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Iterative</span> <span class="syn-variable">Speed</span> <span class="syn-variable">Advantage</span></code></td>
+          <td>Loops generally execute 2x-5x faster in Python due to zero stack frame instantiation overhead.</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+    
+        
+
+      
+        <h3 class="sub-title" id="sec-02-programs"><span class="sec-badge">02.3</span> Executable Practical Programs &amp; Trace Analysis</h3>
+        <p style="color: var(--text-dim); margin-bottom: 18px;">Review the verified Python implementations below with syntax highlighting, live standard output streams, and architectural takeaways:</p>
+        
+    <div class="program-box" id="p2_1_factorial_comparison">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 2.1: Factorial Calculation — Recursive vs. Iterative</h4>
+      <p class="program-desc">Direct comparison of factorial logic implemented via recursion vs. a standard iterative for-loop.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># 1. Recursive Factorial (O(N) Stack Space)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">factorial_recursive</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-number">1</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">n</span> * <span class="syn-variable">factorial_recursive</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>)
+
+<span class="syn-comment"># 2. Iterative Factorial (O(1) Constant Space)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">factorial_iterative</span>(<span class="syn-variable">n</span>):
+    <span class="syn-variable">result</span> = <span class="syn-number">1</span>
+    <span class="syn-keyword">for</span> <span class="syn-variable">i</span> <span class="syn-keyword">in</span> <span class="syn-type">range</span>(<span class="syn-number">2</span>, <span class="syn-variable">n</span> + <span class="syn-number">1</span>):
+        <span class="syn-variable">result</span> *= <span class="syn-variable">i</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">result</span>
+
+<span class="syn-variable">n_val</span> = <span class="syn-number">6</span>
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;factorial_recursive({n_val}) = {factorial_recursive(n_val)}&quot;</span>)
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;factorial_iterative({n_val}) = {factorial_iterative(n_val)}&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>factorial_recursive(6) = 720
+factorial_iterative(6) = 720</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Both compute identical outputs (720), but the iterative version avoids allocating 6 stack activation frames.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p2_2_fibonacci_comparison_complexity">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 2.2: Fibonacci Numbers — Exponential Recursive Tree vs. Linear Iterative DP</h4>
+      <p class="program-desc">Contrasts naive recursion (O(2^N) time complexity) with iterative state accumulation (O(N) linear time).</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># 1. Naive Recursive Fibonacci: O(2^N) Exponential Time!</span>
+<span class="syn-keyword">def</span> <span class="syn-function">fib_recursive</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-number">0</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-number">1</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">fib_recursive</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>) + <span class="syn-variable">fib_recursive</span>(<span class="syn-variable">n</span> - <span class="syn-number">2</span>)
+
+<span class="syn-comment"># 2. Iterative Fibonacci: O(N) Linear Time &amp; O(1) Space!</span>
+<span class="syn-keyword">def</span> <span class="syn-function">fib_iterative</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-number">0</span>
+    <span class="syn-variable">a</span>, <span class="syn-variable">b</span> = <span class="syn-number">0</span>, <span class="syn-number">1</span>
+    <span class="syn-keyword">for</span> <span class="syn-variable">_</span> <span class="syn-keyword">in</span> <span class="syn-type">range</span>(<span class="syn-number">2</span>, <span class="syn-variable">n</span> + <span class="syn-number">1</span>):
+        <span class="syn-variable">a</span>, <span class="syn-variable">b</span> = <span class="syn-variable">b</span>, <span class="syn-variable">a</span> + <span class="syn-variable">b</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">b</span>
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;=== FIBONACCI BENCHMARK (n = 10) ===&quot;</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Recursive Result:&quot;</span>, <span class="syn-variable">fib_recursive</span>(<span class="syn-number">10</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Iterative Result:&quot;</span>, <span class="syn-variable">fib_iterative</span>(<span class="syn-number">10</span>))
+
+<span class="syn-comment"># Iterative can easily calculate n = 50 instantly:</span>
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Iterative fib(50):&quot;</span>, <span class="syn-variable">fib_iterative</span>(<span class="syn-number">50</span>))</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>=== FIBONACCI BENCHMARK (n = 10) ===
+Recursive Result: 55
+Iterative Result: 55
+Iterative fib(50): 12586269025</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Naive recursive fib(n) branches into an exponential tree of redundant calls; the iterative version completes in a single linear pass.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p2_3_list_summation_comparison">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 2.3: List Summation — Recursive Head/Tail vs. Iterative Accumulator</h4>
+      <p class="program-desc">Demonstrates summing an array of numbers using recursive slicing vs. a standard loop accumulator.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># 1. Recursive List Sum</span>
+<span class="syn-keyword">def</span> <span class="syn-function">sum_list_recursive</span>(<span class="syn-variable">lst</span>):
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> <span class="syn-variable">lst</span>:  <span class="syn-comment"># Base Case: empty list</span>
+        <span class="syn-keyword">return</span> <span class="syn-number">0</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">lst</span>[<span class="syn-number">0</span>] + <span class="syn-variable">sum_list_recursive</span>(<span class="syn-variable">lst</span>[<span class="syn-number">1</span>:])  <span class="syn-comment"># Head + Sum(Tail)</span>
+
+<span class="syn-comment"># 2. Iterative List Sum</span>
+<span class="syn-keyword">def</span> <span class="syn-function">sum_list_iterative</span>(<span class="syn-variable">lst</span>):
+    <span class="syn-variable">total</span> = <span class="syn-number">0</span>
+    <span class="syn-keyword">for</span> <span class="syn-variable">num</span> <span class="syn-keyword">in</span> <span class="syn-variable">lst</span>:
+        <span class="syn-variable">total</span> += <span class="syn-variable">num</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">total</span>
+
+<span class="syn-variable">numbers</span> = [<span class="syn-number">12</span>, <span class="syn-number">45</span>, <span class="syn-number">23</span>, <span class="syn-number">67</span>, <span class="syn-number">89</span>, <span class="syn-number">34</span>]
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Dataset:&quot;</span>, <span class="syn-variable">numbers</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Recursive Sum:&quot;</span>, <span class="syn-variable">sum_list_recursive</span>(<span class="syn-variable">numbers</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Iterative Sum:&quot;</span>, <span class="syn-variable">sum_list_iterative</span>(<span class="syn-variable">numbers</span>))</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Dataset: [12, 45, 23, 67, 89, 34]
+Recursive Sum: 270
+Iterative Sum: 270</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Recursive summation splits the list into head lst[0] and tail lst[1:], whereas iteration walks the array sequentially in place.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p2_4_decimal_to_binary_comparison">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 2.4: Decimal to Binary Conversion — Recursive vs. Iterative</h4>
+      <p class="program-desc">Converts an integer into its binary representation using recursive divide-by-2 vs. iterative while-loop.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># 1. Recursive Decimal to Binary</span>
+<span class="syn-keyword">def</span> <span class="syn-function">dec_to_bin_recursive</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-string">&quot;0&quot;</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-string">&quot;1&quot;</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">dec_to_bin_recursive</span>(<span class="syn-variable">n</span> // <span class="syn-number">2</span>) + <span class="syn-type">str</span>(<span class="syn-variable">n</span> % <span class="syn-number">2</span>)
+
+<span class="syn-comment"># 2. Iterative Decimal to Binary</span>
+<span class="syn-keyword">def</span> <span class="syn-function">dec_to_bin_iterative</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-string">&quot;0&quot;</span>
+    <span class="syn-variable">bits</span> = []
+    <span class="syn-keyword">while</span> <span class="syn-variable">n</span> &gt; <span class="syn-number">0</span>:
+        <span class="syn-variable">bits</span>.<span class="syn-function">append</span>(<span class="syn-type">str</span>(<span class="syn-variable">n</span> % <span class="syn-number">2</span>))
+        <span class="syn-variable">n</span> //= <span class="syn-number">2</span>
+    <span class="syn-keyword">return</span> <span class="syn-string">&quot;&quot;</span>.<span class="syn-function">join</span>(<span class="syn-variable">reversed</span>(<span class="syn-variable">bits</span>))
+
+<span class="syn-variable">test_values</span> = [<span class="syn-number">10</span>, <span class="syn-number">25</span>, <span class="syn-number">42</span>, <span class="syn-number">128</span>]
+<span class="syn-type">print</span>(<span class="syn-string">&quot;=== DECIMAL TO BINARY CONVERSION ===&quot;</span>)
+<span class="syn-keyword">for</span> <span class="syn-variable">val</span> <span class="syn-keyword">in</span> <span class="syn-variable">test_values</span>:
+    <span class="syn-variable">rec_res</span> = <span class="syn-variable">dec_to_bin_recursive</span>(<span class="syn-variable">val</span>)
+    <span class="syn-variable">itr_res</span> = <span class="syn-variable">dec_to_bin_iterative</span>(<span class="syn-variable">val</span>)
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot; Decimal: {val:3d} | Recursive: {rec_res:&gt;8s} | Iterative: {itr_res:&gt;8s}&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>=== DECIMAL TO BINARY CONVERSION ===
+ Decimal:  10 | Recursive:     1010 | Iterative:     1010
+ Decimal:  25 | Recursive:    11001 | Iterative:    11001
+ Decimal:  42 | Recursive:   101010 | Iterative:   101010
+ Decimal: 128 | Recursive: 10000000 | Iterative: 10000000</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> The recursive version leverages the call stack to reverse the remainder bits naturally during unwinding.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p2_5_gcd_euclidean_comparison">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 2.5: Greatest Common Divisor (GCD) — Euclidean Algorithm</h4>
+      <p class="program-desc">Compares Euclid&#x27;s classic algorithm: gcd(a, b) = gcd(b, a % b).</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># 1. Recursive Euclidean GCD</span>
+<span class="syn-keyword">def</span> <span class="syn-function">gcd_recursive</span>(<span class="syn-variable">a</span>, <span class="syn-variable">b</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">b</span> == <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">a</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">gcd_recursive</span>(<span class="syn-variable">b</span>, <span class="syn-variable">a</span> % <span class="syn-variable">b</span>)
+
+<span class="syn-comment"># 2. Iterative Euclidean GCD</span>
+<span class="syn-keyword">def</span> <span class="syn-function">gcd_iterative</span>(<span class="syn-variable">a</span>, <span class="syn-variable">b</span>):
+    <span class="syn-keyword">while</span> <span class="syn-variable">b</span> != <span class="syn-number">0</span>:
+        <span class="syn-variable">a</span>, <span class="syn-variable">b</span> = <span class="syn-variable">b</span>, <span class="syn-variable">a</span> % <span class="syn-variable">b</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">a</span>
+
+<span class="syn-variable">pairs</span> = [(<span class="syn-number">48</span>, <span class="syn-number">18</span>), (<span class="syn-number">100</span>, <span class="syn-number">25</span>), (<span class="syn-number">35</span>, <span class="syn-number">14</span>), (<span class="syn-number">270</span>, <span class="syn-number">192</span>)]
+<span class="syn-type">print</span>(<span class="syn-string">&quot;=== GREATEST COMMON DIVISOR (EUCLIDEAN) ===&quot;</span>)
+<span class="syn-keyword">for</span> <span class="syn-variable">a</span>, <span class="syn-variable">b</span> <span class="syn-keyword">in</span> <span class="syn-variable">pairs</span>:
+    <span class="syn-variable">rec_gcd</span> = <span class="syn-variable">gcd_recursive</span>(<span class="syn-variable">a</span>, <span class="syn-variable">b</span>)
+    <span class="syn-variable">itr_gcd</span> = <span class="syn-variable">gcd_iterative</span>(<span class="syn-variable">a</span>, <span class="syn-variable">b</span>)
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot; GCD({a:3d}, {b:3d}) -&gt; Recursive: {rec_gcd:2d} | Iterative: {itr_gcd:2d}&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>=== GREATEST COMMON DIVISOR (EUCLIDEAN) ===
+ GCD( 48,  18) -&gt; Recursive:  6 | Iterative:  6
+ GCD(100,  25) -&gt; Recursive: 25 | Iterative: 25
+ GCD( 35,  14) -&gt; Recursive:  7 | Iterative:  7
+ GCD(270, 192) -&gt; Recursive:  6 | Iterative:  6</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Euclid&#x27;s algorithm reduces the problem rapidly in logarithmic steps; both implementations are highly efficient.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p2_6_nested_list_flattening">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 2.6: Nested List Flattening — Recursive Tree Walk vs. Iterative Stack Emulation</h4>
+      <p class="program-desc">Demonstrates handling arbitrary nested lists where recursion shines in code simplicity compared to manual iterative stack management.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># 1. Recursive Deep Flattening (Extremely clean &amp; intuitive)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">flatten_recursive</span>(<span class="syn-variable">nested</span>):
+    <span class="syn-variable">flat</span> = []
+    <span class="syn-keyword">for</span> <span class="syn-variable">item</span> <span class="syn-keyword">in</span> <span class="syn-variable">nested</span>:
+        <span class="syn-keyword">if</span> <span class="syn-type">isinstance</span>(<span class="syn-variable">item</span>, <span class="syn-type">list</span>):
+            <span class="syn-variable">flat</span>.<span class="syn-function">extend</span>(<span class="syn-variable">flatten_recursive</span>(<span class="syn-variable">item</span>))  <span class="syn-comment"># Recursive sub-tree exploration</span>
+        <span class="syn-keyword">else</span>:
+            <span class="syn-variable">flat</span>.<span class="syn-function">append</span>(<span class="syn-variable">item</span>)
+    <span class="syn-keyword">return</span> <span class="syn-variable">flat</span>
+
+<span class="syn-comment"># 2. Iterative Deep Flattening (Requires manual stack data structure emulation)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">flatten_iterative</span>(<span class="syn-variable">nested</span>):
+    <span class="syn-variable">flat</span> = []
+    <span class="syn-variable">stack</span> = <span class="syn-type">list</span>(<span class="syn-variable">reversed</span>(<span class="syn-variable">nested</span>))  <span class="syn-comment"># Explicit stack</span>
+    <span class="syn-keyword">while</span> <span class="syn-variable">stack</span>:
+        <span class="syn-variable">current</span> = <span class="syn-variable">stack</span>.<span class="syn-function">pop</span>()
+        <span class="syn-keyword">if</span> <span class="syn-type">isinstance</span>(<span class="syn-variable">current</span>, <span class="syn-type">list</span>):
+            <span class="syn-variable">stack</span>.<span class="syn-function">extend</span>(<span class="syn-variable">reversed</span>(<span class="syn-variable">current</span>))
+        <span class="syn-keyword">else</span>:
+            <span class="syn-variable">flat</span>.<span class="syn-function">append</span>(<span class="syn-variable">current</span>)
+    <span class="syn-keyword">return</span> <span class="syn-variable">flat</span>
+
+<span class="syn-variable">data</span> = [<span class="syn-number">1</span>, [<span class="syn-number">2</span>, [<span class="syn-number">3</span>, <span class="syn-number">4</span>], <span class="syn-number">5</span>], [<span class="syn-number">6</span>, [<span class="syn-number">7</span>, [<span class="syn-number">8</span>, <span class="syn-number">9</span>]]], <span class="syn-number">10</span>]
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Nested Input :&quot;</span>, <span class="syn-variable">data</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Recursive Out:&quot;</span>, <span class="syn-variable">flatten_recursive</span>(<span class="syn-variable">data</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Iterative Out:&quot;</span>, <span class="syn-variable">flatten_iterative</span>(<span class="syn-variable">data</span>))</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Nested Input : [1, [2, [3, 4], 5], [6, [7, [8, 9]]], 10]
+Recursive Out: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+Iterative Out: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> For hierarchical/nested structures, recursion expresses tree traversal in 6 lines, while iteration requires manually managing a stack.
+      </div>
+    </div>
+    
+        
+    </section>
+    
+
+    <!-- ========================================== -->
+    <!-- PART 03 • ACCUMULATOR ENGINEERING: 3. TAIL RECURSION & TAIL CALL OPTIMIZATION (TCO) -->
+    <!-- ========================================== -->
+    <section id="part-3" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 03 • Accumulator Engineering</span>
+        <h2 class="ch-title">3. Tail Recursion & Tail Call Optimization (TCO)</h2>
+      </div>
+
+      <p class="hero-subtitle">Deep architectural analysis of tail position calls, the accumulator pattern, call frame elimination, why Python does not implement TCO, sys stack limits, and trampolining.</p>
+
+      <h3 class="sub-title" id="sec-03-theory"><span class="sec-badge">03.1</span> Theoretical Foundation &amp; Architecture</h3>
+      <div style="margin-bottom: 24px; color: var(--text); line-height: 1.7;">
+        A recursive function is classified as <strong>Tail Recursive</strong> if the recursive self-invocation is the <strong>absolute last action</strong> executed by the function before returning. In a tail-recursive function, there are no pending calculations or operations waiting to be performed after the child call returns.
+<p>Contrast the two structural patterns below:</p>
+<div class="table-container" style="margin: 20px 0;">
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 22%;">Recursion Category</th>
+        <th style="width: 38%;">Execution Mechanics &amp; Stack State</th>
+        <th style="width: 40%;">Code Signature Pattern</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight: 700; color: var(--red);">Non-Tail Recursion</td>
+        <td>The current stack frame <strong>cannot</strong> be discarded because a calculation (e.g. multiplication <code>n * ...</code>) must occur <em>after</em> the child call returns.</td>
+        <td><code>return n * factorial(n - 1)</code><br><span style="font-size: 0.82rem; color: var(--text-dim);">Multiplication is pending after call.</span></td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--teal);">Tail Recursion</td>
+        <td>The function passes all computed state forward into an <strong>accumulator</strong> parameter. It returns the child call directly with <em>zero pending operations</em>.</td>
+        <td><code>return factorial_tail(n - 1, n * acc)</code><br><span style="font-size: 0.82rem; color: var(--text-dim);">Pure tail call returning directly.</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    <div style="margin: 24px 0 28px;">
+      <div style="font-weight: 700; color: var(--teal); font-size: 0.96rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading);">
+        <span style="font-size: 1.1rem;">📝</span> The Accumulator Pattern: Non-Tail vs. Tail Transformation
+      </div>
+      <div class="code-container" style="margin-bottom: 6px; border-left: 3px solid var(--teal);">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">recursion_blueprint.py</span>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--accent); font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase;">ALGORITHMIC BLUEPRINT</span>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># 1. NON-TAIL RECURSION (Pending multiplication requires keeping stack frame)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">factorial_non_tail</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-number">1</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">n</span> * <span class="syn-variable">factorial_non_tail</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>)  <span class="syn-comment"># Multiplication waits for return!</span>
+
+<span class="syn-comment"># 2. TAIL RECURSION (Accumulator carries running product forward)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">factorial_tail</span>(<span class="syn-variable">n</span>, <span class="syn-variable">accumulator</span>=<span class="syn-number">1</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">accumulator</span>
+    <span class="syn-comment"># Pure tail call: no pending operations upon return!</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">factorial_tail</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>, <span class="syn-variable">n</span> * <span class="syn-variable">accumulator</span>)</code></pre>
+        </div>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 0.88rem; color: var(--text-dim); line-height: 1.5;">The accumulator pattern shifts calculations from the unwinding phase to the winding phase.</p>
+    </div>
+    
+<h4 class="sub-sub-title">⚠️ The Critical Truth About Python &amp; Tail Call Optimization (TCO)</h4>
+<p>In many functional programming languages (such as Scheme, Haskell, Scala, and Lua), compilers automatically perform <strong>Tail Call Optimization (TCO)</strong> (also called <em>Tail Call Elimination</em>). When a function makes a tail call, the compiler reuses the <em>existing stack frame</em> rather than pushing a new one, reducing stack space from $O(N)$ down to $O(1)$ constant memory (running as fast as a <code>while</code> loop).</p>
+<div style="background: var(--cell-bg); border-left: 4px solid var(--amber); padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0;">
+  <strong style="color: var(--amber); font-size: 1.1rem;">💡 Why Python Does NOT Support Tail Call Optimization:</strong>
+  <p style="margin: 8px 0 0 0; font-size: 0.94rem; color: var(--text); line-height: 1.7;">
+    Python's creator, <strong>Guido van Rossum</strong>, deliberately chose <strong>not</strong> to include TCO in CPython for two fundamental engineering reasons:
+  </p>
+  <ol style="margin: 6px 0 0 20px; font-size: 0.92rem; color: var(--text); line-height: 1.7;">
+    <li><strong>Debugging &amp; Stack Traces:</strong> TCO overwrites stack frames. Without stack frames, Python's traceback logs would lose valuable diagnostic stack traces when an exception occurs, making debugging nearly impossible.</li>
+    <li><strong>Python's Dynamic Nature:</strong> In Python, function names and global bindings can be dynamically modified at runtime, making static compiler jump optimizations complex.</li>
+  </ol>
+</div>
+<p>Therefore, in Python, writing tail-recursive functions still consumes $O(N)$ stack frames and will still trigger a <code>RecursionError</code> if depth exceeds the limit. To bypass stack limits in Python, developers use <strong>Iterative Refactoring</strong> or the <strong>Trampoline Pattern</strong>.</p>
+      </div>
+
+      
+        <h3 class="sub-title" id="sec-03-concepts"><span class="sec-badge">03.2</span> One-Line Academic Definitions &amp; Mechanisms</h3>
+        <p style="color: var(--text-dim); margin-bottom: 12px;">Executive academic definitions, syntax archetypes, and runtime mechanics for this module:</p>
+        
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Concept / Term</th>
+            <th style="width: 32%;">Syntax / Signature Archetype</th>
+            <th style="width: 43%;">Academic Definition &amp; Mechanism</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Tail Position</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-keyword">return</span> <span class="syn-variable">func</span>(<span class="syn-variable">args</span>)</code></td>
+          <td>A subroutine call that is the final executable instruction before returning.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Tail Recursion</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-keyword">return</span> <span class="syn-variable">self_call</span>(<span class="syn-variable">n</span>-<span class="syn-number">1</span>, <span class="syn-variable">acc</span>)</code></td>
+          <td>A recursive function where the self-call occurs strictly in tail position with no pending math.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Non-Tail Recursion</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-keyword">return</span> <span class="syn-variable">n</span> + <span class="syn-variable">f</span>(<span class="syn-variable">n</span>-<span class="syn-number">1</span>)</code></td>
+          <td>Recursion requiring execution context to remain in stack memory to perform post-call math.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">The Accumulator Pattern</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-keyword">def</span> <span class="syn-function">f</span>(<span class="syn-variable">n</span>, <span class="syn-variable">acc</span>=<span class="syn-number">0</span>):</code></td>
+          <td>Passing accumulated intermediate state as an incoming argument down the call chain.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Tail Call Optimization (TCO)</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Stack</span> <span class="syn-variable">Frame</span> <span class="syn-variable">Reuse</span></code></td>
+          <td>Compiler optimization replacing tail calls with in-place jumps to achieve O(1) stack space.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Guido&#x27;s TCO Rationale</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Traceback</span> <span class="syn-variable">Preservation</span></code></td>
+          <td>The design choice to preserve complete call stack tracebacks for developer debugging.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">sys.getrecursionlimit()</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Default</span>: <span class="syn-number">1000</span> <span class="syn-variable">frames</span></code></td>
+          <td>CPython configuration function querying the maximum allowable call stack depth.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">sys.setrecursionlimit(N)</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Configurable</span> <span class="syn-variable">stack</span> <span class="syn-variable">ceiling</span></code></td>
+          <td>Adjusts the maximum allowable recursion stack limit (use with extreme caution!).</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Trampoline Pattern</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Thunk</span> <span class="syn-variable">iteration</span> <span class="syn-variable">loop</span></code></td>
+          <td>A design pattern executing tail-recursive generator thunks inside a while loop to avoid stack growth.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Linear vs Tree Tail Calls</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Single</span> <span class="syn-variable">tail</span> <span class="syn-variable">call</span> <span class="syn-variable">vs</span> <span class="syn-variable">branching</span></code></td>
+          <td>Only linear recursion can be tail-optimized; tree recursion (fibonacci) requires multiple branches.</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+    
+        
+
+      
+        <h3 class="sub-title" id="sec-03-programs"><span class="sec-badge">03.3</span> Executable Practical Programs &amp; Trace Analysis</h3>
+        <p style="color: var(--text-dim); margin-bottom: 18px;">Review the verified Python implementations below with syntax highlighting, live standard output streams, and architectural takeaways:</p>
+        
+    <div class="program-box" id="p3_1_tail_vs_non_tail_factorial">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 3.1: Non-Tail vs. Tail Recursive Factorial (The Accumulator Pattern)</h4>
+      <p class="program-desc">Demonstrates shifting intermediate state into an accumulator argument to eliminate pending operations.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># 1. Non-Tail Factorial (Pending multiplication)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">factorial_non_tail</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-number">1</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">n</span> * <span class="syn-variable">factorial_non_tail</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>)  <span class="syn-comment"># &#x27;n *&#x27; is pending!</span>
+
+<span class="syn-comment"># 2. Tail Recursive Factorial (No pending operations)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">factorial_tail</span>(<span class="syn-variable">n</span>, <span class="syn-variable">accumulator</span>=<span class="syn-number">1</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> &lt;= <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">accumulator</span>
+    <span class="syn-comment"># Calculation (n * accumulator) happens BEFORE call, passed as argument</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">factorial_tail</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>, <span class="syn-variable">n</span> * <span class="syn-variable">accumulator</span>)
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Non-Tail factorial(5):&quot;</span>, <span class="syn-variable">factorial_non_tail</span>(<span class="syn-number">5</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Tail     factorial(5):&quot;</span>, <span class="syn-variable">factorial_tail</span>(<span class="syn-number">5</span>))</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Non-Tail factorial(5): 120
+Tail     factorial(5): 120</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> In factorial_tail, the multiplication n * accumulator is evaluated during the call descent, leaving zero pending work.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p3_2_tail_fibonacci_two_accumulators">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 3.2: Tail Recursive Fibonacci with Two Accumulators</h4>
+      <p class="program-desc">Transforms exponential O(2^N) branching Fibonacci into a linear O(N) tail-recursive function.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Tail Recursive Fibonacci using two running accumulators</span>
+<span class="syn-keyword">def</span> <span class="syn-function">fib_tail</span>(<span class="syn-variable">n</span>, <span class="syn-variable">a</span>=<span class="syn-number">0</span>, <span class="syn-variable">b</span>=<span class="syn-number">1</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">a</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">1</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">b</span>
+    <span class="syn-comment"># Shift accumulators: a becomes b, b becomes a + b</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">fib_tail</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>, <span class="syn-variable">b</span>, <span class="syn-variable">a</span> + <span class="syn-variable">b</span>)
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;=== TAIL RECURSIVE FIBONACCI ===&quot;</span>)
+<span class="syn-keyword">for</span> <span class="syn-variable">i</span> <span class="syn-keyword">in</span> <span class="syn-type">range</span>(<span class="syn-number">11</span>):
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;fib_tail({i:2d}) = {fib_tail(i):3d}&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>=== TAIL RECURSIVE FIBONACCI ===
+fib_tail( 0) =   0
+fib_tail( 1) =   1
+fib_tail( 2) =   1
+fib_tail( 3) =   2
+fib_tail( 4) =   3
+fib_tail( 5) =   5
+fib_tail( 6) =   8
+fib_tail( 7) =  13
+fib_tail( 8) =  21
+fib_tail( 9) =  34
+fib_tail(10) =  55</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Passing (b, a + b) as accumulators collapses the entire Fibonacci recursion tree into a single linear chain of tail calls.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p3_3_tail_recursive_list_sum">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 3.3: Tail Recursive List Summation &amp; Length Accumulation</h4>
+      <p class="program-desc">Processes list elements sequentially using an accumulator without post-return addition.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Tail recursive summation</span>
+<span class="syn-keyword">def</span> <span class="syn-function">sum_list_tail</span>(<span class="syn-variable">lst</span>, <span class="syn-variable">accumulator</span>=<span class="syn-number">0</span>):
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> <span class="syn-variable">lst</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">accumulator</span>
+    <span class="syn-comment"># Pass running total down to the next frame</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">sum_list_tail</span>(<span class="syn-variable">lst</span>[<span class="syn-number">1</span>:], <span class="syn-variable">accumulator</span> + <span class="syn-variable">lst</span>[<span class="syn-number">0</span>])
+
+<span class="syn-comment"># Tail recursive length count</span>
+<span class="syn-keyword">def</span> <span class="syn-function">count_list_tail</span>(<span class="syn-variable">lst</span>, <span class="syn-variable">count</span>=<span class="syn-number">0</span>):
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> <span class="syn-variable">lst</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">count</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">count_list_tail</span>(<span class="syn-variable">lst</span>[<span class="syn-number">1</span>:], <span class="syn-variable">count</span> + <span class="syn-number">1</span>)
+
+<span class="syn-variable">data</span> = [<span class="syn-number">10</span>, <span class="syn-number">25</span>, <span class="syn-number">30</span>, <span class="syn-number">45</span>, <span class="syn-number">90</span>]
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Dataset:&quot;</span>, <span class="syn-variable">data</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Tail Recursive Sum   :&quot;</span>, <span class="syn-variable">sum_list_tail</span>(<span class="syn-variable">data</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Tail Recursive Count :&quot;</span>, <span class="syn-variable">count_list_tail</span>(<span class="syn-variable">data</span>))</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Dataset: [10, 25, 30, 45, 90]
+Tail Recursive Sum   : 200
+Tail Recursive Count : 5</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> The running sum accumulates in &#x27;accumulator&#x27; during winding, returning the final total directly from the base case.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p3_4_tail_recursive_string_reversal">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 3.4: Tail Recursive String Reversal</h4>
+      <p class="program-desc">Prepends characters directly to an accumulator string during call descent.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Tail recursive string reversal</span>
+<span class="syn-keyword">def</span> <span class="syn-function">reverse_tail</span>(<span class="syn-variable">s</span>, <span class="syn-variable">accumulator</span>=<span class="syn-string">&quot;&quot;</span>):
+    <span class="syn-keyword">if</span> <span class="syn-keyword">not</span> <span class="syn-variable">s</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">accumulator</span>
+    <span class="syn-comment"># Prepend first char to accumulator: reverse_tail(&quot;cat&quot;, &quot;&quot;) -&gt; reverse_tail(&quot;at&quot;, &quot;c&quot;)</span>
+    <span class="syn-keyword">return</span> <span class="syn-variable">reverse_tail</span>(<span class="syn-variable">s</span>[<span class="syn-number">1</span>:], <span class="syn-variable">s</span>[<span class="syn-number">0</span>] + <span class="syn-variable">accumulator</span>)
+
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Reversed &#x27;Antigravity&#x27; :&quot;</span>, <span class="syn-variable">reverse_tail</span>(<span class="syn-string">&quot;Antigravity&quot;</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Reversed &#x27;SSM College&#x27; :&quot;</span>, <span class="syn-variable">reverse_tail</span>(<span class="syn-string">&quot;SSM College&quot;</span>))
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Reversed &#x27;Racecar&#x27;     :&quot;</span>, <span class="syn-variable">reverse_tail</span>(<span class="syn-string">&quot;Racecar&quot;</span>))</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Reversed &#x27;Antigravity&#x27; : ytivargitnA
+Reversed &#x27;SSM College&#x27; : egelloC MSS
+Reversed &#x27;Racecar&#x27;     : racecaR</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Building the reversed string in &#x27;accumulator&#x27; means the base case already holds the final reversed text.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p3_5_inspecting_recursion_limits">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 3.5: Inspecting &amp; Modifying Call Stack Limits (sys.getrecursionlimit)</h4>
+      <p class="program-desc">Demonstrates inspecting CPython&#x27;s default stack limit and catching the RecursionError.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">import</span> <span class="syn-variable">sys</span>
+
+<span class="syn-comment"># 1. Querying current recursion limit</span>
+<span class="syn-variable">current_limit</span> = <span class="syn-variable">sys</span>.<span class="syn-function">getrecursionlimit</span>()
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Default Python Recursion Limit:&quot;</span>, <span class="syn-variable">current_limit</span>)
+
+<span class="syn-comment"># 2. Demonstrating RecursionError when limit is exceeded</span>
+<span class="syn-keyword">def</span> <span class="syn-function">infinite_recursion</span>(<span class="syn-variable">n</span>):
+    <span class="syn-keyword">return</span> <span class="syn-variable">infinite_recursion</span>(<span class="syn-variable">n</span> + <span class="syn-number">1</span>)
+
+<span class="syn-keyword">try</span>:
+    <span class="syn-variable">infinite_recursion</span>(<span class="syn-number">1</span>)
+<span class="syn-keyword">except</span> <span class="syn-variable">RecursionError</span> <span class="syn-keyword">as</span> <span class="syn-variable">e</span>:
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;Caught Expected RecursionError: {e}&quot;</span>)
+
+<span class="syn-comment"># 3. Adjusting limit temporarily</span>
+<span class="syn-variable">sys</span>.<span class="syn-function">setrecursionlimit</span>(<span class="syn-number">1500</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Updated Recursion Limit       :&quot;</span>, <span class="syn-variable">sys</span>.<span class="syn-function">getrecursionlimit</span>())
+
+<span class="syn-comment"># Restoring default</span>
+<span class="syn-variable">sys</span>.<span class="syn-function">setrecursionlimit</span>(<span class="syn-variable">current_limit</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;Restored Recursion Limit      :&quot;</span>, <span class="syn-variable">sys</span>.<span class="syn-function">getrecursionlimit</span>())</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Default Python Recursion Limit: 1000
+Caught Expected RecursionError: maximum recursion depth exceeded
+Updated Recursion Limit       : 1500
+Restored Recursion Limit      : 1000</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> CPython enforces sys.getrecursionlimit() to guard against physical stack overflow memory corruption.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p3_6_trampoline_pattern_emulation">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 3.6: The Trampoline Pattern — Executing 10,000 Tail Calls Without Stack Overflow</h4>
+      <p class="program-desc">Demonstrates wrapping tail-recursive calls in lambda thunks executed by a while loop to achieve O(1) stack space in Python.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Trampoline runner: executes thunks iteratively</span>
+<span class="syn-keyword">def</span> <span class="syn-function">trampoline</span>(<span class="syn-variable">thunk_fn</span>):
+    <span class="syn-keyword">while</span> <span class="syn-variable">callable</span>(<span class="syn-variable">thunk_fn</span>):
+        <span class="syn-variable">thunk_fn</span> = <span class="syn-variable">thunk_fn</span>()
+    <span class="syn-keyword">return</span> <span class="syn-variable">thunk_fn</span>
+
+<span class="syn-comment"># Tail-recursive countdown wrapped in thunks (lambdas)</span>
+<span class="syn-keyword">def</span> <span class="syn-function">safe_countdown_thunk</span>(<span class="syn-variable">n</span>, <span class="syn-variable">count</span>=<span class="syn-number">0</span>):
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">0</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">count</span>
+    <span class="syn-comment"># Return a lambda (thunk) instead of calling directly</span>
+    <span class="syn-keyword">return</span> <span class="syn-keyword">lambda</span>: <span class="syn-variable">safe_countdown_thunk</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>, <span class="syn-variable">count</span> + <span class="syn-number">1</span>)
+
+<span class="syn-comment"># Executing 10,000 recursive steps (normally crashes at 1,000!)</span>
+<span class="syn-variable">target_steps</span> = <span class="syn-number">10000</span>
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Executing {target_steps:,} recursive steps via Trampoline...&quot;</span>)
+
+<span class="syn-variable">result</span> = <span class="syn-variable">trampoline</span>(<span class="syn-variable">safe_countdown_thunk</span>(<span class="syn-variable">target_steps</span>))
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Successfully completed {result:,} recursive steps with 0 stack overflow!&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Executing 10,000 recursive steps via Trampoline...
+Successfully completed 10,000 recursive steps with 0 stack overflow!</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> The trampoline runs each recursive step sequentially inside a while loop, consuming only 1 single stack frame regardless of depth.
+      </div>
+    </div>
+    
+        
+    </section>
+    
+
+    <!-- ========================================== -->
+    <!-- PART 04 • ARCHITECTURAL MASTERY & REFERENCE: 4. CAPSTONE RECURSIVE ALGORITHMS & MASTER ARCHITECTURAL MATRIX -->
+    <!-- ========================================== -->
+    <section id="part-4" class="chapter">
+      <div class="ch-header">
+        <span class="ch-eyebrow">Part 04 • Architectural Mastery & Reference</span>
+        <h2 class="ch-title">4. Capstone Recursive Algorithms & Master Architectural Matrix</h2>
+      </div>
+
+      <p class="hero-subtitle">Industrial capstone algorithms (Tower of Hanoi, Recursive Binary Search, Deep JSON Tree Navigator), master 5-column comparison matrix, engineering decision framework, and top exam takeaways.</p>
+
+      <h3 class="sub-title" id="sec-04-theory"><span class="sec-badge">04.1</span> Theoretical Foundation &amp; Architecture</h3>
+      <div style="margin-bottom: 24px; color: var(--text); line-height: 1.7;">
+        While linear loops easily solve counting and flat array iteration with maximum efficiency, recursion is <strong>uniquely indispensable</strong> in divide-and-conquer algorithms, hierarchical tree navigations, and combinatorial state-space exploration.
+<p>Below is the complete <strong>Master Comparison Matrix</strong> contrasting all three execution paradigms across performance, memory footprint, language runtime support, and debugging complexity:</p>
+
+<div class="table-container" style="margin: 24px 0;">
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%;">Dimension / Metric</th>
+        <th style="width: 27%;">Standard Recursion</th>
+        <th style="width: 27%;">Tail Recursion (in Python)</th>
+        <th style="width: 28%;">Iteration (Loops)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight: 700; color: var(--accent);">Call Stack Memory</td>
+        <td><strong style="color: var(--danger, #f17666);">O(N) Stack Frames</strong><br><span style="font-size: 0.85rem; color: var(--text-dim);">Allocates new frame on every call</span></td>
+        <td><strong style="color: var(--danger, #f17666);">O(N) Stack Frames</strong><br><span style="font-size: 0.85rem; color: var(--text-dim);">(CPython does not optimize tail calls)</span></td>
+        <td><strong style="color: var(--teal);">O(1) Constant Space</strong><br><span style="font-size: 0.85rem; color: var(--text-dim);">Single frame with local variable mutations</span></td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--accent);">Risk of Overflow</td>
+        <td>High (Triggers <code>RecursionError</code> if depth exceeds ~1,000)</td>
+        <td>High (Subject to same ~1,000 call limit in Python)</td>
+        <td><strong>Zero</strong> (Can iterate billions of times safely)</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--accent);">Execution Speed</td>
+        <td>Slower (Frame allocation, function call overhead)</td>
+        <td>Slightly faster than standard recursion, but still slower than loops</td>
+        <td><strong>Fastest</strong> (Optimized bytecode loop instructions)</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--accent);">Code Readability</td>
+        <td>High for hierarchical &amp; nested structures (Trees, ASTs, Graphs)</td>
+        <td>Moderate (Accumulator parameter passing requires extra mental model)</td>
+        <td>High for linear sequences, complex for branching graphs</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--accent);">Mathematical Model</td>
+        <td>Inductive definition: f(N) = N * f(N-1)</td>
+        <td>Iterative state passing: f(N, acc) = f(N-1, acc * N)</td>
+        <td>State variable progression: acc &larr; acc * i</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; color: var(--accent);">TCO Support</td>
+        <td>N/A (Pending operations prevent tail optimization)</td>
+        <td>Supported in Scheme, Scala, Haskell, ES6 JS. <strong>Disabled in Python.</strong></td>
+        <td>Native loop constructs present in all languages</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+    <div class="callout tip">
+      <div class="callout-head">
+        <span>💡</span> Engineering Decision Rule: When Should You Use Recursion?
+      </div>
+      <div class="callout-body">
+        
+<ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+  <li><strong>Use Iteration (Loops)</strong> when: Traversing flat arrays, counting, searching linear lists, or processing high-volume streams (&gt;1,000 items) where O(1) memory is critical.</li>
+  <li><strong>Use Recursion</strong> when: Navigating hierarchical or branched structures (JSON, DOM trees, file directories, ASTs, binary search trees), implementing backtracking algorithms (Sudoku, N-Queens), or divide-and-conquer strategies (Merge Sort, Quick Sort).</li>
+  <li><strong>Use Trampolining or Custom Stacks</strong> when: You have an inherently recursive tree or graph algorithm that might exceed the 1,000 frame recursion limit in Python.</li>
+</ul>
+
+      </div>
+    </div>
+    
+
+<div style="background: var(--cell-bg); border-left: 4px solid var(--purple); padding: 18px 22px; border-radius: 0 8px 8px 0; margin: 24px 0;">
+  <strong style="color: var(--purple); font-size: 1.1rem;">🎓 Top 8 Core Takeaways &amp; Exam Highlights</strong>
+  <ol style="padding-left: 22px; line-height: 1.8; color: var(--text); margin-top: 8px;">
+    <li><strong>Base Case is Mandatory:</strong> Every recursive function must have at least one terminal condition that halts execution without making another recursive call.</li>
+    <li><strong>Progress Toward Termination:</strong> Recursive steps must strictly reduce problem size so that the base case is guaranteed to be reached.</li>
+    <li><strong>Two Call Stack Phases:</strong> Standard recursion operates in a <em>winding phase</em> (pushing frames) followed by an <em>unwinding phase</em> (evaluating pending computations and popping frames).</li>
+    <li><strong>Auxiliary Stack Space:</strong> Recursion consumes O(N) memory on the CPython call stack, contrasting sharply with loops which run in O(1) constant auxiliary memory.</li>
+    <li><strong>Recursion Limit:</strong> Python protects system memory via <code>sys.getrecursionlimit()</code> (default 1,000), raising a <code>RecursionError</code> if recursion runs too deep.</li>
+    <li><strong>Tail Recursion Position:</strong> A function is tail-recursive if and only if the recursive call is the <em>final expression</em> evaluated in the stack frame.</li>
+    <li><strong>CPython Design Decision:</strong> Python deliberately does not implement Tail Call Optimization (TCO) in order to maintain complete, uncompressed tracebacks for debugging and support dynamic runtime introspection.</li>
+    <li><strong>Accumulator Pattern:</strong> Converting recursion to tail recursion transfers intermediate computation results forward as arguments rather than backward through return values.</li>
+  </ol>
+</div>
+      </div>
+
+      
+        <h3 class="sub-title" id="sec-04-concepts"><span class="sec-badge">04.2</span> One-Line Academic Definitions &amp; Mechanisms</h3>
+        <p style="color: var(--text-dim); margin-bottom: 12px;">Executive academic definitions, syntax archetypes, and runtime mechanics for this module:</p>
+        
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Concept / Term</th>
+            <th style="width: 32%;">Syntax / Signature Archetype</th>
+            <th style="width: 43%;">Academic Definition &amp; Mechanism</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Tower of Hanoi</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">O</span>(<span class="syn-number">2</span>^<span class="syn-variable">N</span>) <span class="syn-variable">Moves</span></code></td>
+          <td>Classic puzzle requiring moving N disks using recursion, matching mathematical induction.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Binary Search</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">O</span>(<span class="syn-variable">log</span> <span class="syn-variable">N</span>) <span class="syn-variable">Divide</span> &amp; <span class="syn-variable">Conquer</span></code></td>
+          <td>Recursive halving of sorted search space passing boundary indices (low, high).</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Tree / Graph Traversal</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Hierarchical</span> <span class="syn-variable">recursion</span></code></td>
+          <td>Natural navigation of nested trees, JSON structures, and ASTs without fixed-depth loops.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Accumulator Pattern</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">acc</span> <span class="syn-variable">parameter</span></code></td>
+          <td>Passing intermediate state forward in tail recursion to eliminate pending operations.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Trampolining</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Thunk</span> <span class="syn-variable">function</span> <span class="syn-variable">loop</span></code></td>
+          <td>Wrapping recursive functions in a while-loop trampoline to achieve arbitrary depth.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Guido&#x27;s TCO Decision</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">CPython</span> <span class="syn-variable">Design</span> <span class="syn-variable">Choice</span></code></td>
+          <td>Preserving readable stack traces for debugging and supporting runtime introspection.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Recursion Limit</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">sys</span>.<span class="syn-function">getrecursionlimit</span>()</code></td>
+          <td>Protective safety cap in Python (default 1000) preventing C-level stack overflow.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Stack Unwinding</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Return</span> <span class="syn-variable">phase</span></code></td>
+          <td>Popping stack frames and returning final values back to the originating caller.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Memoization</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;">@<span class="syn-variable">functools</span>.<span class="syn-function">lru_cache</span></code></td>
+          <td>Caching recursive return values to optimize exponential O(2^N) algorithms to O(N) linear time.</td>
+        </tr>
+        
+        <tr>
+          <td style="font-weight: 700; color: var(--accent); white-space: nowrap;">Engineering Rule</td>
+          <td><code style="background: var(--code-bg); padding: 3px 8px; border-radius: 4px; display: inline-block;"><span class="syn-variable">Loops</span> <span class="syn-variable">vs</span> <span class="syn-variable">Recursion</span></code></td>
+          <td>Use loops for flat linear sequences; use recursion for branched hierarchical trees and divide-and-conquer.</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+    
+        
+
+      
+        <h3 class="sub-title" id="sec-04-programs"><span class="sec-badge">04.3</span> Executable Practical Programs &amp; Trace Analysis</h3>
+        <p style="color: var(--text-dim); margin-bottom: 18px;">Review the verified Python implementations below with syntax highlighting, live standard output streams, and architectural takeaways:</p>
+        
+    <div class="program-box" id="p4_1_tower_of_hanoi">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 4.1: Classic Tower of Hanoi Solver (Recursive State Transformation)</h4>
+      <p class="program-desc">Solves the classic mathematical puzzle of moving N disks from Source rod (A) to Destination rod (C) using Auxiliary rod (B). Explains how 3 simple recursive lines generate the optimal 2^N - 1 movement sequence.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">def</span> <span class="syn-function">tower_of_hanoi</span>(<span class="syn-variable">n</span>, <span class="syn-variable">source</span>, <span class="syn-variable">destination</span>, <span class="syn-variable">auxiliary</span>, <span class="syn-variable">step_counter</span>):
+    <span class="syn-string">&quot;&quot;&quot;
+    Solves the Tower of Hanoi puzzle recursively.
+    Mathematical Minimum Moves = (2^n) - 1
+    &quot;&quot;&quot;</span>
+    <span class="syn-comment"># Base Case: Single disk can be moved directly</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">n</span> == <span class="syn-number">1</span>:
+        <span class="syn-variable">step_counter</span>[<span class="syn-number">0</span>] += <span class="syn-number">1</span>
+        <span class="syn-type">print</span>(<span class="syn-string">f&quot;Step {step_counter[0]:02d}: Move disk 1 from [{source}] ---&gt; [{destination}]&quot;</span>)
+        <span class="syn-keyword">return</span>
+
+    <span class="syn-comment"># Step 1: Move top (n-1) disks from Source to Auxiliary (using Destination as temp)</span>
+    <span class="syn-variable">tower_of_hanoi</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>, <span class="syn-variable">source</span>, <span class="syn-variable">auxiliary</span>, <span class="syn-variable">destination</span>, <span class="syn-variable">step_counter</span>)
+
+    <span class="syn-comment"># Step 2: Move the largest (nth) disk directly from Source to Destination</span>
+    <span class="syn-variable">step_counter</span>[<span class="syn-number">0</span>] += <span class="syn-number">1</span>
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;Step {step_counter[0]:02d}: Move disk {n} from [{source}] ---&gt; [{destination}]&quot;</span>)
+
+    <span class="syn-comment"># Step 3: Move the (n-1) disks from Auxiliary to Destination (using Source as temp)</span>
+    <span class="syn-variable">tower_of_hanoi</span>(<span class="syn-variable">n</span> - <span class="syn-number">1</span>, <span class="syn-variable">auxiliary</span>, <span class="syn-variable">destination</span>, <span class="syn-variable">source</span>, <span class="syn-variable">step_counter</span>)
+
+<span class="syn-comment"># Solve for N = 3 disks</span>
+<span class="syn-variable">num_disks</span> = <span class="syn-number">3</span>
+<span class="syn-variable">counter</span> = [<span class="syn-number">0</span>]
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;--- Solving Tower of Hanoi for {num_disks} disks ---&quot;</span>)
+<span class="syn-variable">tower_of_hanoi</span>(<span class="syn-variable">num_disks</span>, <span class="syn-variable">source</span>=<span class="syn-string">&#x27;A&#x27;</span>, <span class="syn-variable">destination</span>=<span class="syn-string">&#x27;C&#x27;</span>, <span class="syn-variable">auxiliary</span>=<span class="syn-string">&#x27;B&#x27;</span>, <span class="syn-variable">step_counter</span>=<span class="syn-variable">counter</span>)
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Total optimal moves completed: {counter[0]} (Expected: {2**num_disks - 1})&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>--- Solving Tower of Hanoi for 3 disks ---
+Step 01: Move disk 1 from [A] ---&gt; [C]
+Step 02: Move disk 2 from [A] ---&gt; [B]
+Step 03: Move disk 1 from [C] ---&gt; [B]
+Step 04: Move disk 3 from [A] ---&gt; [C]
+Step 05: Move disk 1 from [B] ---&gt; [A]
+Step 06: Move disk 2 from [B] ---&gt; [C]
+Step 07: Move disk 1 from [A] ---&gt; [C]
+Total optimal moves completed: 7 (Expected: 7)</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Tower of Hanoi exhibits O(2^N) time complexity and O(N) call stack depth. An iterative solution requires complex explicit stacks and state tracking, whereas the recursive algorithm elegantly mirrors the mathematical induction proof.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p4_2_binary_search_recursive">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 4.2: Divide-and-Conquer Recursive Binary Search</h4>
+      <p class="program-desc">Searches for a target element in a sorted sequence by recursively halving the search space. Demonstrates O(log N) logarithmic time complexity and tail-like index passing without list slicing.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">def</span> <span class="syn-function">binary_search_recursive</span>(<span class="syn-variable">arr</span>, <span class="syn-variable">target</span>, <span class="syn-variable">low</span>, <span class="syn-variable">high</span>):
+    <span class="syn-string">&quot;&quot;&quot;
+    Searches for target in sorted arr[low...high] recursively.
+    Passes bounding indices rather than slicing arr to maintain O(1) space per frame.
+    &quot;&quot;&quot;</span>
+    <span class="syn-comment"># Base Case: Search range exhausted (Element not present)</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">low</span> &gt; <span class="syn-variable">high</span>:
+        <span class="syn-keyword">return</span> -<span class="syn-number">1</span>
+
+    <span class="syn-variable">mid</span> = (<span class="syn-variable">low</span> + <span class="syn-variable">high</span>) // <span class="syn-number">2</span>
+
+    <span class="syn-comment"># Target found at midpoint</span>
+    <span class="syn-keyword">if</span> <span class="syn-variable">arr</span>[<span class="syn-variable">mid</span>] == <span class="syn-variable">target</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">mid</span>
+    
+    <span class="syn-comment"># Target is in the left half</span>
+    <span class="syn-keyword">elif</span> <span class="syn-variable">target</span> &lt; <span class="syn-variable">arr</span>[<span class="syn-variable">mid</span>]:
+        <span class="syn-keyword">return</span> <span class="syn-variable">binary_search_recursive</span>(<span class="syn-variable">arr</span>, <span class="syn-variable">target</span>, <span class="syn-variable">low</span>, <span class="syn-variable">mid</span> - <span class="syn-number">1</span>)
+    
+    <span class="syn-comment"># Target is in the right half</span>
+    <span class="syn-keyword">else</span>:
+        <span class="syn-keyword">return</span> <span class="syn-variable">binary_search_recursive</span>(<span class="syn-variable">arr</span>, <span class="syn-variable">target</span>, <span class="syn-variable">mid</span> + <span class="syn-number">1</span>, <span class="syn-variable">high</span>)
+
+<span class="syn-comment"># Dataset</span>
+<span class="syn-variable">sorted_nums</span> = [<span class="syn-number">12</span>, <span class="syn-number">24</span>, <span class="syn-number">37</span>, <span class="syn-number">45</span>, <span class="syn-number">59</span>, <span class="syn-number">68</span>, <span class="syn-number">77</span>, <span class="syn-number">83</span>, <span class="syn-number">91</span>, <span class="syn-number">105</span>, <span class="syn-number">120</span>]
+<span class="syn-variable">target_val</span> = <span class="syn-number">77</span>
+
+<span class="syn-variable">idx</span> = <span class="syn-variable">binary_search_recursive</span>(<span class="syn-variable">sorted_nums</span>, <span class="syn-variable">target_val</span>, <span class="syn-number">0</span>, <span class="syn-type">len</span>(<span class="syn-variable">sorted_nums</span>) - <span class="syn-number">1</span>)
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Array: {sorted_nums}&quot;</span>)
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Target &#x27;{target_val}&#x27; located at index: {idx}&quot;</span>)
+
+<span class="syn-variable">missing_val</span> = <span class="syn-number">50</span>
+<span class="syn-variable">idx_missing</span> = <span class="syn-variable">binary_search_recursive</span>(<span class="syn-variable">sorted_nums</span>, <span class="syn-variable">missing_val</span>, <span class="syn-number">0</span>, <span class="syn-type">len</span>(<span class="syn-variable">sorted_nums</span>) - <span class="syn-number">1</span>)
+<span class="syn-type">print</span>(<span class="syn-string">f&quot;Target &#x27;{missing_val}&#x27; search result: {idx_missing} (Not Found)&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>Array: [12, 24, 37, 45, 59, 68, 77, 83, 91, 105, 120]
+Target &#x27;77&#x27; located at index: 6
+Target &#x27;50&#x27; search result: -1 (Not Found)</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Always pass boundary indices (low, high) in recursive array operations instead of slicing (arr[:mid]). Slicing copies the sub-array in O(K) time and memory, whereas index passing maintains strict O(log N) time and O(1) auxiliary frame allocation.
+      </div>
+    </div>
+    
+    <div class="program-box" id="p4_3_deep_json_tree_search">
+      <div class="prog-tag-row">
+        <span class="prog-badge">PYTHON 3.12+</span>
+        <span class="prog-category-badge">VERIFIED EXECUTABLE</span>
+      </div>
+      <h4 class="program-title">Example 4.3: Deep Hierarchical JSON / Tree Search Explorer</h4>
+      <p class="program-desc">Traverses an arbitrarily nested dictionary/list hierarchy (JSON object) to search for specific keys and collect values. Highlights why recursion is the undisputed industry standard for tree and graph traversal.</p>
+      
+      <!-- macOS Code Window -->
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <span style="margin-left: 8px; font-weight: 600; color: #949db2;">main.py</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy Code to Clipboard">
+            <span>📋</span> Copy
+          </button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-keyword">def</span> <span class="syn-function">search_nested_json</span>(<span class="syn-variable">data</span>, <span class="syn-variable">target_key</span>, <span class="syn-variable">current_path</span>=<span class="syn-string">&quot;&quot;</span>):
+    <span class="syn-string">&quot;&quot;&quot;
+    Recursively scans nested dictionaries and lists to find all occurrences
+    of target_key and returns list of (path, value) tuples.
+    &quot;&quot;&quot;</span>
+    <span class="syn-variable">matches</span> = []
+
+    <span class="syn-keyword">if</span> <span class="syn-type">isinstance</span>(<span class="syn-variable">data</span>, <span class="syn-type">dict</span>):
+        <span class="syn-keyword">for</span> <span class="syn-variable">key</span>, <span class="syn-variable">value</span> <span class="syn-keyword">in</span> <span class="syn-variable">data</span>.<span class="syn-function">items</span>():
+            <span class="syn-variable">path</span> = <span class="syn-string">f&quot;{current_path}.{key}&quot;</span> <span class="syn-keyword">if</span> <span class="syn-variable">current_path</span> <span class="syn-keyword">else</span> <span class="syn-variable">key</span>
+            <span class="syn-keyword">if</span> <span class="syn-variable">key</span> == <span class="syn-variable">target_key</span>:
+                <span class="syn-variable">matches</span>.<span class="syn-function">append</span>((<span class="syn-variable">path</span>, <span class="syn-variable">value</span>))
+            
+            <span class="syn-comment"># Recurse if the value is a nested container</span>
+            <span class="syn-keyword">if</span> <span class="syn-type">isinstance</span>(<span class="syn-variable">value</span>, (<span class="syn-type">dict</span>, <span class="syn-type">list</span>)):
+                <span class="syn-variable">matches</span>.<span class="syn-function">extend</span>(<span class="syn-variable">search_nested_json</span>(<span class="syn-variable">value</span>, <span class="syn-variable">target_key</span>, <span class="syn-variable">path</span>))
+
+    <span class="syn-keyword">elif</span> <span class="syn-type">isinstance</span>(<span class="syn-variable">data</span>, <span class="syn-type">list</span>):
+        <span class="syn-keyword">for</span> <span class="syn-variable">index</span>, <span class="syn-variable">item</span> <span class="syn-keyword">in</span> <span class="syn-type">enumerate</span>(<span class="syn-variable">data</span>):
+            <span class="syn-variable">path</span> = <span class="syn-string">f&quot;{current_path}[{index}]&quot;</span>
+            <span class="syn-keyword">if</span> <span class="syn-type">isinstance</span>(<span class="syn-variable">item</span>, (<span class="syn-type">dict</span>, <span class="syn-type">list</span>)):
+                <span class="syn-variable">matches</span>.<span class="syn-function">extend</span>(<span class="syn-variable">search_nested_json</span>(<span class="syn-variable">item</span>, <span class="syn-variable">target_key</span>, <span class="syn-variable">path</span>))
+
+    <span class="syn-keyword">return</span> <span class="syn-variable">matches</span>
+
+<span class="syn-comment"># Complex real-world nested structure</span>
+<span class="syn-variable">organization</span> = {
+    <span class="syn-string">&quot;company&quot;</span>: <span class="syn-string">&quot;Apex Dynamics&quot;</span>,
+    <span class="syn-string">&quot;departments&quot;</span>: [
+        {
+            <span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Engineering&quot;</span>,
+            <span class="syn-string">&quot;manager&quot;</span>: {<span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Dr. Aris&quot;</span>, <span class="syn-string">&quot;email&quot;</span>: <span class="syn-string">&quot;aris@apex.io&quot;</span>},
+            <span class="syn-string">&quot;teams&quot;</span>: [
+                {<span class="syn-string">&quot;team_name&quot;</span>: <span class="syn-string">&quot;Core Platform&quot;</span>, <span class="syn-string">&quot;lead_email&quot;</span>: <span class="syn-string">&quot;core-lead@apex.io&quot;</span>, <span class="syn-string">&quot;members&quot;</span>: <span class="syn-number">14</span>},
+                {<span class="syn-string">&quot;team_name&quot;</span>: <span class="syn-string">&quot;AI Systems&quot;</span>, <span class="syn-string">&quot;lead_email&quot;</span>: <span class="syn-string">&quot;ai-lead@apex.io&quot;</span>, <span class="syn-string">&quot;members&quot;</span>: <span class="syn-number">8</span>}
+            ]
+        },
+        {
+            <span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Security &amp; Infra&quot;</span>,
+            <span class="syn-string">&quot;manager&quot;</span>: {<span class="syn-string">&quot;name&quot;</span>: <span class="syn-string">&quot;Elena Vance&quot;</span>, <span class="syn-string">&quot;email&quot;</span>: <span class="syn-string">&quot;elena@apex.io&quot;</span>}
+        }
+    ]
+}
+
+<span class="syn-comment"># Search for all &#x27;email&#x27; or &#x27;lead_email&#x27; fields</span>
+<span class="syn-variable">found_emails</span> = <span class="syn-variable">search_nested_json</span>(<span class="syn-variable">organization</span>, <span class="syn-string">&quot;email&quot;</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;--- Found Key: &#x27;email&#x27; ---&quot;</span>)
+<span class="syn-keyword">for</span> <span class="syn-variable">path</span>, <span class="syn-variable">val</span> <span class="syn-keyword">in</span> <span class="syn-variable">found_emails</span>:
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;Path: {path:&lt;48} | Value: {val}&quot;</span>)
+
+<span class="syn-variable">found_teams</span> = <span class="syn-variable">search_nested_json</span>(<span class="syn-variable">organization</span>, <span class="syn-string">&quot;team_name&quot;</span>)
+<span class="syn-type">print</span>(<span class="syn-string">&quot;\n--- Found Key: &#x27;team_name&#x27; ---&quot;</span>)
+<span class="syn-keyword">for</span> <span class="syn-variable">path</span>, <span class="syn-variable">val</span> <span class="syn-keyword">in</span> <span class="syn-variable">found_teams</span>:
+    <span class="syn-type">print</span>(<span class="syn-string">f&quot;Path: {path:&lt;48} | Value: {val}&quot;</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Output Window -->
+      <div class="output-box">
+        <div class="output-header">
+          <span>🖥️ Terminal / Standard Output Stream</span>
+          <span style="font-size: 0.72rem; color: var(--teal);">Exit Code: 0 (Success)</span>
+        </div>
+        <div class="output-body">
+          <pre>--- Found Key: &#x27;email&#x27; ---
+Path: departments[0].manager.email                     | Value: aris@apex.io
+Path: departments[1].manager.email                     | Value: elena@apex.io
+
+--- Found Key: &#x27;team_name&#x27; ---
+Path: departments[0].teams[0].team_name                | Value: Core Platform
+Path: departments[0].teams[1].team_name                | Value: AI Systems</pre>
+        </div>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="prog-takeaway">
+        <strong style="color: var(--accent);">Key Architectural Takeaway:</strong> Arbitrarily nested trees and graphs cannot be parsed with fixed-depth loops. Recursion naturally delegates sub-branches to new stack frames, making tree walks, AST parsing, and filesystem discovery clean and bug-free.
+      </div>
+    </div>
+    
+        
+    </section>
+    
+
+  </main>
+
+  <!-- Site Footer with Author Details -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <div style="font-weight: 700; color: var(--text);">Lecture 09 • Recursion, Iteration &amp; Tail Recursion</div>
+          <div style="font-size: 0.85rem; color: var(--text-dim);">Prepared by Umer Farooq | SSM College of Engineering</div>
+        </div>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-dim);">
+        B.Tech 5th Semester • Department of Computer Science &amp; Engineering
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" title="Back to Top">
+      <span>↑</span>
+    </button>
+    <button class="btn-float" id="theme-toggle-float" onclick="toggleTheme()" title="Toggle Theme">
+      <span id="theme-icon-float">☀️</span>
+    </button>
+  </div>
+
+  <script>
+
+    // Scroll Progress Indicator
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      document.getElementById('progress-bar').style.width = scrolled + '%';
+    });
+
+    // Theme Switcher
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcons(newTheme);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    // Initialize Theme
+    (function() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.addEventListener('DOMContentLoaded', () => {
+        updateThemeIcons(savedTheme);
+      });
+    })();
+
+    // Copy Code functionality
+    function copyCode(btn) {
+      const codeBlock = btn.closest('.code-container').querySelector('code');
+      const textToCopy = codeBlock.innerText;
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const origText = btn.innerHTML;
+        btn.innerHTML = '<span>✅</span> Copied!';
+        btn.style.borderColor = 'var(--teal)';
+        btn.style.color = 'var(--teal)';
+
+        setTimeout(() => {
+          btn.innerHTML = origText;
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy code: ', err);
+      });
+    }
+
+  </script>
+</body>
+</html>

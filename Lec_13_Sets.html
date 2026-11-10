@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Master Sets in Python: Complete guide to creating sets, adding and removing elements, set methods, union, intersection, difference, symmetric difference, subset and superset, lists vs tuples vs sets, set comprehension and solved programs. Prepared by Umer Farooq for SSM College of Engineering.">
+  <meta name="author" content="Umer Farooq">
+  <title>Lecture 13: Sets in Python – Complete Masterclass | SSM College of Engineering</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #12141a;
+      --bg-alt: #181b22;
+      --card: #1c202a;
+      --card-hover: #222734;
+      --cell-bg: #1e222e;
+      --cell-border: #2c3242;
+      --border: #282f3f;
+      --border-accent: #3d475f;
+      --text: #e9ecf2;
+      --text-dim: #949db2;
+      --text-faint: #60687d;
+      --accent: #f3872e;
+      --accent-glow: rgba(243, 135, 46, 0.25);
+      --accent-soft: rgba(243, 135, 46, 0.12);
+      --teal: #4ee3c2;
+      --teal-soft: rgba(78, 227, 194, 0.12);
+      --purple: #c39bf5;
+      --purple-soft: rgba(195, 155, 245, 0.12);
+      --red: #f17666;
+      --red-soft: rgba(241, 118, 102, 0.12);
+      --blue: #5ba2f4;
+      --blue-soft: rgba(91, 162, 244, 0.12);
+      --green: #48d689;
+      --green-soft: rgba(72, 214, 137, 0.12);
+      --amber: #fbb034;
+      --amber-soft: rgba(251, 176, 52, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --code-bg: #0e1015;
+      --table-stripe: #171a23;
+      --radius: 12px;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', 'Manrope', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      /* IDE syntax highlighting tokens (Dark) */
+      --syn-keyword: #c792ea;
+      --syn-type: #82aaff;
+      --syn-string: #c3e88d;
+      --syn-number: #f78c6c;
+      --syn-comment: #60687d;
+      --syn-function: #82aaff;
+      --syn-preprocessor: #f07178;
+      --syn-operator: #89ddff;
+      --syn-punctuation: #89ddff;
+      --syn-variable: #eeffff;
+      --syn-format: #ffcb6b;
+      --syn-header: #f07178;
+      --syn-include: #f07178;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --cell-bg: #f8fafc;
+      --cell-border: #e2e8f0;
+      --border: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-faint: #94a3b8;
+      --accent: #ea580c;
+      --accent-glow: rgba(234, 88, 12, 0.2);
+      --accent-soft: rgba(234, 88, 12, 0.08);
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.08);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.08);
+      --shadow: rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --table-stripe: #f8fafc;
+
+      /* IDE syntax highlighting tokens (Light) */
+      --syn-keyword: #7c3aed;
+      --syn-type: #2563eb;
+      --syn-string: #16a34a;
+      --syn-number: #ea580c;
+      --syn-comment: #6b7280;
+      --syn-function: #2563eb;
+      --syn-preprocessor: #dc2626;
+      --syn-operator: #0891b2;
+      --syn-punctuation: #0891b2;
+      --syn-variable: #0f172a;
+      --syn-format: #d97706;
+      --syn-header: #dc2626;
+      --syn-include: #dc2626;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16.5px;
+      line-height: 1.75;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--teal), var(--purple));
+      transition: width 0.1s ease;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(18, 20, 26, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 900;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="light"] .top-nav {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-brand .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(28, 32, 42, 0.95), rgba(24, 27, 34, 0.98));
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 30px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-theme="light"] .hero-banner {
+      background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tag-accent {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .tag-teal {
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+
+    .tag-purple {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border: 1px solid var(--purple);
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.12rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .hero-author-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .author-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 10px var(--accent-glow);
+    }
+
+    .author-details h4 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .author-details p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #e06c15);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px var(--accent-glow);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .meta-item .val {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .meta-item .lbl {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-header-pill {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #toc-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .toc-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .toc-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+
+    .toc-card .ch-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .toc-card .ch-name {
+      font-family: var(--font-heading);
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .toc-card .ch-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+
+    .toc-pill-badge {
+      align-self: flex-start;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+    }
+
+    .chapter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
+    .ch-header {
+      margin-bottom: 28px;
+    }
+
+    .ch-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    h2.ch-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    h2.section-title {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 10px;
+      margin: 30px 0 18px;
+    }
+
+    h3 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 24px 0 10px;
+    }
+
+    h4 {
+      font-family: var(--font-heading);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 18px 0 8px;
+    }
+
+    h5.example-heading {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 28px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .prog-desc {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .program-block {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 28px;
+      margin-bottom: 28px;
+    }
+
+    .program-block:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .program-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 28px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 16.5px;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    code {
+      font-family: var(--font-code);
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border);
+    }
+
+    .key {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    ul, ol {
+      margin: 6px 0 14px 24px;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 6px;
+      line-height: 1.65;
+    }
+
+    .highlight-box {
+      background: var(--blue-soft);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .highlight-box.tip {
+      background: var(--green-soft);
+      border-left-color: var(--green);
+    }
+
+    .highlight-box.warning {
+      background: var(--amber-soft);
+      border-left-color: var(--amber);
+    }
+
+    .highlight-box.important {
+      background: var(--red-soft);
+      border-left-color: var(--red);
+    }
+
+    .highlight-box.remember {
+      background: var(--purple-soft);
+      border-left-color: var(--purple);
+    }
+
+    .highlight-box strong {
+      color: var(--text);
+    }
+
+    .syntax-box {
+      background: var(--bg-alt);
+      border: 1px dashed var(--border-accent);
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin: 12px 0 16px;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      color: var(--teal);
+      overflow-x: auto;
+    }
+
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 16px 0;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .code-header {
+      background: #151821;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    [data-theme="light"] .code-header {
+      background: #e2e8f0;
+    }
+
+    .code-title {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .code-title {
+      color: #334155;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .copy-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .code-body pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--font-code);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text);
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .code-body pre {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .syn-keyword { color: var(--syn-keyword); font-weight: 700; }
+    .syn-type { color: var(--syn-type); }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-comment { color: var(--syn-comment); font-style: italic; }
+    .syn-function { color: var(--syn-function); font-weight: 600; }
+    .syn-preprocessor { color: var(--syn-preprocessor); font-weight: 700; }
+    .syn-operator { color: var(--syn-operator); }
+    .syn-punctuation { color: var(--syn-punctuation); }
+    .syn-variable { color: var(--syn-variable); }
+    .syn-format { color: var(--syn-format); font-weight: 700; }
+    .syn-header { color: var(--syn-header); }
+    .syn-include { color: var(--syn-include); }
+
+    .output-box {
+      background: #090a0d;
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      margin: 12px 0 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] .output-box {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .output-header {
+      background: #11141c;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    [data-theme="light"] .output-header {
+      background: #0f172a;
+      color: #2dd4bf;
+      border-bottom-color: #334155;
+    }
+
+    .output-body pre {
+      padding: 12px 16px;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: #a9b7c6;
+      line-height: 1.5;
+      overflow-x: auto;
+      background: transparent;
+      border: none;
+    }
+
+    [data-theme="light"] .output-body pre {
+      color: #e2e8f0;
+    }
+
+    .memory-diagram {
+      display: flex;
+      gap: 0;
+      margin: 14px 0 0 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .mem-cell {
+      border: 2px solid var(--accent);
+      padding: 10px 18px;
+      text-align: center;
+      font-family: var(--font-code);
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--accent-soft);
+      color: var(--text);
+      min-width: 50px;
+    }
+
+    .mem-cell.null {
+      background: var(--red-soft);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .mem-cell:first-child {
+      border-radius: 6px 0 0 6px;
+    }
+
+    .mem-cell:last-child {
+      border-radius: 0 6px 6px 0;
+    }
+
+    .index-row {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .idx {
+      min-width: 50px;
+      padding: 4px 18px;
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-faint);
+      font-weight: 500;
+      font-family: var(--font-code);
+    }
+
+    .grid-2d {
+      margin: 14px auto;
+      text-align: center;
+    }
+
+    .grid-2d table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+
+    .grid-2d td {
+      border: 2px solid var(--accent);
+      padding: 10px 18px;
+      font-family: var(--font-code);
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--accent-soft);
+      color: var(--text);
+      text-align: center;
+    }
+
+    .grid-2d th {
+      background: transparent;
+      color: var(--text-faint);
+      font-size: 10px;
+      padding: 4px 18px;
+      font-weight: 500;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: var(--cell-bg);
+      color: var(--accent);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--accent);
+      font-family: var(--font-heading);
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    tr:nth-child(even) td {
+      background: var(--table-stripe);
+    }
+
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    .float-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 800;
+    }
+
+    .btn-float {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-float:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .top-nav, #progress-container, .float-actions, .copy-btn, .btn-primary, .btn-nav, .hero-buttons { display: none !important; }
+      .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .hero-banner, .chapter, .toc-card, #toc-section, .code-container, .output-box {
+        background: #ffffff !important; color: #000000 !important; border: 1px solid #cccccc !important; box-shadow: none !important; page-break-inside: avoid;
+      }
+      .code-body pre, .output-body pre { color: #000000 !important; background: #f8fafc !important; }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 20px 16px 60px; }
+      .hero-banner { padding: 24px 20px; }
+      .hero-title { font-size: 1.75rem; }
+      .chapter { padding: 20px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <header class="top-nav">
+    <a href="index.html" class="nav-brand">
+      <span class="badge">LEC 13</span>
+      <span>Sets in Python</span>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn-nav" title="Course Portal">
+        <span>🏠</span> Portal
+      </a>
+      <a href="Lec_12.html" class="btn-nav" title="Pointers in C (Lecture 12)">
+        <span>👉</span> Pointers
+      </a>
+      <a href="Lec_11.html" class="btn-nav" title="Dynamic Memory (Lecture 11)">
+        <span>💾</span> DMA
+      </a>
+      <button class="btn-nav" onclick="window.print()" title="Print / Export PDF">
+        <span>🖨️</span> Print PDF
+      </button>
+      <button class="btn-nav" id="theme-toggle-nav" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon-nav">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <header class="hero-banner">
+      <div class="hero-meta">
+        <span class="tag tag-accent">B.Tech 1st Semester</span>
+        <span class="tag tag-teal">Python: Sets</span>
+        <span class="tag tag-purple">5 Hands-On Programs</span>
+      </div>
+      <h1 class="hero-title">Sets in Python — Complete Masterclass</h1>
+      <p class="hero-subtitle">
+        The ultimate comprehensive guide to sets in Python. Covers <strong>set characteristics</strong>, <strong>creating sets</strong>, <strong>adding &amp; removing elements</strong>, <strong>set methods</strong>, <strong>union</strong>, <strong>intersection</strong>, <strong>difference</strong>, <strong>symmetric difference</strong>, <strong>subset &amp; superset</strong>, <strong>lists vs tuples vs sets</strong>, and <strong>set comprehension</strong> — with 5 complete solved programs, outputs, and exam-ready notes.
+      </p>
+      <div class="hero-author-box">
+        <div class="author-profile">
+          <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="author-img"
+            onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+          <div class="author-details">
+            <h4>Prepared by Umer Farooq</h4>
+            <p>Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="window.print()">
+            <span>🖨️</span> Save as PDF / Print
+          </button>
+        </div>
+      </div>
+      <div class="hero-meta-strip">
+        <div class="meta-item">
+          <span class="val">6</span>
+          <span class="lbl">Core Sections</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">5</span>
+          <span class="lbl">Complete Programs</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">6</span>
+          <span class="lbl">Set Operations</span>
+        </div>
+        <div class="meta-item">
+          <span class="val">3</span>
+          <span class="lbl">Collections Compared</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TABLE OF CONTENTS -->
+    <section id="toc-section">
+      <div class="section-header-pill">📚 Quick Chapter Navigation</div>
+      <div class="toc-grid">
+        <a href="#sec-intro" class="toc-card">
+          <span class="ch-num">SECTION 01</span>
+          <span class="ch-name">1. Introduction to Sets</span>
+          <span class="ch-desc">Definition, characteristics, creating sets, empty set trap, add/remove methods.</span>
+          <span class="toc-pill-badge">Fundamentals</span>
+        </a>
+        <a href="#sec-operations" class="toc-card">
+          <span class="ch-num">SECTION 02</span>
+          <span class="ch-name">2. Set Operations</span>
+          <span class="ch-desc">Union, intersection, difference, symmetric difference, subset &amp; superset.</span>
+          <span class="toc-pill-badge">Operations</span>
+        </a>
+        <a href="#sec-compare" class="toc-card">
+          <span class="ch-num">SECTION 03</span>
+          <span class="ch-name">3. Lists vs Tuples vs Sets</span>
+          <span class="ch-desc">Side-by-side comparison table, when to use which, type conversion.</span>
+          <span class="toc-pill-badge">Comparison</span>
+        </a>
+        <a href="#sec-points" class="toc-card">
+          <span class="ch-num">SECTION 04</span>
+          <span class="ch-name">4. Important Points</span>
+          <span class="ch-desc">Boolean trick (<code>True == 1</code>) and set comprehension.</span>
+          <span class="toc-pill-badge">Deep Dive</span>
+        </a>
+        <a href="#sec-programs" class="toc-card">
+          <span class="ch-num">SECTION 05</span>
+          <span class="ch-name">5. Hands-On Programs</span>
+          <span class="ch-desc">5 complete Python programs with outputs, from duplicates to enrollment system.</span>
+          <span class="toc-pill-badge">Programs 1 – 5</span>
+        </a>
+        <a href="#sec-cheatsheet" class="toc-card">
+          <span class="ch-num">SECTION 06</span>
+          <span class="ch-name">6. Cheat Sheet</span>
+          <span class="ch-desc">Quick reference table of every set method, operator and exam tip.</span>
+          <span class="toc-pill-badge">Summary</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="sec-intro" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 01 &bull; Fundamentals</div>
+        <h2 class="ch-title">1. Introduction to Sets in Python</h2>
+      </div>
+
+
+      <h3>1.1 What is a Set?</h3>
+      <div class="highlight-box">
+        <strong>Definition:</strong> A <strong>Set</strong> is an <strong>unordered collection of unique (non-duplicate) elements</strong> in Python. Sets are written with curly braces <code>{ }</code>.
+      </div>
+      <p>Sets are one of the <strong>four built-in data types</strong> in Python used to store collections of data (the others are <strong>List</strong>, <strong>Tuple</strong>, and <strong>Dictionary</strong>).</p>
+
+      <h3>1.2 Key Characteristics of Sets</h3>
+      <ol>
+        <li><strong>Unordered</strong> — The items in a set do NOT have a defined order. Every time you print a set, items can appear in a different order. You cannot access set items by index or key.</li>
+        <li><strong>Unique Elements</strong> — Duplicate values are automatically removed. If you try to add a duplicate, Python simply ignores it.</li>
+        <li><strong>Mutable</strong> — You can add or remove items after the set is created. However, the items themselves must be immutable (like numbers, strings, tuples).</li>
+        <li><strong>Unindexed</strong> — You cannot access items using an index like <code>my_set[0]</code>. You must use loops or the <code>in</code> keyword.</li>
+      </ol>
+
+      <h3>1.3 How to Create a Set</h3>
+      <h4>💻 Method 1: Using Curly Braces</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Creating a Set (Curly Braces)</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>fruits = {<span class="syn-string">&quot;apple&quot;</span>, <span class="syn-string">&quot;banana&quot;</span>, <span class="syn-string">&quot;cherry&quot;</span>, <span class="syn-string">&quot;apple&quot;</span>}
+<span class="syn-function">print</span>(fruits)
+<span class="syn-function">print</span>(<span class="syn-function">type</span>(fruits))</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>{'cherry', 'banana', 'apple'}
+&lt;class 'set'&gt;</pre>
+        </div>
+      </div>
+      <div class="highlight-box tip">
+        <strong>📌 Note:</strong> Notice that <code>'apple'</code> appears only once even though we wrote it twice. Sets automatically remove duplicates!
+      </div>
+      <h4>💻 Method 2: Using the set() Constructor</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Creating a Set (set() Constructor)</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># From a list</span>
+numbers = <span class="syn-type">set</span>([<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>])
+<span class="syn-function">print</span>(numbers)
+
+<span class="syn-comment"># From a string (each character becomes an element)</span>
+letters = <span class="syn-type">set</span>(<span class="syn-string">&quot;hello&quot;</span>)
+<span class="syn-function">print</span>(letters)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>{1, 2, 3, 4, 5}
+{'h', 'e', 'l', 'o'}</pre>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <strong>Why only 4 letters?</strong> The string <code>"hello"</code> has 5 characters, but the letter <code>'l'</code> appears twice. Since a set keeps only unique elements, the duplicate <code>'l'</code> is dropped.
+      </div>
+
+      <h3>1.4 Creating an Empty Set</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Empty Set vs Empty Dictionary</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># WRONG way - this creates a dictionary, not a set!</span>
+wrong = {}
+<span class="syn-function">print</span>(<span class="syn-function">type</span>(wrong))   <span class="syn-comment"># &lt;class 'dict'&gt;</span>
+
+<span class="syn-comment"># CORRECT way - use set()</span>
+correct = <span class="syn-type">set</span>()
+<span class="syn-function">print</span>(<span class="syn-function">type</span>(correct)) <span class="syn-comment"># &lt;class 'set'&gt;</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>&lt;class 'dict'&gt;
+&lt;class 'set'&gt;</pre>
+        </div>
+      </div>
+      <div class="highlight-box important">
+        <strong>📌 Note:</strong> To create an empty set, you <strong>MUST</strong> use <code>set()</code>. Using <code>{}</code> creates an empty <strong>dictionary</strong>, not a set!
+      </div>
+
+      <h3>1.5 What Can a Set Contain?</h3>
+      <p>Sets can contain <strong>numbers, strings, and tuples</strong> — but <strong>NOT lists or dictionaries</strong> (because lists and dictionaries are mutable, so they are <em>unhashable</em>).</p>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Valid and Invalid Set Elements</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Valid set elements</span>
+valid_set = {<span class="syn-number">1</span>, <span class="syn-number">2.5</span>, <span class="syn-string">&quot;hello&quot;</span>, (<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>), <span class="syn-keyword">True</span>}
+<span class="syn-function">print</span>(valid_set)
+
+<span class="syn-comment"># Invalid - this will give an error:</span>
+<span class="syn-comment"># invalid_set = {1, [2, 3]}  # TypeError: unhashable type: 'list'</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>{1, 2.5, (1, 2, 3), 'hello'}</pre>
+        </div>
+      </div>
+      <table>
+        <tr><th>Element Type</th><th>Allowed in a Set?</th><th>Reason</th></tr>
+        <tr><td>int, float, bool</td><td>✅ Yes</td><td>Immutable and hashable</td></tr>
+        <tr><td>str</td><td>✅ Yes</td><td>Immutable and hashable</td></tr>
+        <tr><td>tuple</td><td>✅ Yes</td><td>Immutable and hashable (as long as it contains only immutable items)</td></tr>
+        <tr><td>list</td><td>❌ No</td><td>Mutable → <code>TypeError: unhashable type: 'list'</code></td></tr>
+        <tr><td>dict</td><td>❌ No</td><td>Mutable → <code>TypeError: unhashable type: 'dict'</code></td></tr>
+        <tr><td>set</td><td>❌ No</td><td>A set itself is mutable, so a set cannot be an element of another set</td></tr>
+      </table>
+
+      <h3>1.6 Accessing Set Elements</h3>
+      <p>Because sets are unordered and unindexed, you cannot use <code>my_set[0]</code>. Instead, you <strong>loop</strong> through the set or <strong>check membership</strong> with the <code>in</code> keyword.</p>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Looping Through a Set</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>colors = {<span class="syn-string">&quot;red&quot;</span>, <span class="syn-string">&quot;green&quot;</span>, <span class="syn-string">&quot;blue&quot;</span>, <span class="syn-string">&quot;yellow&quot;</span>}
+
+<span class="syn-comment"># Using a for loop</span>
+<span class="syn-keyword">for</span> color <span class="syn-keyword">in</span> colors:
+    <span class="syn-function">print</span>(color)
+
+<span class="syn-comment"># Check if an item exists</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;red&quot;</span> <span class="syn-keyword">in</span> colors)     <span class="syn-comment"># True</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;purple&quot;</span> <span class="syn-keyword">in</span> colors)  <span class="syn-comment"># False</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>red
+blue
+green
+yellow
+True
+False</pre>
+        </div>
+      </div>
+      <div class="highlight-box warning">
+        <strong>Order Warning:</strong> The order in which the loop prints the colours can be different every time you run the program. Never write a program that depends on the order of items in a set.
+      </div>
+
+      <h3>1.7 Adding and Removing Elements</h3>
+      <h4>💻 Adding Elements — add() and update()</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Adding Elements to a Set</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>fruits = {<span class="syn-string">&quot;apple&quot;</span>, <span class="syn-string">&quot;banana&quot;</span>}
+
+<span class="syn-comment"># add() - adds one element</span>
+fruits.<span class="syn-function">add</span>(<span class="syn-string">&quot;cherry&quot;</span>)
+<span class="syn-function">print</span>(fruits)
+
+<span class="syn-comment"># update() - adds multiple elements (from list, tuple, set, etc.)</span>
+fruits.<span class="syn-function">update</span>([<span class="syn-string">&quot;mango&quot;</span>, <span class="syn-string">&quot;grape&quot;</span>, <span class="syn-string">&quot;banana&quot;</span>])
+<span class="syn-function">print</span>(fruits)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>{'cherry', 'banana', 'apple'}
+{'grape', 'cherry', 'mango', 'banana', 'apple'}</pre>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <strong>Note:</strong> <code>'banana'</code> was passed to <code>update()</code> again, but since it was already in the set, it was ignored — no duplicate was created.
+      </div>
+      <h4>💻 Removing Elements — remove(), discard(), pop(), clear()</h4>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Removing Elements from a Set</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>fruits = {<span class="syn-string">&quot;apple&quot;</span>, <span class="syn-string">&quot;banana&quot;</span>, <span class="syn-string">&quot;cherry&quot;</span>, <span class="syn-string">&quot;mango&quot;</span>}
+
+<span class="syn-comment"># remove() - removes an element; raises ERROR if not found</span>
+fruits.<span class="syn-function">remove</span>(<span class="syn-string">&quot;banana&quot;</span>)
+<span class="syn-function">print</span>(fruits)
+
+<span class="syn-comment"># discard() - removes an element; does NOT raise error if not found</span>
+fruits.<span class="syn-function">discard</span>(<span class="syn-string">&quot;grape&quot;</span>)  <span class="syn-comment"># No error even though 'grape' is not in set</span>
+<span class="syn-function">print</span>(fruits)
+
+<span class="syn-comment"># pop() - removes and returns a random element</span>
+removed = fruits.<span class="syn-function">pop</span>()
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Removed: {removed}&quot;</span>)
+<span class="syn-function">print</span>(fruits)
+
+<span class="syn-comment"># clear() - removes ALL elements</span>
+fruits.<span class="syn-function">clear</span>()
+<span class="syn-function">print</span>(fruits)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>{'cherry', 'mango', 'apple'}
+{'cherry', 'mango', 'apple'}
+Removed: cherry
+{'mango', 'apple'}
+set()</pre>
+        </div>
+      </div>
+      <table>
+        <tr><th>Method</th><th>If element is missing</th><th>Returns</th><th>Use when…</th></tr>
+        <tr><td><code>remove(x)</code></td><td>Raises <code>KeyError</code></td><td>None</td><td>You are sure the element exists and want an error if it does not</td></tr>
+        <tr><td><code>discard(x)</code></td><td>Does nothing (no error)</td><td>None</td><td>You are not sure whether the element exists</td></tr>
+        <tr><td><code>pop()</code></td><td>Raises <code>KeyError</code> on an empty set</td><td>The removed (arbitrary) element</td><td>You need to remove any one element</td></tr>
+        <tr><td><code>clear()</code></td><td>—</td><td>None</td><td>You want to empty the whole set</td></tr>
+      </table>
+
+      <h3>1.8 Other Useful Set Methods</h3>
+      <table>
+        <tr><th>Method</th><th>Description</th><th>Example</th></tr>
+        <tr><td><code>len(s)</code></td><td>Returns the number of elements</td><td><code>len({1,2,3}) = 3</code></td></tr>
+        <tr><td><code>s.copy()</code></td><td>Returns a shallow copy of the set</td><td><code>s2 = s.copy()</code></td></tr>
+        <tr><td><code>s.add(x)</code></td><td>Adds element x to the set</td><td><code>s.add(5)</code></td></tr>
+        <tr><td><code>s.remove(x)</code></td><td>Removes x; raises KeyError if not found</td><td><code>s.remove(3)</code></td></tr>
+        <tr><td><code>s.discard(x)</code></td><td>Removes x; no error if not found</td><td><code>s.discard(3)</code></td></tr>
+        <tr><td><code>s.pop()</code></td><td>Removes and returns a random element</td><td><code>s.pop()</code></td></tr>
+        <tr><td><code>s.clear()</code></td><td>Removes all elements from the set</td><td><code>s.clear()</code></td></tr>
+        <tr><td><code>s.update(t)</code></td><td>Adds all elements from t to s</td><td><code>s.update([4,5])</code></td></tr>
+        <tr><td><code>x in s</code></td><td>Returns True if x is in the set</td><td><code>3 in {1,2,3} = True</code></td></tr>
+      </table>
+    </section>
+    <section id="sec-operations" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 02 &bull; Operations</div>
+        <h2 class="ch-title">2. Set Operations</h2>
+      </div>
+
+      <p>Set operations in Python work just like set operations in mathematics. They let you <strong>combine</strong>, <strong>compare</strong>, and <strong>find differences</strong> between sets. Python supports these using both <strong>methods</strong> and <strong>operators</strong>.</p>
+      <table>
+        <tr><th>Operation</th><th>Math Symbol</th><th>Method</th><th>Operator</th></tr>
+        <tr><td>Union</td><td>A ∪ B</td><td><code>A.union(B)</code></td><td><code>A | B</code></td></tr>
+        <tr><td>Intersection</td><td>A ∩ B</td><td><code>A.intersection(B)</code></td><td><code>A &amp; B</code></td></tr>
+        <tr><td>Difference</td><td>A − B</td><td><code>A.difference(B)</code></td><td><code>A - B</code></td></tr>
+        <tr><td>Symmetric Difference</td><td>A △ B</td><td><code>A.symmetric_difference(B)</code></td><td><code>A ^ B</code></td></tr>
+        <tr><td>Subset</td><td>A ⊆ B</td><td><code>A.issubset(B)</code></td><td><code>A &lt;= B</code></td></tr>
+        <tr><td>Superset</td><td>A ⊇ B</td><td><code>A.issuperset(B)</code></td><td><code>A &gt;= B</code></td></tr>
+      </table>
+
+      <h3>2.1 Union (A ∪ B)</h3>
+      <div class="highlight-box">
+        <strong>Definition:</strong> <strong>Union</strong> combines <strong>all elements from both sets</strong>. Duplicates are removed automatically.
+      </div>
+      <div class="syntax-box">
+        Method:   A.union(B)<br>
+        Operator: A | B
+      </div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>A = {1, 2, 3, 4}</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">1</div><div class="mem-cell">2</div><div class="mem-cell">3</div><div class="mem-cell">4</div></div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>B = {3, 4, 5, 6}</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">3</div><div class="mem-cell">4</div><div class="mem-cell">5</div><div class="mem-cell">6</div></div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>A ∪ B</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">1</div><div class="mem-cell">2</div><div class="mem-cell">3</div><div class="mem-cell">4</div><div class="mem-cell">5</div><div class="mem-cell">6</div></div>
+      <br>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Union Example</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>A = {<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>}
+B = {<span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>}
+
+<span class="syn-comment"># Using method</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Union (method):&quot;</span>, A.<span class="syn-function">union</span>(B))
+
+<span class="syn-comment"># Using operator</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Union (operator):&quot;</span>, A | B)
+
+<span class="syn-comment"># Union of multiple sets</span>
+C = {<span class="syn-number">7</span>, <span class="syn-number">8</span>}
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Multiple union:&quot;</span>, A | B | C)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Union (method): {1, 2, 3, 4, 5, 6}
+Union (operator): {1, 2, 3, 4, 5, 6}
+Multiple union: {1, 2, 3, 4, 5, 6, 7, 8}</pre>
+        </div>
+      </div>
+
+      <h3>2.2 Intersection (A ∩ B)</h3>
+      <div class="highlight-box">
+        <strong>Definition:</strong> <strong>Intersection</strong> gives only the elements that are <strong>COMMON in both sets</strong>.
+      </div>
+      <div class="syntax-box">
+        Method:   A.intersection(B)<br>
+        Operator: A &amp; B
+      </div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>A = {1, 2, 3, 4, 5}</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">1</div><div class="mem-cell">2</div><div class="mem-cell">3</div><div class="mem-cell">4</div><div class="mem-cell">5</div></div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>B = {3, 4, 5, 6, 7}</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">3</div><div class="mem-cell">4</div><div class="mem-cell">5</div><div class="mem-cell">6</div><div class="mem-cell">7</div></div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>A ∩ B</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">3</div><div class="mem-cell">4</div><div class="mem-cell">5</div></div>
+      <br>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Intersection Example</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>A = {<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>}
+B = {<span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>}
+
+<span class="syn-comment"># Using method</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Intersection (method):&quot;</span>, A.<span class="syn-function">intersection</span>(B))
+
+<span class="syn-comment"># Using operator</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Intersection (operator):&quot;</span>, A &amp; B)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Intersection (method): {3, 4, 5}
+Intersection (operator): {3, 4, 5}</pre>
+        </div>
+      </div>
+
+      <h3>2.3 Difference (A − B)</h3>
+      <div class="highlight-box">
+        <strong>Definition:</strong> <strong>Difference</strong> gives elements that are <strong>in A but NOT in B</strong>.
+      </div>
+      <div class="syntax-box">
+        Method:   A.difference(B)<br>
+        Operator: A - B
+      </div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>A − B</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">1</div><div class="mem-cell">2</div></div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>B − A</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">6</div><div class="mem-cell">7</div></div>
+      <br>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Difference Example</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>A = {<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>}
+B = {<span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>}
+
+<span class="syn-comment"># Elements in A but not in B</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;A - B:&quot;</span>, A.<span class="syn-function">difference</span>(B))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;A - B:&quot;</span>, A - B)
+
+<span class="syn-comment"># Elements in B but not in A</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;B - A:&quot;</span>, B.<span class="syn-function">difference</span>(A))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;B - A:&quot;</span>, B - A)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>A - B: {1, 2}
+A - B: {1, 2}
+B - A: {6, 7}
+B - A: {6, 7}</pre>
+        </div>
+      </div>
+      <div class="highlight-box important">
+        <strong>Important:</strong> Difference is <strong>NOT commutative</strong>. <code>A - B</code> and <code>B - A</code> give different results (here <code>{1, 2}</code> vs <code>{6, 7}</code>). The order of the sets matters!
+      </div>
+
+      <h3>2.4 Symmetric Difference (A ^ B)</h3>
+      <div class="highlight-box">
+        <strong>Definition:</strong> <strong>Symmetric Difference</strong> gives elements that are in <strong>EITHER set, but NOT in both</strong>. Think of it as: <code>(A ∪ B) − (A ∩ B)</code>
+      </div>
+      <div class="syntax-box">
+        Method:   A.symmetric_difference(B)<br>
+        Operator: A ^ B
+      </div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>A = {1, 2, 3, 4}</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">1</div><div class="mem-cell">2</div><div class="mem-cell">3</div><div class="mem-cell">4</div></div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>B = {3, 4, 5, 6}</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">3</div><div class="mem-cell">4</div><div class="mem-cell">5</div><div class="mem-cell">6</div></div>
+      <p class="prog-desc" style="text-align:center; margin-bottom:6px; margin-top:14px;"><strong>A ^ B</strong></p>
+      <div class="memory-diagram"><div class="mem-cell">1</div><div class="mem-cell">2</div><div class="mem-cell">5</div><div class="mem-cell">6</div></div>
+      <br>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Symmetric Difference Example</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>A = {<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>}
+B = {<span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>}
+
+<span class="syn-comment"># Using method</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Symmetric Difference:&quot;</span>, A.<span class="syn-function">symmetric_difference</span>(B))
+
+<span class="syn-comment"># Using operator</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Symmetric Difference:&quot;</span>, A ^ B)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Symmetric Difference: {1, 2, 5, 6}
+Symmetric Difference: {1, 2, 5, 6}</pre>
+        </div>
+      </div>
+
+      <h3>2.5 Subset and Superset</h3>
+      <ul>
+        <li><strong>Subset:</strong> A is a subset of B if <strong>ALL elements of A are also in B</strong>.</li>
+        <li><strong>Superset:</strong> A is a superset of B if <strong>A contains ALL elements of B</strong>.</li>
+      </ul>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Subset and Superset Example</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>A = {<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>}
+B = {<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>}
+
+<span class="syn-comment"># Subset check</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;A is subset of B:&quot;</span>, A.<span class="syn-function">issubset</span>(B))     <span class="syn-comment"># True</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;A &lt;= B:&quot;</span>, A &lt;= B)                      <span class="syn-comment"># True</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;B is subset of A:&quot;</span>, B.<span class="syn-function">issubset</span>(A))     <span class="syn-comment"># False</span>
+
+<span class="syn-comment"># Superset check</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;B is superset of A:&quot;</span>, B.<span class="syn-function">issuperset</span>(A)) <span class="syn-comment"># True</span>
+<span class="syn-function">print</span>(<span class="syn-string">&quot;B &gt;= A:&quot;</span>, B &gt;= A)                      <span class="syn-comment"># True</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>A is subset of B: True
+A &lt;= B: True
+B is subset of A: False
+B is superset of A: True
+B &gt;= A: True</pre>
+        </div>
+      </div>
+
+      <h3>2.6 Disjoint Sets — isdisjoint()</h3>
+      <p>Two sets are <strong>disjoint</strong> when they have <strong>no common elements</strong> (their intersection is empty). The method <code>A.isdisjoint(B)</code> returns <code>True</code> in that case. It is used in <a href="#prog-4" style="color: var(--accent);">Program 4</a> below.</p>
+      <div class="syntax-box">
+        A.isdisjoint(B)   # True if A and B share no elements
+      </div>
+    </section>
+    <section id="sec-compare" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 03 &bull; Comparison</div>
+        <h2 class="ch-title">3. Difference Between Lists, Tuples, and Sets</h2>
+      </div>
+
+      <p>Python has three main collection types for storing multiple values: <strong>Lists</strong>, <strong>Tuples</strong>, and <strong>Sets</strong>. They look similar but behave very differently. Let's understand each one in easy English.</p>
+
+      <h3>3.1 Lists</h3>
+      <div class="highlight-box">
+        <strong>Definition:</strong> A <strong>List</strong> is an <strong>ordered, mutable</strong> collection that <strong>allows duplicate</strong> elements. Lists are created using square brackets <code>[ ]</code>.
+      </div>
+      <ul>
+        <li><strong>Ordered</strong> — items stay in the order you add them.</li>
+        <li><strong>Mutable</strong> — you can change, add, or remove items after creation.</li>
+        <li><strong>Allows duplicates</strong> — <code>[1, 1, 2, 2, 3]</code> is perfectly valid.</li>
+        <li><strong>Indexed</strong> — you can access items by position: <code>my_list[0]</code>, <code>my_list[1]</code>, etc.</li>
+        <li><strong>Slower for searching</strong> — checking if an item exists takes more time for large lists.</li>
+      </ul>
+
+      <h3>3.2 Tuples</h3>
+      <div class="highlight-box">
+        <strong>Definition:</strong> A <strong>Tuple</strong> is an <strong>ordered, immutable</strong> collection that <strong>allows duplicate</strong> elements. Tuples are created using parentheses <code>( )</code>.
+      </div>
+      <ul>
+        <li><strong>Ordered</strong> — items stay in the order you add them.</li>
+        <li><strong>Immutable</strong> — you CANNOT change, add, or remove items after creation.</li>
+        <li><strong>Allows duplicates</strong> — <code>(1, 1, 2, 2)</code> is valid.</li>
+        <li><strong>Indexed</strong> — you can access items by position: <code>my_tuple[0]</code>.</li>
+        <li><strong>Faster than lists</strong> — because they are immutable, Python can optimize them.</li>
+        <li><strong>Can be used as dictionary keys</strong> — because they are immutable (hashable).</li>
+      </ul>
+
+      <h3>3.3 Sets</h3>
+      <div class="highlight-box">
+        <strong>Definition:</strong> A <strong>Set</strong> is an <strong>unordered, mutable</strong> collection that does <strong>NOT allow duplicate</strong> elements. Sets are created using curly braces <code>{ }</code> or the <code>set()</code> constructor.
+      </div>
+      <ul>
+        <li><strong>Unordered</strong> — items have no fixed position or order.</li>
+        <li><strong>Mutable</strong> — you can add or remove items.</li>
+        <li><strong>No duplicates</strong> — duplicates are automatically removed.</li>
+        <li><strong>Not indexed</strong> — you cannot use <code>my_set[0]</code> to access items.</li>
+        <li><strong>Very fast for searching</strong> — checking <code>x in my_set</code> is extremely fast (<code>O(1)</code> time).</li>
+        <li><strong>Supports mathematical operations</strong> — union, intersection, difference, etc.</li>
+      </ul>
+
+      <h3>3.4 Detailed Comparison Table</h3>
+      <table>
+        <tr><th>Feature</th><th>List [ ]</th><th>Tuple ( )</th><th>Set { }</th></tr>
+        <tr><td>Syntax</td><td><code>[ 1, 2, 3 ]</code></td><td><code>( 1, 2, 3 )</code></td><td><code>{ 1, 2, 3 }</code></td></tr>
+        <tr><td>Ordered?</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+        <tr><td>Mutable?</td><td>Yes</td><td>No (Immutable)</td><td>Yes</td></tr>
+        <tr><td>Duplicates?</td><td>Allowed</td><td>Allowed</td><td>Not Allowed</td></tr>
+        <tr><td>Indexed?</td><td>Yes (<code>list[0]</code>)</td><td>Yes (<code>tuple[0]</code>)</td><td>No</td></tr>
+        <tr><td>Slicing?</td><td>Yes (<code>list[1:3]</code>)</td><td>Yes (<code>tuple[1:3]</code>)</td><td>No</td></tr>
+        <tr><td>Search Speed</td><td>Slow <code>O(n)</code></td><td>Slow <code>O(n)</code></td><td>Fast <code>O(1)</code></td></tr>
+        <tr><td>Use as Dict Key?</td><td>No</td><td>Yes</td><td>No</td></tr>
+        <tr><td>Methods</td><td>Many (append, sort...)</td><td>Few (count, index)</td><td>Many (add, union...)</td></tr>
+        <tr><td>Math Operations?</td><td>No</td><td>No</td><td>Yes (Union, Intersection)</td></tr>
+        <tr><td>Memory Usage</td><td>More</td><td>Less</td><td>More</td></tr>
+        <tr><td>When to Use?</td><td>Ordered, changeable data</td><td>Fixed, safe data</td><td>Unique values, fast lookup</td></tr>
+      </table>
+
+      <h3>3.5 When to Use Which?</h3>
+      <div class="highlight-box tip">
+        <strong>Use a List</strong> when you need to store items in a <strong>specific order</strong> and might need to <strong>change</strong> them later.<br><em>Example: A to-do list, student marks.</em>
+      </div>
+      <div class="highlight-box warning">
+        <strong>Use a Tuple</strong> when your data should <strong>NOT change</strong>.<br><em>Example: Coordinates (x, y), days of the week, RGB color values.</em>
+      </div>
+      <div class="highlight-box remember">
+        <strong>Use a Set</strong> when you need <strong>unique items</strong> and want <strong>fast membership testing</strong>.<br><em>Example: Unique student IDs, removing duplicates from a list.</em>
+      </div>
+
+      <h3>3.6 Converting Between List, Tuple, and Set</h3>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Converting Between List, Tuple, and Set</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>my_list = [<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">2</span>, <span class="syn-number">1</span>]
+
+<span class="syn-comment"># Convert to tuple</span>
+my_tuple = <span class="syn-type">tuple</span>(my_list)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Tuple:&quot;</span>, my_tuple)
+
+<span class="syn-comment"># Convert to set (removes duplicates)</span>
+my_set = <span class="syn-type">set</span>(my_list)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Set:&quot;</span>, my_set)
+
+<span class="syn-comment"># Convert set back to list</span>
+back_to_list = <span class="syn-type">list</span>(my_set)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Back to list:&quot;</span>, back_to_list)
+
+<span class="syn-comment"># Convert set to tuple</span>
+set_to_tuple = <span class="syn-type">tuple</span>(my_set)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Set to tuple:&quot;</span>, set_to_tuple)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>Tuple: (1, 2, 3, 2, 1)
+Set: {1, 2, 3}
+Back to list: [1, 2, 3]
+Set to tuple: (1, 2, 3)</pre>
+        </div>
+      </div>
+    </section>
+    <section id="sec-points" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📘 Section 04 &bull; Deep Dive</div>
+        <h2 class="ch-title">4. Important Points You Should Know</h2>
+      </div>
+
+
+      <h3>4.1 Sets and Boolean Values</h3>
+      <p>In Python, <code>True</code> is treated as <code>1</code> and <code>False</code> is treated as <code>0</code>. So a set will treat <code>True</code> and <code>1</code> as the <strong>same value</strong>, and <code>False</code> and <code>0</code> as the <strong>same value</strong>.</p>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Boolean Trick in Sets</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code>s = {<span class="syn-number">1</span>, <span class="syn-keyword">True</span>, <span class="syn-number">0</span>, <span class="syn-keyword">False</span>}
+<span class="syn-function">print</span>(s)  <span class="syn-comment"># Only {0, 1} because True==1 and False==0</span></code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>{0, 1}</pre>
+        </div>
+      </div>
+
+      <h3>4.2 Set Comprehension</h3>
+      <p>Just like list comprehension, you can create sets using <strong>set comprehension</strong> — a compact way to build sets.</p>
+      <div class="syntax-box">
+        { expression for item in iterable }<br>
+        { expression for item in iterable if condition }
+      </div>
+      <div class="code-container">
+        <div class="code-header">
+          <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Set Comprehension</div>
+          <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+        </div>
+        <div class="code-body">
+          <pre><code><span class="syn-comment"># Squares of numbers 1 to 10</span>
+squares = {x**<span class="syn-number">2</span> <span class="syn-keyword">for</span> x <span class="syn-keyword">in</span> <span class="syn-type">range</span>(<span class="syn-number">1</span>, <span class="syn-number">11</span>)}
+<span class="syn-function">print</span>(squares)
+
+<span class="syn-comment"># Even numbers only</span>
+evens = {x <span class="syn-keyword">for</span> x <span class="syn-keyword">in</span> <span class="syn-type">range</span>(<span class="syn-number">1</span>, <span class="syn-number">21</span>) <span class="syn-keyword">if</span> x % <span class="syn-number">2</span> == <span class="syn-number">0</span>}
+<span class="syn-function">print</span>(evens)</code></pre>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">🖥️ Output (Rendered ASCII Output)</div>
+        <div class="output-body">
+          <pre>{64, 1, 4, 36, 100, 9, 16, 49, 81, 25}
+{2, 4, 6, 8, 10, 12, 14, 16, 18, 20}</pre>
+        </div>
+      </div>
+    </section>
+    <section id="sec-programs" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">💻 Section 05 &bull; Programs</div>
+        <h2 class="ch-title">5. Programs on Sets and Operations</h2>
+      </div>
+
+      <p>Five complete, runnable Python programs demonstrating sets and set operations — from removing duplicates to a real-world student enrollment system.</p>
+
+      <div class="program-block" id="prog-1">
+        <div class="program-title">📌 Program 1: Remove Duplicates from a List Using a Set</div>
+        <p class="prog-desc">Definition: When you convert a list to a set, all duplicate values are automatically removed because sets only store unique elements. Then you can convert it back to a list.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Program 1</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Program to remove duplicates from a list using a set</span>
+numbers = [<span class="syn-number">1</span>, <span class="syn-number">5</span>, <span class="syn-number">3</span>, <span class="syn-number">2</span>, <span class="syn-number">5</span>, <span class="syn-number">1</span>, <span class="syn-number">8</span>, <span class="syn-number">3</span>, <span class="syn-number">9</span>, <span class="syn-number">2</span>, <span class="syn-number">7</span>, <span class="syn-number">1</span>]
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Original list:&quot;</span>, numbers)
+
+<span class="syn-comment"># Convert to set to remove duplicates</span>
+unique_numbers = <span class="syn-type">list</span>(<span class="syn-type">set</span>(numbers))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;After removing duplicates:&quot;</span>, unique_numbers)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Number of duplicates removed:&quot;</span>, <span class="syn-function">len</span>(numbers) - <span class="syn-function">len</span>(unique_numbers))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Program 1 Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Original list: [1, 5, 3, 2, 5, 1, 8, 3, 9, 2, 7, 1]
+After removing duplicates: [1, 2, 3, 5, 7, 8, 9]
+Number of duplicates removed: 5</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block" id="prog-2">
+        <div class="program-title">📌 Program 2: Find Common Elements Between Two Sets (Intersection)</div>
+        <p class="prog-desc">Definition: Intersection finds elements that exist in BOTH sets. This is useful when you want to find shared items, like students who are in both the cricket team AND the football team.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Program 2</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Find common subjects between two students</span>
+student1_subjects = {<span class="syn-string">&quot;Math&quot;</span>, <span class="syn-string">&quot;Physics&quot;</span>, <span class="syn-string">&quot;Chemistry&quot;</span>, <span class="syn-string">&quot;English&quot;</span>, <span class="syn-string">&quot;Hindi&quot;</span>}
+student2_subjects = {<span class="syn-string">&quot;Math&quot;</span>, <span class="syn-string">&quot;Biology&quot;</span>, <span class="syn-string">&quot;English&quot;</span>, <span class="syn-string">&quot;History&quot;</span>, <span class="syn-string">&quot;Hindi&quot;</span>}
+
+<span class="syn-comment"># Find common subjects</span>
+common = student1_subjects &amp; student2_subjects
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Student 1 subjects:&quot;</span>, student1_subjects)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Student 2 subjects:&quot;</span>, student2_subjects)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Common subjects:&quot;</span>, common)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Number of common subjects:&quot;</span>, <span class="syn-function">len</span>(common))</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Program 2 Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Student 1 subjects: {'Hindi', 'English', 'Physics', 'Chemistry', 'Math'}
+Student 2 subjects: {'Hindi', 'English', 'Biology', 'History', 'Math'}
+Common subjects: {'Hindi', 'English', 'Math'}
+Number of common subjects: 3</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block" id="prog-3">
+        <div class="program-title">📌 Program 3: Count Character Frequency Using Sets</div>
+        <p class="prog-desc">Definition: This program uses a set to find all unique characters in a string, then counts how many times each character appears. Sets are great for getting unique values quickly.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Program 3</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Count frequency of each character in a string</span>
+text = <span class="syn-string">&quot;hello world python programming&quot;</span>
+
+<span class="syn-comment"># Get unique characters (excluding space)</span>
+unique_chars = <span class="syn-type">set</span>(text.<span class="syn-function">replace</span>(<span class="syn-string">&quot; &quot;</span>, <span class="syn-string">&quot;&quot;</span>))
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Unique characters:&quot;</span>, unique_chars)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Number of unique characters:&quot;</span>, <span class="syn-function">len</span>(unique_chars))
+
+<span class="syn-comment"># Count frequency of each character</span>
+<span class="syn-function">print</span>()
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Character Frequencies:&quot;</span>)
+<span class="syn-keyword">for</span> char <span class="syn-keyword">in</span> <span class="syn-function">sorted</span>(unique_chars):
+    count = text.<span class="syn-function">count</span>(char)
+    bar = <span class="syn-string">&quot;#&quot;</span> * count
+    <span class="syn-function">print</span>(<span class="syn-string">f&quot;  '{char}' = {count}  {bar}&quot;</span>)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Program 3 Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Unique characters: {'a', 'd', 'e', 'g', 'h', 'i', 'l', 'm', 'n', 'o', 'p', 'r', 't', 'w', 'y'}
+Number of unique characters: 15
+
+Character Frequencies:
+  'a' = 1  #
+  'd' = 1  #
+  'e' = 1  #
+  'g' = 2  ##
+  'h' = 2  ##
+  'i' = 1  #
+  'l' = 3  ###
+  'm' = 2  ##
+  'n' = 2  ##
+  'o' = 4  ####
+  'p' = 2  ##
+  'r' = 3  ###
+  't' = 1  #
+  'w' = 1  #
+  'y' = 1  #</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block" id="prog-4">
+        <div class="program-title">📌 Program 4: Perform All Set Operations Together</div>
+        <p class="prog-desc">Aim: Demonstrate union, intersection, difference, symmetric difference, subset, superset and disjoint checks in a single program.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Program 4</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Comprehensive Set Operations Demo</span>
+A = {<span class="syn-number">1</span>, <span class="syn-number">2</span>, <span class="syn-number">3</span>, <span class="syn-number">4</span>, <span class="syn-number">5</span>}
+B = {<span class="syn-number">4</span>, <span class="syn-number">5</span>, <span class="syn-number">6</span>, <span class="syn-number">7</span>, <span class="syn-number">8</span>}
+C = {<span class="syn-number">1</span>, <span class="syn-number">2</span>}
+
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Set A: {A}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Set B: {B}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Set C: {C}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;-&quot;</span> * <span class="syn-number">40</span>)
+
+<span class="syn-comment"># All operations</span>
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;A Union B: {A | B}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;A Intersection B: {A &amp; B}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;A Difference B: {A - B}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;B Difference A: {B - A}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;A Symmetric Diff B: {A ^ B}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;C subset of A?: {C &lt;= A}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;A superset of C?: {A &gt;= C}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;A disjoint B?: {A.isdisjoint(B)}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;A disjoint {{9,10}}?: {A.isdisjoint({9, 10})}&quot;</span>)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Program 4 Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Set A: {1, 2, 3, 4, 5}
+Set B: {4, 5, 6, 7, 8}
+Set C: {1, 2}
+----------------------------------------
+A Union B: {1, 2, 3, 4, 5, 6, 7, 8}
+A Intersection B: {4, 5}
+A Difference B: {1, 2, 3}
+B Difference A: {8, 6, 7}
+A Symmetric Diff B: {1, 2, 3, 6, 7, 8}
+C subset of A?: True
+A superset of C?: True
+A disjoint B?: False
+A disjoint {9,10}?: True</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-block" id="prog-5">
+        <div class="program-title">📌 Program 5: Real-World Example — Student Enrollment System</div>
+        <p class="prog-desc">Description: This program uses sets to manage student enrollments across different courses. It finds students enrolled in multiple courses, only one course, or all courses — a real-world use of set operations.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-title"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span> Python Source Code &bull; Program 5</div>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <div class="code-body">
+            <pre><code><span class="syn-comment"># Student Enrollment System using Sets</span>
+math_students = {<span class="syn-string">&quot;Alice&quot;</span>, <span class="syn-string">&quot;Bob&quot;</span>, <span class="syn-string">&quot;Charlie&quot;</span>, <span class="syn-string">&quot;David&quot;</span>, <span class="syn-string">&quot;Eve&quot;</span>}
+science_students = {<span class="syn-string">&quot;Bob&quot;</span>, <span class="syn-string">&quot;David&quot;</span>, <span class="syn-string">&quot;Frank&quot;</span>, <span class="syn-string">&quot;Grace&quot;</span>, <span class="syn-string">&quot;Eve&quot;</span>}
+english_students = {<span class="syn-string">&quot;Alice&quot;</span>, <span class="syn-string">&quot;Charlie&quot;</span>, <span class="syn-string">&quot;Eve&quot;</span>, <span class="syn-string">&quot;Frank&quot;</span>, <span class="syn-string">&quot;Henry&quot;</span>}
+
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Math students:&quot;</span>, math_students)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;Science students:&quot;</span>, science_students)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;English students:&quot;</span>, english_students)
+<span class="syn-function">print</span>(<span class="syn-string">&quot;=&quot;</span> * <span class="syn-number">50</span>)
+
+<span class="syn-comment"># All unique students (Union of all)</span>
+all_students = math_students | science_students | english_students
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Total unique students: {len(all_students)}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;All students: {all_students}&quot;</span>)
+
+<span class="syn-comment"># Students in ALL three courses (Intersection of all)</span>
+in_all_three = math_students &amp; science_students &amp; english_students
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Students in ALL 3 courses: {in_all_three}&quot;</span>)
+
+<span class="syn-comment"># Students in Math but NOT Science</span>
+math_only_not_science = math_students - science_students
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;In Math but not Science: {math_only_not_science}&quot;</span>)
+
+<span class="syn-comment"># Students in exactly ONE course</span>
+only_math = math_students - science_students - english_students
+only_science = science_students - math_students - english_students
+only_english = english_students - math_students - science_students
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Only in Math: {only_math}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Only in Science: {only_science}&quot;</span>)
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Only in English: {only_english}&quot;</span>)
+
+<span class="syn-comment"># Students in at least TWO courses</span>
+in_ms = math_students &amp; science_students
+in_me = math_students &amp; english_students
+in_se = science_students &amp; english_students
+in_at_least_two = in_ms | in_me | in_se
+<span class="syn-function">print</span>(<span class="syn-string">f&quot;Students in at least 2 courses: {in_at_least_two}&quot;</span>)</code></pre>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="output-header">🖥️ Program 5 Output (Rendered ASCII Output)</div>
+          <div class="output-body">
+            <pre>Math students: {'Bob', 'Eve', 'Charlie', 'David', 'Alice'}
+Science students: {'Frank', 'Grace', 'Bob', 'Eve', 'David'}
+English students: {'Frank', 'Henry', 'Eve', 'Charlie', 'Alice'}
+==================================================
+Total unique students: 8
+All students: {'Frank', 'Grace', 'Henry', 'Bob', 'Eve', 'Charlie', 'David', 'Alice'}
+Students in ALL 3 courses: {'Eve'}
+In Math but not Science: {'Charlie', 'Alice'}
+Only in Math: set()
+Only in Science: {'Grace'}
+Only in English: {'Henry'}
+Students in at least 2 courses: {'Frank', 'Bob', 'Eve', 'Charlie', 'David', 'Alice'}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="highlight-box warning">
+        <strong>Note on output order:</strong> Because sets are unordered, the order of elements printed on your screen may differ from the output shown here. The <em>contents</em> of each set will always be the same.
+      </div>
+    </section>
+    <section id="sec-cheatsheet" class="chapter">
+      <div class="ch-header">
+        <div class="ch-eyebrow">📋 Section 06 &bull; Summary</div>
+        <h2 class="ch-title">6. Comprehensive Sets Cheat Sheet</h2>
+      </div>
+
+      <table>
+        <tr><th>Syntax / Expression</th><th>Name / Category</th><th>Exact Meaning &amp; Behavior</th></tr>
+        <tr><td><code>s = {1, 2, 3}</code></td><td>Set Literal</td><td>Creates a set with unique elements using curly braces.</td></tr>
+        <tr><td><code>s = set()</code></td><td>Empty Set</td><td>Creates an empty set. <code>{}</code> creates an empty dictionary instead!</td></tr>
+        <tr><td><code>set(iterable)</code></td><td>Constructor</td><td>Builds a set from a list, tuple, string, etc. — duplicates removed.</td></tr>
+        <tr><td><code>s.add(x)</code></td><td>Add One</td><td>Adds a single element x; ignored if already present.</td></tr>
+        <tr><td><code>s.update(t)</code></td><td>Add Many</td><td>Adds all elements of iterable t to the set.</td></tr>
+        <tr><td><code>s.remove(x)</code></td><td>Remove (strict)</td><td>Removes x; raises <code>KeyError</code> if x is not found.</td></tr>
+        <tr><td><code>s.discard(x)</code></td><td>Remove (safe)</td><td>Removes x; no error if x is not found.</td></tr>
+        <tr><td><code>s.pop()</code></td><td>Remove Random</td><td>Removes and returns an arbitrary element.</td></tr>
+        <tr><td><code>s.clear()</code></td><td>Empty the Set</td><td>Removes all elements; the set becomes <code>set()</code>.</td></tr>
+        <tr><td><code>s.copy()</code></td><td>Shallow Copy</td><td>Returns a new set containing the same elements.</td></tr>
+        <tr><td><code>len(s)</code></td><td>Size</td><td>Returns the number of elements in the set.</td></tr>
+        <tr><td><code>x in s</code></td><td>Membership Test</td><td>True if x is in s — very fast, <code>O(1)</code>.</td></tr>
+        <tr><td><code>A | B</code> / <code>A.union(B)</code></td><td>Union</td><td>All elements from A and B, duplicates removed.</td></tr>
+        <tr><td><code>A &amp; B</code> / <code>A.intersection(B)</code></td><td>Intersection</td><td>Only the elements common to both A and B.</td></tr>
+        <tr><td><code>A - B</code> / <code>A.difference(B)</code></td><td>Difference</td><td>Elements in A that are NOT in B (order matters).</td></tr>
+        <tr><td><code>A ^ B</code> / <code>A.symmetric_difference(B)</code></td><td>Symmetric Difference</td><td>Elements in either set but NOT in both: <code>(A | B) - (A &amp; B)</code>.</td></tr>
+        <tr><td><code>A &lt;= B</code> / <code>A.issubset(B)</code></td><td>Subset</td><td>True if every element of A is also in B.</td></tr>
+        <tr><td><code>A &gt;= B</code> / <code>A.issuperset(B)</code></td><td>Superset</td><td>True if A contains every element of B.</td></tr>
+        <tr><td><code>A.isdisjoint(B)</code></td><td>Disjoint Check</td><td>True if A and B have no common elements.</td></tr>
+        <tr><td><code>{x**2 for x in range(5)}</code></td><td>Set Comprehension</td><td>Compact way to build a set from an iterable.</td></tr>
+      </table>
+
+      <div class="highlight-box tip" style="margin-top: 20px;">
+        <strong>💡 Final Tips for Exams:</strong>
+        <ul style="margin-top: 6px;">
+          <li>A set is <strong>unordered, mutable and holds unique elements</strong> — no indexing, no slicing, no duplicates.</li>
+          <li>Use <code>set()</code> — NOT <code>{}</code> — to create an empty set. <code>{}</code> is an empty dictionary.</li>
+          <li>Set elements must be <strong>immutable</strong>: numbers, strings and tuples are allowed; lists and dictionaries are not.</li>
+          <li><code>remove(x)</code> raises <code>KeyError</code> if x is missing; <code>discard(x)</code> does not.</li>
+          <li><code>True</code> equals <code>1</code> and <code>False</code> equals <code>0</code>, so <code>{1, True, 0, False}</code> becomes <code>{0, 1}</code>.</li>
+          <li><code>A - B</code> is not the same as <code>B - A</code>; but <code>A | B</code>, <code>A &amp; B</code> and <code>A ^ B</code> give the same result in either order.</li>
+          <li><code>A ^ B</code> is the same as <code>(A | B) - (A &amp; B)</code>.</li>
+          <li>Converting a list to a set and back (<code>list(set(my_list))</code>) is the quickest way to remove duplicates.</li>
+        </ul>
+      </div>
+
+      <div style="text-align: center; margin-top: 30px; padding: 15px; color: var(--text-faint); font-size: 12px;">
+        ─── End of Sets in Python ───<br>
+        <em>Sets keep things unique and fast. Practice every operation, try the programs yourself, and set theory will feel natural!</em>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-author">
+        <img src="images/umer_farooq.jpg" alt="Umer Farooq" class="footer-avatar"
+          onerror="this.onerror=null; this.src='images/umer_farooq.png';">
+        <div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text);">Prepared by Umer Farooq</h4>
+          <p style="font-size: 0.85rem; color: var(--text-dim);">Department of Computer Science &amp; Engineering | SSM College of Engineering</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <a href="index.html" class="btn-nav">
+          <span>🏠</span> Course Portal
+        </a>
+        <a href="Lec_12.html" class="btn-nav">
+          <span>👉</span> Pointers (Lec 12)
+        </a>
+        <a href="Lec_11.html" class="btn-nav">
+          <span>💾</span> DMA (Lec 11)
+        </a>
+        <button class="btn-nav" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <span>⬆️</span> Back to Top
+        </button>
+        <button class="btn-nav" onclick="window.print()">
+          <span>🖨️</span> Print Notes
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="float-actions">
+    <button class="btn-float" onclick="toggleTheme()" title="Toggle Theme">
+      <span id="theme-icon-float">☀️</span>
+    </button>
+    <button class="btn-float" onclick="window.print()" title="Print Page">
+      <span>🖨️</span>
+    </button>
+    <button class="btn-float" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to Top">
+      <span>▲</span>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcons(next);
+    }
+
+    function updateThemeIcons(theme) {
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      const navIcon = document.getElementById('theme-icon-nav');
+      const floatIcon = document.getElementById('theme-icon-float');
+      if (navIcon) navIcon.textContent = icon;
+      if (floatIcon) floatIcon.textContent = icon;
+    }
+
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    function copyCode(btn) {
+      const container = btn.closest('.code-container');
+      if (!container) return;
+      const codeBlock = container.querySelector('pre code') || container.querySelector('pre');
+      if (codeBlock) {
+        const textToCopy = codeBlock.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          btn.style.color = 'var(--green)';
+          btn.style.borderColor = 'var(--green)';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 2000);
+        }).catch(() => {
+          const range = document.createRange();
+          range.selectNode(codeBlock);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied! ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2000);
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+    });
+  </script>
+</body>
+
+</html>
